@@ -111,3 +111,12 @@ export default function Home() {
     </main>
   );
 }
+
+Home.getLayout = (page: any) => {
+  return (
+    <div>
+      <div>customized layout</div>
+      <div>{page}</div>
+    </div>
+  )
+};
