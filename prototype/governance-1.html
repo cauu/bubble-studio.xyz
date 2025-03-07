@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Studio - 区块链治理平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            border: 2px solid #000;
+            border-radius: 16px;
+            box-shadow: 4px 4px 0px #000;
+        }
+        .btn {
+            border: 2px solid #000;
+            border-radius: 8px;
+            box-shadow: 2px 2px 0px #000;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px #000;
+        }
+        .mockup-container {
+            width: 1200px;
+            height: 800px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            background-color: #ffffff;
+            position: relative;
+        }
+        .dot-pattern {
+            background-image: radial-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="p-8 flex flex-wrap justify-center">
+    <!-- 首页设计 -->
+    <div class="mockup-container dot-pattern">
+        <div class="w-full h-full p-6">
+            <!-- 导航栏 -->
+            <nav class="card bg-white p-4 flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="text-3xl font-bold mr-10 flex items-center">
+                        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                            <circle cx="18" cy="18" r="16" stroke="black" stroke-width="4"/>
+                            <circle cx="18" cy="18" r="8" stroke="black" stroke-width="4"/>
+                        </svg>
+                        Bubble Studio
+                    </div>
+                    <div class="flex space-x-6">
+                        <a href="#" class="px-4 py-2 bg-black text-white font-medium rounded-lg">治理</a>
+                        <a href="#" class="px-4 py-2 hover:bg-gray-100 font-medium rounded-lg">Staking</a>
+                        <a href="#" class="px-4 py-2 hover:bg-gray-100 font-medium rounded-lg">About</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="btn px-4 py-2 bg-white font-medium flex items-center">
+                        <img src="https://unpkg.com/lucide-static@latest/icons/wallet.svg" class="w-5 h-5 mr-2" />
+                        连接钱包
+                    </button>
+                </div>
+            </nav>
+            
+            <!-- 主要内容区域 -->
+            <div class="grid grid-cols-3 gap-6 h-[calc(100%-80px)]">
+                <!-- 左侧内容 -->
+                <div class="col-span-2 space-y-6">
+                    <!-- 当前投票 -->
+                    <div class="card bg-white p-5 h-1/2">
+                        <h2 class="text-xl font-bold mb-4 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/vote.svg" class="w-5 h-5 mr-2" />
+                            当前投票
+                        </h2>
+                        
+                        <!-- 主要投票项目 -->
+                        <div class="border-2 border-black rounded-lg p-4 mb-4 flex items-center justify-between">
+                            <div class="flex-1">
+                                <h3 class="font-medium">提案 #42: Cardano 生态系统基金分配</h3>
+                                <div class="text-sm text-gray-600 mt-1">剩余时间: 3天 12小时</div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-32 bg-gray-200 rounded-full h-2.5 mr-3 border border-black">
+                                    <div class="bg-black h-2.5 rounded-full" style="width: 65%"></div>
+                                </div>
+                                <span class="text-sm font-medium">65%</span>
+                            </div>
+                            <button class="btn ml-4 px-3 py-1.5 bg-black text-white text-sm">
+                                投票
+                            </button>
+                        </div>
+                        
+                        <!-- 观点区域 -->
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <!-- 正方观点 -->
+                            <div class="border-2 border-black rounded-lg p-4">
+                                <h4 class="font-medium mb-2 flex items-center">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                        <circle cx="8" cy="8" r="7" stroke="black" stroke-width="2"/>
+                                        <path d="M5 8L7 10L11 6" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    正方观点总结
+                                </h4>
+                                <p class="text-sm text-gray-700">增加对开发者工具的资金分配将加速生态系统增长，提高开发效率，并吸引更多开发者加入Cardano生态。</p>
+                            </div>
+                            
+                            <!-- 反方观点 -->
+                            <div class="border-2 border-black rounded-lg p-4">
+                                <h4 class="font-medium mb-2 flex items-center">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                        <circle cx="8" cy="8" r="7" stroke="black" stroke-width="2"/>
+                                        <path d="M5 5L11 11M5 11L11 5" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    反方观点总结
+                                </h4>
+                                <p class="text-sm text-gray-700">当前资金分配已经足够，应该优先考虑现有项目的完成度和质量，而不是分散资源到更多项目。</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 我们的观点 -->
+                        <div class="border-2 border-black rounded-lg p-4 bg-gray-100">
+                            <h4 class="font-medium mb-2 flex items-center">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                    <circle cx="8" cy="8" r="7" stroke="black" stroke-width="2"/>
+                                    <circle cx="8" cy="8" r="1" fill="black"/>
+                                    <circle cx="8" cy="5" r="1" fill="black"/>
+                                    <circle cx="8" cy="11" r="1" fill="black"/>
+                                </svg>
+                                我们的观点
+                            </h4>
+                            <p class="text-sm text-gray-700">Bubble Studio支持增加开发者工具的资金分配，但建议设立明确的绩效指标，确保资金使用效率。我们认为平衡发展是关键。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 当前提案 -->
+                    <div class="card bg-white p-5 h-1/2">
+                        <h2 class="text-xl font-bold mb-4 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/file-text.svg" class="w-5 h-5 mr-2" />
+                            当前提案
+                        </h2>
+                        
+                        <!-- 提案列表 -->
+                        <div class="space-y-3 mb-4 max-h-[calc(100%-120px)] overflow-y-auto pr-2">
+                            <div class="border-2 border-black rounded-lg p-4 flex items-center justify-between">
+                                <div class="flex-1">
+                                    <h3 class="font-medium">提案 #43: DApp互操作性标准</h3>
+                                    <div class="text-sm text-gray-600 mt-1">提交日期: 2023-11-15</div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <span class="px-2 py-1 bg-gray-200 border border-black rounded text-xs">讨论中</span>
+                                    <button class="btn px-3 py-1.5 bg-white text-sm">
+                                        查看详情
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="border-2 border-black rounded-lg p-4 flex items-center justify-between">
+                                <div class="flex-1">
+                                    <h3 class="font-medium">提案 #44: 社区教育基金</h3>
+                                    <div class="text-sm text-gray-600 mt-1">提交日期: 2023-11-10</div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <span class="px-2 py-1 bg-gray-200 border border-black rounded text-xs">已批准</span>
+                                    <button class="btn px-3 py-1.5 bg-white text-sm">
+                                        查看详情
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="border-2 border-black rounded-lg p-4 flex items-center justify-between">
+                                <div class="flex-1">
+                                    <h3 class="font-medium">提案 #45: 跨链桥安全审计</h3>
+                                    <div class="text-sm text-gray-600 mt-1">提交日期: 2023-11-05</div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <span class="px-2 py-1 bg-gray-200 border border-black rounded text-xs">投票中</span>
+                                    <button class="btn px-3 py-1.5 bg-white text-sm">
+                                        查看详情
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 创建提案按钮 -->
+                        <div class="flex justify-center mt-4">
+                            <button class="btn px-4 py-2 bg-black text-white flex items-center">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/plus.svg" class="w-4 h-4 mr-2 text-white" />
+                                创建新提案
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧内容 -->
+                <div class="col-span-1 space-y-6">
+                    <!-- DReps区域 -->
+                    <div class="card bg-white p-5 h-[calc(50%-12px)]">
+                        <h2 class="text-xl font-bold mb-4 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" class="w-5 h-5 mr-2" />
+                            DReps
+                        </h2>
+                        
+                        <div class="space-y-3">
+                            <div class="border-2 border-black rounded-lg p-3 flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-gray-200 border-2 border-black mr-3 flex items-center justify-center">
+                                    <span class="font-bold">AC</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-medium">Alex Chen</h3>
+                                    <div class="text-xs text-gray-600">投票权重: 8.5%</div>
+                                </div>
+                                <button class="p-1.5 border border-black rounded-lg">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" class="w-4 h-4" />
+                                </button>
+                            </div>
+                            
+                            <div class="border-2 border-black rounded-lg p-3 flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-gray-200 border-2 border-black mr-3 flex items-center justify-center">
+                                    <span class="font-bold">SJ</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-medium">Sarah Johnson</h3>
+                                    <div class="text-xs text-gray-600">投票权重: 7.2%</div>
+                                </div>
+                                <button class="p-1.5 border border-black rounded-lg">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" class="w-4 h-4" />
+                                </button>
+                            </div>
+                            
+                            <div class="border-2 border-black rounded-lg p-3 flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-gray-200 border-2 border-black mr-3 flex items-center justify-center">
+                                    <span class="font-bold">MT</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-medium">Michael Torres</h3>
+                                    <div class="text-xs text-gray-600">投票权重: 6.8%</div>
+                                </div>
+                                <button class="p-1.5 border border-black rounded-lg">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" class="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <a href="#" class="text-black text-sm font-medium flex items-center justify-center">
+                                查看全部DReps
+                                <img src="https://unpkg.com/lucide-static@latest/icons/chevron-right.svg" class="w-4 h-4 ml-1" />
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- About Governance区域 -->
+                    <div class="card bg-white p-5 h-[calc(50%-12px)]">
+                        <h2 class="text-xl font-bold mb-4 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" class="w-5 h-5 mr-2" />
+                            关于治理
+                        </h2>
+                        
+                        <div class="border-2 border-black rounded-lg p-4 mb-4">
+                            <p class="text-sm text-gray-700 mb-3">
+                                Bubble Studio致力于推动Cardano生态系统的去中心化治理，我们相信社区的力量和集体智慧。
+                            </p>
+                            <p class="text-sm text-gray-700">
+                                通过参与投票和提案，您可以直接影响Cardano的未来发展方向。
+                            </p>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center mr-3">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/vote.svg" class="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">投票权</h3>
+                                    <p class="text-xs text-gray-600">基于您的ADA质押量</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center mr-3">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/file-text.svg" class="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">提案流程</h3>
+                                    <p class="text-xs text-gray-600">从提交到执行的完整周期</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center mr-3">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" class="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">代表机制</h3>
+                                    <p class="text-xs text-gray-600">了解DReps如何代表社区</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
