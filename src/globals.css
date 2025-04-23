@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -20,4 +23,212 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+body {
+  background-color: #f0f7ff;
+  font-family: 'Comic Neue', cursive;
+}
+
+.card {
+  border: 3px solid #010102;
+  border-radius: 16px;
+  box-shadow: 6px 6px 0px #0a2463;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border: 3px solid #0a2463;
+  transform: rotate(45deg);
+  z-index: 0;
+}
+.btn {
+  border: 3px solid #0a2463;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0px #0a2463;
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+.btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0px #0a2463;
+}
+.mockup-container {
+  width: 1200px;
+  height: 800px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  background-color: #f0f7ff;
+  position: relative;
+}
+.comic-bg {
+  background-image: 
+      radial-gradient(#b8d3ff 2px, transparent 2px),
+      radial-gradient(#d6e4ff 2px, transparent 2px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+.title-font {
+  font-family: 'Bangers', cursive;
+  letter-spacing: 1px;
+}
+.speech-bubble {
+  position: relative;
+  background: #ffffff;
+  border: 3px solid #0a2463;
+  border-radius: 12px;
+}
+.speech-bubble:after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 20px;
+  border-width: 15px 15px 0;
+  border-style: solid;
+  border-color: #0a2463 transparent;
+  display: block;
+  width: 0;
+}
+.speech-bubble:before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 23px;
+  border-width: 12px 12px 0;
+  border-style: solid;
+  border-color: #ffffff transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+}
+.progress-bar {
+  height: 24px;
+  border: 2px solid #0a2463;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-bar-inner {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.5s ease;
+}
+.progress-threshold {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #0a2463;
+  z-index: 5;
+}
+.progress-threshold::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -4px;
+  width: 10px;
+  height: 10px;
+  background-color: #0a2463;
+  border-radius: 50%;
+}
+.vote-badge {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  background-color: #3f8efc;
+  color: white;
+  border: 3px solid #0a2463;
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-weight: bold;
+  transform: rotate(5deg);
+  z-index: 10;
+}
+.tab-active {
+  background-color: #3f8efc;
+  color: white;
+  transform: translateY(0) rotate(0);
+}
+.tab-inactive {
+  background-color: #d6e4ff;
+  transform: translateY(3px) rotate(-2deg);
+}
+.tab-inactive:nth-child(even) {
+  transform: translateY(3px) rotate(2deg);
+}
+.tab {
+  transition: all 0.3s ease;
+}
+.tab:hover {
+  transform: translateY(0) rotate(0) !important;
+}
+.point-list li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 8px;
+}
+.point-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #0a2463;
+}
+.point-list.pros li::before {
+  background-color: #06D6A0;
+}
+.point-list.cons li::before {
+  background-color: #EF476F;
+}
+.pie-chart {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+.bubble {
+  position: absolute;
+  background-color: #d6e4ff;
+  border: 2px solid #0a2463;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: float 3s infinite ease-in-out;
+}
+.bubble:nth-child(1) {
+  width: 30px;
+  height: 30px;
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+.bubble:nth-child(2) {
+  width: 20px;
+  height: 20px;
+  top: 30%;
+  left: 20%;
+  animation-delay: 0.5s;
+}
+.bubble:nth-child(3) {
+  width: 25px;
+  height: 25px;
+  top: 15%;
+  left: 30%;
+  animation-delay: 1s;
+}
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }
