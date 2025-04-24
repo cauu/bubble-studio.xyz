@@ -1,10 +1,11 @@
+import { ChevronRight, Info, Users } from 'lucide-react';
 import React from 'react';
 
 export const Dreps: React.FC = () => {
   return (
     <div className="card bg-white p-5">
       <h2 className="text-2xl title-font mb-4 flex items-center text-[#0a2463]">
-        <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" className="w-6 h-6 mr-2" />
+        <Users className="w-6 h-6 mr-2" />
         DReps
       </h2>
 
@@ -35,7 +36,7 @@ export const Dreps: React.FC = () => {
             </div>
           </div>
           <button className="p-1.5 border-2 border-[#0a2463] rounded-lg bg-white">
-            <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" className="w-4 h-4" />
+            <Info className="w-4 h-4" />
           </button>
         </div>
 
@@ -65,7 +66,7 @@ export const Dreps: React.FC = () => {
             </div>
           </div>
           <button className="p-1.5 border-2 border-[#0a2463] rounded-lg bg-white">
-            <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" className="w-4 h-4" />
+            <Info className="w-4 h-4" />
           </button>
         </div>
 
@@ -95,7 +96,7 @@ export const Dreps: React.FC = () => {
             </div>
           </div>
           <button className="p-1.5 border-2 border-[#0a2463] rounded-lg bg-white">
-            <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" className="w-4 h-4" />
+            <Info className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -103,7 +104,7 @@ export const Dreps: React.FC = () => {
       <div className="mt-4 text-center">
         <a href="#" className="text-[#3f8efc] text-sm font-bold flex items-center justify-center">
           查看全部DReps
-          <img src="https://unpkg.com/lucide-static@latest/icons/chevron-right.svg" className="w-4 h-4 ml-1" />
+          <ChevronRight className="w-4 h-4 ml-1" />
         </a>
       </div>
     </div>
