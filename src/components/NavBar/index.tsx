@@ -38,8 +38,8 @@ export const NavBar = () => {
             xmlns="http://www.w3.org/2000/svg"
             className="mr-2"
           >
-            <circle cx="20" cy="20" r="18" fill="#d6e4ff" stroke="#0a2463" stroke-width="4" />
-            <circle cx="20" cy="20" r="8" fill="#3f8efc" stroke="#0a2463" stroke-width="4" />
+            <circle cx="20" cy="20" r="18" fill="#d6e4ff" stroke="#0a2463" strokeWidth="4" />
+            <circle cx="20" cy="20" r="8" fill="#3f8efc" stroke="#0a2463" strokeWidth="4" />
           </svg>
           Bubble Studio
         </div>

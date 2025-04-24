@@ -179,17 +179,17 @@ export const GovActionCard = ({ proposal }: { proposal: IGovernanceAction }) => 
                           strokeDasharray={path.dasharray || ''}
                         />
                       ))} */}
-                      <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0" stroke-width="10" />
-                      <path d="M95 50 A45 45 0 0 1 78 85" fill="none" stroke="#EF476F" stroke-width="10" />
-                      <path d="M78 85 A45 45 0 0 1 50 95" fill="none" stroke="#d6e4ff" stroke-width="10" />
+                      <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0" strokeWidth="10" />
+                      <path d="M95 50 A45 45 0 0 1 78 85" fill="none" stroke="#EF476F" strokeWidth="10" />
+                      <path d="M78 85 A45 45 0 0 1 50 95" fill="none" stroke="#d6e4ff" strokeWidth="10" />
                       <path
                         d="M50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5"
                         fill="none"
                         stroke="#f0f7ff"
-                        stroke-width="10"
-                        stroke-dasharray="5,5"
+                        strokeWidth="10"
+                        strokeDasharray="5,5"
                       />
-                      <text x="50" y="55" text-anchor="middle" font-size="16" font-weight="bold">
+                      <text x="50" y="55" textAnchor="middle" fontSize="16" fontWeight="bold">
                         70%
                       </text>
                       <text x="50" y="55" textAnchor="middle" fontSize="16" fontWeight="bold">
