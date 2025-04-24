@@ -2,7 +2,7 @@ import React from 'react';
 
 export const About: React.FC = () => {
   return (
-    <div className="card bg-white p-5 h-[calc(50%-12px)]">
+    <div className="card bg-white p-5">
       <h2 className="text-2xl title-font mb-4 flex items-center text-[#0a2463]">
         <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" className="w-6 h-6 mr-2" />
         关于治理

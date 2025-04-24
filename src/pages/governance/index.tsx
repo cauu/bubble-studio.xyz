@@ -43,9 +43,9 @@ export default function Governance({ data, error }: GovernanceProps) {
   if (error) return <div>错误: {error}</div>;
 
   return (
-    <div className="governance-container">
-      <div>
-        <div>
+    <div className="flex space-x-6 justify-center">
+      <div className="flex flex-col space-y-6">
+        <div className="flex-1">
           {data.length > 0 ? (
             <div className="governance-content">
               {/* 投票标签页 */}
@@ -68,12 +68,12 @@ export default function Governance({ data, error }: GovernanceProps) {
           )}
         </div>
 
-        <div>
+        <div className="flex-1">
           <ProposalCard />
         </div>
       </div>
 
-      <div>
+      <div className="flex flex-col space-y-6">
         <Dreps />
 
         <About />
