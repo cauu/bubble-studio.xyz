@@ -1,32 +1,37 @@
-import { GetServerSideProps } from 'next';
-import { getGovernanceActions } from '@/services';
-import { IGovernanceAction } from '@/types/governance';
-import { GovActionCard } from '@/pages/governance/components/GovActionCard';
-// import { ProposalCard } from '@/pages/governance/components/ProposalCard';
-import { Dreps } from '@/pages/governance/components/Dreps';
 import { useState } from 'react';
-import { About } from './components/About';
 import { FileText, Vote } from 'lucide-react';
 import clsx from 'clsx';
+import { GetServerSideProps } from 'next';
+
+import { getGovernanceActions, getGovernanceProposals } from '@/services';
+import { IGovernanceAction } from '@/types/governance';
+import { GovActionCard } from '@/pages/governance/components/GovActionCard';
+import { Dreps } from '@/pages/governance/components/Dreps';
+import { About } from './components/About';
+import { ProposalCard } from './components/ProposalCard';
 
 interface GovernanceProps {
-  data: IGovernanceAction[];
+  actions: IGovernanceAction[];
+  proposals: any[];
   error?: string;
 }
 
 export const getServerSideProps: GetServerSideProps<GovernanceProps> = async () => {
   try {
     const actions = await getGovernanceActions();
+    const proposals = await getGovernanceProposals();
     return {
       props: {
-        data: actions
+        actions,
+        proposals
       }
     };
   } catch (error) {
     console.error('获取治理数据失败:', error);
     return {
       props: {
-        data: [],
+        actions: [],
+        proposals: [],
         error: '获取数据失败，请稍后重试'
       }
     };
@@ -46,7 +51,7 @@ const TABS_PC = [
   }
 ];
 
-export default function Governance({ data, error }: GovernanceProps) {
+export default function Governance({ actions, proposals, error }: GovernanceProps) {
   // const [currentProposalId, setCurrentProposalId] = useState(data[0]?.id);
   const [currentTab, setCurrentTab] = useState<'actions' | 'proposals'>('actions');
 
@@ -81,25 +86,33 @@ export default function Governance({ data, error }: GovernanceProps) {
           </div>
         </div>
 
-        <div className="flex flex-col space-y-6">
-          {data.length > 0 ? (
-            data.map((item) => {
-              return (
-                <div key={item.id} className="governance-content">
-                  <GovActionCard key={item.id} proposal={item} />
-                </div>
-              );
-            })
-          ) : (
-            <div>暂无治理数据</div>
-          )}
-        </div>
+        {currentTab === 'actions' && (
+          <div className="flex flex-col space-y-6">
+            {actions.length > 0 ? (
+              actions.map((item) => {
+                return (
+                  <div key={item.id} className="governance-content">
+                    <GovActionCard key={item.id} proposal={item} />
+                  </div>
+                );
+              })
+            ) : (
+              <div>暂无治理数据</div>
+            )}
+          </div>
+        )}
+        {currentTab === 'proposals' && (
+          <div className="flex flex-col space-y-6">
+            {proposals.length > 0 ? (
+              proposals.map((item) => {
+                return <ProposalCard key={item} />;
+              })
+            ) : (
+              <div>暂无提案数据</div>
+            )}
+          </div>
+        )}
       </div>
-
-      {/* <div className="flex-1">
-        <ProposalCard />
-      </div> */}
-      {/* </div> */}
 
       <div className="space-y-6 w-72 sticky top-6 self-start hidden md:flex md:flex-col">
         <Dreps />

@@ -157,3 +157,7 @@ const governanceAction3: IGovernanceAction = {
 export async function getGovernanceActions() {
   return await Promise.resolve([governanceAction1, governanceAction2, governanceAction3]);
 }
+
+export async function getGovernanceProposals() {
+  return await Promise.resolve([1, 2, 3]);
+}

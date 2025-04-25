@@ -1,1 +1,1 @@
-export { getGovernanceActions } from './governance';
+export { getGovernanceActions, getGovernanceProposals } from './governance';
