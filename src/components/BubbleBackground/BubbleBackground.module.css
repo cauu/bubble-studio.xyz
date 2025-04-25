@@ -1,0 +1,48 @@
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      inset 0 0 15px rgba(255, 255, 255, 0.5),
+      0 0 15px rgba(255, 255, 255, 0.2),
+      0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: rise linear infinite, sway ease-in-out infinite;
+  }
+  
+  @keyframes rise {
+    0% {
+      bottom: -100px;
+      transform: translateX(0);
+    }
+    100% {
+      bottom: calc(100% + 100px);
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes sway {
+    0% {
+      transform: translateX(0) rotate(0);
+    }
+    33% {
+      transform: translateX(var(--sway-x, 30px)) rotate(var(--rotate, 5deg));
+    }
+    66% {
+      transform: translateX(calc(var(--sway-x, 30px) * -1)) rotate(calc(var(--rotate, 5deg) * -1));
+    }
+    100% {
+      transform: translateX(0) rotate(0);
+    }
+  }
