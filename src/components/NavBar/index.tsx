@@ -28,7 +28,7 @@ export const NavBar = () => {
     // <div className="w-full h-full">
     <nav className="card bg-white p-4 flex items-center justify-between mb-6">
       <div className="flex items-center">
-        <div className="text-3xl title-font mr-10 flex items-center text-[#0a2463]">
+        <Link href="/" className="text-3xl title-font mr-10 flex items-center text-[#0a2463]">
           {/* <Layers size={32} className="mr-2" /> */}
           <svg
             width="40"
@@ -42,7 +42,7 @@ export const NavBar = () => {
             <circle cx="20" cy="20" r="8" fill="#3f8efc" stroke="#0a2463" strokeWidth="4" />
           </svg>
           Bubble Studio
-        </div>
+        </Link>
         <div className="flex space-x-6">
           {navItems.map((item) => {
             return (
