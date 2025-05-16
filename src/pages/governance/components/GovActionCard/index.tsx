@@ -191,7 +191,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
 
           <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
             <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
-              <MessageCircle size={16} className="mr-2 text-[#3f8efc]" />
+              <MessageCircle size={20} className="mr-2 text-[#3f8efc]" />
               提案内容
             </h3>
 
@@ -210,7 +210,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             {/* 正方观点 */}
             <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
               <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
-                <CheckCircle size={32} className="mr-2 text-[#06D6A0]" />
+                <CheckCircle size={20} className="mr-2 text-[#06D6A0]" />
                 正方观点总结
               </h3>
 
@@ -222,7 +222,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             {/* 反方观点 */}
             <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
               <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
-                <XCircle size={16} className="mr-2 text-[#EF476F]" />
+                <XCircle size={20} className="mr-2 text-[#EF476F]" />
                 反方观点总结
               </h3>
 
@@ -235,7 +235,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
           {/* 我们的观点 */}
           <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
             <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
-              <Lightbulb size={16} className="mr-2 text-[#3f8efc]" />
+              <Lightbulb size={20} className="mr-2 text-[#3f8efc]" />
               我们的观点
             </h3>
 
