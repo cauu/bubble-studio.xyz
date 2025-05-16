@@ -94,3 +94,5 @@ export const ProposalCard: React.FC = () => {
     </div>
   );
 };
+
+export default ProposalCard;
