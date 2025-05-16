@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Studio - 区块链治理平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+
+        body {
+            background-color: #f0f7ff;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .card {
+            border: 3px solid #0a2463;
+            border-radius: 16px;
+            box-shadow: 6px 6px 0px #0a2463;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border: 3px solid #0a2463;
+            transform: rotate(45deg);
+            z-index: 0;
+        }
+
+        .btn {
+            border: 3px solid #0a2463;
+            border-radius: 8px;
+            box-shadow: 3px 3px 0px #0a2463;
+            transition: all 0.2s ease;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0px #0a2463;
+        }
+
+        .mockup-container {
+            width: 1200px;
+            height: 800px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            background-color: #f0f7ff;
+            position: relative;
+        }
+
+        .comic-bg {
+            background-image:
+                radial-gradient(#b8d3ff 2px, transparent 2px),
+                radial-gradient(#d6e4ff 2px, transparent 2px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+        }
+
+        .title-font {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 1px;
+        }
+
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border: 3px solid #0a2463;
+            border-radius: 12px;
+        }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 20px;
+            border-width: 15px 15px 0;
+            border-style: solid;
+            border-color: #0a2463 transparent;
+            display: block;
+            width: 0;
+        }
+
+        .speech-bubble:before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 23px;
+            border-width: 12px 12px 0;
+            border-style: solid;
+            border-color: #ffffff transparent;
+            display: block;
+            width: 0;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            height: 24px;
+            border: 2px solid #0a2463;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-threshold {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: #0a2463;
+            z-index: 5;
+        }
+
+        .progress-threshold::after {
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: -4px;
+            width: 10px;
+            height: 10px;
+            background-color: #0a2463;
+            border-radius: 50%;
+        }
+
+        .vote-badge {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background-color: #3f8efc;
+            color: white;
+            border: 3px solid #0a2463;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-weight: bold;
+            transform: rotate(5deg);
+            z-index: 10;
+        }
+
+        .tab-active {
+            background-color: #3f8efc;
+            color: white;
+            transform: translateY(0) rotate(0);
+        }
+
+        .tab-inactive {
+            background-color: #d6e4ff;
+            transform: translateY(3px) rotate(-2deg);
+        }
+
+        .tab-inactive:nth-child(even) {
+            transform: translateY(3px) rotate(2deg);
+        }
+
+        .tab {
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            transform: translateY(0) rotate(0) !important;
+        }
+
+        .point-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 8px;
+        }
+
+        .point-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #0a2463;
+        }
+
+        .point-list.pros li::before {
+            background-color: #06D6A0;
+        }
+
+        .point-list.cons li::before {
+            background-color: #EF476F;
+        }
+
+        .pie-chart {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .bubble {
+            position: absolute;
+            background-color: #d6e4ff;
+            border: 2px solid #0a2463;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .bubble:nth-child(1) {
+            width: 30px;
+            height: 30px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            top: 30%;
+            left: 20%;
+            animation-delay: 0.5s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 25px;
+            height: 25px;
+            top: 15%;
+            left: 30%;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+
+<body class="p-8 flex flex-wrap justify-center">
+    <!-- Governance页面设计 -->
+    <div class="mockup-container comic-bg">
+        <div class="w-full h-full p-6 overflow-scroll">
+            <!-- 导航栏 -->
+            <nav class="card bg-white p-4 flex items-center justify-between mb-6">
+                // ... existing code ...
+            </nav>
+
+            <!-- 主要内容 - 改为左侧固定菜单 + 右侧内容区域的布局 -->
+            <div class="flex gap-6">
+                <!-- 左侧固定菜单 -->
+                <div class="w-64 sticky top-6 self-start">
+                    <!-- 我的投票权 -->
+                    <div class="card bg-white p-4 mb-4">
+                        <h2 class="text-xl title-font mb-3 flex items-center text-[#0a2463]">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/vote.svg" class="w-5 h-5 mr-2" />
+                            我的投票权
+                        </h2>
+
+                        <div class="flex justify-center mb-3">
+                            <div class="relative w-24 h-24">
+                                <svg width="100%" height="100%" viewBox="0 0 100 100" class="progress-ring">
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="#e6f0ff" stroke-width="10" />
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="#3f8efc" stroke-width="10"
+                                        stroke-dasharray="282.7" stroke-dashoffset="70.7" />
+                                    <text x="50" y="45" text-anchor="middle" font-size="16" font-weight="bold"
+                                        transform="rotate(90 50 50)">75%</text>
+                                    <text x="50" y="65" text-anchor="middle" font-size="10"
+                                        transform="rotate(90 50 50)">已激活</text>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="border-2 border-[#0a2463] rounded-lg p-2 bg-[#e6f0ff]">
+                                <div class="flex justify-between items-center">
+                                    <div class="text-xs font-bold text-[#0a2463]">总投票权</div>
+                                    <div class="text-xs font-bold text-[#3f8efc]">12,450</div>
+                                </div>
+                            </div>
+
+                            <div class="border-2 border-[#0a2463] rounded-lg p-2 bg-[#e6f0ff]">
+                                <div class="flex justify-between items-center">
+                                    <div class="text-xs font-bold text-[#0a2463]">已激活</div>
+                                    <div class="text-xs font-bold text-[#3f8efc]">9,337</div>
+                                </div>
+                            </div>
+
+                            <div class="border-2 border-[#0a2463] rounded-lg p-2 bg-[#e6f0ff]">
+                                <div class="flex justify-between items-center">
+                                    <div class="text-xs font-bold text-[#0a2463]">已委托</div>
+                                    <div class="text-xs font-bold text-[#3f8efc]">3,113</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <button class="btn px-3 py-1 bg-[#3f8efc] text-white text-xs w-full">
+                                管理投票权
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 我的代表 -->
+                    <div class="card bg-white p-4 mb-4">
+                        <h2 class="text-xl title-font mb-3 flex items-center text-[#0a2463]">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" class="w-5 h-5 mr-2" />
+                            我的代表
+                        </h2>
+
+                        <div class="border-2 border-[#0a2463] rounded-lg p-2 bg-[#e6f0ff] mb-2">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-[#0a2463] flex items-center justify-center bg-[#d6e4ff] mr-2">
+                                    <span class="font-bold text-xs">CD</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-xs text-[#0a2463]">Cardano DAO</h3>
+                                    <div class="text-xs text-[#3f8efc]">drep1abc...</div>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-xs">
+                                <div class="flex justify-between mb-1">
+                                    <span>委托投票权</span>
+                                    <span class="font-bold">3,113</span>
+                                </div>
+                                <div class="progress-bar bg-white" style="height: 8px;">
+                                    <div class="progress-bar-inner bg-[#3f8efc]" style="width: 25%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <button class="btn px-3 py-1 bg-white text-[#0a2463] text-xs w-full">
+                                更换代表
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 关于治理 -->
+                    <div class="card bg-white p-4">
+                        <h2 class="text-xl title-font mb-3 flex items-center text-[#0a2463]">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" class="w-5 h-5 mr-2" />
+                            关于治理
+                        </h2>
+
+                        <div class="border-2 border-[#0a2463] rounded-lg p-2 mb-2 bg-[#e6f0ff]">
+                            <p class="text-xs mb-1">
+                                Bubble Studio致力于推动Cardano生态系统的去中心化治理，我们相信社区的力量和集体智慧。
+                            </p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-[#0a2463] flex items-center justify-center mr-2 bg-[#3f8efc] transform rotate-3">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/vote.svg"
+                                        class="w-4 h-4 text-white" />
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-xs">投票权</h3>
+                                    <p class="text-xs">基于您的ADA质押量</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-[#0a2463] flex items-center justify-center mr-2 bg-[#d6e4ff] transform -rotate-3">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/file-text.svg"
+                                        class="w-4 h-4 text-[#0a2463]" />
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-xs">提案流程</h3>
+                                    <p class="text-xs">从提交到执行的完整周期</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-[#0a2463] flex items-center justify-center mr-2 bg-[#3f8efc] transform rotate-3">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/users.svg"
+                                        class="w-4 h-4 text-white" />
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-xs">代表机制</h3>
+                                    <p class="text-xs">了解DReps如何代表社区</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧内容区域 - 瀑布流设计 -->
+                <div class="flex-1 space-y-6">
+                    <!-- 标题和筛选器 -->
+                    <div class="card bg-white p-4 flex justify-between items-center">
+                        <h2 class="text-2xl title-font flex items-center text-[#0a2463]">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/vote.svg" class="w-6 h-6 mr-2" />
+                            治理行动
+                        </h2>
+                        <div class="flex space-x-2">
+                            <button class="btn px-3 py-1 bg-[#3f8efc] text-white text-sm">
+                                活跃中
+                            </button>
+                            <button class="btn px-3 py-1 bg-white text-[#0a2463] text-sm">
+                                已结束
+                            </button>
+                            <select class="border-2 border-[#0a2463] rounded-md p-1 text-sm">
+                                <option>全部类型</option>
+                                <option>参数变更</option>
+                                <option>资金分配</option>
+                                <option>协议升级</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 瀑布流 Governance Actions -->
+                    <!-- 提案 #42 -->
+                    <div class="card bg-white p-5 relative">
+                        <div class="vote-badge">热门！</div>
+                        <h3 class="text-xl font-bold text-[#0a2463] mb-3 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/file-text.svg"
+                                class="w-5 h-5 mr-2" />
+                            提案 #42: Cardano 生态系统基金分配
+                        </h3>
+
+                        <div class="flex justify-between mb-3">
+                            <div class="flex items-center text-sm">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/calendar.svg"
+                                    class="w-4 h-4 mr-1" />
+                                <span>开始: 2023-11-10</span>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/calendar-x.svg"
+                                    class="w-4 h-4 mr-1" />
+                                <span>结束: 2023-11-25</span>
+                            </div>
+                            <div class="flex items-center text-sm font-bold text-[#3f8efc]">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/clock.svg"
+                                    class="w-4 h-4 mr-1" />
+                                <span>剩余时间: 3天 12小时</span>
+                            </div>
+                        </div>
+
+                        <!-- 总体投票进度 -->
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-bold">总体投票进度</span>
+                                <span class="text-sm font-bold">65%</span>
+                            </div>
+                            <div class="progress-bar bg-white">
+                                <div class="progress-bar-inner bg-[#3f8efc]" style="width: 65%"></div>
+                                <div class="progress-threshold" style="left: 50%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs mt-1">
+                                <span>最低参与率: 50%</span>
+                                <span class="text-[#06D6A0] font-bold">✓ 已达标</span>
+                            </div>
+                        </div>
+
+                        <!-- 观点总结 - 更加突出 -->
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <!-- 正方观点 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-white">
+                                <h3 class="font-bold text-[#0a2463] mb-2 flex items-center">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/check-circle.svg"
+                                        class="w-4 h-4 mr-1 text-[#06D6A0]" />
+                                    正方观点总结
+                                </h3>
+
+                                <ul class="point-list pros text-xs">
+                                    <li>增加对开发者工具的资金分配将加速生态系统增长</li>
+                                    <li>提高开发效率，吸引更多开发者加入</li>
+                                    <li>改进工具将直接提升用户体验和应用质量</li>
+                                    <li>生态系统快速发展将提高ADA价值</li>
+                                </ul>
+                            </div>
+
+                            <!-- 反方观点 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-white">
+                                <h3 class="font-bold text-[#0a2463] mb-2 flex items-center">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/x-circle.svg"
+                                        class="w-4 h-4 mr-1 text-[#EF476F]" />
+                                    反方观点总结
+                                </h3>
+
+                                <ul class="point-list cons text-xs">
+                                    <li>当前资金分配已经足够，应优先考虑现有项目</li>
+                                    <li>分散资源可能导致整体质量下降</li>
+                                    <li>应先完善现有工具，再考虑扩展</li>
+                                    <li>过快扩张可能导致安全问题和技术债务</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 我们的观点 -->
+                        <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-white mb-4">
+                            <h3 class="font-bold text-[#0a2463] mb-2 flex items-center">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/lightbulb.svg"
+                                    class="w-4 h-4 mr-1 text-[#3f8efc]" />
+                                我们的观点
+                            </h3>
+
+                            <p class="text-xs">
+                                我们支持增加开发者工具的资金分配，但建议采用分阶段方式，先完成现有项目，再逐步扩展新工具的开发。这样既能保证质量，又能促进生态系统的长期健康发展。
+                            </p>
+                        </div>
+
+                        <!-- 投票组织概览 - 缩小比例 -->
+                        <div class="flex justify-between mb-4 border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
+                            <!-- DReps投票进度 -->
+                            <div class="flex items-center">
+                                <div class="relative w-12 h-12 mr-2">
+                                    <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463" stroke-width="2" />
+                                        <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0"
+                                            stroke-width="10" />
+                                        <path d="M95 50 A45 45 0 0 1 78 85" fill="none" stroke="#EF476F"
+                                            stroke-width="10" />
+                                        <path d="M78 85 A45 45 0 0 1 50 95" fill="none" stroke="#d6e4ff"
+                                            stroke-width="10" />
+                                        <path d="M50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5" fill="none"
+                                            stroke="#f0f7ff" stroke-width="10" stroke-dasharray="5,5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-xs text-[#0a2463] flex items-center">
+                                        <img src="https://unpkg.com/lucide-static@latest/icons/users.svg"
+                                            class="w-3 h-3 mr-1" />
+                                        DReps
+                                    </h3>
+                                    <div class="text-xs">赞成: 50% | 反对: 15% | 弃权: 5%</div>
+                                </div>
+                            </div>
+
+                            <!-- SPOs投票进度 -->
+                            <div class="flex items-center">
+                                <div class="relative w-12 h-12 mr-2">
+                                    <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463" stroke-width="2" />
+                                        <path d="M50 5 A45 45 0 0 1 95 50 A45 45 0 0 1 50 95" fill="none"
+                                            stroke="#06D6A0" stroke-width="10" />
+                                        <path d="M50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5" fill="none"
+                                            stroke="#f0f7ff" stroke-width="10" stroke-dasharray="5,5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-xs text-[#0a2463] flex items-center">
+                                        <img src="https://unpkg.com/lucide-static@latest/icons/database.svg"
+                                            class="w-3 h-3 mr-1" />
+                                        SPOs
+                                    </h3>
+                                    <div class="text-xs">赞成: 55% | 反对: 0% | 弃权: 0%</div>
+                                </div>
+                            </div>
+
+                            <!-- 宪法委员会投票进度 -->
+                            <div class="flex items-center">
+                                <div class="relative w-12 h-12 mr-2">
+                                    <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463" stroke-width="2" />
+                                        <path d="M50 5 A45 45 0 0 1 95 50 A45 45 0 0 1 85 78" fill="none"
+                                            stroke="#06D6A0" stroke-width="10" />
+                                        <path d="M85 78 A45 45 0 0 1 78 85" fill="none" stroke="#EF476F"
+                                            stroke-width="10" />
+                                        <path d="M78 85 A45 45 0 0 1 70 90" fill="none" stroke="#d6e4ff"
+                                            stroke-width="10" />
+                                        <path d="M70 90 A45 45 0 0 1 50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5"
+                                            fill="none" stroke="#f0f7ff" stroke-width="10" stroke-dasharray="5,5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-xs text-[#0a2463] flex items-center">
+                                        <img src="https://unpkg.com/lucide-static@latest/icons/landmark.svg"
+                                            class="w-3 h-3 mr-1" />
+                                        宪法委员会
+                                    </h3>
+                                    <div class="text-xs">赞成: 40% | 反对: 10% | 弃权: 10%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 投票按钮 -->
+                        <div class="flex justify-center space-x-3">
+                            <button class="btn px-4 py-2 bg-[#06D6A0] text-white flex items-center text-sm">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/thumbs-up.svg"
+                                    class="w-4 h-4 mr-1" />
+                                赞成
+                            </button>
+                            <button class="btn px-4 py-2 bg-[#EF476F] text-white flex items-center text-sm">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/thumbs-down.svg"
+                                    class="w-4 h-4 mr-1" />
+                                反对
+                            </button>
+                            <button class="btn px-4 py-2 bg-[#d6e4ff] text-[#0a2463] flex items-center text-sm">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/minus-circle.svg"
+                                    class="w-4 h-4 mr-1" />
+                                弃权
+                            </button>
+                            <button class="btn px-4 py-2 bg-white text-[#0a2463] flex items-center text-sm">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/more-horizontal.svg"
+                                    class="w-4 h-4 mr-1" />
+                                详情
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 提案 #41 -->
+                    <div class="card bg-white p-5 relative">
+                        <h3 class="text-xl font-bold text-[#0a2463] mb-3 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/file-text.svg"
+                                class="w-5 h-5 mr-2" />
+                            提案 #41: Cardano智能合约标准
+                        </h3>
+
+                        <div class="flex justify-between mb-3">
+                            <div class="flex items-center text-sm">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/calendar.svg"
+                                    class="w-4 h-4 mr-1" />
+                                <span>开始: 2023-11-05</span>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/calendar-x.svg"
+                                    class="w-4 h-4 mr-1" />
+                                <span>结束: 2023-11-20</span>
+                            </div>
+                            <div class="flex items-center text-sm font-bold text-[#3f8efc]">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/clock.svg"
+                                    class="w-4 h-4 mr-1" />
+                                <span>剩余时间: 1天</span>
+                            </div>
+                        </div>
+
+                        <!-- 总体投票进度 -->
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-bold">总体投票进度</span>
+                                <span class="text-sm font-bold">58%</span>
+                            </div>
+                            <div class="progress-bar bg-white">
+                                <div class="progress-bar-inner bg-[#3f8efc]" style="width: 58%"></div>
+                                <div class="progress-threshold" style="left: 50%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs mt-1">
+                                <span>最低参与率: 50%</span>
+                                <span class="text-[#06D6A0] font-bold">✓ 已达标</span>
+                            </div>
+                        </div>
+
+                        <!-- 观点总结 - 更加突出 -->
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <!-- 正方观点 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-white">
+                                <h3 class="font-bold text-[#0a2463] mb-2 flex items-center">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/check-circle.svg"
+                                        class="w-4 h-4 mr-1 text-[#06D6A0]" />
+                                    正方观点总结
+                                </h3>
+
+                                <ul class="point-list pros text-xs">
+                                    <li>统一的智能合约标准将提高互操作性</li>
+                                    <li>降低开发者学习成本和开发难度</li>
+                                    <li>提高安全性，减少漏洞风险</li>
+                                    <li>促进更多应用和服务的集成</li>
+                                </ul>
+                            </div>
+
+                            <!-- 反方观点 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-white">
+                                <h3 class="font-bold text-[#0a2463] mb-2 flex items-center">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/x-circle.svg"
+                                        class="w-4 h-4 mr-1 text-[#EF476F]" />
+                                    反方观点总结
+                                </h3>
+
+                                <ul class="point-list cons text-xs">
+                                    <li>过早制定标准可能限制创新和灵活性</li>
+                                    <li>当前生态系统尚未成熟，标准可能需要频繁修改</li>
+                                    <li>强制标准可能增加开发者负担</li>
+                                    <li>应该让市场自然选择最佳实践</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 投票组织概览 - 缩小比例 -->
+                        <div class="flex justify-between mb-4 border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
+                            <!-- 三个组织的投票进度 -->
+                            <div class="flex items-center">
+                                <div class="relative w-12 h-12 mr-2">
+                                    <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463" stroke-width="2" />
+                                        <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0"
+                                            stroke-width="10" />
+                                        <path d="M95 50 A45 45 0 0 1 50 95" fill="none" stroke="#EF476F"
+                                            stroke-width="10" />
+                                        <path d="M50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5" fill="none"
+                                            stroke="#f0f7ff" stroke-width="10" stroke-dasharray="5,5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    // ... existing code ...
+
+                                    <div>
+                                        <h3 class="font-bold text-xs text-[#0a2463] flex items-center">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/users.svg"
+                                                class="w-3 h-3 mr-1" />
+                                            DReps
+                                        </h3>
+                                        <div class="text-xs">赞成: 30% | 反对: 40% | 弃权: 0%</div>
+                                    </div>
+                                </div>
+
+                                <!-- SPOs投票进度 -->
+                                <div class="flex items-center">
+                                    <div class="relative w-12 h-12 mr-2">
+                                        <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463"
+                                                stroke-width="2" />
+                                            <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0"
+                                                stroke-width="10" />
+                                            <path d="M95 50 A45 45 0 0 1 50 95" fill="none" stroke="#EF476F"
+                                                stroke-width="10" />
+                                            <path d="M50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5" fill="none"
+                                                stroke="#f0f7ff" stroke-width="10" stroke-dasharray="5,5" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-xs text-[#0a2463] flex items-center">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/database.svg"
+                                                class="w-3 h-3 mr-1" />
+                                            SPOs
+                                        </h3>
+                                        <div class="text-xs">赞成: 35% | 反对: 35% | 弃权: 5%</div>
+                                    </div>
+                                </div>
+
+                                <!-- 宪法委员会投票进度 -->
+                                <div class="flex items-center">
+                                    <div class="relative w-12 h-12 mr-2">
+                                        <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463"
+                                                stroke-width="2" />
+                                            <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0"
+                                                stroke-width="10" />
+                                            <path d="M95 50 A45 45 0 0 1 50 95" fill="none" stroke="#EF476F"
+                                                stroke-width="10" />
+                                            <path d="M50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5" fill="none"
+                                                stroke="#f0f7ff" stroke-width="10" stroke-dasharray="5,5" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-xs text-[#0a2463] flex items-center">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/landmark.svg"
+                                                class="w-3 h-3 mr-1" />
+                                            宪法委员会
+                                        </h3>
+                                        <div class="text-xs">赞成: 60% | 反对: 20% | 弃权: 0%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 投票按钮 -->
+                            <div class="flex justify-center space-x-3">
+                                <button class="btn px-4 py-2 bg-[#06D6A0] text-white flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/thumbs-up.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    赞成
+                                </button>
+                                <button class="btn px-4 py-2 bg-[#EF476F] text-white flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/thumbs-down.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    反对
+                                </button>
+                                <button class="btn px-4 py-2 bg-[#d6e4ff] text-[#0a2463] flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/minus-circle.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    弃权
+                                </button>
+                                <button class="btn px-4 py-2 bg-white text-[#0a2463] flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/more-horizontal.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    详情
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 提案 #40 -->
+                        <div class="card bg-white p-5 relative">
+                            <h3 class="text-xl font-bold text-[#0a2463] mb-3 flex items-center">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/file-text.svg"
+                                    class="w-5 h-5 mr-2" />
+                                提案 #40: 跨链互操作性协议
+                            </h3>
+
+                            <div class="flex justify-between mb-3">
+                                <div class="flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/calendar.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    <span>开始: 2023-11-01</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/calendar-x.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    <span>结束: 2023-11-15</span>
+                                </div>
+                                <div class="flex items-center text-sm font-bold text-[#3f8efc]">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/clock.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    <span>剩余时间: 5天</span>
+                                </div>
+                            </div>
+
+                            <!-- 总体投票进度 -->
+                            <div class="mb-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm font-bold">总体投票进度</span>
+                                    <span class="text-sm font-bold">42%</span>
+                                </div>
+                                <div class="progress-bar bg-white">
+                                    <div class="progress-bar-inner bg-[#3f8efc]" style="width: 42%"></div>
+                                    <div class="progress-threshold" style="left: 50%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs mt-1">
+                                    <span>最低参与率: 50%</span>
+                                    <span class="text-[#EF476F] font-bold">✗ 未达标</span>
+                                </div>
+                            </div>
+
+                            <!-- 观点总结 - 折叠状态 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-white mb-4">
+                                <button class="w-full flex justify-between items-center">
+                                    <h3 class="font-bold text-[#0a2463] flex items-center">
+                                        <img src="https://unpkg.com/lucide-static@latest/icons/message-square.svg"
+                                            class="w-4 h-4 mr-1" />
+                                        查看观点总结
+                                    </h3>
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/chevron-down.svg"
+                                        class="w-4 h-4" />
+                                </button>
+                            </div>
+
+                            <!-- 投票组织概览 - 缩小比例 -->
+                            <div
+                                class="flex justify-between mb-4 border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
+                                <!-- 三个组织的投票进度 -->
+                                <div class="flex items-center">
+                                    <div class="relative w-12 h-12 mr-2">
+                                        <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463"
+                                                stroke-width="2" />
+                                            <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0"
+                                                stroke-width="10" />
+                                            <path d="M95 50 A45 45 0 0 1 50 95" fill="none" stroke="#f0f7ff"
+                                                stroke-width="10" stroke-dasharray="5,5" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-xs text-[#0a2463] flex items-center">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/users.svg"
+                                                class="w-3 h-3 mr-1" />
+                                            DReps
+                                        </h3>
+                                        <div class="text-xs">赞成: 25% | 反对: 0% | 弃权: 0%</div>
+                                    </div>
+                                </div>
+
+                                <!-- SPOs投票进度 -->
+                                <div class="flex items-center">
+                                    <div class="relative w-12 h-12 mr-2">
+                                        <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463"
+                                                stroke-width="2" />
+                                            <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0"
+                                                stroke-width="10" />
+                                            <path d="M95 50 A45 45 0 0 1 50 95" fill="none" stroke="#f0f7ff"
+                                                stroke-width="10" stroke-dasharray="5,5" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-xs text-[#0a2463] flex items-center">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/database.svg"
+                                                class="w-3 h-3 mr-1" />
+                                            SPOs
+                                        </h3>
+                                        <div class="text-xs">赞成: 30% | 反对: 0% | 弃权: 0%</div>
+                                    </div>
+                                </div>
+
+                                <!-- 宪法委员会投票进度 -->
+                                <div class="flex items-center">
+                                    <div class="relative w-12 h-12 mr-2">
+                                        <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463"
+                                                stroke-width="2" />
+                                            <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0"
+                                                stroke-width="10" />
+                                            <path d="M95 50 A45 45 0 0 1 50 95" fill="none" stroke="#f0f7ff"
+                                                stroke-width="10" stroke-dasharray="5,5" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-xs text-[#0a2463] flex items-center">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/landmark.svg"
+                                                class="w-3 h-3 mr-1" />
+                                            宪法委员会
+                                        </h3>
+                                        <div class="text-xs">赞成: 45% | 反对: 0% | 弃权: 0%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 投票按钮 -->
+                            <div class="flex justify-center space-x-3">
+                                <button class="btn px-4 py-2 bg-[#06D6A0] text-white flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/thumbs-up.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    赞成
+                                </button>
+                                <button class="btn px-4 py-2 bg-[#EF476F] text-white flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/thumbs-down.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    反对
+                                </button>
+                                <button class="btn px-4 py-2 bg-[#d6e4ff] text-[#0a2463] flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/minus-circle.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    弃权
+                                </button>
+                                <button class="btn px-4 py-2 bg-white text-[#0a2463] flex items-center text-sm">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/more-horizontal.svg"
+                                        class="w-4 h-4 mr-1" />
+                                    详情
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 历史提案标题 -->
+                        <div class="card bg-white p-4 flex justify-between items-center">
+                            <h2 class="text-2xl title-font flex items-center text-[#0a2463]">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/history.svg"
+                                    class="w-6 h-6 mr-2" />
+                                历史提案
+                            </h2>
+                            <button class="btn px-3 py-1 bg-white text-[#0a2463] text-sm">
+                                查看全部
+                            </button>
+                        </div>
+
+                        <!-- 历史提案列表 -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="card bg-white p-3 flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-bold text-[#0a2463]">提案 #39: DApp商店集成</h3>
+                                    <div class="text-xs text-[#3f8efc]">2023-10-15 结束</div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div
+                                        class="bg-[#06D6A0] text-white text-xs font-bold px-2 py-1 rounded-lg border-2 border-[#0a2463]">
+                                        已通过
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card bg-white p-3 flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-bold text-[#0a2463]">提案 #38: 社区基金分配</h3>
+                                    <div class="text-xs text-[#3f8efc]">2023-10-01 结束</div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div
+                                        class="bg-[#EF476F] text-white text-xs font-bold px-2 py-1 rounded-lg border-2 border-[#0a2463]">
+                                        未通过
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card bg-white p-3 flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-bold text-[#0a2463]">提案 #37: 质押池参数调整</h3>
+                                    <div class="text-xs text-[#3f8efc]">2023-09-15 结束</div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div
+                                        class="bg-[#06D6A0] text-white text-xs font-bold px-2 py-1 rounded-lg border-2 border-[#0a2463]">
+                                        已通过
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card bg-white p-3 flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-bold text-[#0a2463]">提案 #36: 网络安全升级</h3>
+                                    <div class="text-xs text-[#3f8efc]">2023-09-01 结束</div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div
+                                        class="bg-[#06D6A0] text-white text-xs font-bold px-2 py-1 rounded-lg border-2 border-[#0a2463]">
+                                        已通过
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 加载更多按钮 -->
+                        <div class="flex justify-center">
+                            <button class="btn px-6 py-2 bg-white text-[#0a2463] text-sm flex items-center">
+                                加载更多
+                                <img src="https://unpkg.com/lucide-static@latest/icons/chevron-down.svg"
+                                    class="w-4 h-4 ml-1" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+</html>

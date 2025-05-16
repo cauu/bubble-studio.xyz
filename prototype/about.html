@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Studio - About</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        .mockup-container {
+            width: 1200px;
+            height: 800px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            background-color: #f0f4f8;
+            position: relative;
+        }
+        .bubble-bg {
+            background-image: radial-gradient(circle at 10% 20%, rgba(91, 194, 231, 0.2) 0%, rgba(91, 194, 231, 0) 50%),
+                            radial-gradient(circle at 80% 70%, rgba(137, 247, 254, 0.2) 0%, rgba(137, 247, 254, 0) 50%);
+        }
+        .team-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #4f46e5;
+            position: absolute;
+            left: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: #d1d5db;
+        }
+    </style>
+</head>
+<body class="p-8 flex flex-wrap justify-center">
+    <!-- About页面设计 -->
+    <div class="mockup-container bubble-bg">
+        <div class="w-full h-full p-6">
+            <!-- 导航栏 -->
+            <nav class="glass rounded-xl p-4 flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="text-3xl font-bold text-indigo-800 mr-10">Bubble Studio</div>
+                    <div class="flex space-x-6">
+                        <a href="#" class="px-4 py-2 rounded-lg hover:bg-indigo-100 text-indigo-800 font-medium">治理</a>
+                        <a href="#" class="px-4 py-2 rounded-lg hover:bg-indigo-100 text-indigo-800 font-medium">Staking</a>
+                        <a href="#" class="px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium">About</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="px-4 py-2 rounded-lg bg-indigo-100 text-indigo-800 font-medium flex items-center">
+                        <img src="https://unpkg.com/lucide-static@latest/icons/wallet.svg" class="w-5 h-5 mr-2" />
+                        连接钱包
+                    </button>
+                </div>
+            </nav>
+            
+            <!-- 主要内容区域 -->
+            <div class="grid grid-cols-3 gap-6 h-[calc(100%-80px)]">
+                <!-- 左侧内容 -->
+                <div class="col-span-2 space-y-6">
+                    <!-- 关于我们 -->
+                    <div class="glass rounded-xl p-5 h-[calc(40%)]">
+                        <h2 class="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" class="w-5 h-5 mr-2" />
+                            关于我们
+                        </h2>
+                        
+                        <div class="grid grid-cols-2 gap-6 h-[calc(100%-40px)]">
+                            <div class="flex flex-col justify-center">
+                                <h3 class="text-2xl font-bold text-indigo-800 mb-4">Bubble Studio</h3>
+                                <p class="text-gray-700 mb-3">
+                                    Bubble Studio 是一个专注于区块链技术和去中心化应用开发的独立工作室。我们致力于为 Cardano 生态系统构建创新、用户友好的解决方案。
+                                </p>
+                                <p class="text-gray-700">
+                                    我们的使命是通过简化区块链技术的复杂性，让更多人能够参与到去中心化治理和质押中来，共同塑造区块链的未来。
+                                </p>
+                                
+                                <div class="flex space-x-4 mt-4">
+                                    <a href="#" class="p-2 bg-indigo-100 rounded-full">
+                                        <img src="https://unpkg.com/lucide-static@latest/icons/github.svg" class="w-5 h-5 text-indigo-800" />
+                                    </a>
+                                    <a href="#" class="p-2 bg-indigo-100 rounded-full">
+                                        <img src="https://unpkg.com/lucide-static@latest/icons/twitter.svg" class="w-5 h-5 text-indigo-800" />
+                                    </a>
+                                    <a href="#" class="p-2 bg-indigo-100 rounded-full">
+                                        <img src="https://unpkg.com/lucide-static@latest/icons/linkedin.svg" class="w-5 h-5 text-indigo-800" />
+                                    </a>
+                                    <a href="#" class="p-2 bg-indigo-100 rounded-full">
+                                        <img src="https://unpkg.com/lucide-static@latest/icons/message-circle.svg" class="w-5 h-5 text-indigo-800" />
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-center">
+                                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" class="rounded-lg w-full h-auto max-h-[200px] object-cover" alt="Bubble Studio Office" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 团队成员 -->
+                    <div class="glass rounded-xl p-5 h-[calc(60%)]">
+                        <h2 class="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" class="w-5 h-5 mr-2" />
+                            团队成员
+                        </h2>
+                        
+                        <div class="grid grid-cols-3 gap-4 h-[calc(100%-40px)] overflow-y-auto pr-2">
+                            <!-- 团队成员卡片 -->
+                            <div class="bg-white bg-opacity-60 rounded-lg p-4 team-card transition-all duration-300">
+                                <div class="flex flex-col items-center">
+                                    <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" class="w-24 h-24 rounded-full mb-3 object-cover" />
+                                    <h3 class="font-bold text-indigo-800">David Chen</h3>
+                                    <div class="text-sm text-gray-600 mb-2">创始人 & CEO</div>
+                                    <p class="text-xs text-gray-700 text-center mb-3">
+                                        区块链技术专家，拥有10年软件开发经验，Cardano早期贡献者。
+                                    </p>
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/linkedin.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/twitter.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white bg-opacity-60 rounded-lg p-4 team-card transition-all duration-300">
+                                <div class="flex flex-col items-center">
+                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" class="w-24 h-24 rounded-full mb-3 object-cover" />
+                                    <h3 class="font-bold text-indigo-800">Sarah Johnson</h3>
+                                    <div class="text-sm text-gray-600 mb-2">CTO</div>
+                                    <p class="text-xs text-gray-700 text-center mb-3">
+                                        分布式系统专家，曾在多个知名区块链项目担任技术顾问。
+                                    </p>
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/linkedin.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/github.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white bg-opacity-60 rounded-lg p-4 team-card transition-all duration-300">
+                                <div class="flex flex-col items-center">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" class="w-24 h-24 rounded-full mb-3 object-cover" />
+                                    <h3 class="font-bold text-indigo-800">Michael Torres</h3>
+                                    <div class="text-sm text-gray-600 mb-2">产品设计师</div>
+                                    <p class="text-xs text-gray-700 text-center mb-3">
+                                        UI/UX专家，专注于创造简洁、直观的用户体验，曾为多个Web3项目设计界面。
+                                    </p>
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/dribbble.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/instagram.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white bg-opacity-60 rounded-lg p-4 team-card transition-all duration-300">
+                                <div class="flex flex-col items-center">
+                                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" class="w-24 h-24 rounded-full mb-3 object-cover" />
+                                    <h3 class="font-bold text-indigo-800">Emma Wilson</h3>
+                                    <div class="text-sm text-gray-600 mb-2">区块链研究员</div>
+                                    <p class="text-xs text-gray-700 text-center mb-3">
+                                        密码经济学专家，专注于治理机制研究和代币经济模型设计。
+                                    </p>
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/linkedin.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/book-open.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white bg-opacity-60 rounded-lg p-4 team-card transition-all duration-300">
+                                <div class="flex flex-col items-center">
+                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" class="w-24 h-24 rounded-full mb-3 object-cover" />
+                                    <h3 class="font-bold text-indigo-800">Alex Zhang</h3>
+                                    <div class="text-sm text-gray-600 mb-2">全栈开发者</div>
+                                    <p class="text-xs text-gray-700 text-center mb-3">
+                                        精通Haskell和JavaScript，Cardano智能合约专家，DApp开发经验丰富。
+                                    </p>
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/github.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/code.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white bg-opacity-60 rounded-lg p-4 team-card transition-all duration-300">
+                                <div class="flex flex-col items-center">
+                                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" class="w-24 h-24 rounded-full mb-3 object-cover" />
+                                    <h3 class="font-bold text-indigo-800">Olivia Martinez</h3>
+                                    <div class="text-sm text-gray-600 mb-2">社区经理</div>
+                                    <p class="text-xs text-gray-700 text-center mb-3">
+                                        负责社区建设和用户教育，拥有丰富的区块链项目运营经验。
+                                    </p>
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/twitter.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                        <a href="#" class="p-1.5 bg-indigo-100 rounded-full">
+                                            <img src="https://unpkg.com/lucide-static@latest/icons/message-circle.svg" class="w-4 h-4 text-indigo-800" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧内容 -->
+                <div class="col-span-1 space-y-6">
+                    <!-- 我们的愿景 -->
+                    <div class="glass rounded-xl p-5 h-[calc(40%)]">
+                        <h2 class="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/target.svg" class="w-5 h-5 mr-2" />
+                            我们的愿景
+                        </h2>
+                        
+                        <div class="bg-white bg-opacity-60 rounded-lg p-4 mb-4">
+                            <h3 class="font-medium text-indigo-800 mb-2">使命</h3>
+                            <p class="text-sm text-gray-700 mb-4">
+                                通过创新技术和用户友好的界面，让区块链治理和质押变得简单易用，使更多人能够参与到去中心化决策中来。
+                            </p>
+                            
+                            <h3 class="font-medium text-indigo-800 mb-2">价值观</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-600 mr-2"></div>
+                                    <span class="text-sm text-gray-700">透明度与开放性</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-600 mr-2"></div>
+                                    <span class="text-sm text-gray-700">社区驱动的创新</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-600 mr-2"></div>
+                                    <span class="text-sm text-gray-700">安全与可靠性</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-600 mr-2"></div>
+                                    <span class="text-sm text-gray-700">用户体验至上</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-indigo-50 bg-opacity-70 rounded-lg p-4">
+                            <div class="flex items-center mb-2">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/quote.svg" class="w-5 h-5 text-indigo-600 mr-2" />
+                                <h3 class="font-medium text-indigo-800">创始人寄语</h3>
+                            </div>
+                            <p class="text-sm text-gray-700 italic">
+                                "我们相信区块链技术的未来在于让每个人都能轻松参与治理，共同决定生态系统的发展方向。Bubble Studio致力于成为这一愿景的推动者。"
+                            </p>
+                            <div class="text-right text-xs text-gray-600 mt-2">
+                                — David Chen, 创始人
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 发展历程 -->
+                    <div class="glass rounded-xl p-5 h-[calc(60%)]">
+                        <h2 class="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/milestone.svg" class="w-5 h-5 mr-2" />
+                            发展历程
+                        </h2>
+                        
+                        <div class="relative pl-8 space-y-6 max-h-[calc(100%-40px)] overflow-y-auto pr-2">
+                            <div class="timeline-line"></div>
+                            
+                            <div class="relative">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-white bg-opacity-60 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="font-medium text-indigo-800">成立 Bubble Studio</h3>
+                                        <span class="text-xs text-gray-600">2021年3月</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700">
+                                        由一群区块链爱好者和开发者共同创立，致力于为Cardano生态系统开发创新应用。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-white bg-opacity-60 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="font-medium text-indigo-800">首个产品发布</h3>
+                                        <span class="text-xs text-gray-600">2021年9月</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700">
+                                        推出Cardano质押工具，帮助用户轻松参与网络质押，获得奖励。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-white bg-opacity-60 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="font-medium text-indigo-800">社区增长里程碑</h3>
+                                        <span class="text-xs text-gray-600">2022年2月</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700">
+                                        用户数量突破10,000，质押总量超过500万ADA。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-white bg-opacity-60 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="font-medium text-indigo-800">治理平台上线</h3>
+                                        <span class="text-xs text-gray-600">2022年7月</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700">
+                                        推出去中心化治理平台，使社区成员能够参与提案投票和决策过程。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-white bg-opacity-60 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="font-medium text-indigo-800">获得生态系统基金支持</h3>
+                                        <span class="text-xs text-gray-600">2022年11月</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700">
+                                        项目获得Cardano生态系统基金支持，用于开发更多创新功能。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-white bg-opacity-60 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="font-medium text-indigo-800">DReps代表机制推出</h3>
+                                        <span class="text-xs text-gray-600">2023年4月</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700">
+                                        引入代表投票机制，让用户可以委托投票权给专业代表。
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-white bg-opacity-60 rounded-lg p-4 border-l-4 border-indigo-500">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="font-medium text-indigo-800">全新平台界面发布</h3>
+                                        <span class="text-xs text-gray-600">2023年10月</span>
+                                    </div>
+                                    <p class="text-sm text-gray-700">
+                                        推出全新设计的用户界面，提升用户体验，简化操作流程。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

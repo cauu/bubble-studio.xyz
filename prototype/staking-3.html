@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Studio - Staking</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+        
+        body {
+            background-color: #f0f7ff;
+            font-family: 'Comic Neue', cursive;
+        }
+        .card {
+            border: 3px solid #0a2463;
+            border-radius: 16px;
+            box-shadow: 6px 6px 0px #0a2463;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border: 3px solid #0a2463;
+            transform: rotate(45deg);
+            z-index: 0;
+        }
+        .btn {
+            border: 3px solid #0a2463;
+            border-radius: 8px;
+            box-shadow: 3px 3px 0px #0a2463;
+            transition: all 0.2s ease;
+            font-weight: bold;
+        }
+        .btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0px #0a2463;
+        }
+        .mockup-container {
+            width: 1200px;
+            height: 800px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            background-color: #f0f7ff;
+            position: relative;
+        }
+        .comic-bg {
+            background-image: 
+                radial-gradient(#b8d3ff 2px, transparent 2px),
+                radial-gradient(#d6e4ff 2px, transparent 2px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+        }
+        .title-font {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 1px;
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .badge {
+            transform: rotate(-15deg);
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            z-index: 10;
+        }
+        .pool-card {
+            transition: all 0.3s ease;
+        }
+        .pool-card:hover {
+            transform: translateY(-5px);
+        }
+        .bubble {
+            position: absolute;
+            background-color: #d6e4ff;
+            border: 2px solid #0a2463;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 3s infinite ease-in-out;
+        }
+        .bubble:nth-child(1) {
+            width: 30px;
+            height: 30px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            top: 30%;
+            left: 20%;
+            animation-delay: 0.5s;
+        }
+        .bubble:nth-child(3) {
+            width: 25px;
+            height: 25px;
+            top: 15%;
+            left: 30%;
+            animation-delay: 1s;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="p-8 flex flex-wrap justify-center">
+    <!-- Staking页面设计 -->
+    <div class="mockup-container comic-bg">
+        <div class="w-full h-full p-6">
+            <!-- 导航栏 -->
+            <nav class="card bg-white p-4 flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="text-3xl title-font mr-10 flex items-center text-[#0a2463]">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                            <circle cx="20" cy="20" r="18" fill="#d6e4ff" stroke="#0a2463" stroke-width="4"/>
+                            <circle cx="20" cy="20" r="8" fill="#3f8efc" stroke="#0a2463" stroke-width="4"/>
+                        </svg>
+                        Bubble Studio
+                    </div>
+                    <div class="flex space-x-6">
+                        <a href="#" class="px-4 py-2 hover:bg-[#e6f0ff] font-bold rounded-lg">治理</a>
+                        <a href="#" class="px-4 py-2 bg-[#3f8efc] text-white font-bold rounded-lg btn">Staking</a>
+                        <a href="#" class="px-4 py-2 hover:bg-[#e6f0ff] font-bold rounded-lg">About</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="btn px-4 py-2 bg-white font-bold flex items-center">
+                        <img src="https://unpkg.com/lucide-static@latest/icons/wallet.svg" class="w-5 h-5 mr-2" />
+                        连接钱包
+                    </button>
+                </div>
+            </nav>
+            
+            <!-- 主要内容区域 -->
+            <div class="grid grid-cols-3 gap-6 h-[calc(100%-80px)]">
+                <!-- 左侧内容 -->
+                <div class="col-span-2 space-y-6">
+                    <!-- 质押概览 -->
+                    <div class="card bg-white p-5 h-[calc(40%)] relative">
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        
+                        <h2 class="text-2xl title-font mb-4 flex items-center text-[#0a2463]">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/layers.svg" class="w-6 h-6 mr-2" />
+                            质押概览
+                        </h2>
+                        
+                        <div class="grid grid-cols-3 gap-4 h-[calc(100%-40px)]">
+                            <!-- 质押总量 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-4 flex flex-col justify-between bg-[#e6f0ff] transform rotate-1">
+                                <div>
+                                    <h3 class="text-sm font-bold text-[#0a2463]">质押总量</h3>
+                                    <div class="text-2xl font-bold mt-1 text-[#0a2463]">12,450 ADA</div>
+                                </div>
+                                <div class="flex items-center text-sm font-bold text-[#3f8efc]">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                        <path d="M8 3V13M8 3L4 7M8 3L12 7" stroke="#3f8efc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span>+320 ADA (本周)</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 预计年化收益 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-4 flex flex-col justify-between bg-[#e6f0ff] transform -rotate-1">
+                                <div>
+                                    <h3 class="text-sm font-bold text-[#0a2463]">预计年化收益</h3>
+                                    <div class="text-2xl font-bold mt-1 text-[#0a2463]">4.8%</div>
+                                </div>
+                                <div class="text-sm font-bold text-[#3f8efc]">
+                                    约 598 ADA/年
+                                </div>
+                            </div>
+                            
+                            <!-- 下一次奖励 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-4 flex flex-col justify-between bg-[#e6f0ff] transform rotate-1">
+                                <div>
+                                    <h3 class="text-sm font-bold text-[#0a2463]">下一次奖励</h3>
+                                    <div class="text-2xl font-bold mt-1 text-[#0a2463]">49.8 ADA</div>
+                                </div>
+                                <div class="flex items-center text-sm font-bold text-[#3f8efc]">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/clock.svg" class="w-4 h-4 mr-1" />
+                                    <span>2天后 (Epoch 435结束)</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 质押进度 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-4 col-span-2 bg-[#e6f0ff]">
+                                <h3 class="text-sm font-bold text-[#0a2463] mb-2">当前Epoch进度</h3>
+                                <div class="flex items-center">
+                                    <div class="w-full bg-white rounded-full h-4 mr-3 border-2 border-[#0a2463] overflow-hidden">
+                                        <div class="bg-[#3f8efc] h-4 rounded-full relative" style="width: 65%">
+                                            <div class="absolute top-0 bottom-0 right-0 w-4 bg-[#3f8efc]"></div>
+                                        </div>
+                                    </div>
+                                    <span class="text-sm font-bold">65%</span>
+                                </div>
+                                <div class="flex justify-between mt-2 text-xs font-bold">
+                                    <span>Epoch 434</span>
+                                    <span>剩余时间: 1天 20小时</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 投票权 -->
+                            <div class="border-3 border-[#0a2463] rounded-lg p-4 bg-[#e6f0ff]">
+                                <h3 class="text-sm font-bold text-[#0a2463] mb-2">治理投票权</h3>
+                                <div class="flex items-center justify-center h-[80px] relative">
+                                    <svg width="80" height="80" viewBox="0 0 80 80" class="progress-ring">
+                                        <circle cx="40" cy="40" r="35" stroke="#d6e4ff" stroke-width="8" fill="none" />
+                                        <circle cx="40" cy="40" r="35" stroke="#3f8efc" stroke-width="8" fill="none" stroke-dasharray="220" stroke-dashoffset="77" />
+                                    </svg>
+                                    <div class="absolute text-xl font-bold text-[#0a2463]">65%</div>
+                                </div>
+                                <div class="text-center text-xs font-bold text-[#3f8efc] mt-1">
+                                    已激活投票权
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 质押池信息 -->
+                    <div class="card bg-white p-5 h-[calc(60%)]">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl title-font flex items-center text-[#0a2463]">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/database.svg" class="w-6 h-6 mr-2" />
+                                质押池信息
+                            </h2>
+                            
+                            <div class="badge">
+                                <div class="bg-[#3f8efc] text-white text-xs font-bold px-3 py-1 rounded-full border-2 border-[#0a2463]">
+                                    热门推荐
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 当前质押池 -->
+                        <div class="border-3 border-[#0a2463] rounded-lg p-4 mb-4 border-l-[6px] bg-[#e6f0ff]">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-14 h-14 rounded-lg border-3 border-[#0a2463] mr-4 flex items-center justify-center bg-[#3f8efc] transform rotate-3">
+                                        <span class="font-bold text-xl text-white">B</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-[#0a2463]">BUBBLE 质押池</h3>
+                                        <div class="text-sm text-[#3f8efc] mt-1 font-bold">池ID: pool1z4vgdh...</div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end">
+                                    <div class="text-sm font-bold text-[#0a2463]">您的质押: 12,450 ADA</div>
+                                    <div class="text-xs text-[#3f8efc] mt-1 font-bold">池总量: 5.2M ADA</div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-4 gap-3 mt-4">
+                                <div class="border-2 border-[#0a2463] rounded-lg p-2 bg-white">
+                                    <div class="text-xs text-[#3f8efc] font-bold">饱和度</div>
+                                    <div class="text-sm font-bold text-[#0a2463]">78%</div>
+                                </div>
+                                <div class="border-2 border-[#0a2463] rounded-lg p-2 bg-white">
+                                    <div class="text-xs text-[#3f8efc] font-bold">费率</div>
+                                    <div class="text-sm font-bold text-[#0a2463]">3.5%</div>
+                                </div>
+                                <div class="border-2 border-[#0a2463] rounded-lg p-2 bg-white">
+                                    <div class="text-xs text-[#3f8efc] font-bold">ROA</div>
+                                    <div class="text-sm font-bold text-[#0a2463]">4.8%</div>
+                                </div>
+                                <div class="border-2 border-[#0a2463] rounded-lg p-2 bg-white">
+                                    <div class="text-xs text-[#3f8efc] font-bold">区块生产</div>
+                                    <div class="text-sm font-bold text-[#0a2463]">42 / epoch</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 推荐质押池 -->
+                        <h3 class="font-bold text-[#0a2463] mb-3">推荐质押池</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="pool-card border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 rounded-lg border-2 border-[#0a2463] mr-3 flex items-center justify-center bg-[#d6e4ff] transform rotate-2">
+                                        <span class="font-bold text-[#0a2463]">A</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-[#0a2463]">ATLAS 质押池</h4>
+                                        <div class="text-xs text-[#3f8efc] font-bold">ROA: 5.1%</div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-xs font-bold text-[#0a2463]">饱和度: 65%</div>
+                                    <button class="btn px-2 py-1 bg-white text-xs font-bold">
+                                        切换
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="pool-card border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 rounded-lg border-2 border-[#0a2463] mr-3 flex items-center justify-center bg-[#d6e4ff] transform -rotate-2">
+                                        <span class="font-bold text-[#0a2463]">C</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-[#0a2463]">CRYPTO 质押池</h4>
+                                        <div class="text-xs text-[#3f8efc] font-bold">ROA: 4.9%</div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-xs font-bold text-[#0a2463]">饱和度: 72%</div>
+                                    <button class="btn px-2 py-1 bg-white text-xs font-bold">
+                                        切换
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="pool-card border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 rounded-lg border-2 border-[#0a2463] mr-3 flex items-center justify-center bg-[#d6e4ff] transform rotate-2">
+                                        <span class="font-bold text-[#0a2463]">D</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-[#0a2463]">DIGITAL 质押池</h4>
+                                        <div class="text-xs text-[#3f8efc] font-bold">ROA: 4.7%</div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-xs font-bold text-[#0a2463]">饱和度: 58%</div>
+                                    <button class="btn px-2 py-1 bg-white text-xs font-bold">
+                                        切换
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="pool-card border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 rounded-lg border-2 border-[#0a2463] mr-3 flex items-center justify-center bg-[#d6e4ff] transform -rotate-2">
+                                        <span class="font-bold text-[#0a2463]">E</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-[#0a2463]">EPOCH 质押池</h4>
+                                        <div class="text-xs text-[#3f8efc] font-bold">ROA: 4.6%</div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-xs font-bold text-[#0a2463]">饱和度: 63%</div>
+                                    <button class="btn px-2 py-1 bg-white text-xs font-bold">
+                                        切换
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-center mt-4">
+                            <button class="btn px-4 py-2 bg-[#3f8efc] text-white flex items-center transform rotate-1">
+                                <img src="https://unpkg.com/lucide-static@latest/icons/search.svg" class="w-4 h-4 mr-2 text-white" />
+                                查找更多质押池
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧内容 -->
+                <div class="col-span-1 space-y-6">
+                    <!-- 钱包信息 -->
+                    <div class="card bg-white p-5 h-[calc(40%)]">
+                        <h2 class="text-2xl title-font mb-4 flex items-center text-[#0a2463]">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/wallet.svg" class="w-6 h-6 mr-2" />
+                            钱包信息
+                        </h2>
+                        
+                        <div class="border-3 border-[#0a2463] rounded-lg p-4 mb-4 bg-[#e6f0ff]">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-bold text-[#0a2463]">可用余额</h3>
+                                <div class="text-xl font-bold text-[#0a2463]">3,250 ADA</div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-bold text-[#0a2463]">质押中</h3>
+                                <div class="text-xl font-bold text-[#0a2463]">12,450 ADA</div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-bold text-[#0a2463]">总资产</h3>
+                                <div class="text-xl font-bold text-[#0a2463]">15,700 ADA</div>
+                            </div>
+                        </div>
+                        
+                        <div class="border-3 border-[#0a2463] rounded-lg p-3 mb-4 bg-[#e6f0ff]">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <img src="https://unpkg.com/lucide-static@latest/icons/credit-card.svg" class="w-5 h-5 mr-2" />
+                                    <div class="text-sm font-bold text-[#0a2463]">钱包地址</div>
+                                </div>
+                                <div class="text-xs font-bold text-[#3f8efc]">addr1qxy...</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button class="btn flex-1 px-3 py-2 bg-[#3f8efc] text-white text-sm font-bold">
+                                增加质押
+                            </button>
+                            <button class="btn flex-1 px-3 py-2 bg-white text-[#0a2463] text-sm font-bold">
+                                提取奖励
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 质押奖励历史 -->
+                    <div class="card bg-white p-5 h-[calc(60%)]">
+                        <h2 class="text-2xl title-font mb-4 flex items-center text-[#0a2463]">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/history.svg" class="w-6 h-6 mr-2" />
+                            质押奖励历史
+                        </h2>
+                        
+                        <div class="space-y-3 overflow-y-auto h-[calc(100%-80px)] pr-1">
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff] transform rotate-1">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h3 class="font-bold text-[#0a2463]">Epoch 433</h3>
+                                        <div class="text-xs text-[#3f8efc] font-bold">2023-11-15</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-[#0a2463]">+48.5 ADA</div>
+                                        <div class="text-xs text-[#3f8efc] font-bold">待领取</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff] transform -rotate-1">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h3 class="font-bold text-[#0a2463]">Epoch 432</h3>
+                                        <div class="text-xs text-[#3f8efc] font-bold">2023-11-10</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-[#0a2463]">+47.8 ADA</div>
+                                        <div class="text-xs text-[#3f8efc] font-bold">已复投</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff] transform rotate-1">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h3 class="font-bold text-[#0a2463]">Epoch 431</h3>
+                                        <div class="text-xs text-[#3f8efc] font-bold">2023-11-05</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-[#0a2463]">+46.2 ADA</div>
+                                        <div class="text-xs text-[#3f8efc] font-bold">已提取</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff] transform -rotate-1">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h3 class="font-bold text-[#0a2463]">Epoch 430</h3>
+                                        <div class="text-xs text-[#3f8efc] font-bold">2023-10-31</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-[#0a2463]">+45.9 ADA</div>
+                                        <div class="text-xs text-[#3f8efc] font-bold">已复投</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-3 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff] transform rotate-1">
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h3 class="font-bold text-[#0a2463]">Epoch 429</h3>
+                                        <div class="text-xs text-[#3f8efc] font-bold">2023-10-26</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-[#0a2463]">+44.7 ADA</div>
+                                        <div class="text-xs text-[#3f8efc] font-bold">已复投</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <a href="#" class="text-[#3f8efc] text-sm font-bold flex items-center justify-center">
+                                查看完整历史
+                                <img src="https://unpkg.com/lucide-static@latest/icons/chevron-right.svg" class="w-4 h-4 ml-1" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 装饰性气泡 -->
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+        </div>
+    </div>
+</body>
+</html>
