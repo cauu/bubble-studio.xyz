@@ -54,3 +54,36 @@ export interface IGovernanceAction {
     myOpinions: string;
   };
 }
+
+export interface IGovActionContent {
+  id: string;
+  type: string;
+  title: string;
+  abstract: string;
+  content: string;
+  language: string;
+  tags: string;
+  metadata: IGovernanceAction;
+
+  tweets: {
+    tweetId: string;
+    author: {
+      rest_id: string;
+      name: string;
+      screen_name: string;
+      avatar: string;
+      blue_verified: boolean;
+    };
+    text: string;
+    originalText: string;
+  }[];
+  opinions: {
+    summary: string;
+    pros: string[];
+    cons: string[];
+    myOpinion: string;
+  };
+
+  createdAt: string;
+  updatedAt: string;
+}

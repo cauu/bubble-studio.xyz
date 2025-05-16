@@ -1,7 +1,11 @@
-import React, { useMemo } from 'react';
-import { Calendar, CalendarX, CheckCircle, Clock, Lightbulb, User, Users, XCircle } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Calendar, CalendarX, CheckCircle, Clock, Lightbulb, MessageCircle, User, Users, XCircle } from 'lucide-react';
+import dayjs from 'dayjs';
+import ReactMarkdown from 'react-markdown';
 
-import { IGovernanceAction } from '@/types/governance';
+import { IGovActionContent } from '@/types/governance';
+
+import { getDurationString } from '@/utils';
 
 // 投票组织组件
 const VotingOrganization = ({ organization }) => {
@@ -46,10 +50,15 @@ const VotingOrganization = ({ organization }) => {
   );
 };
 
-export const GovActionCard = ({ proposal }: { proposal: IGovernanceAction }) => {
+const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
+
+export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => {
   const currentProposal = proposal;
 
+  const [duration, setDuration] = useState(getDurationString(new Date(), currentProposal.metadata.expiryDate));
+
   const votingOrganizations = useMemo(() => {
+    const metadata = currentProposal.metadata;
     return [
       {
         name: 'dRep',
@@ -58,19 +67,19 @@ export const GovActionCard = ({ proposal }: { proposal: IGovernanceAction }) => 
         votes: [
           {
             type: '赞成',
-            value: proposal.dRepYesVotes,
+            value: metadata.dRepYesVotes,
             percentage: 50,
             color: '#06D6A0'
           },
           {
             type: '反对',
-            value: proposal.dRepNoVotes,
+            value: metadata.dRepNoVotes,
             percentage: 0,
             color: '#EF476F'
           },
           {
             type: '弃权',
-            value: proposal.dRepAbstainVotes,
+            value: metadata.dRepAbstainVotes,
             percentage: 0,
             color: '#d6e4ff'
           }
@@ -83,19 +92,19 @@ export const GovActionCard = ({ proposal }: { proposal: IGovernanceAction }) => 
         votes: [
           {
             type: '赞成',
-            value: proposal.poolYesVotes,
+            value: metadata.poolYesVotes,
             percentage: 50,
             color: '#06D6A0'
           },
           {
             type: '反对',
-            value: proposal.poolNoVotes,
+            value: metadata.poolNoVotes,
             percentage: 0,
             color: '#EF476F'
           },
           {
             type: '弃权',
-            value: proposal.poolAbstainVotes,
+            value: metadata.poolAbstainVotes,
             percentage: 0,
             color: '#d6e4ff'
           }
@@ -108,55 +117,62 @@ export const GovActionCard = ({ proposal }: { proposal: IGovernanceAction }) => 
         votes: [
           {
             type: '赞成',
-            value: proposal.ccYesVotes,
+            value: metadata.ccYesVotes,
             percentage: 50,
             color: '#06D6A0'
           },
           {
             type: '反对',
-            value: proposal.ccNoVotes,
+            value: metadata.ccNoVotes,
             percentage: 0,
             color: '#EF476F'
           },
           {
             type: '弃权',
-            value: proposal.ccAbstainVotes,
+            value: metadata.ccAbstainVotes,
             percentage: 0,
             color: '#d6e4ff'
           }
         ]
       }
     ];
-  }, [proposal]);
+  }, [currentProposal.metadata]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDuration(getDurationString(new Date(), currentProposal.metadata.expiryDate));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [currentProposal.metadata.expiryDate]);
+
+  const isHotTopic = HOT_TOPICS.includes(currentProposal.id);
 
   return (
     <div className="card bg-white p-5 relative">
-      <div className="vote-badge">热门！</div>
+      {isHotTopic && <div className="vote-badge">热门！</div>}
 
       {/* 投票内容 */}
       {currentProposal && (
         <div className="border-3 border-[#0a2463] rounded-lg flex flex-col space-y-4">
-          <h3 className="text-xl font-bold text-[#0a2463]">
-            提案 #{currentProposal.id}: {currentProposal.title}
-          </h3>
+          <h3 className="text-xl font-bold text-[#0a2463]">{currentProposal.title}</h3>
 
           <div className="flex justify-between">
             <div className="flex items-center text-sm">
               <Calendar size={16} className="mr-1" />
-              <span>开始: {currentProposal.createdDate}</span>
+              <span>提交时间: {dayjs(currentProposal.metadata.createdDate).format('YYYY-MM-DD HH:mm')}</span>
             </div>
             <div className="flex items-center text-sm">
               <CalendarX size={16} className="mr-1" />
-              <span>结束: {currentProposal.expiryDate}</span>
+              <span>结束时间: {dayjs(currentProposal.metadata.expiryDate).format('YYYY-MM-DD HH:mm')}</span>
             </div>
             <div className="flex items-center text-sm font-bold text-[#3f8efc]">
               <Clock size={16} className="mr-1" />
-              <span>剩余时间: 3天5小时</span>
+              <span>剩余时间: {duration}</span>
             </div>
           </div>
 
           {/* 总体投票进度 */}
-          <div>
+          {/* <div>
             <div className="flex justify-between items-center mb-1">
               <span className="text-sm font-bold">总体投票进度</span>
               <span className="text-sm font-bold">50%</span>
@@ -169,13 +185,24 @@ export const GovActionCard = ({ proposal }: { proposal: IGovernanceAction }) => 
               <span>最低参与率: {65}%</span>
               <span className="text-[#06D6A0] font-bold">✓ 已达标</span>
             </div>
+          </div> */}
+
+          <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
+            <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
+              <MessageCircle size={16} className="mr-2 text-[#3f8efc]" />
+              提案内容
+            </h3>
+
+            <div className="text-sm text-gray-900 leading-relaxed">
+              <ReactMarkdown>{currentProposal.opinions.summary}</ReactMarkdown>
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 rounded-lg p-3">
+          {/* <div className="grid grid-cols-3 gap-2 rounded-lg p-3">
             {votingOrganizations.map((org, index) => (
               <VotingOrganization key={`org-${index}`} organization={org} />
             ))}
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-2 gap-4">
             {/* 正方观点 */}
@@ -185,7 +212,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovernanceAction }) => 
                 正方观点总结
               </h3>
 
-              <ul className="point-list pros text-xs">
+              <ul className="point-list pros text-sm text-gray-900 leading-relaxed">
                 {currentProposal.opinions.pros.map((point, index) => (
                   <li key={index}>{point}</li>
                 ))}
@@ -199,8 +226,8 @@ export const GovActionCard = ({ proposal }: { proposal: IGovernanceAction }) => 
                 反方观点总结
               </h3>
 
-              <ul className="point-list cons text-xs">
-                {currentProposal.opinions.againsts.map((point, index) => (
+              <ul className="point-list cons text-sm text-gray-900 leading-relaxed">
+                {currentProposal.opinions.cons.map((point, index) => (
                   <li key={index}>{point}</li>
                 ))}
               </ul>
@@ -214,12 +241,15 @@ export const GovActionCard = ({ proposal }: { proposal: IGovernanceAction }) => 
               我们的观点
             </h3>
 
-            <p className="text-xs">{currentProposal.opinions.myOpinions}</p>
+            {/* <p className="text-sm text-gray-900">{currentProposal.opinions.myOpinion}</p> */}
+            <div className="text-sm text-gray-900 leading-relaxed">
+              <ReactMarkdown>{currentProposal.opinions.myOpinion}</ReactMarkdown>
+            </div>
           </div>
 
-          <div className="flex justify-end">
+          {/* <div className="flex justify-end">
             <button className="btn px-4 py-2 bg-[#3f8efc] text-white">查看详情</button>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

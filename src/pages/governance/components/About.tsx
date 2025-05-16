@@ -1,18 +1,19 @@
+import { Info } from 'lucide-react';
 import React from 'react';
 
 export const About: React.FC = () => {
   return (
     <div className="card bg-white p-5">
-      <h2 className="text-2xl title-font mb-4 flex items-center text-[#0a2463]">
-        <img src="https://unpkg.com/lucide-static@latest/icons/info.svg" className="w-6 h-6 mr-2" />
+      <h2 className="text-2xl title-font mb-4 flex items-center text-[#0a2463] font-bold">
+        <Info className="w-6 h-6 mr-2" />
         关于治理
       </h2>
 
       <div className="border-3 border-[#0a2463] rounded-lg p-4 mb-4 bg-[#e6f0ff]">
-        <p className="text-sm mb-3">
+        <p className="text-sm mb-3 leading-relaxed">
           Bubble Studio致力于推动Cardano生态系统的去中心化治理，我们相信社区的力量和集体智慧。
         </p>
-        <p className="text-sm">通过参与投票和提案，您可以直接影响Cardano的未来发展方向。</p>
+        {/* <p className="text-sm leading-relaxed">通过参与投票和提案，您可以直接影响Cardano的未来发展方向。</p> */}
       </div>
 
       <div className="space-y-3">

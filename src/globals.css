@@ -27,7 +27,7 @@
 
 body {
   background-color: #f0f7ff;
-  font-family: 'Comic Neue', cursive;
+  /* font-family: 'Comic Neue', cursive; */
 }
 
 .card {
@@ -143,8 +143,8 @@ body {
 }
 .vote-badge {
   position: absolute;
-  top: -10px;
-  right: 10px;
+  top: 5px;
+  right: 5px;
   background-color: #3f8efc;
   color: white;
   border: 3px solid #0a2463;
@@ -182,7 +182,7 @@ body {
   content: "";
   position: absolute;
   left: 0;
-  top: 5px;
+  top: 2px;
   width: 16px;
   height: 16px;
   border-radius: 50%;

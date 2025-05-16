@@ -60,7 +60,7 @@ export const NavBar = () => {
         </div>
       </div>
       <div className="flex items-center">
-        <button className="btn px-4 py-2 bg-[#3f8efc] text-white mr-4">连接钱包</button>
+        {/* <button className="btn px-4 py-2 bg-[#3f8efc] text-white mr-4">连接钱包</button> */}
         {/* <div className="flex items-center">
             <Globe size={20} className="mr-1" />
             <select className="border-2 border-[#0a2463] rounded-md p-1">
