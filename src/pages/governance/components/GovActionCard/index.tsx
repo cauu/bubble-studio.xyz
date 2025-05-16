@@ -55,7 +55,7 @@ const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => {
   const currentProposal = proposal;
 
-  const [duration, setDuration] = useState(getDurationString(new Date(), currentProposal.metadata.expiryDate));
+  const [duration, setDuration] = useState<string>();
 
   // const votingOrganizations = useMemo(() => {
   //   const metadata = currentProposal.metadata;
@@ -140,12 +140,14 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDuration(getDurationString(new Date(), currentProposal.metadata.expiryDate));
+      if (currentProposal?.metadata.expiryDate) {
+        setDuration(getDurationString(new Date(), currentProposal?.metadata.expiryDate));
+      }
     }, 1000);
     return () => clearInterval(interval);
-  }, [currentProposal.metadata.expiryDate]);
+  }, [currentProposal?.metadata.expiryDate]);
 
-  const isHotTopic = HOT_TOPICS.includes(currentProposal.id);
+  const isHotTopic = HOT_TOPICS.includes(currentProposal?.id);
 
   return (
     <div className="card bg-white p-5 relative">
@@ -159,11 +161,11 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
           <div className="flex justify-between">
             <div className="flex items-center text-sm">
               <Calendar size={16} className="mr-1" />
-              <span>提交时间: {dayjs(currentProposal.metadata.createdDate).format('YYYY-MM-DD HH:mm')}</span>
+              <span>提交时间: {dayjs(currentProposal?.metadata.createdDate).format('YYYY-MM-DD HH:mm')}</span>
             </div>
             <div className="flex items-center text-sm">
               <CalendarX size={16} className="mr-1" />
-              <span>结束时间: {dayjs(currentProposal.metadata.expiryDate).format('YYYY-MM-DD HH:mm')}</span>
+              <span>结束时间: {dayjs(currentProposal?.metadata.expiryDate).format('YYYY-MM-DD HH:mm')}</span>
             </div>
             <div className="flex items-center text-sm font-bold text-[#3f8efc]">
               <Clock size={16} className="mr-1" />
@@ -194,7 +196,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             </h3>
 
             <div className="text-sm text-gray-900 leading-relaxed">
-              <ReactMarkdown>{currentProposal.opinions.summary}</ReactMarkdown>
+              <ReactMarkdown>{currentProposal?.opinions.summary}</ReactMarkdown>
             </div>
           </div>
 
@@ -213,9 +215,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
               </h3>
 
               <ul className="point-list pros text-sm text-gray-900 leading-relaxed">
-                {currentProposal.opinions.pros.map((point, index) => (
-                  <li key={index}>{point}</li>
-                ))}
+                {currentProposal?.opinions.pros.map((point, index) => <li key={index}>{point}</li>)}
               </ul>
             </div>
 
@@ -227,9 +227,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
               </h3>
 
               <ul className="point-list cons text-sm text-gray-900 leading-relaxed">
-                {currentProposal.opinions.cons.map((point, index) => (
-                  <li key={index}>{point}</li>
-                ))}
+                {currentProposal?.opinions.cons.map((point, index) => <li key={index}>{point}</li>)}
               </ul>
             </div>
           </div>
@@ -243,7 +241,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
 
             {/* <p className="text-sm text-gray-900">{currentProposal.opinions.myOpinion}</p> */}
             <div className="text-sm text-gray-900 leading-relaxed">
-              <ReactMarkdown>{currentProposal.opinions.myOpinion}</ReactMarkdown>
+              <ReactMarkdown>{currentProposal?.opinions.myOpinion}</ReactMarkdown>
             </div>
           </div>
 
