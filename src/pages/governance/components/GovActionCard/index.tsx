@@ -255,3 +255,5 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
     </div>
   );
 };
+
+export default GovActionCard;

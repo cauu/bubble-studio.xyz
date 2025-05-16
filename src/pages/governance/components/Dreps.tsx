@@ -110,3 +110,5 @@ export const Dreps: React.FC = () => {
     </div>
   );
 };
+
+export default Dreps;
