@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Calendar, CalendarX, CheckCircle, Clock, Lightbulb, MessageCircle, User, Users, XCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Calendar, CalendarX, CheckCircle, Clock, Lightbulb, MessageCircle, XCircle } from 'lucide-react';
 import dayjs from 'dayjs';
 import ReactMarkdown from 'react-markdown';
 
@@ -8,47 +8,47 @@ import { IGovActionContent } from '@/types/governance';
 import { getDurationString } from '@/utils';
 
 // 投票组织组件
-const VotingOrganization = ({ organization }) => {
-  const { name, icon, votes } = organization;
+// const VotingOrganization = ({ organization }) => {
+//   const { name, icon, votes } = organization;
 
-  return (
-    <div className="flex items-center px-2">
-      <div className="relative w-16 h-16 mb-2">
-        <svg width="100%" height="100%" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463" strokeWidth="2" />
-          <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0" strokeWidth="10" />
-          <path d="M95 50 A45 45 0 0 1 78 85" fill="none" stroke="#EF476F" strokeWidth="10" />
-          <path d="M78 85 A45 45 0 0 1 50 95" fill="none" stroke="#d6e4ff" strokeWidth="10" />
-          <path
-            d="M50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5"
-            fill="none"
-            stroke="#f0f7ff"
-            strokeWidth="10"
-            strokeDasharray="5,5"
-          />
-        </svg>
-      </div>
-      <div className="text-center flex flex-col ml-4">
-        <h3 className="font-bold text-sm text-[#0a2463] flex items-center justify-center mb-1">
-          {icon}
-          <span className="ml-1">{name}</span>
-        </h3>
-        <div className="text-xs space-y-1">
-          {votes.map((vote) => {
-            return (
-              <div key={vote.type} className="flex items-center justify-between space-x-2">
-                <span className="font-medium text-nowrap" style={{ color: vote.color }}>
-                  {vote.type}
-                </span>
-                <span className="font-bold">{vote.percentage}%</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div className="flex items-center px-2">
+//       <div className="relative w-16 h-16 mb-2">
+//         <svg width="100%" height="100%" viewBox="0 0 100 100">
+//           <circle cx="50" cy="50" r="45" fill="white" stroke="#0a2463" strokeWidth="2" />
+//           <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#06D6A0" strokeWidth="10" />
+//           <path d="M95 50 A45 45 0 0 1 78 85" fill="none" stroke="#EF476F" strokeWidth="10" />
+//           <path d="M78 85 A45 45 0 0 1 50 95" fill="none" stroke="#d6e4ff" strokeWidth="10" />
+//           <path
+//             d="M50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5"
+//             fill="none"
+//             stroke="#f0f7ff"
+//             strokeWidth="10"
+//             strokeDasharray="5,5"
+//           />
+//         </svg>
+//       </div>
+//       <div className="text-center flex flex-col ml-4">
+//         <h3 className="font-bold text-sm text-[#0a2463] flex items-center justify-center mb-1">
+//           {icon}
+//           <span className="ml-1">{name}</span>
+//         </h3>
+//         <div className="text-xs space-y-1">
+//           {votes.map((vote) => {
+//             return (
+//               <div key={vote.type} className="flex items-center justify-between space-x-2">
+//                 <span className="font-medium text-nowrap" style={{ color: vote.color }}>
+//                   {vote.type}
+//                 </span>
+//                 <span className="font-bold">{vote.percentage}%</span>
+//               </div>
+//             );
+//           })}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 
@@ -57,86 +57,86 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
 
   const [duration, setDuration] = useState(getDurationString(new Date(), currentProposal.metadata.expiryDate));
 
-  const votingOrganizations = useMemo(() => {
-    const metadata = currentProposal.metadata;
-    return [
-      {
-        name: 'dRep',
-        icon: <Users size={16} />,
-        voteRate: 50,
-        votes: [
-          {
-            type: '赞成',
-            value: metadata.dRepYesVotes,
-            percentage: 50,
-            color: '#06D6A0'
-          },
-          {
-            type: '反对',
-            value: metadata.dRepNoVotes,
-            percentage: 0,
-            color: '#EF476F'
-          },
-          {
-            type: '弃权',
-            value: metadata.dRepAbstainVotes,
-            percentage: 0,
-            color: '#d6e4ff'
-          }
-        ]
-      },
-      {
-        name: 'pool',
-        icon: <User size={16} />,
-        voteRate: 50,
-        votes: [
-          {
-            type: '赞成',
-            value: metadata.poolYesVotes,
-            percentage: 50,
-            color: '#06D6A0'
-          },
-          {
-            type: '反对',
-            value: metadata.poolNoVotes,
-            percentage: 0,
-            color: '#EF476F'
-          },
-          {
-            type: '弃权',
-            value: metadata.poolAbstainVotes,
-            percentage: 0,
-            color: '#d6e4ff'
-          }
-        ]
-      },
-      {
-        name: 'cc',
-        icon: <User size={16} />,
-        voteRate: 50,
-        votes: [
-          {
-            type: '赞成',
-            value: metadata.ccYesVotes,
-            percentage: 50,
-            color: '#06D6A0'
-          },
-          {
-            type: '反对',
-            value: metadata.ccNoVotes,
-            percentage: 0,
-            color: '#EF476F'
-          },
-          {
-            type: '弃权',
-            value: metadata.ccAbstainVotes,
-            percentage: 0,
-            color: '#d6e4ff'
-          }
-        ]
-      }
-    ];
-  }, [currentProposal.metadata]);
+  // const votingOrganizations = useMemo(() => {
+  //   const metadata = currentProposal.metadata;
+  //   return [
+  //     {
+  //       name: 'dRep',
+  //       icon: <Users size={16} />,
+  //       voteRate: 50,
+  //       votes: [
+  //         {
+  //           type: '赞成',
+  //           value: metadata.dRepYesVotes,
+  //           percentage: 50,
+  //           color: '#06D6A0'
+  //         },
+  //         {
+  //           type: '反对',
+  //           value: metadata.dRepNoVotes,
+  //           percentage: 0,
+  //           color: '#EF476F'
+  //         },
+  //         {
+  //           type: '弃权',
+  //           value: metadata.dRepAbstainVotes,
+  //           percentage: 0,
+  //           color: '#d6e4ff'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       name: 'pool',
+  //       icon: <User size={16} />,
+  //       voteRate: 50,
+  //       votes: [
+  //         {
+  //           type: '赞成',
+  //           value: metadata.poolYesVotes,
+  //           percentage: 50,
+  //           color: '#06D6A0'
+  //         },
+  //         {
+  //           type: '反对',
+  //           value: metadata.poolNoVotes,
+  //           percentage: 0,
+  //           color: '#EF476F'
+  //         },
+  //         {
+  //           type: '弃权',
+  //           value: metadata.poolAbstainVotes,
+  //           percentage: 0,
+  //           color: '#d6e4ff'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       name: 'cc',
+  //       icon: <User size={16} />,
+  //       voteRate: 50,
+  //       votes: [
+  //         {
+  //           type: '赞成',
+  //           value: metadata.ccYesVotes,
+  //           percentage: 50,
+  //           color: '#06D6A0'
+  //         },
+  //         {
+  //           type: '反对',
+  //           value: metadata.ccNoVotes,
+  //           percentage: 0,
+  //           color: '#EF476F'
+  //         },
+  //         {
+  //           type: '弃权',
+  //           value: metadata.ccAbstainVotes,
+  //           percentage: 0,
+  //           color: '#d6e4ff'
+  //         }
+  //       ]
+  //     }
+  //   ];
+  // }, [currentProposal.metadata]);
 
   useEffect(() => {
     const interval = setInterval(() => {
