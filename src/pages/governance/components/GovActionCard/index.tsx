@@ -7,6 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { IGovActionContent } from '@/types/governance';
 
 import { getDurationString } from '@/utils';
+import { useRouter } from 'next/router';
 
 // 投票组织组件
 // const VotingOrganization = ({ organization }) => {
@@ -56,8 +57,8 @@ const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => {
   const currentProposal = useMemo(() => proposal, [proposal]);
   const { t } = useTranslation('common');
-
-  console.log(t('governance.hot'));
+  const router = useRouter();
+  const { locale } = router;
 
   const [duration, setDuration] = useState<string>();
 
@@ -145,11 +146,11 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
   useEffect(() => {
     const interval = setInterval(() => {
       if (currentProposal?.metadata.expiryDate) {
-        setDuration(getDurationString(new Date(), currentProposal?.metadata.expiryDate));
+        setDuration(getDurationString(new Date(), currentProposal?.metadata.expiryDate, locale as 'zh' | 'en' | 'tw'));
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [currentProposal?.metadata.expiryDate]);
+  }, [currentProposal?.metadata.expiryDate, locale]);
 
   const isHotTopic = HOT_TOPICS.includes(currentProposal?.id);
 
@@ -255,9 +256,14 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             </div>
           </div>
 
-          {/* <div className="flex justify-end">
-            <button className="btn px-4 py-2 bg-[#3f8efc] text-white">查看详情</button>
-          </div> */}
+          <div className="flex justify-end">
+            <button
+              className="btn px-4 py-2 bg-[#3f8efc] text-white"
+              onClick={() => router.push(`/action-detail/${currentProposal.id}`)}
+            >
+              {t('common.view_detail')}
+            </button>
+          </div>
         </div>
       )}
     </div>

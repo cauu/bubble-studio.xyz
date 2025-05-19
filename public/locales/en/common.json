@@ -1,5 +1,7 @@
 {
   "common.no_data": "No Data",
+  "common.view_detail": "View Detail",
+  "common.back": "Back",
 
   "error.get_data_failed": "Get Data Failed, Please Try Again Later",
 
@@ -19,5 +21,6 @@
   "governance.title_our_opinion": "Our Opinions",
   "governance.no_data": "No Data",
   "governance.about_title": "About Governance",
-  "governance.about_content": "Bubble Studio is committed to advancing the decentralized governance of the Cardano ecosystem. We believe in the power of the community and collective wisdom."
+  "governance.about_content": "Bubble Studio is committed to advancing the decentralized governance of the Cardano ecosystem. We believe in the power of the community and collective wisdom.",
+  "governance.related_tweets": "Related Tweets"
 }
