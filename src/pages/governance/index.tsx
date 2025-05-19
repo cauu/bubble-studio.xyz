@@ -24,8 +24,8 @@ export const getServerSideProps: GetServerSideProps<GovernanceProps> = async ({ 
   try {
     // const actions = await getGovernanceActions();
     // const proposals = await getGovernanceProposals();
-    const actions = governanceData.Chinese_Simplified.filter((item) => item.type === 'action') as any;
-    const proposals = governanceData.Chinese_Simplified.filter((item) => item.type === 'proposal');
+    const actions = governanceData[locale as string].filter((item) => item.type === 'action') as any;
+    const proposals = governanceData[locale as string].filter((item) => item.type === 'proposal');
 
     const translations = await serverSideTranslations(locale || 'en', ['common']);
 

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   i18n: {
-    locales: ['en', 'zh', 'zh-tw'], // 支持的语言
+    locales: ['en', 'zh', 'tw'], // 支持的语言
     defaultLocale: 'en' // 默认语言
   }
 };
