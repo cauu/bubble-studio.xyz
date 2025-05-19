@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Calendar, CalendarX, CheckCircle, Clock, Lightbulb, MessageCircle, XCircle } from 'lucide-react';
 import dayjs from 'dayjs';
 import ReactMarkdown from 'react-markdown';
+import { useTranslation } from 'next-i18next';
 
 import { IGovActionContent } from '@/types/governance';
 
@@ -53,7 +54,10 @@ import { getDurationString } from '@/utils';
 const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 
 export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => {
-  const currentProposal = proposal;
+  const currentProposal = useMemo(() => proposal, [proposal]);
+  const { t } = useTranslation('common');
+
+  console.log(t('governance.hot'));
 
   const [duration, setDuration] = useState<string>();
 
@@ -151,7 +155,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
 
   return (
     <div className="card bg-white p-5 relative">
-      {isHotTopic && <div className="vote-badge">热门！</div>}
+      {isHotTopic && <div className="vote-badge">{`${t('governance.hot')}!`}</div>}
 
       {/* 投票内容 */}
       {currentProposal && (
@@ -161,15 +165,21 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
           <div className="flex justify-between">
             <div className="flex items-center text-sm">
               <Calendar size={16} className="mr-1" />
-              <span>提交时间: {dayjs(currentProposal?.metadata.createdDate).format('YYYY-MM-DD HH:mm')}</span>
+              <span>
+                {t('governance.submit_at')}: {dayjs(currentProposal?.metadata.createdDate).format('YYYY-MM-DD HH:mm')}
+              </span>
             </div>
             <div className="flex items-center text-sm">
               <CalendarX size={16} className="mr-1" />
-              <span>结束时间: {dayjs(currentProposal?.metadata.expiryDate).format('YYYY-MM-DD HH:mm')}</span>
+              <span>
+                {t('governance.expire_at')}: {dayjs(currentProposal?.metadata.expiryDate).format('YYYY-MM-DD HH:mm')}
+              </span>
             </div>
             <div className="flex items-center text-sm font-bold text-[#3f8efc]">
               <Clock size={16} className="mr-1" />
-              <span>剩余时间: {duration}</span>
+              <span>
+                {t('governance.remaining_time')}: {duration}
+              </span>
             </div>
           </div>
 
@@ -192,7 +202,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
           <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
             <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
               <MessageCircle size={20} className="mr-2 text-[#3f8efc]" />
-              提案内容
+              {t('governance.title_proposal_content')}
             </h3>
 
             <div className="text-sm text-gray-900 leading-relaxed">
@@ -211,7 +221,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
               <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
                 <CheckCircle size={20} className="mr-2 text-[#06D6A0]" />
-                正方观点总结
+                {t('governance.title_pros')}
               </h3>
 
               <ul className="point-list pros text-sm text-gray-900 leading-relaxed">
@@ -223,7 +233,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
               <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
                 <XCircle size={20} className="mr-2 text-[#EF476F]" />
-                反方观点总结
+                {t('governance.title_cons')}
               </h3>
 
               <ul className="point-list cons text-sm text-gray-900 leading-relaxed">
@@ -236,7 +246,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
           <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
             <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
               <Lightbulb size={20} className="mr-2 text-[#3f8efc]" />
-              我们的观点
+              {t('governance.title_our_opinion')}
             </h3>
 
             {/* <p className="text-sm text-gray-900">{currentProposal.opinions.myOpinion}</p> */}

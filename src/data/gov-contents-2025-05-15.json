@@ -1,5 +1,5 @@
 {
-  "English": [
+  "en": [
     {
       "id": "GA:14",
       "title": "Cardano Blockchain Ecosystem Budget: Amaru Node Development 2025",
@@ -6750,7 +6750,7 @@
       "updatedAt": "2025-05-14T05:00:29.223Z"
     }
   ],
-  "Chinese_Simplified": [
+  "zh": [
     {
       "id": "GA:14",
       "title": "Cardano 区块链生态系统预算：Amaru 节点开发 2025",
@@ -13501,7 +13501,7 @@
       "updatedAt": "2025-05-14T05:00:29.223Z"
     }
   ],
-  "Chinese_Traditional": [
+  "tw": [
     {
       "id": "GA:14",
       "title": "Cardano 區塊鏈生態系統預算：Amaru 節點開發 2025",

@@ -1,0 +1,23 @@
+{
+  "common.no_data": "暂无数据",
+
+  "error.get_data_failed": "获取数据失败，请稍后重试",
+
+  "header.governance": "治理",
+  "header.staking": "质押",
+  "header.about": "关于我们",
+
+  "governance.actions": "治理行动",
+  "governance.hot_topics": "热门话题",
+  "governance.submit_at": "提交时间",
+  "governance.expire_at": "到期时间",
+  "governance.remaining_time": "剩余时间",
+  "governance.hot": "热门",
+  "governance.title_proposal_content": "提案内容",
+  "governance.title_pros": "正方观点",
+  "governance.title_cons": "反方观点",
+  "governance.title_our_opinion": "我们的观点",
+  "governance.no_data": "暂无数据",
+  "governance.about_title": "关于治理",
+  "governance.about_content": "Bubble Studio致力于推动Cardano生态系统的去中心化治理，我们相信社群的力量与集体智慧。"
+}

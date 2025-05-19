@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FileText, Vote } from 'lucide-react';
 import clsx from 'clsx';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 
 // import { IGovernanceAction } from '@/types/governance';
-import { GovActionCard } from '@/pages/governance/components/GovActionCard';
+import { GovActionCard } from './components/GovActionCard';
 // import { Dreps } from '@/pages/governance/components/Dreps';
 import governanceData from '@/data/gov-contents-2025-05-15.json';
 import { IGovActionContent } from '@/types/governance';
@@ -12,6 +12,8 @@ import EmptyList from '@/components/EmptyList';
 
 import { About } from './components/About';
 import { ProposalCard } from './components/ProposalCard';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 interface GovernanceProps {
   actions: IGovActionContent[];
@@ -19,55 +21,52 @@ interface GovernanceProps {
   error?: string;
 }
 
-export const getServerSideProps: GetServerSideProps<GovernanceProps> = async () => {
+export const getStaticProps: GetStaticProps<GovernanceProps> = async ({ locale }) => {
+  const translations = await serverSideTranslations(locale || 'en', ['common']);
+
   try {
-    // const actions = await getGovernanceActions();
-    // const proposals = await getGovernanceProposals();
-    const actions = governanceData.Chinese_Simplified.filter((item) => item.type === 'action') as any;
-    const proposals = governanceData.Chinese_Simplified.filter((item) => item.type === 'proposal');
+    const actions = governanceData[locale as string].filter((item) => item.type === 'action') as any;
+    const proposals = governanceData[locale as string].filter((item) => item.type === 'proposal');
 
     return {
       props: {
         actions,
-        proposals
+        proposals,
+        ...translations
       }
     };
-  } catch (error) {
-    console.error('获取治理数据失败:', error);
+  } catch (error: any) {
     return {
       props: {
         actions: [],
         proposals: [],
-        error: '获取数据失败，请稍后重试'
+        error: error.message || translations._nextI18Next?.initialI18nStore('error.get_data_failed')
       }
     };
   }
 };
 
-const TABS_PC = [
-  {
-    id: 'actions',
-    label: '治理行动',
-    icon: <Vote className="w-4 h-4 md:w-5 md:h-5 mr-1 md:mr-2" />
-  },
-  {
-    id: 'topics',
-    label: '提案讨论',
-    icon: <FileText className="w-4 h-4 md:w-5 md:h-5 mr-1 md:mr-2" />
-  }
-];
-
 export default function Governance({ actions, proposals, error }: GovernanceProps) {
-  // const [currentProposalId, setCurrentProposalId] = useState(data[0]?.id);
   const [currentTab, setCurrentTab] = useState<'actions' | 'topics'>('actions');
+  const { t } = useTranslation('common');
 
-  // const currentProposal = data.find((item) => item.id === currentProposalId);
+  const TABS_PC = useMemo(
+    () => [
+      {
+        id: 'actions',
+        label: t('governance.actions'),
+        icon: <Vote className="w-4 h-4 md:w-5 md:h-5 mr-1 md:mr-2" />
+      },
+      {
+        id: 'topics',
+        label: t('governance.hot_topics'),
+        icon: <FileText className="w-4 h-4 md:w-5 md:h-5 mr-1 md:mr-2" />
+      }
+    ],
+    [t]
+  );
 
-  // const handleTabChange = (id: string) => {
-  //   setCurrentProposalId(id);
-  // };
-
-  if (error) return <div>错误: {error}</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="flex space-x-6 justify-center">
@@ -103,7 +102,7 @@ export default function Governance({ actions, proposals, error }: GovernanceProp
                 );
               })
             ) : (
-              <div>暂无治理数据</div>
+              <div>{t('governance.no_data')}</div>
             )}
           </div>
         )}
@@ -115,7 +114,7 @@ export default function Governance({ actions, proposals, error }: GovernanceProp
               })
             ) : (
               // <div>暂无提案数据</div>
-              <EmptyList />
+              <EmptyList text={t('common.no_data')} />
             )}
           </div>
         )}

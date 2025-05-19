@@ -1,26 +1,32 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-// import { Layers } from 'lucide-react';
-
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
-
-const navItems = [
-  {
-    text: '治理',
-    path: '/governance'
-  },
-  {
-    text: '质押',
-    path: '/staking'
-  },
-  {
-    text: '关于我们',
-    path: '/about'
-  }
-];
+import { useMemo } from 'react';
+import { Globe } from 'lucide-react';
+// import { Layers } from 'lucide-react';
 
 export const NavBar = () => {
   const router = useRouter();
+  const { t } = useTranslation('common');
+
+  const navItems = useMemo(
+    () => [
+      {
+        text: t('header.governance'),
+        path: '/governance'
+      },
+      {
+        text: t('header.staking'),
+        path: '/staking'
+      },
+      {
+        text: t('header.about'),
+        path: '/about'
+      }
+    ],
+    [t]
+  );
 
   const path = router.asPath;
 
@@ -59,7 +65,7 @@ export const NavBar = () => {
           })}
         </div>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center mr-4">
         {/* <button className="btn px-4 py-2 bg-[#3f8efc] text-white mr-4">连接钱包</button> */}
         {/* <div className="flex items-center">
             <Globe size={20} className="mr-1" />
@@ -68,6 +74,22 @@ export const NavBar = () => {
               <option>English</option>
             </select>
           </div> */}
+        <div className="flex items-center gap-2">
+          <Globe size={24} className="text-[#0a2463]" />
+
+          <select
+            className="border-2 border-[#0a2463] rounded-md p-1 text-[#0a2463] font-bold bg-white cursor-pointer"
+            value={router.locale}
+            onChange={(e) => {
+              const locale = e.target.value;
+              router.push(router.asPath, router.asPath, { locale });
+            }}
+          >
+            <option value="zh">简体中文</option>
+            <option value="tw">繁體中文</option>
+            <option value="en">English</option>
+          </select>
+        </div>
       </div>
     </nav>
     // </div>
