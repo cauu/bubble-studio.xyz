@@ -3,7 +3,7 @@ import { Calendar, CalendarX, CheckCircle, Clock, Lightbulb, MessageCircle, XCir
 import dayjs from 'dayjs';
 import ReactMarkdown from 'react-markdown';
 import { useTranslation } from 'next-i18next';
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+// import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -14,7 +14,7 @@ import governanceData from '@/data/gov-contents-2025-05-15.json';
 import { IGovActionContent } from '@/types/governance';
 import { getDurationString } from '@/utils';
 
-const VOTE_COLORS = ['#06D6A0', '#EF476F', '#d6e4ff'];
+// const VOTE_COLORS = ['#06D6A0', '#EF476F', '#d6e4ff'];
 
 const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 
