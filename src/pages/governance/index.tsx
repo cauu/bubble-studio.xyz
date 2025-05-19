@@ -12,6 +12,7 @@ import EmptyList from '@/components/EmptyList';
 
 import { About } from './components/About';
 import { ProposalCard } from './components/ProposalCard';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface GovernanceProps {
   actions: IGovActionContent[];
@@ -19,17 +20,20 @@ interface GovernanceProps {
   error?: string;
 }
 
-export const getServerSideProps: GetServerSideProps<GovernanceProps> = async () => {
+export const getServerSideProps: GetServerSideProps<GovernanceProps> = async ({ locale }) => {
   try {
     // const actions = await getGovernanceActions();
     // const proposals = await getGovernanceProposals();
     const actions = governanceData.Chinese_Simplified.filter((item) => item.type === 'action') as any;
     const proposals = governanceData.Chinese_Simplified.filter((item) => item.type === 'proposal');
 
+    const translations = await serverSideTranslations(locale || 'en', ['common']);
+
     return {
       props: {
         actions,
-        proposals
+        proposals,
+        ...translations
       }
     };
   } catch (error) {
@@ -58,14 +62,7 @@ const TABS_PC = [
 ];
 
 export default function Governance({ actions, proposals, error }: GovernanceProps) {
-  // const [currentProposalId, setCurrentProposalId] = useState(data[0]?.id);
   const [currentTab, setCurrentTab] = useState<'actions' | 'topics'>('actions');
-
-  // const currentProposal = data.find((item) => item.id === currentProposalId);
-
-  // const handleTabChange = (id: string) => {
-  //   setCurrentProposalId(id);
-  // };
 
   if (error) return <div>错误: {error}</div>;
 

@@ -1,26 +1,32 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 // import { Layers } from 'lucide-react';
 
 import Link from 'next/link';
-
-const navItems = [
-  {
-    text: '治理',
-    path: '/governance'
-  },
-  {
-    text: '质押',
-    path: '/staking'
-  },
-  {
-    text: '关于我们',
-    path: '/about'
-  }
-];
+import { useMemo } from 'react';
 
 export const NavBar = () => {
   const router = useRouter();
+  const { t } = useTranslation('common');
+
+  const navItems = useMemo(
+    () => [
+      {
+        text: t('header.governance'),
+        path: '/governance'
+      },
+      {
+        text: t('header.staking'),
+        path: '/staking'
+      },
+      {
+        text: t('header.about'),
+        path: '/about'
+      }
+    ],
+    [t]
+  );
 
   const path = router.asPath;
 
