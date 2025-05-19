@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { FileText, Vote } from 'lucide-react';
 import clsx from 'clsx';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 
 // import { IGovernanceAction } from '@/types/governance';
-import { GovActionCard } from '@/pages/governance/components/GovActionCard';
+import { GovActionCard } from './components/GovActionCard';
 // import { Dreps } from '@/pages/governance/components/Dreps';
 import governanceData from '@/data/gov-contents-2025-05-15.json';
 import { IGovActionContent } from '@/types/governance';
@@ -21,7 +21,7 @@ interface GovernanceProps {
   error?: string;
 }
 
-export const getServerSideProps: GetServerSideProps<GovernanceProps> = async ({ locale }) => {
+export const getStaticProps: GetStaticProps<GovernanceProps> = async ({ locale }) => {
   const translations = await serverSideTranslations(locale || 'en', ['common']);
 
   try {
@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps<GovernanceProps> = async ({ 
 
 export default function Governance({ actions, proposals, error }: GovernanceProps) {
   const [currentTab, setCurrentTab] = useState<'actions' | 'topics'>('actions');
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
 
   const TABS_PC = useMemo(
     () => [

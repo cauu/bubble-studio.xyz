@@ -14,8 +14,10 @@
   "governance.remaining_time": "Remaining Time",
   "governance.hot": "Hot",
   "governance.title_proposal_content": "Proposal Content",
-  "governance.title_pros": "Pros",
-  "governance.title_cons": "Cons",
+  "governance.title_pros": "Pro Arguments",
+  "governance.title_cons": "Con Arguments",
   "governance.title_our_opinion": "Our Opinions",
-  "governance.no_data": "No Data"
+  "governance.no_data": "No Data",
+  "governance.about_title": "About Governance",
+  "governance.about_content": "Bubble Studio is committed to advancing the decentralized governance of the Cardano ecosystem. We believe in the power of the community and collective wisdom."
 }

@@ -1,5 +1,6 @@
 import { Layout } from '@/components/Layout';
 import { appWithTranslation } from 'next-i18next';
+import nextI18NextConfig from '../../next-i18next.config'; // 路径根据实际情况调整
 
 import '@/globals.css';
 
@@ -15,4 +16,4 @@ function App({ Component, pageProps }: AppProps) {
   return getLayout(<Component {...pageProps} />);
 }
 
-export default appWithTranslation(App);
+export default appWithTranslation(App, nextI18NextConfig);

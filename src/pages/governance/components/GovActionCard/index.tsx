@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Calendar, CalendarX, CheckCircle, Clock, Lightbulb, MessageCircle, XCircle } from 'lucide-react';
 import dayjs from 'dayjs';
 import ReactMarkdown from 'react-markdown';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { IGovActionContent } from '@/types/governance';
 
@@ -54,9 +54,10 @@ import { getDurationString } from '@/utils';
 const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 
 export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => {
-  const { t } = useTranslation();
+  const currentProposal = useMemo(() => proposal, [proposal]);
+  const { t } = useTranslation('common');
 
-  const currentProposal = proposal;
+  console.log(t('governance.hot'));
 
   const [duration, setDuration] = useState<string>();
 

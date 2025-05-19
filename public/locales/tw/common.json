@@ -17,5 +17,7 @@
   "governance.title_pros": "正方觀點",
   "governance.title_cons": "反方觀點",
   "governance.title_our_opinion": "我們的觀點",
-  "governance.no_data": "暫無數據"
+  "governance.no_data": "暫無數據",
+  "governance.about_title": "關於治理",
+  "governance.about_content": "Bubble Studio致力於推動Cardano生態系統的去中心化治理，我們相信社群的力量與集體智慧。"
 }
