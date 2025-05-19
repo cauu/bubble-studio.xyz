@@ -1,5 +1,7 @@
 {
   "common.no_data": "暫無數據",
+  "common.view_details": "查看詳情",
+  "common.back": "返回",
 
   "error.get_data_failed": "獲取數據失敗，請稍後重試",
 
@@ -19,5 +21,6 @@
   "governance.title_our_opinion": "我們的觀點",
   "governance.no_data": "暫無數據",
   "governance.about_title": "關於治理",
-  "governance.about_content": "Bubble Studio致力於推動Cardano生態系統的去中心化治理，我們相信社群的力量與集體智慧。"
+  "governance.about_content": "Bubble Studio致力於推動Cardano生態系統的去中心化治理，我們相信社群的力量與集體智慧。",
+  "governance.related_tweets": "相關推文"
 }
