@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-// import { Layers } from 'lucide-react';
-
 import Link from 'next/link';
 import { useMemo } from 'react';
+import { Globe } from 'lucide-react';
+// import { Layers } from 'lucide-react';
 
 export const NavBar = () => {
   const router = useRouter();
@@ -74,18 +74,22 @@ export const NavBar = () => {
               <option>English</option>
             </select>
           </div> */}
-        <select
-          className="border-2 border-[#0a2463] rounded-md p-1 text-[#0a2463] font-bold bg-white cursor-pointer"
-          value={router.locale}
-          onChange={(e) => {
-            const locale = e.target.value;
-            router.push(router.asPath, router.asPath, { locale });
-          }}
-        >
-          <option value="zh">简体中文</option>
-          <option value="tw">繁體中文</option>
-          <option value="en">English</option>
-        </select>
+        <div className="flex items-center gap-2">
+          <Globe size={24} className="text-[#0a2463]" />
+
+          <select
+            className="border-2 border-[#0a2463] rounded-md p-1 text-[#0a2463] font-bold bg-white cursor-pointer"
+            value={router.locale}
+            onChange={(e) => {
+              const locale = e.target.value;
+              router.push(router.asPath, router.asPath, { locale });
+            }}
+          >
+            <option value="zh">简体中文</option>
+            <option value="tw">繁體中文</option>
+            <option value="en">English</option>
+          </select>
+        </div>
       </div>
     </nav>
     // </div>
