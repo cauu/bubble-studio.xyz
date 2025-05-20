@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function EmptyList({ text = '暂无数据' }) {
   return (
-    <div className="relative flex flex-col items-center justify-center py-16 bg-white card">
+    <div className="relative flex flex-col items-center justify-center py-16 bg-white md:card shadow-md border-t">
       {/* 装饰气泡（无动画） */}
       <div
         className="absolute"
