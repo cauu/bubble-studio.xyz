@@ -155,13 +155,13 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
   const isHotTopic = HOT_TOPICS.includes(currentProposal?.id);
 
   return (
-    <div className="card bg-white p-5 relative">
-      {isHotTopic && <div className="vote-badge">{`${t('governance.hot')}!`}</div>}
+    <div className="md:card bg-white p-4 relative">
+      {isHotTopic && <div className="vote-badge md:block hidden">{`${t('governance.hot')}!`}</div>}
 
       {/* 投票内容 */}
       {currentProposal && (
-        <div className="border-3 border-[#0a2463] rounded-lg flex flex-col space-y-4">
-          <h3 className="text-xl font-bold text-[#0a2463]">{currentProposal.title}</h3>
+        <div className="border-3 border-[#0a2463] rounded-lg flex flex-col space-y-2 md:space-y-4">
+          <h3 className="text-base md:text-xl font-bold text-[#0a2463]">{currentProposal.title}</h3>
 
           <div className="flex justify-between flex-col md:flex-row">
             <div className="flex items-center text-sm">
@@ -201,12 +201,12 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
           </div> */}
 
           <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-            <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
+            <h3 className="font-bold text-[#0a2463] flex mb-1 items-center">
               <MessageCircle size={20} className="mr-2 text-[#3f8efc]" />
               {t('governance.title_proposal_content')}
             </h3>
 
-            <div className="text-sm text-gray-900 leading-relaxed">
+            <div className="text-sm text-gray-900 leading-relaxed line-clamp-5 md:line-clamp-none">
               <ReactMarkdown>{currentProposal?.opinions.summary}</ReactMarkdown>
             </div>
           </div>
@@ -217,10 +217,10 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             ))}
           </div> */}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid-cols-1 md:grid-cols-2 gap-4 hidden md:grid">
             {/* 正方观点 */}
-            <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-              <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
+            <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff] hidden md:block">
+              <h3 className="font-bold text-[#0a2463] flex items-center">
                 <CheckCircle size={20} className="mr-2 text-[#06D6A0]" />
                 {t('governance.title_pros')}
               </h3>
@@ -231,8 +231,8 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             </div>
 
             {/* 反方观点 */}
-            <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-              <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
+            <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff] hidden md:block">
+              <h3 className="font-bold text-[#0a2463] flex mb-1 items-center">
                 <XCircle size={20} className="mr-2 text-[#EF476F]" />
                 {t('governance.title_cons')}
               </h3>
@@ -245,13 +245,13 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
 
           {/* 我们的观点 */}
           <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-            <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
+            <h3 className="font-bold text-[#0a2463] flex mb-1 items-center">
               <Lightbulb size={20} className="mr-2 text-[#3f8efc]" />
               {t('governance.title_our_opinion')}
             </h3>
 
             {/* <p className="text-sm text-gray-900">{currentProposal.opinions.myOpinion}</p> */}
-            <div className="text-sm text-gray-900 leading-relaxed">
+            <div className="text-sm text-gray-900 leading-relaxed line-clamp-5 md:line-clamp-none">
               <ReactMarkdown>{currentProposal?.opinions.myOpinion}</ReactMarkdown>
             </div>
           </div>

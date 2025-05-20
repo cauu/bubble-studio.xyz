@@ -70,9 +70,9 @@ export default function Governance({ actions, proposals, error }: GovernanceProp
 
   return (
     <div className="flex space-x-6 justify-center">
-      <div className="flex flex-col space-y-6 flex-1">
-        <div className="card bg-white p-2 md:p-4">
-          <div className="flex border-b border-gray-200">
+      <div className="flex flex-col space-y-0 md:space-y-6 flex-1">
+        <div className="md:card bg-white px-2 md:p-4">
+          <div className="flex border-gray-200 items-stretch">
             {TABS_PC.map((tab) => {
               return (
                 <button
@@ -92,11 +92,11 @@ export default function Governance({ actions, proposals, error }: GovernanceProp
         </div>
 
         {currentTab === 'actions' && (
-          <div className="flex flex-col space-y-6">
+          <div className="flex flex-col space-y-4 md:space-y-6">
             {actions.length > 0 ? (
               actions.map((item) => {
                 return (
-                  <div key={item.id} className="governance-content">
+                  <div key={item.id} className="governance-content border-t shadow-md md:border-y-0 md:shadow-none">
                     <GovActionCard key={item.id} proposal={item} />
                   </div>
                 );
@@ -107,7 +107,7 @@ export default function Governance({ actions, proposals, error }: GovernanceProp
           </div>
         )}
         {currentTab === 'topics' && (
-          <div className="flex flex-col space-y-6">
+          <div className="flex flex-col space-y-4 md:space-y-6">
             {proposals.length > 0 ? (
               proposals.map((item) => {
                 return <ProposalCard key={item} />;

@@ -25,30 +25,32 @@
   }
 }
 
+@layer components {
+  .card {
+    border: 3px solid #010102;
+    border-radius: 16px;
+    box-shadow: 6px 6px 0px #0a2463;
+    position: relative;
+  }
+}
+
 body {
   background-color: #f0f7ff;
   /* font-family: 'Comic Neue', cursive; */
 }
 
-.card {
-  border: 3px solid #010102;
-  border-radius: 16px;
-  box-shadow: 6px 6px 0px #0a2463;
-  position: relative;
-  overflow: hidden;
-}
-.card::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 40px;
-  height: 40px;
-  background: #fff;
-  border: 3px solid #0a2463;
-  transform: rotate(45deg);
-  z-index: 0;
-}
+/* .card::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border: 3px solid #0a2463;
+    transform: rotate(45deg);
+    z-index: 0;
+} */
 .btn {
   border: 3px solid #0a2463;
   border-radius: 8px;

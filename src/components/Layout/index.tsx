@@ -6,7 +6,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex justify-center comic-bg h-full w-full relative">
       {/* <BubbleBackground count={15} minSize={20} maxSize={60} glassEffect={true} zIndex={10} /> */}
 
-      <div className="h-full w-full max-w-[1536px] p-6 relative">
+      <div className="h-full w-full max-w-[1536px] md:p-6 p-0 relative">
         <NavBar />
 
         {children}
