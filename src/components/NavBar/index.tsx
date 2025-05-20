@@ -34,7 +34,7 @@ export const NavBar = () => {
     // <div className="w-full h-full">
     <nav className="card bg-white p-4 flex items-center justify-between mb-6">
       <div className="flex items-center">
-        <Link href="/" className="text-3xl title-font mr-10 flex items-center text-[#0a2463]">
+        <Link href="/" className="hidden md:flex text-3xl title-font mr-10 items-center text-[#0a2463]">
           {/* <Layers size={32} className="mr-2" /> */}
           <svg
             width="40"

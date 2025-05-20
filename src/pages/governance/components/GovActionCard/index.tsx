@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Calendar, CalendarX, CheckCircle, Clock, Lightbulb, MessageCircle, XCircle } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Lightbulb, MessageCircle, XCircle } from 'lucide-react';
 import dayjs from 'dayjs';
 import ReactMarkdown from 'react-markdown';
 import { useTranslation } from 'next-i18next';
@@ -163,7 +163,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
         <div className="border-3 border-[#0a2463] rounded-lg flex flex-col space-y-4">
           <h3 className="text-xl font-bold text-[#0a2463]">{currentProposal.title}</h3>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between flex-col md:flex-row">
             <div className="flex items-center text-sm">
               <Calendar size={16} className="mr-1" />
               <span>
@@ -171,7 +171,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
               </span>
             </div>
             <div className="flex items-center text-sm">
-              <CalendarX size={16} className="mr-1" />
+              <Calendar size={16} className="mr-1" />
               <span>
                 {t('governance.expire_at')}: {dayjs(currentProposal?.metadata.expiryDate).format('YYYY-MM-DD HH:mm')}
               </span>
@@ -217,7 +217,7 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             ))}
           </div> */}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* 正方观点 */}
             <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
               <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">
