@@ -120,7 +120,7 @@ export default function Governance({ actions, proposals, error }: GovernanceProp
         )}
       </div>
 
-      <div className="space-y-6 w-72 sticky top-6 self-start hidden md:flex md:flex-col">
+      <div className="space-y-6 w-72 sticky top-6 self-start hidden lg:flex lg:flex-col">
         {/* <Dreps /> */}
 
         <About />
