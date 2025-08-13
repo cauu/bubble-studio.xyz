@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Studio - About | Minimal Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .glass-card { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .hover-lift { transition: all 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .text-gradient { background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg"></div>
+                        <span class="text-xl font-semibold text-gray-800">Bubble Studio</span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">治理</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Staking</a>
+                        <a href="#" class="text-indigo-600 font-medium">About</a>
+                    </div>
+                </div>
+                <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                    连接钱包
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative py-20 md:py-32">
+        <div class="absolute inset-0 gradient-bg opacity-5"></div>
+        <div class="max-w-7xl mx-auto px-6 relative">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-6xl font-light text-gray-900 mb-6">
+                    我们是 <span class="text-gradient font-medium">Bubble Studio</span>
+                </h1>
+                <p class="text-xl text-gray-600 leading-relaxed">
+                    一个专注于区块链技术和去中心化应用开发的创新工作室。
+                    让复杂的技术变得简单易用，这是我们的使命。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl font-light text-gray-900 mb-6">关于我们</h2>
+                    <div class="space-y-4 text-gray-600 leading-relaxed">
+                        <p>
+                            Bubble Studio 成立于2021年，由一群对区块链技术充满热情的开发者、
+                            设计师和研究人员组成。我们相信去中心化的未来，致力于构建能够赋能社区的解决方案。
+                        </p>
+                        <p>
+                            目前专注于 Cardano 生态系统，为用户提供质押服务和治理参与工具，
+                            让每个人都能轻松参与区块链网络的建设和决策过程。
+                        </p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm hover-lift">
+                        <div class="text-3xl font-light text-indigo-600 mb-2">2021</div>
+                        <div class="text-sm text-gray-600">工作室成立</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm hover-lift">
+                        <div class="text-3xl font-light text-indigo-600 mb-2">4+</div>
+                        <div class="text-sm text-gray-600">核心成员</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm hover-lift">
+                        <div class="text-3xl font-light text-indigo-600 mb-2">Cardano</div>
+                        <div class="text-sm text-gray-600">生态专注</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm hover-lift">
+                        <div class="text-3xl font-light text-indigo-600 mb-2">社区</div>
+                        <div class="text-sm text-gray-600">优先导向</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-light text-gray-900 mb-8">我们的愿景</h2>
+                <div class="bg-white rounded-3xl p-12 shadow-sm">
+                    <blockquote class="text-2xl text-gray-700 leading-relaxed mb-8">
+                        "我们相信区块链技术将重塑未来的金融和社会系统，
+                        创造更加公平、透明和高效的世界。"
+                    </blockquote>
+                    <p class="text-gray-600 leading-relaxed">
+                        Bubble Studio 的愿景是成为连接普通用户和区块链技术的桥梁，
+                        通过简化复杂概念和流程，让更多人能够参与到这场技术革命中来。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-light text-gray-900 mb-4">核心团队</h2>
+                <p class="text-gray-600">由经验丰富的专业人士组成</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="group">
+                    <div class="relative overflow-hidden rounded-2xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=300&h=300&fit=crop" 
+                             class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h3 class="font-medium text-gray-900 mb-1">David Chen</h3>
+                    <p class="text-sm text-gray-600">创始人 & CEO</p>
+                </div>
+                <div class="group">
+                    <div class="relative overflow-hidden rounded-2xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&fit=crop" 
+                             class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h3 class="font-medium text-gray-900 mb-1">Sarah Johnson</h3>
+                    <p class="text-sm text-gray-600">产品设计师</p>
+                </div>
+                <div class="group">
+                    <div class="relative overflow-hidden rounded-2xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop" 
+                             class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h3 class="font-medium text-gray-900 mb-1">Michael Torres</h3>
+                    <p class="text-sm text-gray-600">区块链开发者</p>
+                </div>
+                <div class="group">
+                    <div class="relative overflow-hidden rounded-2xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300&h=300&fit=crop" 
+                             class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h3 class="font-medium text-gray-900 mb-1">Emily Zhang</h3>
+                    <p class="text-sm text-gray-600">社区经理</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-3xl font-light text-center text-gray-900 mb-12">发展历程</h2>
+            <div class="space-y-8">
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-medium">2021</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm flex-1">
+                        <h3 class="font-medium text-gray-900 mb-2">工作室成立</h3>
+                        <p class="text-sm text-gray-600">Bubble Studio正式成立，开始探索Cardano生态系统</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-medium">09</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm flex-1">
+                        <h3 class="font-medium text-gray-900 mb-2">质押池上线</h3>
+                        <p class="text-sm text-gray-600">推出首个Cardano质押池，为社区提供质押服务</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-medium">2022</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm flex-1">
+                        <h3 class="font-medium text-gray-900 mb-2">治理平台上线</h3>
+                        <p class="text-sm text-gray-600">推出去中心化治理平台，让社区参与决策</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-medium">2023</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm flex-1">
+                        <h3 class="font-medium text-gray-900 mb-2">全新平台发布</h3>
+                        <p class="text-sm text-gray-600">推出全新设计的用户界面，提升用户体验</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-600 rounded"></div>
+                    <span class="text-lg font-medium text-gray-900">Bubble Studio</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i data-lucide="twitter" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
