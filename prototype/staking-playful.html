@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Studio - Staking | Playful Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Nunito', sans-serif; }
+        .bubble { animation: bubble 3s infinite ease-in-out; }
+        @keyframes bubble { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(180deg); } 100% { transform: translateY(0px) rotate(360deg); } }
+        .wiggle { animation: wiggle 2s infinite; }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+        .bounce-in { animation: bounce-in 0.5s; }
+        @keyframes bounce-in { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); opacity: 1; } }
+        .hover-grow { transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .hover-grow:hover { transform: scale(1.05) rotate(1deg); }
+        .candy-gradient { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); }
+        .mint-gradient { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .sunset-gradient { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .sky-gradient { background: linear-gradient(135deg, #e3ffe7 0%, #d9e7ff 100%); }
+        .pool-card { transition: all 0.3s ease; }
+        .pool-card:hover { transform: translateY(-4px) rotate(-1deg); }
+        .metric-card { transition: all 0.2s ease; }
+        .metric-card:hover { transform: scale(1.02); }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .status-online { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
+        .status-warning { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .status-offline { background: linear-gradient(135deg, #a8caba 0%, #5d4e75 100%); }
+        
+        /* Real-time data styles */
+        .data-value {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #ff9a9e, #fecfef);
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .glow {
+            box-shadow: 0 0 20px rgba(255, 154, 158, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen">
+
+    <!-- Floating Bubbles -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="bubble absolute w-16 h-16 bg-blue-300/20 rounded-full top-20 left-20"></div>
+        <div class="bubble absolute w-12 h-12 bg-purple-300/20 rounded-full top-40 right-32" style="animation-delay: 1s;"></div>
+        <div class="bubble absolute w-8 h-8 bg-pink-300/20 rounded-full bottom-32 left-40" style="animation-delay: 2s;"></div>
+        <div class="bubble absolute w-20 h-20 bg-indigo-300/10 rounded-full top-60 left-1/2" style="animation-delay: 0.5s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative z-50 m-6">
+        <div class="bg-white/80 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 candy-gradient rounded-full shadow-lg"></div>
+                        <span class="text-xl font-bold text-gray-800 wiggle">Bubble Studio Staking</span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="#" class="text-gray-600 hover:text-blue-500 transition-colors font-medium">治理</a>
+                        <a href="#" class="text-blue-500 font-bold">Staking</a>
+                        <a href="#" class="text-gray-600 hover:text-purple-500 transition-colors font-medium">About</a>
+                        <a href="#" class="text-gray-600 hover:text-pink-500 transition-colors font-medium">Blog</a>
+                    </div>
+                </div>
+                <button class="px-6 py-2 candy-gradient text-white rounded-full shadow-lg hover-grow font-bold">
+                    连接钱包
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative z-10 py-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl md:text-7xl font-black mb-6">
+                <span class="text-transparent bg-clip-text candy-gradient">Bubble Pool 🏊‍♂️</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
+                我们的 Cardano 质押池实时数据，透明、有趣、值得信赖！
+            </p>
+        </div>
+    </section>
+
+    <!-- Key Metrics Overview -->
+    <section class="relative z-10 py-16 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-black text-gray-800 mb-4">
+                    📊 实时关键数据
+                </h2>
+                <p class="text-xl text-gray-600">用户最关心的四大指标</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Saturation -->
+                <div class="metric-card bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl text-center">
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">饱和度</h3>
+                    <div class="text-3xl font-bold text-blue-600 mb-2 data-value">78.5%</div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div class="progress-bar" style="width: 78.5%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500">健康状态 ✅</p>
+                </div>
+
+                <!-- Delegations -->
+                <div class="metric-card bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl text-center">
+                    <div class="text-4xl mb-4">👥</div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">委托者</h3>
+                    <div class="text-3xl font-bold text-purple-600 mb-2 data-value">247</div>
+                    <p class="text-sm text-gray-500">活跃委托者</p>
+                </div>
+
+                <!-- Recent ROI -->
+                <div class="metric-card bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl text-center glow">
+                    <div class="text-4xl mb-4">📈</div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">近期ROI</h3>
+                    <div class="text-3xl font-bold text-green-600 mb-2 data-value">4.2%</div>
+                    <p class="text-sm text-gray-500">年化收益率</p>
+                </div>
+
+                <!-- Relays Status -->
+                <div class="metric-card bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl text-center">
+                    <div class="text-4xl mb-4">🚀</div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">中继状态</h3>
+                    <div class="flex items-center justify-center space-x-2 mb-2">
+                        <div class="w-4 h-4 status-online rounded-full"></div>
+                        <div class="w-4 h-4 status-online rounded-full"></div>
+                        <div class="w-4 h-4 status-online rounded-full"></div>
+                    </div>
+                    <p class="text-sm text-gray-500">3/3 在线</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pool Details Card -->
+    <section class="relative z-10 py-16 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl pool-card">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">Bubble Pool</h1>
+                        <p class="text-xl text-blue-600 font-bold">[BUBBLE]</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm text-gray-500">Pool ID</div>
+                        <div class="font-mono text-sm text-gray-700">pool1xyz...</div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Left Column -->
+                    <div class="space-y-6">
+                        <div class="bg-blue-50 rounded-2xl p-4">
+                            <h4 class="font-bold text-blue-800 mb-2">质押数据</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">实时质押</span>
+                                    <span class="font-bold data-value">45.2M ADA</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">活跃质押</span>
+                                    <span class="font-bold data-value">42.8M ADA</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-purple-50 rounded-2xl p-4">
+                            <h4 class="font-bold text-purple-800 mb-2">费用结构</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Margin Fee</span>
+                                    <span class="font-bold data-value">2.5%</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Fixed Fee</span>
+                                    <span class="font-bold data-value">340 ADA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+                        <div class="bg-green-50 rounded-2xl p-4">
+                            <h4 class="font-bold text-green-800 mb-2">产出数据</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Epoch Blocks</span>
+                                    <span class="font-bold data-value">23</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Lifetime Blocks</span>
+                                    <span class="font-bold data-value">1,247</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-orange-50 rounded-2xl p-4">
+                            <h4 class="font-bold text-orange-800 mb-2">网络状态</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Relay 1</span>
+                                    <span class="px-2 py-1 bg-green-200 text-green-800 rounded-full text-xs">在线</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Relay 2</span>
+                                    <span class="px-2 py-1 bg-green-200 text-green-800 rounded-full text-xs">在线</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Relay 3</span>
+                                    <span class="px-2 py-1 bg-green-200 text-green-800 rounded-full text-xs">在线</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delegation Guide -->
+    <section class="relative z-10 py-16 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">如何委托给 Bubble Pool? 🎯</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+                        <h4 class="font-bold text-gray-800 mb-2">连接钱包</h4>
+                        <p class="text-sm text-gray-600">点击上方"连接钱包"按钮，选择您的Cardano钱包</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-purple-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+                        <h4 class="font-bold text-gray-800 mb-2">搜索池子</h4>
+                        <p class="text-sm text-gray-600">在质押界面搜索"BUBBLE"或输入池ID</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-pink-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+                        <h4 class="font-bold text-gray-800 mb-2">确认委托</h4>
+                        <p class="text-sm text-gray-600">确认委托数量，支付少量费用，开始获得奖励！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rewards Calculator -->
+    <section class="relative z-10 py-16 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">奖励计算器 🧮</h3>
+                <div class="max-w-md mx-auto">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">委托金额 (ADA)</label>
+                            <input type="number" placeholder="1000" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none" id="ada-amount">
+                        </div>
+                        <div class="bg-blue-50 rounded-xl p-4">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-blue-600 mb-2">预期年化收益</div>
+                                <div class="text-3xl font-bold text-green-600" id="calculated-rewards">42 ADA</div>
+                                <div class="text-sm text-gray-600">基于当前4.2%年化收益率</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="relative z-10 py-16 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">常见问题 🤔</h3>
+                <div class="space-y-4">
+                    <div class="border-b border-gray-200 pb-4">
+                        <h4 class="font-bold text-gray-800 mb-2">什么是饱和度？</h4>
+                        <p class="text-gray-600 text-sm">饱和度表示池子接近最大容量的程度。当饱和度超过100%时，奖励会递减。78.5%是理想状态！</p>
+                    </div>
+                    <div class="border-b border-gray-200 pb-4">
+                        <h4 class="font-bold text-gray-800 mb-2">多久能获得奖励？</h4>
+                        <p class="text-gray-600 text-sm">通常在委托后15-20天开始获得奖励，之后每5天发放一次。</p>
+                    </div>
+                    <div class="border-b border-gray-200 pb-4">
+                        <h4 class="font-bold text-gray-800 mb-2">有风险吗？</h4>
+                        <p class="text-gray-600 text-sm">质押非常安全！您的ADA始终在您的钱包中，我们只是获得委托权，不会控制您的资金。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-12 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 candy-gradient rounded-full shadow-lg"></div>
+                        <span class="text-xl font-black text-gray-800">Bubble Pool</span>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-gray-600 mb-2">💝 感谢每一位委托者的信任！</p>
+                        <p class="text-sm text-gray-500">让我们一起在Cardano的海洋里畅游！</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-blue-500 transition-colors">
+                            <i data-lucide="twitter" class="w-6 h-6"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-purple-500 transition-colors">
+                            <i data-lucide="telegram" class="w-6 h-6"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-green-500 transition-colors">
+                            <i data-lucide="mail" class="w-6 h-6"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        
+        // Add some interactive fun
+        document.addEventListener('DOMContentLoaded', function() {
+            const bubbles = document.querySelectorAll('.bubble');
+            bubbles.forEach((bubble, index) => {
+                bubble.style.animationDelay = `${index * 0.5}s`;
+            });
+
+            // Real-time data updates simulation
+            setInterval(() => {
+                const saturation = document.querySelector('[data-metric="saturation"]');
+                const delegations = document.querySelector('[data-metric="delegations"]');
+                
+                // Simulate small random updates
+                const currentSat = parseFloat(document.querySelector('.data-value').textContent);
+                const newSat = Math.max(75, Math.min(82, currentSat + (Math.random() - 0.5) * 0.1));
+                document.querySelectorAll('.data-value')[0].textContent = newSat.toFixed(1) + '%';
+                document.querySelector('.progress-bar').style.width = newSat.toFixed(1) + '%';
+            }, 3000);
+
+            // Rewards calculator
+            document.getElementById('ada-amount').addEventListener('input', function() {
+                const amount = parseFloat(this.value) || 0;
+                const rewards = Math.round(amount * 0.042);
+                document.getElementById('calculated-rewards').textContent = rewards + ' ADA';
+            });
+
+            // Add hover effects to metric cards
+            document.querySelectorAll('.metric-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.classList.add('glow');
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.classList.remove('glow');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
