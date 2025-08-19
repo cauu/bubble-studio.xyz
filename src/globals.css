@@ -1,4 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+/* Alibaba PuHuiTi Thin */
+ @font-face {
+  font-family: 'AlibabaPuHuiTi';
+  src: url('/fonts/AlibabaPuHuiTi-3-35-Thin.woff2') format('woff2');
+  font-weight: 100, 900;
+  font-style: normal;
+}
+
+ @font-face {
+  font-family: 'AlibabaPuHuiTi';
+  src: url('/fonts/AlibabaPuHuiTi-3-45-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AlibabaPuHuiTi';
+  src: url('/fonts/AlibabaPuHuiTi-3-55-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AlibabaPuHuiTi';
+  src: url('/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AlibabaPuHuiTi';
+  src: url('/fonts/AlibabaPuHuiTi-3-75-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AlibabaPuHuiTi';
+  src: url('/fonts/AlibabaPuHuiTi-3-85-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AlibabaPuHuiTi';
+  src: url('/fonts/AlibabaPuHuiTi-3-95-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AlibabaPuHuiTi';
+  src: url('/fonts/AlibabaPuHuiTi-3-105-Heavy.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
 
 @tailwind base;
 @tailwind components;
@@ -237,7 +292,7 @@ body {
 }
 
 body {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'AlibabaPuHuiTi', sans-serif;
 }
 .bubble { animation: bubble 3s infinite ease-in-out; }
 @keyframes bubble { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(180deg); } 100% { transform: translateY(0px) rotate(360deg); } }
