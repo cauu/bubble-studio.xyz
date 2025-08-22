@@ -56,8 +56,6 @@ export const getStaticProps: GetStaticProps<GovernanceActionProps> = async ({ lo
   const translations = await serverSideTranslations(locale || 'en', ['common']);
   const action = governanceData[locale as string].find((item) => item.type === 'action' && item.id === id) as any;
 
-  console.log('action', action);
-
   return {
     props: {
       content: action,

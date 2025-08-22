@@ -5,6 +5,7 @@
 
   "error.get_data_failed": "Get Data Failed, Please Try Again Later",
 
+  "header.blogs": "Blogs",
   "header.governance": "Governance",
   "header.staking": "Staking",
   "header.about": "About Us",

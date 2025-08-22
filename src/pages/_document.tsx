@@ -9,6 +9,7 @@ export default function Document() {
         <link rel="icon" href="/favicon.svg" />
         {/* 可以添加默认样式、字体等 */}
       </Head>
+
       <body>
         <Main />
         <NextScript />

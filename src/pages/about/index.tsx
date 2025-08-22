@@ -1,5 +1,18 @@
+import { GetStaticProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
-// import { Layout } from '../../components/Layout';
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const translations = await serverSideTranslations(locale || 'en', ['common']);
+
+  const a = [123];
+
+  return {
+    props: {
+      ...translations
+    }
+  }
+}
 
 export default function About() {
   return (
@@ -10,8 +23,8 @@ export default function About() {
         <section className="relative z-10 py-8 px-6">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-black mb-2">
-                <div className="candy-gradient text-transparent !bg-clip-text">你好呀！👋</div>
-                <div className="text-gray-800 mt-2">我们是 Bubble Studio!</div>
+              <div className="candy-gradient text-transparent !bg-clip-text">你好呀！👋</div>
+              <div className="text-gray-800 mt-2">我们是 Bubble Studio!</div>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
               一个在 Cardano 上生根发芽的小家庭作坊
@@ -60,7 +73,7 @@ export default function About() {
               </h2>
               <p className="text-lg text-gray-600">小而美的家庭作坊</p>
             </div>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {/* Martin */}
               <div className="group">
