@@ -46,28 +46,30 @@ export default function Blogs(props: { allTags: string[], allPosts: PostData[] }
 
   return (
     <div>
-      <section className="relative z-10 py-8 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {allTags.map(tag => (
-              <FilterTag key={tag} tag={tag} isSelected={selectedTag === tag} onClick={handleTagClick} />
-            ))}
+      <div className="relative z-10 max-w-6xl mx-auto">
+        <section className="relative z-10 py-8 px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              {allTags.map(tag => (
+                <FilterTag key={tag} tag={tag} isSelected={selectedTag === tag} onClick={handleTagClick} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
 
-      <section className="relative z-10 pb-8 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {
-              filteredPosts.map(post => (
-                <BlogCard key={post.slug} post={post} onClick={handleBlogCardClick} />
-              ))
-            }
+        <section className="relative z-10 pb-8 px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {
+                filteredPosts.map(post => (
+                  <BlogCard key={post.slug} post={post} onClick={handleBlogCardClick} />
+                ))
+              }
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { NavBar } from '../NavBar';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-sky-100 to-blue-100 overflow-hidden justify-center items-center">
+    <div className="flex h-screen overflow-auto bg-gradient-to-br from-blue-50 via-sky-100 to-blue-100 justify-center items-center">
       {/* <BubbleBackground count={15} minSize={20} maxSize={60} glassEffect={true} zIndex={10} /> */}
 
       {/* Floating Bubbles */}
@@ -13,10 +13,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="absolute w-24 h-24 bg-blue-200/30 rounded-full top-60 left-1/2 animate-bounce" style={{ animationDelay: '0.5s', animationDuration: '5s' }}></div>
       </div>
 
-      <div className="h-full w-full max-w-[1536px] md:p-6 p-0 relative">
+      <div className="h-full w-full flex-1 max-w-[1536px] md:p-6 p-0 relative">
         <NavBar />
 
-        {children}
+        <div>
+          {children}
+        </div>
       </div>
     </div>
   );

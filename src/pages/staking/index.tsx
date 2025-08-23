@@ -1,7 +1,47 @@
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSideProps } from "next";
+
+import { getPoolInfo, getPoolStakeSnapshot, getPoolDelegators } from "../../services/pool";
+
 import MetricCard from "./MetricCard";
 import RelayStatusIndicator from "./RelayStatusIndicator";
+import { PoolDelegatorsResponse, PoolInfoResponse, PoolStakeSnapshotResponse } from "@/types/koios.types";
+import { GlobalConfig } from "@/constants";
 
-export default function Staking() {
+export const getServerSideProps: GetServerSideProps<any> = async ({ locale }) => {
+  const translations = await serverSideTranslations(locale || 'en', ['common']);
+  const [
+    poolInfo,
+    poolStakeSnapshot,
+    poolDelegators
+  ] = await Promise.all([
+    getPoolInfo([GlobalConfig.POOL_ID]),
+    getPoolStakeSnapshot(GlobalConfig.POOL_ID),
+    getPoolDelegators(GlobalConfig.POOL_ID)
+  ])
+
+  return {
+    props: {
+      ...translations,
+      poolInfo,
+      poolStakeSnapshot,
+      poolDelegators
+    }
+  }
+}
+
+export default function Staking(
+  props: {
+    poolInfo: PoolInfoResponse,
+    poolStakeSnapshot: PoolStakeSnapshotResponse,
+    poolDelegators: PoolDelegatorsResponse
+  }
+) {
+
+  const { poolInfo, poolStakeSnapshot, poolDelegators } = props;
+
+  console.log(poolInfo, poolStakeSnapshot, poolDelegators);
+
   return (
     <div>
       <div className="relative z-10 max-w-6xl mx-auto">
