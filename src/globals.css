@@ -1,5 +1,5 @@
 /* Alibaba PuHuiTi Thin */
- @font-face {
+@font-face {
   font-family: 'AlibabaPuHuiTi';
   src: url('/fonts/AlibabaPuHuiTi-3-35-Thin.woff2') format('woff2');
   font-weight: 100, 900;
@@ -94,18 +94,6 @@ body {
   /* font-family: 'Comic Neue', cursive; */
 }
 
-/* .card::before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 40px;
-    height: 40px;
-    background: #fff;
-    border: 3px solid #0a2463;
-    transform: rotate(45deg);
-    z-index: 0;
-} */
 .btn {
   border: 3px solid #0a2463;
   border-radius: 8px;
@@ -113,10 +101,12 @@ body {
   transition: all 0.2s ease;
   font-weight: bold;
 }
+
 .btn:hover {
   transform: translate(-3px, -3px);
   box-shadow: 6px 6px 0px #0a2463;
 }
+
 .mockup-container {
   width: 1200px;
   height: 800px;
@@ -128,23 +118,27 @@ body {
   background-color: #f0f7ff;
   position: relative;
 }
+
 .comic-bg {
-  background-image: 
-      radial-gradient(#b8d3ff 2px, transparent 2px),
-      radial-gradient(#d6e4ff 2px, transparent 2px);
+  background-image:
+    radial-gradient(#b8d3ff 2px, transparent 2px),
+    radial-gradient(#d6e4ff 2px, transparent 2px);
   background-size: 30px 30px;
   background-position: 0 0, 15px 15px;
 }
+
 .title-font {
   font-family: 'Bangers', cursive;
   letter-spacing: 1px;
 }
+
 .speech-bubble {
   position: relative;
   background: #ffffff;
   border: 3px solid #0a2463;
   border-radius: 12px;
 }
+
 .speech-bubble:after {
   content: '';
   position: absolute;
@@ -156,6 +150,7 @@ body {
   display: block;
   width: 0;
 }
+
 .speech-bubble:before {
   content: '';
   position: absolute;
@@ -168,6 +163,7 @@ body {
   width: 0;
   z-index: 1;
 }
+
 .progress-bar {
   height: 24px;
   border: 2px solid #0a2463;
@@ -175,11 +171,13 @@ body {
   overflow: hidden;
   position: relative;
 }
+
 .progress-bar-inner {
   height: 100%;
   border-radius: 8px;
   transition: width 0.5s ease;
 }
+
 .progress-threshold {
   position: absolute;
   top: 0;
@@ -188,6 +186,7 @@ body {
   background-color: #0a2463;
   z-index: 5;
 }
+
 .progress-threshold::after {
   content: "";
   position: absolute;
@@ -198,6 +197,7 @@ body {
   background-color: #0a2463;
   border-radius: 50%;
 }
+
 .vote-badge {
   position: absolute;
   top: 5px;
@@ -217,24 +217,30 @@ body {
   color: white;
   transform: translateY(0) rotate(0);
 }
+
 .tab-inactive {
   background-color: #d6e4ff;
   transform: translateY(3px) rotate(-2deg);
 }
+
 .tab-inactive:nth-child(even) {
   transform: translateY(3px) rotate(2deg);
 }
+
 .tab {
   transition: all 0.3s ease;
 }
+
 .tab:hover {
   transform: translateY(0) rotate(0) !important;
 }
+
 .point-list li {
   position: relative;
   padding-left: 25px;
   margin-bottom: 8px;
 }
+
 .point-list li::before {
   content: "";
   position: absolute;
@@ -245,17 +251,21 @@ body {
   border-radius: 50%;
   border: 2px solid #0a2463;
 }
+
 .point-list.pros li::before {
   background-color: #06D6A0;
 }
+
 .point-list.cons li::before {
   background-color: #EF476F;
 }
+
 .pie-chart {
   position: relative;
   width: 120px;
   height: 120px;
 }
+
 .bubble {
   position: absolute;
   background-color: #d6e4ff;
@@ -264,6 +274,7 @@ body {
   opacity: 0.7;
   animation: float 3s infinite ease-in-out;
 }
+
 .bubble:nth-child(1) {
   width: 30px;
   height: 30px;
@@ -271,6 +282,7 @@ body {
   left: 10%;
   animation-delay: 0s;
 }
+
 .bubble:nth-child(2) {
   width: 20px;
   height: 20px;
@@ -278,6 +290,7 @@ body {
   left: 20%;
   animation-delay: 0.5s;
 }
+
 .bubble:nth-child(3) {
   width: 25px;
   height: 25px;
@@ -285,35 +298,170 @@ body {
   left: 30%;
   animation-delay: 1s;
 }
+
 @keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 body {
   font-family: 'AlibabaPuHuiTi', sans-serif;
 }
-.bubble { animation: bubble 3s infinite ease-in-out; }
-@keyframes bubble { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(180deg); } 100% { transform: translateY(0px) rotate(360deg); } }
-.wiggle { animation: wiggle 2s infinite; }
-@keyframes wiggle { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
-.bounce-in { animation: bounce-in 0.5s; }
-@keyframes bounce-in { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); opacity: 1; } }
-.hover-grow { transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-.hover-grow:hover { transform: scale(1.1) rotate(2deg); }
-.candy-gradient { background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 50%, #dbeafe 100%); }
-.mint-gradient { background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); }
-.sunset-gradient { background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%); }
-.sky-gradient { background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); }
-.metric-card { transition: all 0.2s ease; }
-.metric-card:hover { transform: scale(1.02); }
-.stake-button {
+
+.bubble {
+  animation: bubble 3s infinite ease-in-out;
+}
+
+@keyframes bubble {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(360deg);
+  }
+}
+
+.wiggle {
+  animation: wiggle 2s infinite;
+}
+
+@keyframes wiggle {
+
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+.bounce-in {
+  animation: bounce-in 0.5s;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  70% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.hover-grow {
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.hover-grow:hover {
+  transform: scale(1.1) rotate(2deg);
+}
+
+.candy-gradient {
+  background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 50%, #dbeafe 100%);
+}
+
+.mint-gradient {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+}
+
+.sunset-gradient {
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+}
+
+.sky-gradient {
+  background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+}
+
+.metric-card {
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: scale(1.02);
+}
+
+.starknet-gradient {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+}
+
+.cardano-stake-button {
   background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
   transition: all 0.3s ease;
 }
-.stake-button:hover {
+
+.cardano-stake-button:hover {
   background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+}
+
+.starknet-stake-button {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  transition: all 0.3s ease;
+}
+
+.starknet-stake-button:hover {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  transform: translateY(-2px);
+
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Tab styles */
+.tab-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.tab-button.active {
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.tab-button.active.cardano-tab {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+}
+
+.tab-button.active.starknet-tab {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+}
+
+.tab-button:not(.active) {
+  background: rgba(255, 255, 255, 0.6);
+  color: #6b7280;
+}
+
+.tab-button:not(.active):hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: #374151;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }

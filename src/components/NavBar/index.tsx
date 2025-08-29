@@ -1,8 +1,11 @@
+'use client';
+
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { Globe } from 'lucide-react';
 
 export const NavBar = () => {
   const router = useRouter();
@@ -63,11 +66,30 @@ export const NavBar = () => {
             </div>
           </div>
 
-          <button className="px-6 py-2 candy-gradient text-white rounded-full shadow-lg hover-grow font-bold">
-            连接钱包
-          </button>
+          <div className="hidden md:flex items-center">
+            <div className="relative">
+              <Globe size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white z-10" />
+              <select
+                className="candy-gradient text-white font-bold rounded-full pl-10 pr-6 py-2 shadow-lg hover-grow cursor-pointer appearance-none border-none outline-none transition-all"
+                value={router.locale}
+                onChange={(e) => {
+                  const locale = e.target.value;
+                  router.push(router.asPath, router.asPath, { locale });
+                }}
+              >
+                <option value="zh" className="text-gray-800 bg-white">简体中文</option>
+                <option value="tw" className="text-gray-800 bg-white">繁體中文</option>
+                <option value="en" className="text-gray-800 bg-white">English</option>
+              </select>
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L6 6L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </nav>
+    </nav >
   )
 };

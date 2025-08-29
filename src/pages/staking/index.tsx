@@ -1,31 +1,58 @@
+import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
+import clsx from "clsx";
 
-import { getPoolInfo, getPoolStakeSnapshot, getPoolDelegators } from "../../services/pool";
-
-import MetricCard from "./MetricCard";
-import RelayStatusIndicator from "./RelayStatusIndicator";
+import { getPoolInfo, getPoolStakeSnapshot } from "@/services/pool";
 import { PoolDelegatorsResponse, PoolInfoResponse, PoolStakeSnapshotResponse } from "@/types/koios.types";
 import { GlobalConfig } from "@/constants";
+import { WrappedMemoryCache } from "@/utils/WrappedMemoryCache";
+
+import { CardanoStaking } from "./CardanoStaking";
+import { StarknetStaking } from "./StarknetStaking";
+import { getValidatorInfo } from "@/services/starknet-validator";
+import { ValidatorData } from "@/types/voyager.types";
+
+const poolInfoCache = new WrappedMemoryCache({
+  ttl: 1000 * 60 * 10,
+  refreshThreshold: 1000 * 60 * 5,
+  refreshFn: () => {
+    return async () => {
+      const [
+        poolInfo,
+        poolStakeSnapshot,
+      ] = await Promise.all([
+        getPoolInfo([GlobalConfig.POOL_ID]),
+        getPoolStakeSnapshot(GlobalConfig.POOL_ID),
+      ])
+
+      return {
+        poolInfo,
+        poolStakeSnapshot,
+      }
+    }
+  }
+});
 
 export const getServerSideProps: GetServerSideProps<any> = async ({ locale }) => {
   const translations = await serverSideTranslations(locale || 'en', ['common']);
-  const [
-    poolInfo,
-    poolStakeSnapshot,
-    poolDelegators
-  ] = await Promise.all([
-    getPoolInfo([GlobalConfig.POOL_ID]),
-    getPoolStakeSnapshot(GlobalConfig.POOL_ID),
-    getPoolDelegators(GlobalConfig.POOL_ID)
-  ])
+
+  const poolInfoCacheValue = await poolInfoCache.getCachedValue<{
+    poolInfo: PoolInfoResponse,
+    poolStakeSnapshot: PoolStakeSnapshotResponse,
+  }>('poolInfo');
+
+  if (!poolInfoCacheValue) {
+    throw new Error('Failed to fetch pool info');
+  }
+
+  const { poolInfo, poolStakeSnapshot, } = poolInfoCacheValue;
 
   return {
     props: {
       ...translations,
       poolInfo,
       poolStakeSnapshot,
-      poolDelegators
     }
   }
 }
@@ -38,85 +65,67 @@ export default function Staking(
   }
 ) {
 
-  const { poolInfo, poolStakeSnapshot, poolDelegators } = props;
+  const { poolInfo, poolDelegators, poolStakeSnapshot } = props;
 
-  console.log(poolInfo, poolStakeSnapshot, poolDelegators);
+  const [activePool, setActivePool] = useState<'cardano' | 'starknet'>('cardano');
+
+  const [validatorInfo, setValidatorInfo] = useState<ValidatorData['validatorDetails'] | null>(null);
+
+  useEffect(() => {
+    const fetchValidatorInfo = async () => {
+      const validatorInfo = await getValidatorInfo(GlobalConfig.STARKNET_VALIDATOR_ADDRESS);
+      setValidatorInfo(validatorInfo.validatorDetails);
+    }
+
+    fetchValidatorInfo();
+  }, [])
+
 
   return (
     <div>
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <section className="relative z-10 py-8 px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-black mb-2">
-              <div className="candy-gradient text-transparent !bg-clip-text">Bubble Pool 🏊‍♂️</div>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
-              透明、可靠的 Cardano 质押池，支持去中心化生态发展
-            </p>
-          </div>
-        </section>
-
-        <section className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8 mt-4">
-          <MetricCard icon="💰" title="质押总量" value="45.2M" description="ADA" />
-          <MetricCard icon="🎯" title="饱和度" value="78.5%" progressValue={78.5} />
-          <MetricCard icon="👥" title="委托者" value="247" description="活跃" />
-          <MetricCard icon="📈" title="年化收益" value="4.2%" description="ROI" />
-          <MetricCard icon="🔄" title="Relays 状态" value={
-            <div className="py-2">
-              <RelayStatusIndicator onlineCount={3} totalCount={3} />
-            </div>
-          } description="3/3 在线" />
-        </section>
-
-        <section className="text-center">
-          <button className="stake-button px-8 py-4 text-white rounded-2xl shadow-xl font-bold text-lg">
-            🎯 立即质押到 Bubble Pool
-          </button>
-          <p className="text-sm text-gray-500 mt-2">连接钱包开始获得稳定收益</p>
-        </section>
-      </div>
-
-      <section className="relative z-10 mt-4 py-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">💝 为什么选择 Bubble Pool？</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">💻</div>
-                  <div>
-                    <h4 className="font-bold text-gray-800 mb-1">支持开发工作</h4>
-                    <p className="text-sm text-gray-600">您的质押直接支持我们在 Cardano 生态系统中的开发工作，包括去中心化应用、工具和基础设施的构建。</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">🔧</div>
-                  <div>
-                    <h4 className="font-bold text-gray-800 mb-1">技术专业性</h4>
-                    <p className="text-sm text-gray-600">我们的团队具有丰富的区块链开发经验，确保矿池的稳定运行和最优性能。</p>
-                  </div>
-                </div>
+      <section className="flex justify-center mt-12 mb-4">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg">
+          <div className="flex space-x-3">
+            <button className={
+              clsx("tab-button cardano-tab px-8 py-4 rounded-2xl font-bold text-lg flex items-center space-x-3", {
+                "active": activePool === 'cardano'
+              })
+            }
+              onClick={() => setActivePool('cardano')}
+              data-pool="cardano">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <span className="text-xl">₳</span>
               </div>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">🌱</div>
-                  <div>
-                    <h4 className="font-bold text-gray-800 mb-1">生态贡献</h4>
-                    <p className="text-sm text-gray-600">我们积极参与 Cardano 社区建设，推动生态系统的健康发展和创新。</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">🎯</div>
-                  <div>
-                    <h4 className="font-bold text-gray-800 mb-1">透明运营</h4>
-                    <p className="text-sm text-gray-600">所有运营数据公开透明，定期发布矿池状态报告和技术更新。</p>
-                  </div>
-                </div>
+              <div className="text-left">
+                <div className="text-md font-bold">Cardano Pool</div>
               </div>
-            </div>
+            </button>
+            <button className={
+              clsx("tab-button starknet-tab px-8 py-4 rounded-2xl font-bold text-lg flex items-center space-x-3", {
+                "active": activePool === 'starknet'
+              })
+            }
+              onClick={() => setActivePool('starknet')}
+              data-pool="starknet">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <span className="text-xl">⚡</span>
+              </div>
+              <div className="text-left">
+                <div className="text-md font-bold">StarkNet Validator</div>
+              </div>
+            </button>
           </div>
         </div>
       </section>
+
+      <main>
+        {activePool === 'cardano' && (
+          <CardanoStaking poolInfo={poolInfo} poolStakeSnapshot={poolStakeSnapshot} poolDelegators={poolDelegators} />
+        )}
+        {activePool === 'starknet' && (
+          <StarknetStaking validatorInfo={validatorInfo} />
+        )}
+      </main>
 
       <footer className="relative z-10 py-8 px-4">
         <div className="max-w-6xl mx-auto">
@@ -128,7 +137,7 @@ export default function Staking(
               </div>
               <div className="text-center">
                 <p className="text-gray-600 mb-1 text-sm">💝 感谢每一位委托者的信任！</p>
-                <p className="text-xs text-gray-500">让我们一起在Cardano的海洋里畅游！</p>
+                <p className="text-xs text-gray-500">让我们一起在去中心化的海洋里畅游！</p>
               </div>
               <div className="flex items-center space-x-3">
                 <a href="#" className="text-gray-500 hover:text-blue-500 transition-colors">
