@@ -10,8 +10,8 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
     props: {
       ...translations
     }
-  }
-}
+  };
+};
 
 export default function About() {
   const { t } = useTranslation('common');
@@ -27,9 +27,7 @@ export default function About() {
               <div className="candy-gradient text-transparent !bg-clip-text">{t('about.title1')}</div>
               <div className="text-gray-800 mt-2">{t('about.title2')}</div>
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
-              {t('about.title3')}
-            </p>
+            <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">{t('about.title3')}</p>
           </div>
         </section>
 
@@ -41,9 +39,7 @@ export default function About() {
                 {t('about.ourDreams.title')}
               </h2>
               <div className="space-y-4 text-gray-700 leading-relaxed">
-                <p className="text-sm md:text-base">
-                  {t('about.ourDreams.description')}
-                </p>
+                <p className="text-sm md:text-base">{t('about.ourDreams.description')}</p>
                 <div className="grid md:grid-cols-2 gap-4 my-6">
                   <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-4 rounded-2xl">
                     <div className="text-3xl mb-2">🤖</div>
@@ -56,9 +52,7 @@ export default function About() {
                     <p className="text-xs text-gray-600">{t('about.ourDreams.column2.description')}</p>
                   </div>
                 </div>
-                <p className="text-sm md:text-base">
-                  {t('about.ourDreams.vision')}
-                </p>
+                <p className="text-sm md:text-base">{t('about.ourDreams.vision')}</p>
               </div>
             </div>
           </div>
@@ -68,9 +62,7 @@ export default function About() {
         <section className="py-8 px-6">
           <div className="mx-auto">
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-black text-gray-800 mb-2">
-                {t('about.ourTeam')}
-              </h2>
+              <h2 className="text-2xl md:text-3xl font-black text-gray-800 mb-2">{t('about.ourTeam')}</h2>
               <p className="text-lg text-gray-600">{t('about.ourTeam.description')}</p>
             </div>
 

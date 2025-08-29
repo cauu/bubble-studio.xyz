@@ -157,7 +157,9 @@ export const GovActionDetail = ({ content }: { content: IGovActionContent }) => 
               </h3>
 
               <ul className="point-list pros text-sm text-gray-900 leading-relaxed">
-                {currentProposal?.opinions.pros.map((point, index) => <li key={index}>{point}</li>)}
+                {currentProposal?.opinions.pros.map((point, index) => (
+                  <li key={index}>{point}</li>
+                ))}
               </ul>
             </div>
 
@@ -169,7 +171,9 @@ export const GovActionDetail = ({ content }: { content: IGovActionContent }) => 
               </h3>
 
               <ul className="point-list cons text-sm text-gray-900 leading-relaxed">
-                {currentProposal?.opinions.cons.map((point, index) => <li key={index}>{point}</li>)}
+                {currentProposal?.opinions.cons.map((point, index) => (
+                  <li key={index}>{point}</li>
+                ))}
               </ul>
             </div>
           </div>

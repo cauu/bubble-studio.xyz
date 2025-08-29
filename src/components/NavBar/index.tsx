@@ -4,13 +4,12 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Globe } from 'lucide-react';
 
 export const NavBar = () => {
   const router = useRouter();
   const { t } = useTranslation('common');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = useMemo(
     () => [
@@ -32,11 +31,6 @@ export const NavBar = () => {
     ],
     [t, router.asPath]
   );
-
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
 
   return (
     <nav className="relative z-50 m-6">
@@ -77,9 +71,15 @@ export const NavBar = () => {
                   router.push(router.asPath, router.asPath, { locale });
                 }}
               >
-                <option value="zh" className="text-gray-800 bg-white">简体中文</option>
-                <option value="tw" className="text-gray-800 bg-white">繁體中文</option>
-                <option value="en" className="text-gray-800 bg-white">English</option>
+                <option value="zh" className="text-gray-800 bg-white">
+                  简体中文
+                </option>
+                <option value="tw" className="text-gray-800 bg-white">
+                  繁體中文
+                </option>
+                <option value="en" className="text-gray-800 bg-white">
+                  English
+                </option>
               </select>
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -90,6 +90,6 @@ export const NavBar = () => {
           </div>
         </div>
       </div>
-    </nav >
-  )
+    </nav>
+  );
 };
