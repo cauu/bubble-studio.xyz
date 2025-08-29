@@ -22,3 +22,7 @@ export function getDurationString(
       ? `${days}天 ${hours.toString().padStart(2, '0')}小時 ${minutes.toString().padStart(2, '0')}分`
       : `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m`;
 }
+
+export function numberWithCommas(value: number | string) {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}

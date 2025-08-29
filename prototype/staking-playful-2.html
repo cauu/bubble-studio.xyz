@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Studio - Staking | Playful Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Nunito', sans-serif; }
+        .bubble { animation: bubble 3s infinite ease-in-out; }
+        @keyframes bubble { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(180deg); } 100% { transform: translateY(0px) rotate(360deg); } }
+        .wiggle { animation: wiggle 2s infinite; }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+        .bounce-in { animation: bounce-in 0.5s; }
+        @keyframes bounce-in { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); opacity: 1; } }
+        .hover-grow { transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .hover-grow:hover { transform: scale(1.05) rotate(1deg); }
+        .candy-gradient { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); }
+        .mint-gradient { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .sunset-gradient { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .sky-gradient { background: linear-gradient(135deg, #e3ffe7 0%, #d9e7ff 100%); }
+        .starknet-gradient { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); }
+        .cardano-gradient { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
+        .pool-card { transition: all 0.3s ease; }
+        .pool-card:hover { transform: translateY(-4px) rotate(-1deg); }
+        .metric-card { transition: all 0.2s ease; }
+        .metric-card:hover { transform: scale(1.02); }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .status-online { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
+        .status-warning { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .status-offline { background: linear-gradient(135deg, #a8caba 0%, #5d4e75 100%); }
+        
+        /* Real-time data styles */
+        .data-value {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #ff9a9e, #fecfef);
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .glow {
+            box-shadow: 0 0 20px rgba(255, 154, 158, 0.3);
+        }
+        .stake-button {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            transition: all 0.3s ease;
+        }
+        .stake-button:hover {
+            background: linear-gradient(135deg, #3730a3 0%, #5b21b6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+        
+        /* Tab styles */
+        .tab-button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .tab-button:hover::before {
+            opacity: 1;
+        }
+        .tab-button > * {
+            position: relative;
+            z-index: 2;
+        }
+        .tab-button.active {
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .tab-button.active.cardano-tab {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+        }
+        .tab-button.active.starknet-tab {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+        .tab-button:not(.active) {
+            background: rgba(255, 255, 255, 0.6);
+            color: #6b7280;
+        }
+        .tab-button:not(.active):hover {
+            background: rgba(255, 255, 255, 0.8);
+            color: #374151;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Pool content animation */
+        .pool-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        .pool-content.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* StarkNet specific styles */
+        .starknet-metric {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(236, 72, 153, 0.2);
+        }
+        .starknet-button {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+        .starknet-button:hover {
+            background: linear-gradient(135deg, #be185d 0%, #7c3aed 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen">
+
+    <!-- Floating Bubbles -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="bubble absolute w-16 h-16 bg-blue-300/20 rounded-full top-20 left-20"></div>
+        <div class="bubble absolute w-12 h-12 bg-purple-300/20 rounded-full top-40 right-32" style="animation-delay: 1s;"></div>
+        <div class="bubble absolute w-8 h-8 bg-pink-300/20 rounded-full bottom-32 left-40" style="animation-delay: 2s;"></div>
+        <div class="bubble absolute w-20 h-20 bg-indigo-300/10 rounded-full top-60 left-1/2" style="animation-delay: 0.5s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative z-50 m-4">
+        <div class="bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 candy-gradient rounded-full shadow-lg"></div>
+                        <span class="text-lg font-bold text-gray-800 wiggle">Bubble Studio</span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-4">
+                        <a href="#" class="text-gray-600 hover:text-blue-500 transition-colors font-medium text-sm">治理</a>
+                        <a href="#" class="text-blue-500 font-bold text-sm">Staking</a>
+                        <a href="#" class="text-gray-600 hover:text-purple-500 transition-colors font-medium text-sm">About</a>
+                        <a href="#" class="text-gray-600 hover:text-pink-500 transition-colors font-medium text-sm">Blog</a>
+                    </div>
+                </div>
+                <button class="px-4 py-2 candy-gradient text-white rounded-full shadow-lg hover-grow font-bold text-sm">
+                    连接钱包
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Pool Tabs -->
+    <section class="relative z-10 py-8 px-4">
+        <div class="max-w-6xl mx-auto">
+            <!-- Pool Tabs -->
+            <div class="flex justify-center mb-8">
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg">
+                    <div class="flex space-x-3">
+                        <button class="tab-button cardano-tab active px-8 py-4 rounded-2xl font-bold text-lg flex items-center space-x-3" data-pool="cardano">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <span class="text-xl">₳</span>
+                            </div>
+                            <div class="text-left">
+                                <div class="text-sm font-bold">Cardano Pool</div>
+                                <div class="text-xs opacity-80">主要质押服务</div>
+                            </div>
+                        </button>
+                        <button class="tab-button starknet-tab px-8 py-4 rounded-2xl font-bold text-lg flex items-center space-x-3" data-pool="starknet">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <span class="text-xl">⚡</span>
+                            </div>
+                            <div class="text-left">
+                                <div class="text-sm font-bold">StarkNet Validator</div>
+                                <div class="text-xs opacity-80">验证节点服务</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cardano Pool Content -->
+            <div id="cardano-content" class="pool-content active">
+                <!-- Pool Overview -->
+                <div class="text-center mb-8">
+                    <div class="flex items-center justify-center space-x-4 mb-4">
+                        <div class="w-12 h-12 cardano-gradient rounded-full shadow-xl flex items-center justify-center text-xl text-white">
+                            ₳
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-black text-gray-800">Bubble Pool</h2>
+                            <p class="text-lg text-blue-600 font-bold">[BUBBLE]</p>
+                        </div>
+                    </div>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        透明、可靠的 Cardano 质押池，支持去中心化生态发展
+                    </p>
+                </div>
+
+                <!-- Cardano Metrics Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+                    <!-- Total Stake -->
+                    <div class="metric-card bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg text-center">
+                        <div class="text-2xl mb-2">💰</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">质押总量</h3>
+                        <div class="text-xl font-bold text-blue-600 data-value">45.2M</div>
+                        <p class="text-xs text-gray-500">ADA</p>
+                    </div>
+
+                    <!-- Saturation -->
+                    <div class="metric-card bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg text-center">
+                        <div class="text-2xl mb-2">🎯</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">饱和度</h3>
+                        <div class="text-xl font-bold text-blue-600 mb-1 data-value">78.5%</div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                            <div class="progress-bar" style="width: 78.5%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Delegations -->
+                    <div class="metric-card bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg text-center">
+                        <div class="text-2xl mb-2">👥</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">委托者</h3>
+                        <div class="text-xl font-bold text-purple-600 data-value">247</div>
+                        <p class="text-xs text-gray-500">活跃</p>
+                    </div>
+
+                    <!-- Recent ROI -->
+                    <div class="metric-card bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg text-center glow">
+                        <div class="text-2xl mb-2">📈</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">年化收益</h3>
+                        <div class="text-xl font-bold text-green-600 data-value">4.2%</div>
+                        <p class="text-xs text-gray-500">ROI</p>
+                    </div>
+
+                    <!-- Relays Status -->
+                    <div class="metric-card bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg text-center">
+                        <div class="text-2xl mb-2">🚀</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">中继状态</h3>
+                        <div class="flex items-center justify-center space-x-1 mb-1">
+                            <div class="w-2 h-2 status-online rounded-full"></div>
+                            <div class="w-2 h-2 status-online rounded-full"></div>
+                            <div class="w-2 h-2 status-online rounded-full"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">3/3 在线</p>
+                    </div>
+                </div>
+
+                <!-- Cardano Stake Button -->
+                <div class="text-center">
+                    <button class="stake-button px-8 py-4 text-white rounded-2xl shadow-xl font-bold text-lg">
+                        🎯 立即质押到 Bubble Pool
+                    </button>
+                    <p class="text-sm text-gray-500 mt-2">连接钱包开始获得稳定收益</p>
+                </div>
+            </div>
+
+            <!-- StarkNet Validator Content -->
+            <div id="starknet-content" class="pool-content">
+                <!-- Validator Overview -->
+                <div class="text-center mb-8">
+                    <div class="flex items-center justify-center space-x-4 mb-4">
+                        <div class="w-12 h-12 starknet-gradient rounded-full shadow-xl flex items-center justify-center text-xl text-white">
+                            ⚡
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-black text-gray-800">Bubble Validator</h2>
+                            <p class="text-lg text-pink-600 font-bold">[STARKNET]</p>
+                        </div>
+                    </div>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        高性能 StarkNet 验证节点，助力以太坊扩容生态
+                    </p>
+                </div>
+
+                <!-- StarkNet Metrics Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+                    <!-- Liveness -->
+                    <div class="metric-card starknet-metric rounded-2xl p-4 shadow-lg text-center">
+                        <div class="text-2xl mb-2">🟢</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">活跃状态</h3>
+                        <div class="text-xl font-bold text-green-600 data-value">99.8%</div>
+                        <p class="text-xs text-gray-500">Liveness</p>
+                    </div>
+
+                    <!-- Total Stake -->
+                    <div class="metric-card starknet-metric rounded-2xl p-4 shadow-lg text-center">
+                        <div class="text-2xl mb-2">🔒</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">质押总量</h3>
+                        <div class="text-xl font-bold text-purple-600 data-value">2.5M</div>
+                        <p class="text-xs text-gray-500">STRK</p>
+                    </div>
+
+                    <!-- Pool Address -->
+                    <div class="metric-card starknet-metric rounded-2xl p-4 shadow-lg text-center">
+                        <div class="text-2xl mb-2">🏷️</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">验证器地址</h3>
+                        <div class="text-xs font-bold text-pink-600 data-value break-all">0x1a2b...c3d4</div>
+                        <p class="text-xs text-gray-500">Address</p>
+                    </div>
+
+                    <!-- Total Epochs -->
+                    <div class="metric-card starknet-metric rounded-2xl p-4 shadow-lg text-center">
+                        <div class="text-2xl mb-2">📊</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">参与轮次</h3>
+                        <div class="text-xl font-bold text-blue-600 data-value">1,247</div>
+                        <p class="text-xs text-gray-500">Epochs</p>
+                    </div>
+
+                    <!-- Revenue Share -->
+                    <div class="metric-card starknet-metric rounded-2xl p-4 shadow-lg text-center glow">
+                        <div class="text-2xl mb-2">💎</div>
+                        <h3 class="text-sm font-bold text-gray-800 mb-1">收益分成</h3>
+                        <div class="text-xl font-bold text-green-600 data-value">95%</div>
+                        <p class="text-xs text-gray-500">Share</p>
+                    </div>
+                </div>
+
+                <!-- StarkNet Stake Button -->
+                <div class="text-center">
+                    <button class="starknet-button px-8 py-4 text-white rounded-2xl shadow-xl font-bold text-lg transition-all">
+                        ⚡ 委托到 Bubble Validator
+                    </button>
+                    <p class="text-sm text-gray-500 mt-2">参与 StarkNet 网络验证获得奖励</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Block Production History -->
+    <section class="relative z-10 py-8 px-4" id="cardano-history" style="display: block;">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl pool-card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">📊 出块记录</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Current Epoch -->
+                    <div class="bg-blue-50 rounded-2xl p-4">
+                        <h3 class="font-bold text-blue-800 mb-4 flex items-center">
+                            <span class="text-lg mr-2">🔥</span>
+                            当前 Epoch (450)
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">已产出区块</span>
+                                <span class="font-bold text-blue-600 data-value">23 / 28</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">预期完成度</span>
+                                <span class="font-bold text-green-600">82.1%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 82.1%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 text-center">
+                                距离 Epoch 结束还有 2 天 14 小时
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Historical Performance -->
+                    <div class="bg-green-50 rounded-2xl p-4">
+                        <h3 class="font-bold text-green-800 mb-4 flex items-center">
+                            <span class="text-lg mr-2">📈</span>
+                            历史表现
+                        </h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-600">Epoch 449</span>
+                                <span class="font-bold text-green-600">31 blocks</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-600">Epoch 448</span>
+                                <span class="font-bold text-green-600">29 blocks</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-600">Epoch 447</span>
+                                <span class="font-bold text-green-600">27 blocks</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-600">Epoch 446</span>
+                                <span class="font-bold text-green-600">33 blocks</span>
+                            </div>
+                            <div class="border-t border-green-200 pt-2 mt-2">
+                                <div class="flex justify-between items-center font-bold">
+                                    <span class="text-gray-700">总计区块</span>
+                                    <span class="text-green-700">1,247</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="relative z-10 py-8 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">💝 为什么选择 Bubble Studio？</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">💻</div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">支持开发工作</h4>
+                                <p class="text-sm text-gray-600">您的质押直接支持我们在多链生态系统中的开发工作，包括去中心化应用、工具和基础设施的构建。</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">🔧</div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">技术专业性</h4>
+                                <p class="text-sm text-gray-600">我们的团队具有丰富的区块链开发经验，确保节点的稳定运行和最优性能。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">🌱</div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">生态贡献</h4>
+                                <p class="text-sm text-gray-600">我们积极参与各个区块链社区建设，推动生态系统的健康发展和创新。</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">🎯</div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">透明运营</h4>
+                                <p class="text-sm text-gray-600">所有运营数据公开透明，定期发布节点状态报告和技术更新。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delegation Guide - Cardano Only -->
+    <section class="relative z-10 py-8 px-4" id="cardano-guide" style="display: block;">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">如何质押到 Bubble Pool? 🎯</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center text-lg font-bold mx-auto mb-3">1</div>
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">连接钱包</h4>
+                        <p class="text-xs text-gray-600">点击"连接钱包"按钮，选择您的 Cardano 钱包</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-purple-500 text-white rounded-full flex items-center justify-center text-lg font-bold mx-auto mb-3">2</div>
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">搜索池子</h4>
+                        <p class="text-xs text-gray-600">搜索 "BUBBLE" 或输入池 ID</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-pink-500 text-white rounded-full flex items-center justify-center text-lg font-bold mx-auto mb-3">3</div>
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">确认质押</h4>
+                        <p class="text-xs text-gray-600">确认质押，支付费用，开始获得奖励</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rewards Calculator - Cardano Only -->
+    <section class="relative z-10 py-8 px-4" id="cardano-calculator" style="display: block;">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">奖励计算器 🧮</h3>
+                <div class="max-w-md mx-auto">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">委托金额 (ADA)</label>
+                            <input type="number" placeholder="1000" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none" id="ada-amount">
+                        </div>
+                        <div class="bg-blue-50 rounded-xl p-4">
+                            <div class="text-center">
+                                <div class="text-lg font-bold text-blue-600 mb-2">预期年化收益</div>
+                                <div class="text-2xl font-bold text-green-600" id="calculated-rewards">42 ADA</div>
+                                <div class="text-xs text-gray-600">基于当前 4.2% 年化收益率</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ - Cardano Only -->
+    <section class="relative z-10 py-8 px-4" id="cardano-faq" style="display: block;">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">常见问题 🤔</h3>
+                <div class="space-y-3">
+                    <div class="border-b border-gray-200 pb-3">
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">什么是饱和度？</h4>
+                        <p class="text-gray-600 text-xs">饱和度表示池子接近最大容量的程度。当饱和度超过100%时，奖励会递减。78.5%是理想状态！</p>
+                    </div>
+                    <div class="border-b border-gray-200 pb-3">
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">多久能获得奖励？</h4>
+                        <p class="text-gray-600 text-xs">通常在委托后15-20天开始获得奖励，之后每5天发放一次。</p>
+                    </div>
+                    <div class="border-b border-gray-200 pb-3">
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">有风险吗？</h4>
+                        <p class="text-gray-600 text-xs">质押非常安全！您的ADA始终在您的钱包中，我们只是获得委托权，不会控制您的资金。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- StarkNet FAQ -->
+    <section class="relative z-10 py-8 px-4" id="starknet-faq" style="display: none;">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">常见问题 🤔</h3>
+                <div class="space-y-3">
+                    <div class="border-b border-gray-200 pb-3">
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">什么是 StarkNet 验证器？</h4>
+                        <p class="text-gray-600 text-xs">StarkNet 验证器负责验证网络交易和维护网络安全，通过质押 STRK 代币参与共识机制。</p>
+                    </div>
+                    <div class="border-b border-gray-200 pb-3">
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">如何获得奖励？</h4>
+                        <p class="text-gray-600 text-xs">委托 STRK 到我们的验证器后，您将按比例获得网络奖励，奖励会定期自动分发。</p>
+                    </div>
+                    <div class="border-b border-gray-200 pb-3">
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">收益分成如何计算？</h4>
+                        <p class="text-gray-600 text-xs">我们保留 5% 作为运营费用，95% 的奖励会按照委托比例分配给所有委托者。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-8 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 candy-gradient rounded-full shadow-lg"></div>
+                        <span class="text-lg font-black text-gray-800" id="footer-title">Bubble Pool</span>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-gray-600 mb-1 text-sm">💝 感谢每一位委托者的信任！</p>
+                        <p class="text-xs text-gray-500" id="footer-subtitle">让我们一起在区块链的海洋里畅游！</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <a href="#" class="text-gray-500 hover:text-blue-500 transition-colors">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-purple-500 transition-colors">
+                            <i data-lucide="telegram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-green-500 transition-colors">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        
+        // Pool switching functionality
+        function switchPool(poolType) {
+            // Update tab states
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-pool="${poolType}"]`).classList.add('active');
+            
+            // Update content visibility
+            document.querySelectorAll('.pool-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${poolType}-content`).classList.add('active');
+            
+            // Show/hide specific sections
+            const cardanoSections = ['cardano-history', 'cardano-guide', 'cardano-calculator', 'cardano-faq'];
+            const starknetSections = ['starknet-faq'];
+            
+            cardanoSections.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.style.display = poolType === 'cardano' ? 'block' : 'none';
+                }
+            });
+            
+            starknetSections.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.style.display = poolType === 'starknet' ? 'block' : 'none';
+                }
+            });
+            
+            // Update footer text
+            const footerTitle = document.getElementById('footer-title');
+            const footerSubtitle = document.getElementById('footer-subtitle');
+            
+            if (poolType === 'cardano') {
+                footerTitle.textContent = 'Bubble Pool';
+                footerSubtitle.textContent = '让我们一起在Cardano的海洋里畅游！';
+            } else {
+                footerTitle.textContent = 'Bubble Validator';
+                footerSubtitle.textContent = '让我们一起在StarkNet的星空中遨游！';
+            }
+        }
+        
+        // Add event listeners to tab buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const poolType = this.getAttribute('data-pool');
+                    switchPool(poolType);
+                });
+            });
+            
+            const bubbles = document.querySelectorAll('.bubble');
+            bubbles.forEach((bubble, index) => {
+                bubble.style.animationDelay = `${index * 0.5}s`;
+            });
+
+            // Real-time data updates simulation for Cardano
+            setInterval(() => {
+                if (document.getElementById('cardano-content').classList.contains('active')) {
+                    const currentSat = parseFloat(document.querySelector('.data-value').textContent);
+                    const newSat = Math.max(75, Math.min(82, currentSat + (Math.random() - 0.5) * 0.1));
+                    document.querySelectorAll('.data-value')[1].textContent = newSat.toFixed(1) + '%';
+                    document.querySelector('.progress-bar').style.width = newSat.toFixed(1) + '%';
+                }
+            }, 5000);
+
+            // Rewards calculator
+            const adaAmountInput = document.getElementById('ada-amount');
+            if (adaAmountInput) {
+                adaAmountInput.addEventListener('input', function() {
+                    const amount = parseFloat(this.value) || 0;
+                    const rewards = Math.round(amount * 0.042);
+                    document.getElementById('calculated-rewards').textContent = rewards + ' ADA';
+                });
+            }
+
+            // Add hover effects to metric cards
+            document.querySelectorAll('.metric-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.classList.add('glow');
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.classList.remove('glow');
+                });
+            });
+
+            // Stake button click handlers
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('stake-button')) {
+                    alert('🎯 即将跳转到钱包连接页面...\n\n请确保您已安装支持的 Cardano 钱包（如 Nami、Eternl、Flint 等）');
+                }
+                if (e.target.classList.contains('starknet-button')) {
+                    alert('⚡ 即将跳转到 StarkNet 委托页面...\n\n请确保您已安装支持的 StarkNet 钱包（如 Argent X、Braavos 等）');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
