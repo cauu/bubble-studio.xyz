@@ -2,18 +2,18 @@ import { useMemo, useState } from 'react';
 import { FileText, Vote } from 'lucide-react';
 import clsx from 'clsx';
 import { GetStaticProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 // import { IGovernanceAction } from '@/types/governance';
-import { GovActionCard } from './components/GovActionCard';
+import { GovActionCard } from '../../components/governance/GovActionCard';
 // import { Dreps } from '@/pages/governance/components/Dreps';
 import governanceData from '@/data/gov-contents-2025-05-15.json';
 import { IGovActionContent } from '@/types/governance';
 import EmptyList from '@/components/EmptyList';
 
-import { About } from './components/About';
-import { ProposalCard } from './components/ProposalCard';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
+import { About } from '@/components/governance/About';
+import { ProposalCard } from '@/components/governance/ProposalCard';
 
 interface GovernanceProps {
   actions: IGovActionContent[];

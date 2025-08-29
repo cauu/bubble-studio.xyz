@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { getSortedPostsData, PostData } from '@/lib/posts';
-import { BlogCard } from './components/BlogCard';
-import { FilterTag } from './components/FilterTag';
+import { BlogCard } from '@/components/blogs/BlogCard';
+import { FilterTag } from '@/components/blogs/FilterTag';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const translations = await serverSideTranslations(locale || 'en', ['common']);

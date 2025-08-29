@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { GetServerSideProps } from 'next';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 
 import { getPoolInfo, getPoolStakeSnapshot } from '@/services/pool';
 import { PoolDelegatorsResponse, PoolInfoResponse, PoolStakeSnapshotResponse } from '@/types/koios.types';
 import { GlobalConfig } from '@/constants';
 import { WrappedMemoryCache } from '@/utils/WrappedMemoryCache';
 
-import { CardanoStaking } from './CardanoStaking';
-import { StarknetStaking } from './StarknetStaking';
+import { CardanoStaking } from '@/components/staking/CardanoStaking';
+import { StarknetStaking } from '@/components/staking/StarknetStaking';
 import { getValidatorInfo } from '@/services/starknet-validator';
 import { ValidatorData } from '@/types/voyager.types';
-import { useTranslation } from 'next-i18next';
 
 const poolInfoCache = new WrappedMemoryCache({
   ttl: 1000 * 60 * 10,
