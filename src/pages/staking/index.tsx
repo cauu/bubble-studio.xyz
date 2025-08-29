@@ -12,6 +12,7 @@ import { CardanoStaking } from "./CardanoStaking";
 import { StarknetStaking } from "./StarknetStaking";
 import { getValidatorInfo } from "@/services/starknet-validator";
 import { ValidatorData } from "@/types/voyager.types";
+import { useTranslation } from "next-i18next";
 
 const poolInfoCache = new WrappedMemoryCache({
   ttl: 1000 * 60 * 10,
@@ -64,6 +65,7 @@ export default function Staking(
     poolDelegators: PoolDelegatorsResponse
   }
 ) {
+  const { t } = useTranslation('common');
 
   const { poolInfo, poolDelegators, poolStakeSnapshot } = props;
 
@@ -127,17 +129,58 @@ export default function Staking(
         )}
       </main>
 
+      <section className="relative z-10 mt-4 py-8 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">💝 {t('whyUs.title')}</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">💻</div>
+                  <div>
+                    <h4 className="font-bold text-gray-800 mb-1">{t('whyUs.reasons.supportDevelopment.title')}</h4>
+                    <p className="text-sm text-gray-600">{t('whyUs.reasons.supportDevelopment.description')}</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">🔧</div>
+                  <div>
+                    <h4 className="font-bold text-gray-800 mb-1">{t('whyUs.reasons.professionalism.title')}</h4>
+                    <p className="text-sm text-gray-600">{t('whyUs.reasons.professionalism.description')}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">🌱</div>
+                  <div>
+                    <h4 className="font-bold text-gray-800 mb-1">{t('whyUs.reasons.ecosystemContribution.title')}</h4>
+                    <p className="text-sm text-gray-600">{t('whyUs.reasons.ecosystemContribution.description')}</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">🎯</div>
+                  <div>
+                    <h4 className="font-bold text-gray-800 mb-1">{t('whyUs.reasons.decentralization.title')}</h4>
+                    <p className="text-sm text-gray-600">{t('whyUs.reasons.decentralization.description')}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <footer className="relative z-10 py-8 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="w-6 h-6 candy-gradient rounded-full shadow-lg"></div>
-                <span className="text-lg font-black text-gray-800">Bubble Pool</span>
+                <span className="text-lg font-black text-gray-800">Bubble Studio</span>
               </div>
               <div className="text-center">
-                <p className="text-gray-600 mb-1 text-sm">💝 感谢每一位委托者的信任！</p>
-                <p className="text-xs text-gray-500">让我们一起在去中心化的海洋里畅游！</p>
+                <p className="text-gray-600 mb-1 text-md">💝 {t('acknowledgement.message')}</p>
               </div>
               <div className="flex items-center space-x-3">
                 <a href="#" className="text-gray-500 hover:text-blue-500 transition-colors">

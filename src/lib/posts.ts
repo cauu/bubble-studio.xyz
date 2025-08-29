@@ -18,7 +18,7 @@ export interface PostData {
   [key: string]: any;
 }
 
-export async function getSortedPostsData(): Promise<PostData[]> {
+export async function getSortedPostsData(locale: 'zh' | 'en' | 'tw'): Promise<PostData[]> {
   // 获取 /posts 目录下的所有文件名
   const fileNames = await fs.promises.readdir(postsDirectory);
   const allPostsData = await Promise.all(
@@ -44,17 +44,20 @@ export async function getSortedPostsData(): Promise<PostData[]> {
           time: string;
           image: string;
           tags: string[];
+          language: string;
         })
       };
     })
   );
 
   // 根据日期降序排序
-  return allPostsData.sort((a, b) => {
-    const fullDateA = new Date(`${a.date}T${a.time}`);
-    const fullDateB = new Date(`${b.date}T${b.time}`);
-    return fullDateB.getTime() - fullDateA.getTime();
-  });
+  return allPostsData
+    .filter((post) => post.language === locale)
+    .sort((a, b) => {
+      const fullDateA = new Date(`${a.date}T${a.time}`);
+      const fullDateB = new Date(`${b.date}T${b.time}`);
+      return fullDateB.getTime() - fullDateA.getTime();
+    });
 }
 
 export async function getAllPostSlugs() {
@@ -90,6 +93,7 @@ export async function getPostData(slug: string) {
       author: string;
       image: string;
       tags: string[];
+      language: string;
     })
   };
 }

@@ -2,6 +2,9 @@ import { ValidatorData } from "@/types/voyager.types";
 import MetricCard from "./MetricCard";
 import { useMemo } from "react";
 import { GlobalConfig } from "@/constants";
+import { useTranslation } from "next-i18next";
+import { numberWithCommas } from "@/utils";
+import { StepGuid } from "./StepGuid";
 
 
 export const StarknetStaking = (props: {
@@ -9,7 +12,7 @@ export const StarknetStaking = (props: {
 }) => {
     const { validatorInfo } = props;
 
-    // const { liveness, totalStake, address, livenessTotalEpochs, revenueShare } = validatorInfo || {};
+    const { t } = useTranslation('common');
 
     const statistics = useMemo(() => {
         const { liveness, totalStake, livenessTotalEpochs, apr } = validatorInfo || {};
@@ -24,6 +27,26 @@ export const StarknetStaking = (props: {
 
     const { totalStake, liveness, livenessTotalEpochs, apr } = statistics;
 
+    const guideSteps = [
+        {
+            title: t('stakingGuide.starknet.steps.step1.title'),
+            description: t('stakingGuide.starknet.steps.step1.description')
+        },
+        {
+            title: t('stakingGuide.starknet.steps.step2.title'),
+            description: t('stakingGuide.starknet.steps.step2.description')
+        },
+        {
+            title: t('stakingGuide.starknet.steps.step3.title'),
+            description: t('stakingGuide.starknet.steps.step3.description')
+        },
+        {
+            title: t('stakingGuide.starknet.steps.step4.title'),
+            description: t('stakingGuide.starknet.steps.step4.description')
+        }
+    ]
+
+
     const handleStake = () => {
         window.open(`https://voyager.online/staking?validator=${GlobalConfig.STARKNET_VALIDATOR_ADDRESS}`, '_blank');
     }
@@ -35,25 +58,28 @@ export const StarknetStaking = (props: {
                     <h1 className="text-4xl md:text-5xl font-black mb-2">
                         <div className="starknet-gradient text-transparent !bg-clip-text">Bubble Validator️ ⚡</div>
                     </h1>
-                    <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
-                        高性能 StarkNet 验证节点，助力以太坊扩容生态
+                    <p className="text-base md:text-base text-gray-500 leading-relaxed max-w-4xl mx-auto">
+                        {t('hero.starknet.description')}
                     </p>
                 </div>
             </section>
 
             <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 mt-4">
-                <MetricCard icon="💎" title="Apr" value={<div className="starknet-gradient text-transparent !bg-clip-text">{apr}</div>} description="%" />
-                <MetricCard icon="🟢" title="活跃度" value={<div className="starknet-gradient text-transparent !bg-clip-text">{liveness}</div>} description="%" />
-                <MetricCard icon="🔒" title="质押总量" value={<div className="starknet-gradient text-transparent !bg-clip-text">{totalStake}</div>} description="STRK" />
-                <MetricCard icon="📈" title="参与轮次" value={<div className="starknet-gradient text-transparent !bg-clip-text">{livenessTotalEpochs}</div>} description="Epochs" />
+                <MetricCard icon="💰" title={t('metric.totalPledge')} value={<div className="starknet-gradient text-transparent !bg-clip-text">{numberWithCommas(totalStake)}</div>} description="STRK" />
+                <MetricCard icon="📈" title={t('metric.estimatedAnnualizedReturn')} value={<div className="starknet-gradient text-transparent !bg-clip-text">{`${apr}%`}</div>} />
+                <MetricCard icon="🔄" title={t('metric.activity')} value={<div className="starknet-gradient text-transparent !bg-clip-text">{`${liveness}%`}</div>} />
+                <MetricCard icon="🟢" title={t('metric.participationEpoch')} value={<div className="starknet-gradient text-transparent !bg-clip-text">{livenessTotalEpochs}</div>} description="Epochs" />
             </section>
 
             <div className="text-center">
                 <button className="starknet-stake-button px-8 py-4 text-white rounded-2xl shadow-xl font-bold text-lg transition-all" onClick={handleStake}>
-                    ⚡ 委托到 Bubble Validator
+                    ⚡ {`${t('button.stakeNow')} ${t('hero.starknet.title')}`}
                 </button>
-                <p className="text-sm text-gray-500 mt-2">参与 StarkNet 网络验证获得奖励</p>
             </div>
+
+            <section className="pt-16">
+                <StepGuid title={t('stakingGuide.starknet.title')} steps={guideSteps} theme="starknet" />
+            </section>
         </div>
     )
 }

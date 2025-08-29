@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { getSortedPostsData, PostData } from '@/lib/posts';
@@ -9,7 +9,7 @@ import { FilterTag } from "./components/FilterTag";
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const translations = await serverSideTranslations(locale || 'en', ['common']);
-  const allPosts = await getSortedPostsData();
+  const allPosts = await getSortedPostsData(locale as 'zh' | 'en' | 'tw');
 
   const allTags = Array.from(new Set(allPosts.flatMap(post => post.tags)).values());
 
@@ -26,6 +26,7 @@ export default function Blogs(props: { allTags: string[], allPosts: PostData[] }
   const { allTags, allPosts } = props;
 
   const router = useRouter();
+  const { locale } = router;
 
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [filteredPosts, setFilteredPosts] = useState<PostData[]>(allPosts);
@@ -42,6 +43,11 @@ export default function Blogs(props: { allTags: string[], allPosts: PostData[] }
       setFilteredPosts(allPosts);
     }
   };
+
+  useEffect(() => {
+    setSelectedTag(null)
+    setFilteredPosts(allPosts)
+  }, [locale])
 
 
   return (
@@ -63,7 +69,7 @@ export default function Blogs(props: { allTags: string[], allPosts: PostData[] }
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {
                 filteredPosts.map(post => (
-                  <BlogCard key={post.slug} post={post} onClick={handleBlogCardClick} />
+                  <BlogCard key={post.slug + post.language} post={post} onClick={handleBlogCardClick} />
                 ))
               }
             </div>

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { getPostData, getAllPostSlugs, PostData } from '@/lib/posts';
@@ -22,23 +22,28 @@ import { getPostData, getAllPostSlugs, PostData } from '@/lib/posts';
 //     };
 // }
 
-export const getStaticPaths = async () => {
-    const paths = await getAllPostSlugs();
-
-    return {
-        paths,
-        fallback: false
-    }
-}
-
-export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ locale, params }) => {
     const translations = await serverSideTranslations(locale || 'en', ['common']);
-    const post = await getPostData(params!.slug as any);
 
-    return {
-        props: {
-            ...translations,
-            post
+    try {
+        const post = await getPostData(params!.slug as any);
+
+        // 检查博客文章的语言是否匹配当前locale
+        if (post.language !== locale) {
+            return {
+                notFound: true
+            }
+        }
+
+        return {
+            props: {
+                ...translations,
+                post
+            }
+        }
+    } catch (error) {
+        return {
+            notFound: true
         }
     }
 }
