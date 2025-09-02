@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
 
 import { PoolDelegatorsResponse, PoolInfoResponse, PoolStakeSnapshotResponse } from '@/types/koios.types';
 import { GlobalConfig } from '@/constants';
@@ -14,8 +14,8 @@ export const CardanoStaking = (props: {
   poolStakeSnapshot: PoolStakeSnapshotResponse;
   poolDelegators: PoolDelegatorsResponse;
 }) => {
-  const { t } = useTranslation('common');
-  const { poolInfo, poolDelegators } = props;
+  const t = useTranslations('common');
+  const { poolInfo } = props;
 
   const statistics = useMemo(() => {
     const delegators = poolInfo[0].live_delegators;
@@ -32,7 +32,7 @@ export const CardanoStaking = (props: {
       activeStake,
       activeRelays
     };
-  }, [poolDelegators, poolInfo]);
+  }, [poolInfo]);
 
   const { delegators, maxRelays, activeRelays, activeStake, saturation } = statistics;
 

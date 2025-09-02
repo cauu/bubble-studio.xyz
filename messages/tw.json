@@ -1,0 +1,160 @@
+{
+  "header": {
+    "blogs": "部落格",
+    "staking": "質押",
+    "about": "關於我們"
+  },
+  "common": {
+    "poolName": "Pao Pool",
+    "delegate": "質押",
+    "stake": "質押",
+    "view_detail": "查看詳情",
+    "back": "返回",
+    "no_data": "暫無數據"
+  },
+  "hero": {
+    "title": "Pao (泡) Pool",
+    "description": "「Pao」是中文裡「泡泡」的意思。我們是一個致力於為Cardano生態帶來新穎有趣的應用的獨立家庭開發團隊。Pao Pool 是我們透明、可靠的 Cardano 權益池，已穩定運行超過一年。您的每一份質押，都是對我們開發工作的直接支持。",
+    "tagline": "質押您的 ADA，與我們一同建設。",
+    "starknet": {
+      "title": "Bubble Validator️",
+      "description": "Bubble Validator 是我們部署在 Starknet 網路上的驗證者節點。我們團隊目前專注於 Cardano 生態的建設，但仍會持續關注 Starknet 的發展。若您持有 STRK 代幣，誠摯邀請您質押給我們，以支持我們未來的開發工作。"
+    }
+  },
+  "whyUs": {
+    "title": "為什麼選擇我們？",
+    "reasons": {
+      "supportDevelopment": {
+        "title": "支持獨立開發",
+        "description": "我們致力於為 Cardano 生態系帶來新穎有趣的應用，您的委託是我們創造價值的核心動力。"
+      },
+      "professionalism": {
+        "title": "專業技術保障",
+        "description": "團隊擁有豐富的區塊鏈開發經驗，以專業技術確保權益池 7x24 小時穩定、安全地運行。"
+      },
+      "ecosystemContribution": {
+        "title": "共建生態",
+        "description": "我們積極參與 Cardano 社群建設，為生態系統的健康發展和持續創新貢獻自己的力量。"
+      },
+      "decentralization": {
+        "title": "踐行去中心化",
+        "description": "作為獨立節點，我們希望透過 Cardano 獨特的權益和治理機制持續營運，向世界展示獨立創造者在去中心化網路中的無限可能。"
+      },
+      "potentialRewards": {
+        "title": "潛在驚喜獎勵",
+        "description": "為了感謝早期支持者，我們將不定期為委託人提供獨家禮物或空投。"
+      }
+    }
+  },
+  "stakingGuide": {
+    "cardano": {
+      "title": "如何質押到 PAO Pool？🎯",
+      "steps": {
+        "step1": {
+          "title": "跳轉至質押頁面",
+          "description": "點擊「質押」按鈕，跳轉至質押頁面。"
+        },
+        "step2": {
+          "title": "連接錢包",
+          "description": "點擊Connect Wallet按鈕，連接您的 Cardano 錢包。"
+        },
+        "step3": {
+          "title": "確認質押",
+          "description": "點擊「Delegate」並確認交易，即可開始賺取 ADA 獎勵！"
+        }
+      }
+    },
+    "starknet": {
+      "title": "如何質押給我們的 Starknet 驗證節點？",
+      "steps": {
+        "step1": {
+          "title": "訪問質押頁面",
+          "description": "點擊「質押」按鈕，跳轉至質押頁面。"
+        },
+        "step2": {
+          "title": "連接錢包",
+          "description": "在頁面右上角，點擊「連接錢包」並授權。"
+        },
+        "step3": {
+          "title": "選擇質押",
+          "description": "錢包連接成功後，在「連接錢包」下方找到並點擊「Stake」按鈕。"
+        },
+        "step4": {
+          "title": "確認交易",
+          "description": "輸入您要質押的金額及獎勵接收地址，點擊「Delegate」並確認交易，即可開始賺取獎勵。"
+        }
+      },
+      "note": "詳細教程可參考 <a href='https://www.starknet.io/staking/a-guide-to-delegate-your-stake/#endur' target='_blank' rel='noopener noreferrer'>Starknet 官方指南</a>。"
+    }
+  },
+  "acknowledgement": {
+    "title": "致謝",
+    "message": "衷心感謝每一位委託者的信任與支持！"
+  },
+  "metric": {
+    "totalPledge": "質押總量",
+    "estimatedAnnualizedReturn": "預估年化收益",
+    "delegator": "委託者",
+    "relaysStatus": "Relays狀態",
+    "activity": "活躍度",
+    "participationEpoch": "參與輪次",
+    "relaysOnline": "在線"
+  },
+  "button": {
+    "stakeNow": "立即質押到"
+  },
+  "about": {
+    "title1": "你好呀！👋 ",
+    "title2": "我們是 Bubble Studio！",
+    "title3": "一個在 Cardano 上生根發芽的小家庭作坊。",
+    "slogan": "扎根於 Cardano 的獨立小作坊 💝",
+    "ourDreams": {
+      "title": "我們的夢想 ✨",
+      "description": "在我們看來，未來屬於那些能夠按照自己的節奏前進的人——主權個體。這個時代賦予了主權個體兩個最偉大的禮物：AI 和 Cardano。",
+      "column1": {
+        "title": "AI 的力量",
+        "description": "創造力的「外掛」，小團隊也能做很多事。"
+      },
+      "column2": {
+        "title": "Cardano 生態",
+        "description": "金融獨立與自由的護城河。"
+      },
+      "vision": "我們希望我們的小作坊能夠在 Cardano 生態系統中紮根，透過質押和去中心化治理獨立運作，持續發展。同時，我們將繼續探索 Cardano 的技術邊界，為社群帶來有趣、優雅且實用的產品。"
+    },
+    "ourTeam": {
+      "title": "我們的團隊👨‍💻👩‍💻🐾",
+      "description": "一個小而美的家庭作坊。",
+      "martin": {
+        "name": "Martin",
+        "title": "產品&開發",
+        "description": "與程式碼奮鬥是家常便飯"
+      },
+      "yoyo": {
+        "name": "Yoyo",
+        "title": "設計師",
+        "description": "把想法變成溫暖的樣子"
+      },
+      "paopao": {
+        "name": "Paopao",
+        "title": "我們的寶貝",
+        "description": "賣萌和打斷工作的專家"
+      }
+    }
+  },
+  "governance": {
+    "actions": "治理行動",
+    "hot_topics": "熱門話題",
+    "no_data": "暫無數據",
+    "about_title": "關於治理",
+    "about_content": "Cardano 治理是一個去中心化的決策系統，讓 ADA 持有者參與網路的未來發展。",
+    "hot": "熱門",
+    "submit_at": "提交時間",
+    "expire_at": "到期時間",
+    "remaining_time": "剩餘時間",
+    "title_proposal_content": "提案內容",
+    "title_pros": "支持觀點",
+    "title_cons": "反對觀點",
+    "title_our_opinion": "我們的觀點",
+    "related_tweets": "相關討論"
+  }
+}

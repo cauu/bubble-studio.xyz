@@ -1,9 +1,9 @@
 import { Info } from 'lucide-react';
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 export const About: React.FC = () => {
-  const { t } = useTranslation('common');
+  const t = useTranslations('common');
 
   return (
     <div className="card bg-white p-5">

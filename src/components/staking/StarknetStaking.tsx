@@ -2,14 +2,14 @@ import { ValidatorData } from '@/types/voyager.types';
 import MetricCard from './MetricCard';
 import { useMemo } from 'react';
 import { GlobalConfig } from '@/constants';
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
 import { numberWithCommas } from '@/utils';
 import { StepGuid } from './StepGuid';
 
 export const StarknetStaking = (props: { validatorInfo: ValidatorData['validatorDetails'] | null }) => {
   const { validatorInfo } = props;
 
-  const { t } = useTranslation('common');
+  const t = useTranslations('common');
 
   const statistics = useMemo(() => {
     const { liveness, totalStake, livenessTotalEpochs, apr } = validatorInfo || {};
