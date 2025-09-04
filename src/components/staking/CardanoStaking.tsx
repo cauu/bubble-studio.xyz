@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
 
-import { PoolDelegatorsResponse, PoolInfoResponse, PoolStakeSnapshotResponse } from '@/types/koios.types';
+import { PoolInfoResponse, PoolStakeSnapshotResponse } from '@/types/koios.types';
 import { GlobalConfig } from '@/constants';
 import { numberWithCommas } from '@/utils';
 
@@ -9,13 +9,9 @@ import MetricCard from './MetricCard';
 import RelayStatusIndicator from './RelayStatusIndicator';
 import { StepGuid } from './StepGuid';
 
-export const CardanoStaking = (props: {
-  poolInfo: PoolInfoResponse;
-  poolStakeSnapshot: PoolStakeSnapshotResponse;
-  poolDelegators: PoolDelegatorsResponse;
-}) => {
-  const { t } = useTranslation('common');
-  const { poolInfo, poolDelegators } = props;
+export const CardanoStaking = (props: { poolInfo: PoolInfoResponse; poolStakeSnapshot: PoolStakeSnapshotResponse }) => {
+  const t = useTranslations();
+  const { poolInfo } = props;
 
   const statistics = useMemo(() => {
     const delegators = poolInfo[0].live_delegators;
@@ -32,7 +28,7 @@ export const CardanoStaking = (props: {
       activeStake,
       activeRelays
     };
-  }, [poolDelegators, poolInfo]);
+  }, [poolInfo]);
 
   const { delegators, maxRelays, activeRelays, activeStake, saturation } = statistics;
 

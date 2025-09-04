@@ -1,23 +1,17 @@
 import axios, { AxiosInstance } from 'axios';
-import { ValidatorData } from '@/types/voyager.types';
+import { ValidatorApiResponse } from '@/types/voyager.types';
 
 const voyagerApi: AxiosInstance = axios.create({
-  baseURL: 'https://voyager.online/api',
-  headers: {
-    'User-Agent': 'PostmanRuntime/7.44.1',
-    'Cache-Control': 'no-cache',
-    'Accept-Encoding': 'gzip, deflate, br, zstd',
-    Host: 'voyager.online'
-  }
+  baseURL: 'https://api.mainnet.upstark.net'
 });
 
 export const getValidatorInfo = async (validator: string) => {
   try {
     // 发送 POST 请求。通过泛型 <PoolInfoResponse> 为 axios 指定期望的响应数据类型
-    const response = await voyagerApi.get<ValidatorData>(`/staking/validator-details?validator=${validator}`);
+    const response = await voyagerApi.get<ValidatorApiResponse>(`/validators/address/${validator}`);
 
     // axios 返回的数据位于 response.data 属性中
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error('Failed to fetch pool info from Koios API:');
     // 增强错误处理，检查是否是 axios 错误以获取更多信息

@@ -2,12 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Calendar, CheckCircle, Clock, Lightbulb, MessageCircle, XCircle } from 'lucide-react';
 import dayjs from 'dayjs';
 import ReactMarkdown from 'react-markdown';
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
 
 import { IGovActionContent } from '@/types/governance';
 
 import { getDurationString } from '@/utils';
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 
 // 投票组织组件
 // const VotingOrganization = ({ organization }) => {
@@ -56,9 +57,10 @@ const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 
 export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => {
   const currentProposal = useMemo(() => proposal, [proposal]);
-  const { t } = useTranslation('common');
+  const t = useTranslations('common');
+  const params = useParams();
   const router = useRouter();
-  const { locale } = router;
+  const locale = params.locale as string;
 
   const [duration, setDuration] = useState<string>();
 

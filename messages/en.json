@@ -1,0 +1,159 @@
+{
+  "header": {
+    "blogs": "Blog",
+    "staking": "Staking",
+    "about": "About Us"
+  },
+  "common": {
+    "poolName": "Pao Pool",
+    "delegate": "Delegate",
+    "stake": "Stake",
+    "view_detail": "View Details",
+    "back": "Back",
+    "no_data": "No data available"
+  },
+  "hero": {
+    "title": "Pao Pool",
+    "description": "\"Pao\" means \"Bubble\" in Chinese. We are an independent, family-run development team dedicated to the Cardano ecosystem. Pao Pool is our transparent and reliable Cardano stake pool, with over a year of stable operation. Your delegation is direct support for our development work.",
+    "tagline": "Stake your ADA and build with us.",
+    "starknet": {
+      "title": "Bubble Validator",
+      "description": "Bubble Validator is our validator node deployed on the Starknet network. While our team's primary focus is currently on the Cardano ecosystem, we continue to closely follow the developments on Starknet. We invite STRK token holders to support our development work by staking with us."
+    }
+  },
+  "whyUs": {
+    "title": "Why Choose Us?",
+    "reasons": {
+      "supportDevelopment": {
+        "title": "Support Independent Development",
+        "description": "We are committed to bringing novel and engaging applications to the Cardano ecosystem. Your delegation is the core driving force behind our work."
+      },
+      "professionalism": {
+        "title": "Professional & Reliable",
+        "description": "Our team has extensive blockchain development experience, ensuring the pool operates stably and securely, 24/7."
+      },
+      "ecosystemContribution": {
+        "title": "Ecosystem Contribution",
+        "description": "We actively participate in the Cardano community, contributing to the healthy development and continuous innovation of the ecosystem."
+      },
+      "decentralization": {
+        "title": "Championing Decentralization",
+        "description": "As an independent stake pool, we aim to operate sustainably through Cardano's unique staking and governance mechanisms, showcasing the limitless potential for independent creators on a decentralized network."
+      },
+      "potentialRewards": {
+        "title": "Potential Rewards",
+        "description": "To thank our early supporters, we will periodically provide exclusive gifts or airdrops to our delegators."
+      }
+    }
+  },
+  "stakingGuide": {
+    "cardano": {
+      "title": "How to Stake to PAO Pool? 🎯",
+      "steps": {
+        "step1": {
+          "title": "Go to Staking Page",
+          "description": "Click the \"Stake\" button to go to the delegation page."
+        },
+        "step2": {
+          "title": "Connect Wallet",
+          "description": "Connect your Cardano wallet."
+        },
+        "step3": {
+          "description": "Click \"Delegate\" and confirm the transaction to start earning ADA rewards!"
+        }
+      }
+    },
+    "starknet": {
+      "title": "How to Stake to Our Starknet Validator?",
+      "steps": {
+        "step1": {
+          "title": "Go to Staking Page",
+          "description": "Click the \"Stake\" button to proceed to the staking page."
+        },
+        "step2": {
+          "title": "Connect Wallet",
+          "description": "In the top-right corner, click \"Connect Wallet\" and approve the connection."
+        },
+        "step3": {
+          "title": "Initiate Stake",
+          "description": "Once your wallet is successfully connected, find and click the \"Stake\" button."
+        },
+        "step4": {
+          "title": "Confirm Transaction",
+          "description": "Enter the amount you wish to stake and the reward address, then click \"Delegate\" and confirm the transaction to start earning rewards."
+        }
+      },
+      "note": "For a detailed guide, refer to the <a href='https://www.starknet.io/staking/a-guide-to-delegate-your-stake/#endur' target='_blank' rel='noopener noreferrer'>Official Starknet Guide</a>."
+    }
+  },
+  "acknowledgement": {
+    "title": "Acknowledgement",
+    "message": "A heartfelt thank you to every delegator for your trust and support!"
+  },
+  "metric": {
+    "totalPledge": "Total Pledge",
+    "estimatedAnnualizedReturn": "Estimated Annualized Return",
+    "delegator": "Delegator",
+    "relaysStatus": "Relays Status",
+    "activity": "Activity",
+    "participationEpoch": "Participation Epoch",
+    "relaysOnline": "Online"
+  },
+  "button": {
+    "stakeNow": "Stake to"
+  },
+  "about": {
+    "title1": "Hi! 👋 ",
+    "title2": "We're Bubble Studio!",
+    "title3": "a small family workshop taking root and growing on Cardano.",
+    "slogan": "A small family workshop rooted in Cardano 💝",
+    "ourDreams": {
+      "title": "Our Dream ✨",
+      "description": "In our view, the future belongs to those who can march to the beat of their own drum—the sovereign individuals. This era has given us two of the greatest gifts: AI and Cardano.",
+      "column1": {
+        "title": "AI's Power",
+        "description": "The \"plug-in\" of creativity, small teams can do a lot of things."
+      },
+      "column2": {
+        "title": "Cardano Ecosystem",
+        "description": "The independent creator's stronghold in the decentralized network."
+      },
+      "vision": "We hope that our small workshop can firmly plant its roots in the Cardano ecosystem, operating independently and sustainably through the power of staking and decentralized governance. All the while, we'll continue to explore the boundaries of Cardano's capabilities, bringing fun, elegant, and practical products to the community."
+    },
+    "ourTeam": {
+      "title": "Our Family👨‍💻👩‍💻🐾",
+      "description": "A small and beautiful family workshop.",
+      "martin": {
+        "name": "Martin",
+        "title": "Product & Development",
+        "description": "Trouble with code is a daily routine"
+      },
+      "yoyo": {
+        "name": "Yoyo",
+        "title": "Designer",
+        "description": "Turn ideas into warm shapes"
+      },
+      "paopao": {
+        "name": "Paopao",
+        "title": "Our Baby",
+        "description": "Expert in selling cute and interrupting work"
+      }
+    }
+  },
+  "governance": {
+    "actions": "Governance Actions",
+    "hot_topics": "Hot Topics",
+    "no_data": "No data available",
+    "about_title": "About Governance",
+    "about_content": "Cardano governance is a decentralized decision-making system that allows ADA holders to participate in the network's future development.",
+    "hot": "Hot",
+    "submit_at": "Submitted at",
+    "expire_at": "Expires at",
+    "remaining_time": "Remaining time",
+    "title_proposal_content": "Proposal Content",
+    "title_pros": "Supporting Views",
+    "title_cons": "Opposing Views",
+    "title_our_opinion": "Our Opinion",
+    "related_tweets": "Related Discussions"
+  }
+}

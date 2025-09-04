@@ -1,20 +1,17 @@
+'use client';
+
 import React, { useEffect, useMemo, useState } from 'react';
 import { Calendar, CheckCircle, Clock, Lightbulb, MessageCircle, XCircle } from 'lucide-react';
 import dayjs from 'dayjs';
 import ReactMarkdown from 'react-markdown';
-import { useTranslation } from 'next-i18next';
-// import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { GetStaticProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useParams, useRouter } from 'next/navigation';
 
 import governanceData from '@/data/gov-contents-2025-05-15.json';
 import { IGovActionContent } from '@/types/governance';
 import { getDurationString } from '@/utils';
-
-// const VOTE_COLORS = ['#06D6A0', '#EF476F', '#d6e4ff'];
 
 const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 
@@ -25,50 +22,33 @@ export interface Tweet {
   url: string;
 }
 
-interface GovernanceActionProps {
-  content: IGovActionContent;
-}
+export default function GovActionDetail() {
+  const t = useTranslations('common');
+  const router = useRouter();
+  const params = useParams();
 
-export const getStaticPaths = async () => {
-  // 假设 governanceData 结构为 { zh: [...], en: [...], ... }
-  const paths: any[] = [];
+  const locale = params.locale as string;
+  const id = params.id as string;
 
-  // 遍历所有语言和 action，生成所有静态路径
-  for (const locale of Object.keys(governanceData)) {
-    governanceData[locale]
-      .filter((item) => item.type === 'action')
-      .forEach((item) => {
-        paths.push({
-          params: { id: item.id },
-          locale
-        });
-      });
-  }
-
-  return {
-    paths,
-    fallback: false // 没有的 id 返回 404
-  };
-};
-
-export const getStaticProps: GetStaticProps<GovernanceActionProps> = async ({ locale, params }) => {
-  const id = params?.id as string;
-  const translations = await serverSideTranslations(locale || 'en', ['common']);
-  const action = governanceData[locale as string].find((item) => item.type === 'action' && item.id === id) as any;
-
-  return {
-    props: {
-      content: action,
-      ...translations
-    }
-  };
-};
-
-export const GovActionDetail = ({ content }: { content: IGovActionContent }) => {
-  const { t } = useTranslation('common');
-  const { locale, push } = useRouter();
-
+  const [content, setContent] = useState<IGovActionContent | null>(null);
   const [duration, setDuration] = useState<string>();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    try {
+      const action = (governanceData as any)[locale]?.find((item: any) => item.type === 'action' && item.id === id);
+      if (!action) {
+        router.push('/not-found');
+        return;
+      }
+      setContent(action);
+    } catch (error) {
+      console.error('Failed to load action:', error);
+      router.push('/not-found');
+    } finally {
+      setLoading(false);
+    }
+  }, [locale, id, router]);
 
   const currentProposal = useMemo(() => content, [content]);
   const tweets = useMemo(() => {
@@ -84,14 +64,15 @@ export const GovActionDetail = ({ content }: { content: IGovActionContent }) => 
     return () => clearInterval(interval);
   }, [currentProposal?.metadata.expiryDate, locale]);
 
-  const isHotTopic = HOT_TOPICS.includes(currentProposal?.id);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  // 假设投票数据结构如下
-  // const voteData = [
-  //   { name: '赞成', value: currentProposal.metadata., color: VOTE_COLORS[0] },
-  //   { name: '反对', value: currentProposal.metadata.noVotes, color: VOTE_COLORS[1] },
-  //   { name: '弃权', value: currentProposal.metadata.abstainVotes, color: VOTE_COLORS[2] }
-  // ];
+  if (!currentProposal) {
+    return <div>Action not found</div>;
+  }
+
+  const isHotTopic = HOT_TOPICS.includes(currentProposal?.id);
 
   return (
     <div className="mb-4 shadow-md md:card bg-white p-4 relative">
@@ -122,20 +103,6 @@ export const GovActionDetail = ({ content }: { content: IGovActionContent }) => 
               </span>
             </div>
           </div>
-
-          {/* 投票结果饼图 */}
-          {/* <div className="my-6 flex flex-col items-center">
-            <h3 className="font-bold text-[#0a2463] mb-2 flex items-center">投票结果</h3>
-            <PieChart width={320} height={220}>
-              <Pie data={voteData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                {voteData.map((entry, idx) => (
-                  <Cell key={`cell-${idx}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </div> */}
 
           <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
             <h3 className="font-bold text-[#0a2463] mb-1 flex items-center">
@@ -224,12 +191,10 @@ export const GovActionDetail = ({ content }: { content: IGovActionContent }) => 
       )}
 
       <div className="flex justify-end mt-4">
-        <button className="btn px-4 py-2 bg-[#3f8efc] text-white" onClick={() => push('/governance')}>
+        <button className="btn px-4 py-2 bg-[#3f8efc] text-white" onClick={() => router.push(`/${locale}/governance`)}>
           {t('common.back')}
         </button>
       </div>
     </div>
   );
-};
-
-export default GovActionDetail;
+}
