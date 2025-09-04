@@ -42,7 +42,7 @@ export function BlogsClient({ allPosts, allTags }: BlogsClientProps) {
         </div>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid grid-col-4 gap-6">
         {filteredPosts.map((post) => (
           <BlogCard key={post.id} post={post} onClick={handleBlogCardClick} />
         ))}

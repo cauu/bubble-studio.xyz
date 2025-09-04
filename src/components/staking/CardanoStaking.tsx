@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 
-import { PoolDelegatorsResponse, PoolInfoResponse, PoolStakeSnapshotResponse } from '@/types/koios.types';
+import { PoolInfoResponse, PoolStakeSnapshotResponse } from '@/types/koios.types';
 import { GlobalConfig } from '@/constants';
 import { numberWithCommas } from '@/utils';
 
@@ -12,9 +12,8 @@ import { StepGuid } from './StepGuid';
 export const CardanoStaking = (props: {
   poolInfo: PoolInfoResponse;
   poolStakeSnapshot: PoolStakeSnapshotResponse;
-  poolDelegators: PoolDelegatorsResponse;
 }) => {
-  const t = useTranslations('common');
+  const t = useTranslations();
   const { poolInfo } = props;
 
   const statistics = useMemo(() => {
