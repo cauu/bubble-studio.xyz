@@ -1,11 +1,7 @@
 import React from 'react';
 import { getTranslations } from 'next-intl/server';
 
-type Props = {
-  params: { locale: string };
-};
-
-export default async function About({ params: { locale } }: Props) {
+export default async function About() {
   const t = await getTranslations();
 
   return (

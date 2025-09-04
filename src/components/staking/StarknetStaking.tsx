@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 
-
 import { ValidatorData } from '@/types/voyager.types';
 import { GlobalConfig } from '@/constants';
 import { numberWithCommas } from '@/utils';
@@ -87,7 +86,11 @@ export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) 
           title={t('metric.relaysStatus')}
           value={
             <div className="py-2">
-              {isActive ? <RelayStatusIndicator onlineCount={1} totalCount={1} /> : <RelayStatusIndicator onlineCount={0} totalCount={1} />}
+              {isActive ? (
+                <RelayStatusIndicator onlineCount={1} totalCount={1} />
+              ) : (
+                <RelayStatusIndicator onlineCount={0} totalCount={1} />
+              )}
             </div>
           }
           description={`${liveness}% ${t('metric.relaysOnline')}`}

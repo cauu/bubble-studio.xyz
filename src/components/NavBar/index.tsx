@@ -6,8 +6,8 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 
-export const NavBar = async () => {
-  const t = useTranslations()
+export const NavBar = () => {
+  const t = useTranslations();
   const pathname = usePathname();
 
   const navItems = [

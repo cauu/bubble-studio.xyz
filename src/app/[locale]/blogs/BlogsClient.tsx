@@ -27,7 +27,7 @@ export function BlogsClient({ allPosts, allTags }: BlogsClientProps) {
 
   const handleBlogCardClick = (post: PostData) => {
     router.push(`/blogs/${post.slug}`);
-  }
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">

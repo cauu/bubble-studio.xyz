@@ -8,41 +8,41 @@ import { ValidatorData } from '@/types/voyager.types';
 import { StakingClient } from './StakingClient';
 
 const poolInfoCache = new WrappedMemoryCache({
-    ttl: 1000 * 60 * 10,
-    refreshThreshold: 1000 * 60 * 5,
-    refreshFn: () => {
-        return async () => {
-            const [poolInfo, poolStakeSnapshot, validatorInfo] = await Promise.all([
-                getPoolInfo([GlobalConfig.POOL_ID]),
-                getPoolStakeSnapshot(GlobalConfig.POOL_ID),
-                getValidatorInfo(GlobalConfig.STARKNET_VALIDATOR_ADDRESS)
-            ]);
+  ttl: 1000 * 60 * 10,
+  refreshThreshold: 1000 * 60 * 5,
+  refreshFn: () => {
+    return async () => {
+      const [poolInfo, poolStakeSnapshot, validatorInfo] = await Promise.all([
+        getPoolInfo([GlobalConfig.POOL_ID]),
+        getPoolStakeSnapshot(GlobalConfig.POOL_ID),
+        getValidatorInfo(GlobalConfig.STARKNET_VALIDATOR_ADDRESS)
+      ]);
 
-            console.log(validatorInfo, 'validatorInfo');
+      console.log(validatorInfo, 'validatorInfo');
 
-            return {
-                poolInfo,
-                poolStakeSnapshot,
-                validatorInfo
-            };
-        };
-    }
+      return {
+        poolInfo,
+        poolStakeSnapshot,
+        validatorInfo
+      };
+    };
+  }
 });
 
 export default async function Staking() {
-    const { poolInfo, poolStakeSnapshot, validatorInfo } = (await poolInfoCache.getCachedValue<{
-        poolInfo: PoolInfoResponse;
-        poolStakeSnapshot: PoolStakeSnapshotResponse;
-        validatorInfo: ValidatorData;
-    }>('poolInfo')) || {
-        poolInfo: null,
-        poolStakeSnapshot: null,
-        validatorInfo: null
-    };
+  const { poolInfo, poolStakeSnapshot, validatorInfo } = (await poolInfoCache.getCachedValue<{
+    poolInfo: PoolInfoResponse;
+    poolStakeSnapshot: PoolStakeSnapshotResponse;
+    validatorInfo: ValidatorData;
+  }>('poolInfo')) || {
+    poolInfo: null,
+    poolStakeSnapshot: null,
+    validatorInfo: null
+  };
 
-    if (!poolInfo || !poolStakeSnapshot || !validatorInfo) {
-        return <div>Loading...</div>
-    }
+  if (!poolInfo || !poolStakeSnapshot || !validatorInfo) {
+    return <div>Loading...</div>;
+  }
 
-    return <StakingClient poolInfo={poolInfo} poolStakeSnapshot={poolStakeSnapshot} validatorInfo={validatorInfo} />
+  return <StakingClient poolInfo={poolInfo} poolStakeSnapshot={poolStakeSnapshot} validatorInfo={validatorInfo} />;
 }

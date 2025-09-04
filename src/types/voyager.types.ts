@@ -1,9 +1,3 @@
-interface Socials {
-  // 由于示例数据中 socials 为空对象，这里可以定义一个 flexible 的类型
-  // 如果未来会包含社交媒体链接，可以根据需要添加 string 类型的属性
-  [key: string]: string;
-}
-
 /**
  * 定义验证节点最新的见证信息
  */

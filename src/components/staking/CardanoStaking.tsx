@@ -9,10 +9,7 @@ import MetricCard from './MetricCard';
 import RelayStatusIndicator from './RelayStatusIndicator';
 import { StepGuid } from './StepGuid';
 
-export const CardanoStaking = (props: {
-  poolInfo: PoolInfoResponse;
-  poolStakeSnapshot: PoolStakeSnapshotResponse;
-}) => {
+export const CardanoStaking = (props: { poolInfo: PoolInfoResponse; poolStakeSnapshot: PoolStakeSnapshotResponse }) => {
   const t = useTranslations();
   const { poolInfo } = props;
 
