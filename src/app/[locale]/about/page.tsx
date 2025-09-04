@@ -1,20 +1,8 @@
-import { GetStaticProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React from 'react';
+import { getTranslations } from 'next-intl/server';
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const translations = await serverSideTranslations(locale || 'en', ['common']);
-
-  return {
-    props: {
-      ...translations
-    }
-  };
-};
-
-export default function About() {
-  const { t } = useTranslation('common');
+export default async function About() {
+  const t = await getTranslations();
 
   return (
     <div>
@@ -62,7 +50,7 @@ export default function About() {
         <section className="py-8 px-6">
           <div className="mx-auto">
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-black text-gray-800 mb-2">{t('about.ourTeam')}</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-gray-800 mb-2">{t('about.ourTeam.title')}</h2>
               <p className="text-lg text-gray-600">{t('about.ourTeam.description')}</p>
             </div>
 

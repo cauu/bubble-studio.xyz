@@ -1,81 +1,23 @@
-import { useEffect, useState } from 'react';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { GetServerSideProps } from 'next';
+'use client';
+
+import { useTranslations } from 'next-intl';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 
-import { getPoolInfo, getPoolStakeSnapshot } from '@/services/pool';
-import { PoolDelegatorsResponse, PoolInfoResponse, PoolStakeSnapshotResponse } from '@/types/koios.types';
-import { GlobalConfig } from '@/constants';
-import { WrappedMemoryCache } from '@/utils/WrappedMemoryCache';
-
+import { PoolInfoResponse, PoolStakeSnapshotResponse } from '@/types/koios.types';
 import { CardanoStaking } from '@/components/staking/CardanoStaking';
 import { StarknetStaking } from '@/components/staking/StarknetStaking';
-import { getValidatorInfo } from '@/services/starknet-validator';
 import { ValidatorData } from '@/types/voyager.types';
 
-const poolInfoCache = new WrappedMemoryCache({
-  ttl: 1000 * 60 * 10,
-  refreshThreshold: 1000 * 60 * 5,
-  refreshFn: () => {
-    return async () => {
-      const [poolInfo, poolStakeSnapshot] = await Promise.all([
-        getPoolInfo([GlobalConfig.POOL_ID]),
-        getPoolStakeSnapshot(GlobalConfig.POOL_ID)
-      ]);
-
-      return {
-        poolInfo,
-        poolStakeSnapshot
-      };
-    };
-  }
-});
-
-export const getServerSideProps: GetServerSideProps<any> = async ({ locale }) => {
-  const translations = await serverSideTranslations(locale || 'en', ['common']);
-
-  const poolInfoCacheValue = await poolInfoCache.getCachedValue<{
-    poolInfo: PoolInfoResponse;
-    poolStakeSnapshot: PoolStakeSnapshotResponse;
-  }>('poolInfo');
-
-  if (!poolInfoCacheValue) {
-    throw new Error('Failed to fetch pool info');
-  }
-
-  const { poolInfo, poolStakeSnapshot } = poolInfoCacheValue;
-
-  return {
-    props: {
-      ...translations,
-      poolInfo,
-      poolStakeSnapshot
-    }
-  };
-};
-
-export default function Staking(props: {
+export const StakingClient = (props: {
   poolInfo: PoolInfoResponse;
   poolStakeSnapshot: PoolStakeSnapshotResponse;
-  poolDelegators: PoolDelegatorsResponse;
-}) {
-  const { t } = useTranslation('common');
-
-  const { poolInfo, poolDelegators, poolStakeSnapshot } = props;
-
+  validatorInfo: ValidatorData;
+}) => {
+  const { poolInfo, poolStakeSnapshot, validatorInfo } = props;
   const [activePool, setActivePool] = useState<'cardano' | 'starknet'>('cardano');
 
-  const [validatorInfo, setValidatorInfo] = useState<ValidatorData['validatorDetails'] | null>(null);
-
-  useEffect(() => {
-    const fetchValidatorInfo = async () => {
-      const validatorInfo = await getValidatorInfo(GlobalConfig.STARKNET_VALIDATOR_ADDRESS);
-      setValidatorInfo(validatorInfo.validatorDetails);
-    };
-
-    fetchValidatorInfo();
-  }, []);
+  const t = useTranslations();
 
   return (
     <div>
@@ -121,9 +63,7 @@ export default function Staking(props: {
       </section>
 
       <main>
-        {activePool === 'cardano' && (
-          <CardanoStaking poolInfo={poolInfo} poolStakeSnapshot={poolStakeSnapshot} poolDelegators={poolDelegators} />
-        )}
+        {activePool === 'cardano' && <CardanoStaking poolInfo={poolInfo} poolStakeSnapshot={poolStakeSnapshot} />}
         {activePool === 'starknet' && <StarknetStaking validatorInfo={validatorInfo} />}
       </main>
 
@@ -205,4 +145,4 @@ export default function Staking(props: {
       </footer>
     </div>
   );
-}
+};
