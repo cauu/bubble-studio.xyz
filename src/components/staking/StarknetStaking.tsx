@@ -1,28 +1,32 @@
-import { ValidatorData } from '@/types/voyager.types';
-import MetricCard from './MetricCard';
 import { useMemo } from 'react';
-import { GlobalConfig } from '@/constants';
-import { useTranslation } from 'next-i18next';
-import { numberWithCommas } from '@/utils';
-import { StepGuid } from './StepGuid';
+import { useTranslations } from 'next-intl';
 
-export const StarknetStaking = (props: { validatorInfo: ValidatorData['validatorDetails'] | null }) => {
+import { ValidatorData } from '@/types/voyager.types';
+import { GlobalConfig } from '@/constants';
+import { numberWithCommas } from '@/utils';
+
+import { StepGuid } from './StepGuid';
+import MetricCard from './MetricCard';
+import RelayStatusIndicator from './RelayStatusIndicator';
+
+export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) => {
   const { validatorInfo } = props;
 
-  const { t } = useTranslation('common');
+  const t = useTranslations();
 
   const statistics = useMemo(() => {
-    const { liveness, totalStake, livenessTotalEpochs, apr } = validatorInfo || {};
+    const { uptime, total_stake, total_delegators, apy, status } = validatorInfo || {};
 
     return {
-      totalStake: Number(totalStake || 0) / 10 ** 18,
-      liveness,
-      livenessTotalEpochs,
-      apr: Number(apr || 0) / 10 ** 2
+      totalStake: Number(total_stake || 0),
+      liveness: uptime,
+      totalDelegators: total_delegators,
+      apy: Number(apy || 0).toFixed(2),
+      isActive: status === 'active'
     };
   }, [validatorInfo]);
 
-  const { totalStake, liveness, livenessTotalEpochs, apr } = statistics;
+  const { totalStake, liveness, totalDelegators, apy, isActive } = statistics;
 
   const guideSteps = [
     {
@@ -70,18 +74,26 @@ export const StarknetStaking = (props: { validatorInfo: ValidatorData['validator
         <MetricCard
           icon="📈"
           title={t('metric.estimatedAnnualizedReturn')}
-          value={<div className="starknet-gradient text-transparent !bg-clip-text">{`${apr}%`}</div>}
+          value={<div className="starknet-gradient text-transparent !bg-clip-text">{`${apy}%`}</div>}
         />
         <MetricCard
           icon="🔄"
-          title={t('metric.activity')}
-          value={<div className="starknet-gradient text-transparent !bg-clip-text">{`${liveness}%`}</div>}
+          title={t('metric.delegator')}
+          value={<div className="starknet-gradient text-transparent !bg-clip-text">{`${totalDelegators}`}</div>}
         />
         <MetricCard
           icon="🟢"
-          title={t('metric.participationEpoch')}
-          value={<div className="starknet-gradient text-transparent !bg-clip-text">{livenessTotalEpochs}</div>}
-          description="Epochs"
+          title={t('metric.relaysStatus')}
+          value={
+            <div className="py-2">
+              {isActive ? (
+                <RelayStatusIndicator onlineCount={1} totalCount={1} />
+              ) : (
+                <RelayStatusIndicator onlineCount={0} totalCount={1} />
+              )}
+            </div>
+          }
+          description={`${liveness}% ${t('metric.relaysOnline')}`}
         />
       </section>
 

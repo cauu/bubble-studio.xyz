@@ -1,54 +1,42 @@
-import { useMemo, useState } from 'react';
+'use client';
+
+import { useMemo, useState, useEffect } from 'react';
 import { FileText, Vote } from 'lucide-react';
 import clsx from 'clsx';
-import { GetStaticProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 
-// import { IGovernanceAction } from '@/types/governance';
-import { GovActionCard } from '../../components/governance/GovActionCard';
-// import { Dreps } from '@/pages/governance/components/Dreps';
+import { GovActionCard } from '@/components/governance/GovActionCard';
 import governanceData from '@/data/gov-contents-2025-05-15.json';
 import { IGovActionContent } from '@/types/governance';
 import EmptyList from '@/components/EmptyList';
-
 import { About } from '@/components/governance/About';
 import { ProposalCard } from '@/components/governance/ProposalCard';
 
-interface GovernanceProps {
-  actions: IGovActionContent[];
-  proposals: any[];
-  error?: string;
-}
-
-export const getStaticProps: GetStaticProps<GovernanceProps> = async ({ locale }) => {
-  const translations = await serverSideTranslations(locale || 'en', ['common']);
-
-  try {
-    const actions = governanceData[locale as string].filter((item) => item.type === 'action') as any;
-    const proposals = governanceData[locale as string].filter((item) => item.type === 'proposal');
-
-    return {
-      props: {
-        actions,
-        proposals,
-        ...translations
-      }
-    };
-  } catch (error: any) {
-    return {
-      props: {
-        actions: [],
-        proposals: [],
-        error: error.message || translations._nextI18Next?.initialI18nStore('error.get_data_failed')
-      }
-    };
-  }
-};
-
-export default function Governance({ actions, proposals, error }: GovernanceProps) {
+export default function Governance() {
   const [currentTab, setCurrentTab] = useState<'actions' | 'topics'>('actions');
-  const { t } = useTranslation('common');
+  const [actions, setActions] = useState<IGovActionContent[]>([]);
+  const [proposals, setProposals] = useState<any[]>([]);
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState(true);
+
+  const t = useTranslations('common');
+  const params = useParams();
+  const locale = params.locale as string;
+
+  useEffect(() => {
+    try {
+      const actionData = (governanceData as any)[locale]?.filter((item: any) => item.type === 'action') || [];
+      const proposalData = (governanceData as any)[locale]?.filter((item: any) => item.type === 'proposal') || [];
+
+      setActions(actionData);
+      setProposals(proposalData);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load data');
+    } finally {
+      setLoading(false);
+    }
+  }, [locale]);
 
   const TABS_PC = useMemo(
     () => [
@@ -65,6 +53,10 @@ export default function Governance({ actions, proposals, error }: GovernanceProp
     ],
     [t]
   );
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (error) return <div>{error}</div>;
 
@@ -113,7 +105,6 @@ export default function Governance({ actions, proposals, error }: GovernanceProp
                 return <ProposalCard key={item} />;
               })
             ) : (
-              // <div>暂无提案数据</div>
               <EmptyList text={t('common.no_data')} />
             )}
           </div>
@@ -121,8 +112,6 @@ export default function Governance({ actions, proposals, error }: GovernanceProp
       </div>
 
       <div className="space-y-6 w-72 sticky top-6 self-start hidden lg:flex lg:flex-col">
-        {/* <Dreps /> */}
-
         <About />
       </div>
     </div>
