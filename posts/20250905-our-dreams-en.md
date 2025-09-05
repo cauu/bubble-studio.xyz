@@ -14,6 +14,7 @@ Here, we wish to elaborate on the identity, mission, and the fundamental judgmen
 We believe we are at a pivotal historical juncture—the dawn of the "Sovereign Individual" era. This profound transformation is driven by two core forces: **Artificial Intelligence (AI) and Blockchain**.
 - **Artificial Intelligence** is vastly enhancing individual productivity and creativity, elevating them to unprecedented levels.
 - **Blockchain** provides a solid technological foundation for individual asset sovereignty and value transfer, heralding new possibilities for financial freedom.
+
 We firmly believe that any entity or individual who can effectively integrate and leverage these two forces will gain a decisive strategic advantage in future survival and development.
     
 ## Our Mission and Plan
