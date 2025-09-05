@@ -59,6 +59,7 @@
           "description": "Connect your Cardano wallet."
         },
         "step3": {
+          "title": "Delegate",
           "description": "Click \"Delegate\" and confirm the transaction to start earning ADA rewards!"
         }
       }
