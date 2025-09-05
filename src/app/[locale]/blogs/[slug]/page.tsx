@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import { getPostData } from '@/lib/posts';
@@ -22,7 +21,6 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
         <article className="bg-white rounded-lg shadow-lg overflow-hidden">
           {post.image && (
             <div className="relative h-64 md:h-96">
-              {/* <Image fill src={post.image} alt={post.title} className="object-cover" /> */}
               <img src={post.image} alt={post.title} className="object-cover" />
             </div>
           )}
