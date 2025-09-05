@@ -32,14 +32,14 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
         {/* 字体优化：预加载关键字体文件 */}
         <link
           rel="preload"
-          href="/fonts/AlibabaPuHuiTi-3-55-Regular.woff2"
+          href="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-55-Regular.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
         />
         <link
           rel="preload"
-          href="/fonts/AlibabaPuHuiTi-3-85-Bold.woff2"
+          href="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-85-Bold.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
@@ -48,14 +48,14 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
         {/* 可选：预加载次要字体（按需加载） */}
         <link
           rel="prefetch"
-          href="/fonts/AlibabaPuHuiTi-3-65-Medium.woff2"
+          href="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-65-Medium.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
         />
         <link
           rel="prefetch"
-          href="/fonts/AlibabaPuHuiTi-3-115-Black.woff2"
+          href="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-115-Black.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"

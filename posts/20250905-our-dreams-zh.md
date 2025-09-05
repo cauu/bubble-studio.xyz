@@ -2,7 +2,7 @@
 title: "Bubble Studio: 我们的梦想"
 date: "2025-09-05"
 time: "21:30"
-image: "/images/blogs/20250905-bubble-studio.png"
+image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20250905-bubble-studio.png"
 author: Martin
 language: zh
 tags:
