@@ -10,11 +10,7 @@ export const BlogCard = (props: { post: PostData; onClick?: (post: PostData) => 
       className="post-card bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl metric-card cursor-pointer hover:shadow-md"
       onClick={() => onClick?.(post)}
     >
-      <img
-        src={post.image}
-        className="w-full h-48 object-cover rounded-2xl mb-4"
-        alt={title}
-      />
+      <img src={post.image} className="w-full h-48 object-cover rounded-2xl mb-4" alt={title} />
       <div className="flex flex-wrap gap-2 mb-3">
         {tags.map((tag) => {
           return (
