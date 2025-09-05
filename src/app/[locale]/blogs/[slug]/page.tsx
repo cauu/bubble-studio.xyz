@@ -10,7 +10,7 @@ type Props = {
 
 export default async function PostPage({ params: { locale, slug } }: Props) {
   try {
-    const post = await getPostData(slug);
+    const post = await getPostData(slug, locale);
 
     // 检查博客文章的语言是否匹配当前locale
     if (post.language !== locale) {

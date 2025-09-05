@@ -5,6 +5,7 @@ import { PostData } from '@/lib/posts';
 import { BlogCard } from '@/components/blogs/BlogCard';
 import { FilterTag } from '@/components/blogs/FilterTag';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 interface BlogsClientProps {
   allPosts: PostData[];
@@ -13,6 +14,7 @@ interface BlogsClientProps {
 
 export function BlogsClient({ allPosts, allTags }: BlogsClientProps) {
   const router = useRouter();
+  const t = useTranslations();
 
   const [filteredPosts, setFilteredPosts] = useState<PostData[]>(allPosts);
   const [selectedTag, setSelectedTag] = useState<string>('all');
@@ -32,7 +34,7 @@ export function BlogsClient({ allPosts, allTags }: BlogsClientProps) {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">博客</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">{t('header.blogs')}</h1>
 
         <div className="flex flex-wrap gap-2 mb-6">
           <FilterTag tag="all" isSelected={selectedTag === 'all'} onClick={setSelectedTag} />
@@ -42,7 +44,7 @@ export function BlogsClient({ allPosts, allTags }: BlogsClientProps) {
         </div>
       </div>
 
-      <div className="grid grid-col-4 gap-6">
+      <div className="grid gap-6 lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
         {filteredPosts.map((post) => (
           <BlogCard key={post.id} post={post} onClick={handleBlogCardClick} />
         ))}
@@ -50,7 +52,7 @@ export function BlogsClient({ allPosts, allTags }: BlogsClientProps) {
 
       {filteredPosts.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500">暂无相关文章</p>
+          <p className="text-gray-500">{t('common.no_data')}</p>
         </div>
       )}
     </div>

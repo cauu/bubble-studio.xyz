@@ -72,8 +72,10 @@ export async function getAllPostSlugs() {
   });
 }
 
-export async function getPostData(slug: string) {
-  const fullPath = path.join(postsDirectory, `${slug}.md`);
+export async function getPostData(slug: string, locale: string = 'en') {
+  const slugWithLocale = slug.split('-').slice(0, -1).concat(locale).join('-');
+  const fullPath = path.join(postsDirectory, `${slugWithLocale}.md`);
+
   const fileContents = await fs.promises.readFile(fullPath, 'utf8');
 
   // 使用 gray-matter 解析

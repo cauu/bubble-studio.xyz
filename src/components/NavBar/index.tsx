@@ -13,17 +13,17 @@ export const NavBar = () => {
   const navItems = [
     {
       text: t('header.staking'),
-      path: `staking`,
+      path: `/staking`,
       isActive: pathname.endsWith('/staking')
     },
     {
       text: t('header.blogs'),
-      path: `blogs`,
+      path: `/blogs`,
       isActive: pathname.endsWith('/blogs')
     },
     {
       text: t('header.about'),
-      path: `about`,
+      path: `/about`,
       isActive: pathname.endsWith('/about')
     }
   ];

@@ -11,7 +11,7 @@ export const BlogCard = (props: { post: PostData; onClick?: (post: PostData) => 
       onClick={() => onClick?.(post)}
     >
       <img
-        src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=250&fit=crop"
+        src={post.image}
         className="w-full h-48 object-cover rounded-2xl mb-4"
         alt={title}
       />
