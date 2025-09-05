@@ -59,7 +59,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@plugin "@tailwindcss/typography";
 
+
+
+/*
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -78,9 +82,9 @@
   .text-balance {
     text-wrap: balance;
   }
-}
+} */
 
-@layer components {
+/* @layer components {
   .card {
     border: 3px solid #010102;
     border-radius: 16px;
@@ -91,7 +95,6 @@
 
 body {
   background-color: #f0f7ff;
-  /* font-family: 'Comic Neue', cursive; */
 }
 
 .btn {
@@ -125,9 +128,9 @@ body {
     radial-gradient(#d6e4ff 2px, transparent 2px);
   background-size: 30px 30px;
   background-position: 0 0, 15px 15px;
-}
+} */
 
-.title-font {
+/* .title-font {
   font-family: 'Bangers', cursive;
   letter-spacing: 1px;
 }
@@ -196,9 +199,9 @@ body {
   height: 10px;
   background-color: #0a2463;
   border-radius: 50%;
-}
+} */
 
-.vote-badge {
+/* .vote-badge {
   position: absolute;
   top: 5px;
   right: 5px;
@@ -281,9 +284,9 @@ body {
   top: 20%;
   left: 10%;
   animation-delay: 0s;
-}
+} */
 
-.bubble:nth-child(2) {
+/* .bubble:nth-child(2) {
   width: 20px;
   height: 20px;
   top: 30%;
@@ -297,7 +300,7 @@ body {
   top: 15%;
   left: 30%;
   animation-delay: 1s;
-}
+} */
 
 @keyframes float {
   0% {
