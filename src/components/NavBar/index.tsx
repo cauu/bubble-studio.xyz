@@ -33,7 +33,7 @@ export const NavBar = () => {
       <div className="bg-white/80 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <Link href="/" className="flex items-center space-x-2 cursor-pointer">
+            <Link href="/" className="flex items-center space-x-2 cursor-pointer" prefetch>
               <div className="w-8 h-8 candy-gradient rounded-full shadow-lg"></div>
               <span className="text-xl font-bold text-gray-800 wiggle">Bubble Studio</span>
             </Link>
@@ -44,6 +44,7 @@ export const NavBar = () => {
                   <Link
                     key={item.path}
                     href={item.path}
+                    prefetch
                     className={clsx('transition-colors font-medium', {
                       'text-sky-500 font-bold': item.isActive,
                       'text-gray-600 hover:text-sky-500': !item.isActive
