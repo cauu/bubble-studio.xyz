@@ -8,6 +8,7 @@ import { numberWithCommas } from '@/utils';
 import { StepGuid } from './StepGuid';
 import MetricCard from './MetricCard';
 import RelayStatusIndicator from './RelayStatusIndicator';
+import { ExternalLink } from 'lucide-react';
 
 export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) => {
   const { validatorInfo } = props;
@@ -51,18 +52,27 @@ export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) 
     window.open(`https://voyager.online/staking?validator=${GlobalConfig.STARKNET_VALIDATOR_ADDRESS}`, '_blank');
   };
 
+  const handleToDetail = () => {
+    window.open(`https://dashboard.endur.fi/validator/${GlobalConfig.STARKNET_VALIDATOR_ADDRESS}`, '_blank');
+  }
+
   return (
     <div className="relative z-10 max-w-6xl mx-auto">
       <section className="relative z-10 py-8 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-black mb-2">
-            <div className="starknet-gradient text-transparent !bg-clip-text">Bubble Validator️ ⚡</div>
-          </h1>
+          <div className="flex items-center justify-center">
+            <h1 className="text-4xl md:text-5xl font-black mb-2 flex items-center justify-center">
+              <div className="starknet-gradient text-transparent !bg-clip-text">Bubble Validator️
+              </div>
+            </h1>
+            <ExternalLink strokeWidth={2} className="w-5 h-5 ml-2 cursor-pointer text-gray-500 hover:text-purple-500" onClick={handleToDetail} />
+          </div>
+
           <p className="text-base md:text-base text-gray-500 leading-relaxed max-w-4xl mx-auto">
             {t('hero.starknet.description')}
           </p>
         </div>
-      </section>
+      </section >
 
       <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 mt-4">
         <MetricCard
@@ -77,12 +87,12 @@ export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) 
           value={<div className="starknet-gradient text-transparent !bg-clip-text">{`${apy}%`}</div>}
         />
         <MetricCard
-          icon="🔄"
+          icon="👥"
           title={t('metric.delegator')}
           value={<div className="starknet-gradient text-transparent !bg-clip-text">{`${totalDelegators}`}</div>}
         />
         <MetricCard
-          icon="🟢"
+          icon="🔄"
           title={t('metric.relaysStatus')}
           value={
             <div className="py-2">
@@ -109,6 +119,6 @@ export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) 
       <section className="pt-16">
         <StepGuid title={t('stakingGuide.starknet.title')} steps={guideSteps} theme="starknet" />
       </section>
-    </div>
+    </div >
   );
 };
