@@ -54,7 +54,7 @@ export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) 
 
   const handleToDetail = () => {
     window.open(`https://dashboard.endur.fi/validator/${GlobalConfig.STARKNET_VALIDATOR_ADDRESS}`, '_blank');
-  }
+  };
 
   return (
     <div className="relative z-10 max-w-6xl mx-auto">
@@ -62,17 +62,20 @@ export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) 
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center">
             <h1 className="text-4xl md:text-5xl font-black mb-2 flex items-center justify-center">
-              <div className="starknet-gradient text-transparent !bg-clip-text">Bubble Validator️
-              </div>
+              <div className="starknet-gradient text-transparent !bg-clip-text">Bubble Validator️</div>
             </h1>
-            <ExternalLink strokeWidth={2} className="w-5 h-5 ml-2 cursor-pointer text-gray-500 hover:text-purple-500" onClick={handleToDetail} />
+            <ExternalLink
+              strokeWidth={2}
+              className="w-5 h-5 ml-2 cursor-pointer text-gray-500 hover:text-purple-500"
+              onClick={handleToDetail}
+            />
           </div>
 
           <p className="text-base md:text-base text-gray-500 leading-relaxed max-w-4xl mx-auto">
             {t('hero.starknet.description')}
           </p>
         </div>
-      </section >
+      </section>
 
       <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 mt-4">
         <MetricCard
@@ -119,6 +122,6 @@ export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) 
       <section className="pt-16">
         <StepGuid title={t('stakingGuide.starknet.title')} steps={guideSteps} theme="starknet" />
       </section>
-    </div >
+    </div>
   );
 };

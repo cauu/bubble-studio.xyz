@@ -37,13 +37,19 @@ export const StakingClient = (props: {
             >
               <div className="w-8 h-8 flex items-center justify-center">
                 {/* <span className="text-xl">₳</span> */}
-                {
-                  activePool === 'cardano' ? (
-                    <img src={`${GlobalConfig.assetsBaseUrl}/images/logos/cardano_white.png`} alt="cardano" className="w-8 h-8" />
-                  ) : (
-                    <img src={`${GlobalConfig.assetsBaseUrl}/images/logos/cardano_blue.png`} alt="cardano" className="w-8 h-8" />
-                  )
-                }
+                {activePool === 'cardano' ? (
+                  <img
+                    src={`${GlobalConfig.assetsBaseUrl}/images/logos/cardano_white.png`}
+                    alt="cardano"
+                    className="w-8 h-8"
+                  />
+                ) : (
+                  <img
+                    src={`${GlobalConfig.assetsBaseUrl}/images/logos/cardano_blue.png`}
+                    alt="cardano"
+                    className="w-8 h-8"
+                  />
+                )}
               </div>
               <div className="text-left">
                 <div className="text-md font-bold">Cardano Pool</div>
@@ -61,7 +67,11 @@ export const StakingClient = (props: {
             >
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                 {/* <span className="text-xl">⚡</span> */}
-                <img src={`${GlobalConfig.assetsBaseUrl}/images/logos/starknet.png`} alt="starknet" className="w-8 h-8" />
+                <img
+                  src={`${GlobalConfig.assetsBaseUrl}/images/logos/starknet.png`}
+                  alt="starknet"
+                  className="w-8 h-8"
+                />
               </div>
               <div className="text-left">
                 <div className="text-md font-bold">StarkNet Validator</div>
