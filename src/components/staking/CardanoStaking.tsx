@@ -10,7 +10,10 @@ import RelayStatusIndicator from './RelayStatusIndicator';
 import { StepGuid } from './StepGuid';
 import { ExternalLink } from 'lucide-react';
 
-export const CardanoStaking = (props: { poolInfo: PoolInfoResponse | null; poolStakeSnapshot: PoolStakeSnapshotResponse | null }) => {
+export const CardanoStaking = (props: {
+  poolInfo: PoolInfoResponse | null;
+  poolStakeSnapshot: PoolStakeSnapshotResponse | null;
+}) => {
   const t = useTranslations();
   const { poolInfo } = props;
 

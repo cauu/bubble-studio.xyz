@@ -12,7 +12,7 @@ const safeSendRequest = async (fn: () => Promise<any>) => {
     return await fn();
   } catch (error) {
     console.error(error);
-    return null
+    return null;
   }
 };
 
