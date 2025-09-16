@@ -10,17 +10,17 @@ import RelayStatusIndicator from './RelayStatusIndicator';
 import { StepGuid } from './StepGuid';
 import { ExternalLink } from 'lucide-react';
 
-export const CardanoStaking = (props: { poolInfo: PoolInfoResponse; poolStakeSnapshot: PoolStakeSnapshotResponse }) => {
+export const CardanoStaking = (props: { poolInfo: PoolInfoResponse | null; poolStakeSnapshot: PoolStakeSnapshotResponse | null }) => {
   const t = useTranslations();
   const { poolInfo } = props;
 
   const statistics = useMemo(() => {
-    const delegators = poolInfo[0].live_delegators;
-    const saturation = poolInfo[0].live_saturation;
-    const relays = poolInfo[0].relays;
+    const delegators = poolInfo?.[0].live_delegators || 0;
+    const saturation = poolInfo?.[0].live_saturation || 0;
+    const relays = poolInfo?.[0].relays || [];
     const maxRelays = 1;
-    const activeRelays = relays.length;
-    const activeStake = Number(poolInfo[0].active_stake || 0) / 10 ** 6;
+    const activeRelays = relays?.length || 0;
+    const activeStake = Number(poolInfo?.[0].active_stake || 0) / 10 ** 6;
 
     return {
       delegators,

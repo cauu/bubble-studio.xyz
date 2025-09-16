@@ -11,9 +11,9 @@ import { ValidatorData } from '@/types/voyager.types';
 import { GlobalConfig } from '@/constants';
 
 export const StakingClient = (props: {
-  poolInfo: PoolInfoResponse;
-  poolStakeSnapshot: PoolStakeSnapshotResponse;
-  validatorInfo: ValidatorData;
+  poolInfo: PoolInfoResponse | null;
+  poolStakeSnapshot: PoolStakeSnapshotResponse | null;
+  validatorInfo: ValidatorData | null;
 }) => {
   const { poolInfo, poolStakeSnapshot, validatorInfo } = props;
   const [activePool, setActivePool] = useState<'cardano' | 'starknet'>('cardano');

@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { ValidatorApiResponse } from '@/types/voyager.types';
 
 const voyagerApi: AxiosInstance = axios.create({
-  baseURL: 'https://api.mainnet.upstark.net'
+  baseURL: 'https://api-mainnet.upstark.net'
 });
 
 export const getValidatorInfo = async (validator: string) => {
@@ -13,7 +13,7 @@ export const getValidatorInfo = async (validator: string) => {
     // axios 返回的数据位于 response.data 属性中
     return response.data.data;
   } catch (error) {
-    console.error('Failed to fetch pool info from Koios API:');
+    console.error('Failed to fetch pool info from Upstark API:');
     // 增强错误处理，检查是否是 axios 错误以获取更多信息
     if (axios.isAxiosError(error) && error.response) {
       console.error(`Status: ${error.response.status}`);
@@ -22,6 +22,6 @@ export const getValidatorInfo = async (validator: string) => {
       console.error(error);
     }
     // 将错误向上抛出，以便调用者可以处理
-    throw new Error('Koios API request failed.');
+    throw new Error('Upstark API request failed.');
   }
 };

@@ -22,7 +22,7 @@ export const StarknetStaking = (props: { validatorInfo: ValidatorData | null }) 
       totalStake: Number(total_stake || 0),
       liveness: uptime,
       totalDelegators: total_delegators,
-      apy: Number(apy || 0).toFixed(2),
+      apy: Number(apy || 6.22).toFixed(2),
       isActive: status === 'active'
     };
   }, [validatorInfo]);
