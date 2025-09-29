@@ -23,6 +23,5 @@ export function getDurationString(
       : `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m`;
 }
 
-export function numberWithCommas(value: number | string) {
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
+export const numberWithCommas = (x: number, decimals = 2): string =>
+  new Intl.NumberFormat('en-US', { maximumFractionDigits: decimals }).format(x || 0);

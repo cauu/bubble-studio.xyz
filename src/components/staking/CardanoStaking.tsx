@@ -24,17 +24,19 @@ export const CardanoStaking = (props: {
     const maxRelays = 1;
     const activeRelays = relays?.length || 0;
     const activeStake = Number(poolInfo?.[0].active_stake || 0) / 10 ** 6;
+    const liveStake = Number(poolInfo?.[0].live_stake || 0) / 10 ** 6;
 
     return {
       delegators,
       saturation,
       maxRelays,
       activeStake,
-      activeRelays
+      activeRelays,
+      liveStake
     };
   }, [poolInfo]);
 
-  const { delegators, maxRelays, activeRelays, activeStake, saturation } = statistics;
+  const { delegators, maxRelays, activeRelays, liveStake, saturation } = statistics;
 
   const guideSteps = [
     {
@@ -85,7 +87,7 @@ export const CardanoStaking = (props: {
           <MetricCard
             icon="💰"
             title={t('metric.totalPledge')}
-            value={numberWithCommas(activeStake)}
+            value={numberWithCommas(liveStake)}
             description="ADA"
             progressValue={saturation}
           />
