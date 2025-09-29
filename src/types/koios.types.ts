@@ -83,6 +83,11 @@ export interface PoolStakeSnapshot {
    * @description 该纪元快照中网络总活跃质押量 (单位: Lovelace)
    */
   active_stake: string;
+
+  /**
+   * @description 当前快照中网络总活跃质押量 (单位: Lovelace)
+   */
+  live_stake: string;
 }
 
 /**
