@@ -5,7 +5,6 @@ import { Link } from '@/i18n/navigation';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
-import Image from 'next/image';
 import { GlobalConfig } from '@/constants';
 
 export const NavBar = () => {
@@ -37,10 +36,7 @@ export const NavBar = () => {
           <div className="flex items-center space-x-8">
             <Link href="/" className="flex items-center space-x-2 cursor-pointer" prefetch>
               <div className="w-16 h-16">
-                <img
-                  src={GlobalConfig.assetsUrl.bubbleLogo}
-                  alt="Bubble Studio Logo"
-                />
+                <img src={GlobalConfig.assetsUrl.bubbleLogo} alt="Bubble Studio Logo" />
               </div>
               <span className="text-xl font-bold text-gray-800 wiggle">Bubble Studio</span>
             </Link>
