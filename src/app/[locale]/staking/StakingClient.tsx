@@ -39,13 +39,13 @@ export const StakingClient = (props: {
                 {/* <span className="text-xl">₳</span> */}
                 {activePool === 'cardano' ? (
                   <img
-                    src={`${GlobalConfig.assetsBaseUrl}/images/logos/cardano_white.png`}
+                    src={GlobalConfig.assetsUrl.cardanoWhiteLogo}
                     alt="cardano"
                     className="w-8 h-8"
                   />
                 ) : (
                   <img
-                    src={`${GlobalConfig.assetsBaseUrl}/images/logos/cardano_blue.png`}
+                    src={GlobalConfig.assetsUrl.cardanoBlueLogo}
                     alt="cardano"
                     className="w-8 h-8"
                   />
@@ -68,7 +68,7 @@ export const StakingClient = (props: {
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                 {/* <span className="text-xl">⚡</span> */}
                 <img
-                  src={`${GlobalConfig.assetsBaseUrl}/images/logos/starknet.png`}
+                  src={GlobalConfig.assetsUrl.starknetLogo}
                   alt="starknet"
                   className="w-8 h-8"
                 />

@@ -7,6 +7,7 @@ import { IntlProvider } from '@/components/IntlProvider';
 import { NextIntlClientProvider } from 'next-intl';
 
 import '@/globals.css';
+import { GlobalConfig } from '@/constants';
 
 type Props = {
   children: ReactNode;
@@ -28,7 +29,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
         <meta name="description" content="Bubble Studio - 扎根于 Cardano 的独立小作坊" />
         <meta name="title" content="Bubble Studio" />
         <title>Bubble Studio</title>
-        <link rel="icon" href="/favicon.svg" />
+        <link rel="icon" href={GlobalConfig.assetsUrl.favicon} />
 
         {/* 字体优化：预加载关键字体文件 */}
         <link
