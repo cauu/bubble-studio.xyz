@@ -2,8 +2,7 @@
 title: "AI as Your Sword, Web3 as Your Shield: A Survival Strategy for Indie Devs"
 date: "2025-09-05"
 time: "21:30"
-image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20251201-ai-sword-web3-shield.png
-"
+image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20251201-ai-sword-web3-shield.png"
 author: Martin
 language: en
 tags:
