@@ -1,13 +1,13 @@
 ---
 title: "AI as Your Sword, Web3 as Your Shield: A Survival Strategy for Indie Devs"
-date: "2025-09-05"
+date: "2025-12-01"
 time: "21:30"
 image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20251201-ai-sword-web3-shield.png"
 author: Martin
 language: en
 tags:
   - "Cardano"
-  - "AI"
+  - "Indie"
 ---
 We are standing on the eve of a drastic shift in the paradigm of human work.
 
