@@ -2,8 +2,8 @@
 title: "以AI 为矛，Web3 为盾 — 独立开发者的生存之道"
 date: "2025-12-01"
 time: "21:30"
-image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20251201-ai-sword-web3-shield.png
-author: Martin & Gemini
+image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20251201-ai-sword-web3-shield.png"
+author: Martin
 language: zh
 tags:
   - "Cardano"
