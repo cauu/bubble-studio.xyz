@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@formatjs/intl": "^3.1.6",
+    "@giscus/react": "^3.1.0",
     "@tailwindcss/typography": "^0.5.16",
     "axios": "^1.11.0",
     "cache-manager": "^7.1.1",

@@ -1,4 +1,5 @@
 ---
+id: 2
 title: "AI as Your Sword, Web3 as Your Shield: A Survival Strategy for Indie Devs"
 date: "2025-12-01"
 time: "21:30"

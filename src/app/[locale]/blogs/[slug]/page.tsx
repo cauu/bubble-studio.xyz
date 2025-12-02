@@ -1,7 +1,10 @@
+import Script from 'next/script';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 
 import { getPostData } from '@/lib/posts';
+
+import Comments from '@/components/Comments';
 
 type Props = {
   params: { locale: string; slug: string };
@@ -42,6 +45,8 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
             <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
           </div>
         </article>
+
+        <Comments term={post.id} language={locale as any} />
       </div>
     );
   } catch (error) {

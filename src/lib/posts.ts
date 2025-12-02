@@ -90,6 +90,7 @@ export async function getPostData(slug: string, locale: string = 'en') {
     slug,
     contentHtml,
     ...(matterResult.data as {
+      id: string;
       title: string;
       date: string;
       author: string;
