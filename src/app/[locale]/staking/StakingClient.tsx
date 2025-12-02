@@ -126,10 +126,12 @@ export const StakingClient = (props: {
 
       <footer className="relative z-10 py-8 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl px-6 py-2 shadow-xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 candy-gradient rounded-full shadow-lg"></div>
+                <div className="w-16 h-16">
+                  <img src={GlobalConfig.assetsUrl.bubbleLogo} alt="Bubble Studio Logo" />
+                </div>
                 <span className="text-lg font-black text-gray-800">Bubble Studio</span>
               </div>
               <div className="text-center">
