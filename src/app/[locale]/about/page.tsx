@@ -99,7 +99,6 @@ export default async function About() {
           <div className="mx-auto">
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl text-center">
               <div className="flex items-center justify-center space-x-2 mb-3">
-                <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-sky-500 rounded-full shadow-lg"></div>
                 <span className="text-lg font-black text-gray-800">Bubble Studio</span>
               </div>
               <p className="text-gray-600 text-sm">{t('about.slogan')}</p>
