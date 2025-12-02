@@ -2,7 +2,7 @@ import { NavBar } from '../NavBar';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex h-screen overflow-auto bg-gradient-to-br from-blue-50 via-sky-100 to-blue-100 justify-center items-center">
+    <div className="flex overflow-auto bg-gradient-to-br from-blue-50 via-sky-100 to-blue-100 justify-center items-center">
       {/* <BubbleBackground count={15} minSize={20} maxSize={60} glassEffect={true} zIndex={10} /> */}
 
       {/* Floating Bubbles */}

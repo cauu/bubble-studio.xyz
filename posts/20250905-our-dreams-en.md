@@ -1,4 +1,5 @@
 ---
+id: 1
 title: "Bubble Studio: Our Dreams"
 date: "2025-09-05"
 time: "21:30"
