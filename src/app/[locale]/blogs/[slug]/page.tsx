@@ -1,4 +1,3 @@
-import Script from 'next/script';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 
