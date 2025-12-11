@@ -34,6 +34,6 @@ export const BlogCard = (props: { post: PostData; onClick?: (post: PostData) => 
         </div>
         <span className="text-sm text-gray-500">{date}</span>
       </div>
-    </article >
+    </article>
   );
 };
