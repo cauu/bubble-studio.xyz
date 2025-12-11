@@ -22,8 +22,8 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <article className="bg-white rounded-lg shadow-lg overflow-hidden">
           {post.image && (
-            <div className="relative h-64 md:h-96">
-              <img src={post.image} alt={post.title} className="object-cover" />
+            <div className="relative h-[384px] md:h-[466px]">
+              <img src={post.image} alt={post.title} className="object-cover h-full w-full" />
             </div>
           )}
 

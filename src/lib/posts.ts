@@ -36,7 +36,7 @@ export async function getSortedPostsData(locale: 'zh' | 'en' | 'tw'): Promise<Po
       // 组合数据
       return {
         slug,
-        abstract: `${matterResult.content.slice(0, 60)}...`,
+        abstract: `${matterResult.content.slice(0, 80)}...`,
         ...(matterResult.data as {
           title: string;
           date: string;
