@@ -37,15 +37,17 @@ export const NavBar = () => {
 
   return (
     <>
-      <nav className="relative z-50 m-6">
-        <div className="bg-white/80 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg">
+      {/* 移动端：吸顶导航栏，无margin */}
+      {/* 桌面端：保持原有浮动样式 */}
+      <nav className="sticky top-0 z-50 md:relative md:m-6">
+        <div className="bg-white/95 md:bg-white/80 backdrop-blur-sm md:rounded-full px-4 md:px-8 py-3 md:py-4 shadow-sm md:shadow-lg border-b border-gray-100 md:border-none">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-4 md:space-x-8">
               <Link href="/" className="flex items-center space-x-2 cursor-pointer" prefetch>
-                <div className="w-16 h-16 hidden md:block">
-                  <img src={GlobalConfig.assetsUrl.bubbleLogo} alt="Bubble Studio Logo" />
+                <div className="w-10 h-10 md:w-16 md:h-16">
+                  <img src={GlobalConfig.assetsUrl.bubbleLogo} alt="Bubble Studio Logo" className="w-full h-full" />
                 </div>
-                <span className="text-md md:text-xl font-bold text-gray-800 wiggle">Bubble Studio</span>
+                <span className="text-base md:text-xl font-bold text-gray-800 wiggle">Bubble Studio</span>
               </Link>
 
               <div className="hidden md:flex items-center space-x-6">
@@ -67,7 +69,7 @@ export const NavBar = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               {/* Social Media Links */}
               <div className="hidden md:flex items-center gap-1">
                 <a
@@ -102,7 +104,7 @@ export const NavBar = () => {
               {/* 汉堡菜单按钮 - 移动端 */}
               <button
                 onClick={toggleMenu}
-                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="md:hidden p-2 -mr-2 rounded-lg hover:bg-gray-100 transition-colors"
                 aria-label="Toggle menu"
               >
                 <svg

@@ -50,7 +50,7 @@ export function BlogsClient({ allPosts, allTags }: BlogsClientProps) {
   const showExpandButton = isMobile && allTags.length > MOBILE_VISIBLE_TAGS;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-2 pb-8">
+    <div className="max-w-6xl mx-auto px-4 pt-4 pb-8">
       <div className="mb-4 md:mb-8">
         <h1 className="hidden md:block md:text-3xl font-bold text-gray-800 mb-3 md:mb-4">{t('header.blogs')}</h1>
 
