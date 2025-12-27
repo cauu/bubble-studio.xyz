@@ -136,7 +136,7 @@ export const StakingClient = (props: {
               <div className="text-center">
                 <p className="text-gray-600 mb-1 text-sm md:text-md">💝 {t('acknowledgement.message')}</p>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className="hidden max-md:flex items-center space-x-3">
                 <a
                   href={GlobalConfig.social.twitter}
                   target="_blank"

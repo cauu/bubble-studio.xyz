@@ -69,7 +69,7 @@ export const NavBar = () => {
 
             <div className="flex items-center gap-4">
               {/* Social Media Links */}
-              <div className="flex items-center gap-1">
+              <div className="hidden md:flex items-center gap-1">
                 <a
                   href={GlobalConfig.social.twitter}
                   target="_blank"
