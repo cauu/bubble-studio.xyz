@@ -15,7 +15,7 @@ export const StepGuid = (props: StepGuidProps) => {
       <div className="mx-auto">
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-xl">
           <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6 text-center">{title}</h3>
-          
+
           {/* 移动端：垂直布局 */}
           <div className="md:hidden space-y-4">
             {steps.map((step, index) => (

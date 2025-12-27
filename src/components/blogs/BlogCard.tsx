@@ -35,8 +35,12 @@ export const BlogCard = (props: { post: PostData; onClick?: (post: PostData) => 
             </span>
           )}
         </div>
-        <h3 className="text-base md:text-xl font-bold text-gray-800 mb-1 md:mb-2 leading-tight line-clamp-2">{title}</h3>
-        <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-4 leading-relaxed flex-1 line-clamp-2 md:line-clamp-3">{abstract}</p>
+        <h3 className="text-base md:text-xl font-bold text-gray-800 mb-1 md:mb-2 leading-tight line-clamp-2">
+          {title}
+        </h3>
+        <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-4 leading-relaxed flex-1 line-clamp-2 md:line-clamp-3">
+          {abstract}
+        </p>
       </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-gray-100">

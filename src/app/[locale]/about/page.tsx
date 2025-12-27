@@ -31,13 +31,21 @@ export default async function About() {
                 <div className="grid grid-cols-2 gap-3 md:gap-4 my-4 md:my-6">
                   <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-3 md:p-4 rounded-xl md:rounded-2xl">
                     <div className="text-2xl md:text-3xl mb-1 md:mb-2">🤖</div>
-                    <h3 className="font-bold text-sm md:text-base mb-1 text-gray-800">{t('about.ourDreams.column1.title')}</h3>
-                    <p className="text-[10px] md:text-xs text-gray-600 line-clamp-3 md:line-clamp-none">{t('about.ourDreams.column1.description')}</p>
+                    <h3 className="font-bold text-sm md:text-base mb-1 text-gray-800">
+                      {t('about.ourDreams.column1.title')}
+                    </h3>
+                    <p className="text-[10px] md:text-xs text-gray-600 line-clamp-3 md:line-clamp-none">
+                      {t('about.ourDreams.column1.description')}
+                    </p>
                   </div>
                   <div className="bg-gradient-to-br from-cyan-50 to-blue-50 p-3 md:p-4 rounded-xl md:rounded-2xl">
                     <div className="text-2xl md:text-3xl mb-1 md:mb-2">💎</div>
-                    <h3 className="font-bold text-sm md:text-base mb-1 text-gray-800">{t('about.ourDreams.column2.title')}</h3>
-                    <p className="text-[10px] md:text-xs text-gray-600 line-clamp-3 md:line-clamp-none">{t('about.ourDreams.column2.description')}</p>
+                    <h3 className="font-bold text-sm md:text-base mb-1 text-gray-800">
+                      {t('about.ourDreams.column2.title')}
+                    </h3>
+                    <p className="text-[10px] md:text-xs text-gray-600 line-clamp-3 md:line-clamp-none">
+                      {t('about.ourDreams.column2.description')}
+                    </p>
                   </div>
                 </div>
                 <p className="text-xs md:text-base">{t('about.ourDreams.vision')}</p>
@@ -63,9 +71,15 @@ export default async function About() {
                     <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-br from-blue-400 to-sky-500 flex items-center justify-center">
                       <span className="text-2xl">👨‍💻</span>
                     </div>
-                    <h3 className="text-base font-bold text-gray-800 text-center mb-0.5">{t('about.ourTeam.martin.name')}</h3>
-                    <p className="text-blue-500 font-bold text-center mb-1.5 text-xs">{t('about.ourTeam.martin.title')}</p>
-                    <p className="text-gray-600 text-center text-[10px] line-clamp-3">{t('about.ourTeam.martin.description')}</p>
+                    <h3 className="text-base font-bold text-gray-800 text-center mb-0.5">
+                      {t('about.ourTeam.martin.name')}
+                    </h3>
+                    <p className="text-blue-500 font-bold text-center mb-1.5 text-xs">
+                      {t('about.ourTeam.martin.title')}
+                    </p>
+                    <p className="text-gray-600 text-center text-[10px] line-clamp-3">
+                      {t('about.ourTeam.martin.description')}
+                    </p>
                   </div>
                 </div>
 
@@ -75,9 +89,13 @@ export default async function About() {
                     <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center">
                       <span className="text-2xl">👩‍🎨</span>
                     </div>
-                    <h3 className="text-base font-bold text-gray-800 text-center mb-0.5">{t('about.ourTeam.yoyo.name')}</h3>
+                    <h3 className="text-base font-bold text-gray-800 text-center mb-0.5">
+                      {t('about.ourTeam.yoyo.name')}
+                    </h3>
                     <p className="text-sky-500 font-bold text-center mb-1.5 text-xs">{t('about.ourTeam.yoyo.title')}</p>
-                    <p className="text-gray-600 text-center text-[10px] line-clamp-3">{t('about.ourTeam.yoyo.description')}</p>
+                    <p className="text-gray-600 text-center text-[10px] line-clamp-3">
+                      {t('about.ourTeam.yoyo.description')}
+                    </p>
                   </div>
                 </div>
 
@@ -87,9 +105,15 @@ export default async function About() {
                     <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
                       <span className="text-2xl">🐾</span>
                     </div>
-                    <h3 className="text-base font-bold text-gray-800 text-center mb-0.5">{t('about.ourTeam.paopao.name')}</h3>
-                    <p className="text-cyan-500 font-bold text-center mb-1.5 text-xs">{t('about.ourTeam.paopao.title')}</p>
-                    <p className="text-gray-600 text-center text-[10px] line-clamp-3">{t('about.ourTeam.paopao.description')}</p>
+                    <h3 className="text-base font-bold text-gray-800 text-center mb-0.5">
+                      {t('about.ourTeam.paopao.name')}
+                    </h3>
+                    <p className="text-cyan-500 font-bold text-center mb-1.5 text-xs">
+                      {t('about.ourTeam.paopao.title')}
+                    </p>
+                    <p className="text-gray-600 text-center text-[10px] line-clamp-3">
+                      {t('about.ourTeam.paopao.description')}
+                    </p>
                   </div>
                 </div>
               </div>

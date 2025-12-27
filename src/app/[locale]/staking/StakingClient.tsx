@@ -76,7 +76,9 @@ export const StakingClient = (props: {
       <section className="relative z-10 mt-4 py-6 md:py-8 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-xl">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">💝 {t('whyUs.title')}</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
+              💝 {t('whyUs.title')}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <div className="space-y-3 md:space-y-4">
                 <div className="flex items-start space-x-3">
@@ -84,8 +86,12 @@ export const StakingClient = (props: {
                     💻
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-800 mb-1 text-sm md:text-base">{t('whyUs.reasons.supportDevelopment.title')}</h4>
-                    <p className="text-xs md:text-sm text-gray-600">{t('whyUs.reasons.supportDevelopment.description')}</p>
+                    <h4 className="font-bold text-gray-800 mb-1 text-sm md:text-base">
+                      {t('whyUs.reasons.supportDevelopment.title')}
+                    </h4>
+                    <p className="text-xs md:text-sm text-gray-600">
+                      {t('whyUs.reasons.supportDevelopment.description')}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -93,7 +99,9 @@ export const StakingClient = (props: {
                     🔧
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-800 mb-1 text-sm md:text-base">{t('whyUs.reasons.professionalism.title')}</h4>
+                    <h4 className="font-bold text-gray-800 mb-1 text-sm md:text-base">
+                      {t('whyUs.reasons.professionalism.title')}
+                    </h4>
                     <p className="text-xs md:text-sm text-gray-600">{t('whyUs.reasons.professionalism.description')}</p>
                   </div>
                 </div>
@@ -104,8 +112,12 @@ export const StakingClient = (props: {
                     🌱
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-800 mb-1 text-sm md:text-base">{t('whyUs.reasons.ecosystemContribution.title')}</h4>
-                    <p className="text-xs md:text-sm text-gray-600">{t('whyUs.reasons.ecosystemContribution.description')}</p>
+                    <h4 className="font-bold text-gray-800 mb-1 text-sm md:text-base">
+                      {t('whyUs.reasons.ecosystemContribution.title')}
+                    </h4>
+                    <p className="text-xs md:text-sm text-gray-600">
+                      {t('whyUs.reasons.ecosystemContribution.description')}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -113,8 +125,12 @@ export const StakingClient = (props: {
                     🎯
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-800 mb-1 text-sm md:text-base">{t('whyUs.reasons.decentralization.title')}</h4>
-                    <p className="text-xs md:text-sm text-gray-600">{t('whyUs.reasons.decentralization.description')}</p>
+                    <h4 className="font-bold text-gray-800 mb-1 text-sm md:text-base">
+                      {t('whyUs.reasons.decentralization.title')}
+                    </h4>
+                    <p className="text-xs md:text-sm text-gray-600">
+                      {t('whyUs.reasons.decentralization.description')}
+                    </p>
                   </div>
                 </div>
               </div>

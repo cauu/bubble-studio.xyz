@@ -107,26 +107,11 @@ export const NavBar = () => {
                 className="md:hidden p-2 -mr-2 rounded-lg hover:bg-gray-100 transition-colors"
                 aria-label="Toggle menu"
               >
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   {isMenuOpen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   )}
                 </svg>
               </button>
@@ -143,10 +128,7 @@ export const NavBar = () => {
         )}
       >
         {/* 背景遮罩 */}
-        <div
-          className="absolute inset-0 bg-black/30 backdrop-blur-sm"
-          onClick={closeMenu}
-        />
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={closeMenu} />
 
         {/* 侧边栏 */}
         <div
@@ -164,18 +146,8 @@ export const NavBar = () => {
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 aria-label="Close menu"
               >
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
