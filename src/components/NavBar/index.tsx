@@ -6,6 +6,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { GlobalConfig } from '@/constants';
+import { Telegram, X } from '../Icons';
 
 export const NavBar = () => {
   const t = useTranslations();
@@ -60,8 +61,37 @@ export const NavBar = () => {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center">
-            <LanguageSwitcher />
+          <div className="flex items-center gap-4">
+            {/* Social Media Links */}
+            <div className="flex items-center gap-1">
+              <a
+                href={GlobalConfig.social.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-all duration-300"
+                title="Twitter"
+              >
+                <X className="w-5 h-5 text-gray-600 group-hover:text-sky-500 transition-colors" />
+              </a>
+
+              <a
+                href={GlobalConfig.social.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-all duration-300"
+                title="Telegram"
+              >
+                <Telegram className="w-5 h-5 text-gray-600 group-hover:text-sky-500 transition-colors" />
+              </a>
+            </div>
+
+            {/* 分隔线 */}
+            <div className="hidden md:block w-px h-6 bg-gray-300"></div>
+
+            {/* LanguageSwitcher */}
+            <div className="hidden md:block">
+              <LanguageSwitcher />
+            </div>
           </div>
         </div>
       </div>

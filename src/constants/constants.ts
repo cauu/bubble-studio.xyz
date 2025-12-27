@@ -13,5 +13,10 @@ export const GlobalConfig = {
     cardanoWhiteLogo: `${ASSETS_BASE_URL}/images/logos/cardano_white.png`,
     cardanoBlueLogo: `${ASSETS_BASE_URL}/images/logos/cardano_blue.png`,
     starknetLogo: `${ASSETS_BASE_URL}/images/logos/starknet.png`
+  },
+
+  social: {
+    twitter: 'https://x.com/cauu_128',
+    telegram: 'https://t.me/+1aO8bBE7B7VhOWJl'
   }
 };
