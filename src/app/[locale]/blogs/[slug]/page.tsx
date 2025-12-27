@@ -33,12 +33,12 @@ export async function generateMetadata({ params: { locale, slug } }: Props) {
             url: post.image || `${baseUrl}/og-default.png`,
             width: 1200,
             height: 630,
-            alt: post.title,
+            alt: post.title
           }
         ],
         publishedTime: post.date,
         authors: ['Bubble Studio'],
-        tags: post.tags,
+        tags: post.tags
       },
 
       // Twitter Card 标签
@@ -47,8 +47,8 @@ export async function generateMetadata({ params: { locale, slug } }: Props) {
         title: post.title,
         description,
         images: [post.image || `${baseUrl}/og-default.png`],
-        creator: '@bubblestudio', // 根据实际修改
-      },
+        creator: '@bubblestudio' // 根据实际修改
+      }
     };
   } catch (error) {
     console.error('Failed to generate metadata:', error);
