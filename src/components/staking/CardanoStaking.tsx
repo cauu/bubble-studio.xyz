@@ -63,27 +63,27 @@ export const CardanoStaking = (props: {
 
   return (
     <div>
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <section className="relative z-10 py-8 px-6">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-0">
+        <section className="relative z-10 py-6 md:py-8 px-2 md:px-6">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center">
-              <h1 className="text-4xl md:text-5xl font-black mb-2">
+              <h1 className="text-3xl md:text-5xl font-black mb-2">
                 <div className="candy-gradient text-transparent !bg-clip-text">Pao Pool</div>
               </h1>
               <ExternalLink
                 strokeWidth={2}
-                className="w-5 h-5 ml-2 cursor-pointer text-gray-500 hover:text-blue-400"
+                className="w-4 h-4 md:w-5 md:h-5 ml-2 cursor-pointer text-gray-500 hover:text-blue-400"
                 onClick={handleToDetail}
               />
             </div>
 
-            <p className="text-base md:text-base text-gray-500 leading-relaxed max-w-4xl mx-auto">
+            <p className="text-sm md:text-base text-gray-500 leading-relaxed max-w-4xl mx-auto">
               {t('hero.description')}
             </p>
           </div>
         </section>
 
-        <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 mt-4">
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8 mt-2 md:mt-4">
           <MetricCard
             icon="💰"
             title={t('metric.totalPledge')}
@@ -97,7 +97,7 @@ export const CardanoStaking = (props: {
             icon="🔄"
             title={t('metric.relaysStatus')}
             value={
-              <div className="py-2">
+              <div className="py-1 md:py-2">
                 <RelayStatusIndicator onlineCount={activeRelays} totalCount={maxRelays} />
               </div>
             }
@@ -105,16 +105,16 @@ export const CardanoStaking = (props: {
           />
         </section>
 
-        <section className="text-center">
+        <section className="text-center px-4">
           <button
-            className="cardano-stake-button px-8 py-4 text-white rounded-2xl shadow-xl font-bold text-lg"
+            className="cardano-stake-button w-full md:w-auto px-6 md:px-8 py-3 md:py-4 text-white rounded-xl md:rounded-2xl shadow-xl font-bold text-base md:text-lg"
             onClick={handleStake}
           >
             🎯 {`${t('button.stakeNow')} ${t('hero.title')}`}
           </button>
         </section>
 
-        <section className="pt-16">
+        <section className="pt-8 md:pt-16">
           <StepGuid title={t('stakingGuide.cardano.title')} steps={guideSteps} />
         </section>
       </div>
