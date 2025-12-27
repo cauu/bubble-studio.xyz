@@ -9,6 +9,56 @@ type Props = {
   params: { locale: string; slug: string };
 };
 
+export async function generateMetadata({ params: { locale, slug } }: Props) {
+  try {
+    const post = await getPostData(slug, locale);
+
+    // 构建完整URL
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz';
+    const postUrl = `${baseUrl}/${locale}/blogs/${slug}`;
+    const description = post.contentHtml.substring(0, 160).replace(/<[^>]*>/g, '');
+
+    return {
+      title: post.title,
+      description,
+
+      // Open Graph 标签
+      openGraph: {
+        title: post.title,
+        description,
+        url: postUrl,
+        type: 'article',
+        images: [
+          {
+            url: post.image || `${baseUrl}/og-default.png`,
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          }
+        ],
+        publishedTime: post.date,
+        authors: ['Bubble Studio'],
+        tags: post.tags,
+      },
+
+      // Twitter Card 标签
+      twitter: {
+        card: 'summary_large_image',
+        title: post.title,
+        description,
+        images: [post.image || `${baseUrl}/og-default.png`],
+        creator: '@bubblestudio', // 根据实际修改
+      },
+    };
+  } catch (error) {
+    console.error('Failed to generate metadata:', error);
+    return {
+      title: 'Blog Post',
+      description: 'Read our latest blog post'
+    };
+  }
+}
+
 export default async function PostPage({ params: { locale, slug } }: Props) {
   try {
     const post = await getPostData(slug, locale);
