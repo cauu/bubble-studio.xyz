@@ -69,33 +69,57 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
     }
 
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <article className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="max-w-4xl mx-auto px-0 md:px-4 pt-0 pb-4 md:py-8">
+        <article className="bg-white md:rounded-lg md:shadow-lg overflow-hidden">
+          {/* 封面图 - 移动端更紧凑 */}
           {post.image && (
-            <div className="relative h-[384px] md:h-[466px]">
+            <div className="relative h-[200px] md:h-[400px]">
               <img src={post.image} alt={post.title} className="object-cover h-full w-full" />
             </div>
           )}
 
-          <div className="p-6 md:p-8">
-            <div className="mb-4">
-              <div className="flex flex-wrap gap-2 mb-2">
+          <div className="px-4 py-4 md:p-8">
+            {/* 标题区域 - 移动端放在最前面，类似Twitter */}
+            <h1 className="text-xl md:text-3xl font-bold text-gray-900 mb-3 md:mb-4 leading-tight">{post.title}</h1>
+
+            {/* 元信息 */}
+            <div className="flex items-center gap-2 mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-100">
+              <div className="flex flex-wrap gap-1.5 md:gap-2">
                 {post.tags.map((tag) => (
-                  <span key={tag} className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
+                  <span
+                    key={tag}
+                    className="px-2 md:px-3 py-0.5 md:py-1 bg-blue-50 text-blue-600 text-xs md:text-sm rounded-full font-medium"
+                  >
                     {tag}
                   </span>
                 ))}
               </div>
-              <p className="text-gray-500 text-sm">{format(new Date(post.date), 'yyyy年MM月dd日')}</p>
+              <span className="text-gray-400 text-xs md:text-sm">·</span>
+              <p className="text-gray-500 text-xs md:text-sm">{format(new Date(post.date), 'yyyy年MM月dd日')}</p>
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">{post.title}</h1>
-
-            <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+            {/* 正文内容 - 移动端使用更小的字体 */}
+            <div
+              className="prose prose-sm md:prose-lg max-w-none 
+                prose-headings:text-gray-900 prose-headings:font-bold
+                prose-h2:text-lg prose-h2:md:text-2xl prose-h2:mt-6 prose-h2:mb-3
+                prose-h3:text-base prose-h3:md:text-xl prose-h3:mt-4 prose-h3:mb-2
+                prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-sm prose-p:md:text-base
+                prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+                prose-img:rounded-lg prose-img:my-4
+                prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50/50 prose-blockquote:py-1 prose-blockquote:rounded-r-lg
+                prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
+                prose-pre:bg-gray-900 prose-pre:rounded-lg
+                prose-li:text-sm prose-li:md:text-base
+              "
+              dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+            />
           </div>
         </article>
 
-        <Comments term={post.id} language={locale as any} />
+        <div className="px-4 md:px-0">
+          <Comments term={post.id} language={locale as any} />
+        </div>
       </div>
     );
   } catch (error) {
