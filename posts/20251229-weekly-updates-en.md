@@ -70,3 +70,4 @@ Aggregates discussions about Cardano governance on the X platform, including KOL
 
 Development of the frontend MVP version and deployment of the frontend-backend system. Users will then be able to officially experience the complete functionality of the Bubble platform.
 
+
