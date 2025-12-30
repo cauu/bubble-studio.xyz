@@ -17,7 +17,7 @@ const safeSendRequest = async (fn: () => Promise<any>) => {
 };
 
 const poolInfoCache = new WrappedMemoryCache({
-  ttl: 1000 * 60 * 10,
+  ttl: 1000 * 60 * 60 * 12,
   refreshThreshold: 1000 * 60 * 5,
   refreshFn: () => {
     return async () => {
