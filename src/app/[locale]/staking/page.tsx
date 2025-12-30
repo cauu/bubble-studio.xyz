@@ -1,7 +1,6 @@
 import { getPoolInfo, getPoolStakeSnapshot } from '@/services/pool';
 import { PoolInfoResponse, PoolStakeSnapshotResponse } from '@/types/koios.types';
 import { GlobalConfig } from '@/constants';
-import { WrappedMemoryCache } from '@/utils/WrappedMemoryCache';
 
 import { getValidatorInfo } from '@/services/starknet-validator';
 import { ValidatorData } from '@/types/voyager.types';
@@ -16,32 +15,38 @@ const safeSendRequest = async (fn: () => Promise<any>) => {
   }
 };
 
-const poolInfoCache = new WrappedMemoryCache({
-  ttl: 1000 * 60 * 60 * 12,
-  refreshThreshold: 1000 * 60 * 5,
-  refreshFn: () => {
-    return async () => {
-      const [poolInfo, poolStakeSnapshot, validatorInfo] = await Promise.all([
-        safeSendRequest(() => getPoolInfo([GlobalConfig.POOL_ID])),
-        safeSendRequest(() => getPoolStakeSnapshot(GlobalConfig.POOL_ID)),
-        safeSendRequest(() => getValidatorInfo(GlobalConfig.STARKNET_VALIDATOR_ADDRESS))
-      ]);
+let poolInfo: PoolInfoResponse | null = null;
+let poolStakeSnapshot: PoolStakeSnapshotResponse | null = null;
+let validatorInfo: ValidatorData | null = null;
 
-      return {
-        poolInfo,
-        poolStakeSnapshot,
-        validatorInfo
-      };
+async function fetchPoolInfo() {
+  if (poolInfo && poolStakeSnapshot && validatorInfo) {
+    return {
+      poolInfo,
+      poolStakeSnapshot,
+      validatorInfo
     };
   }
-});
+
+  const result = await Promise.all([
+    safeSendRequest(() => getPoolInfo([GlobalConfig.POOL_ID])),
+    safeSendRequest(() => getPoolStakeSnapshot(GlobalConfig.POOL_ID)),
+    safeSendRequest(() => getValidatorInfo(GlobalConfig.STARKNET_VALIDATOR_ADDRESS))
+  ]);
+
+  poolInfo = result[0] || null;
+  poolStakeSnapshot = result[1] || null;
+  validatorInfo = result[2] || null;
+
+  return {
+    poolInfo,
+    poolStakeSnapshot,
+    validatorInfo
+  }
+}
 
 export default async function Staking() {
-  const { poolInfo, poolStakeSnapshot, validatorInfo } = (await poolInfoCache.getCachedValue<{
-    poolInfo: PoolInfoResponse;
-    poolStakeSnapshot: PoolStakeSnapshotResponse;
-    validatorInfo: ValidatorData;
-  }>('poolInfo')) || {
+  const { poolInfo, poolStakeSnapshot, validatorInfo } = await fetchPoolInfo() || {
     poolInfo: null,
     poolStakeSnapshot: null,
     validatorInfo: null
