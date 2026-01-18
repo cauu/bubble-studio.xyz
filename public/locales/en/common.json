@@ -1,6 +1,7 @@
 {
   "header.blogs": "Blog",
   "header.staking": "Staking",
+  "header.products": "Products",
   "header.about": "About Us",
 
   "common.poolName": "Pao Pool",
@@ -76,5 +77,12 @@
   "about.ourTeam.yoyo.description": "Turn ideas into warm shapes",
   "about.ourTeam.paopao.name": "Paopao",
   "about.ourTeam.paopao.title": "Our Baby",
-  "about.ourTeam.paopao.description": "Expert in selling cute and interrupting work"
+  "about.ourTeam.paopao.description": "Expert in selling cute and interrupting work",
+
+  "products.title": "Our Products ✨",
+  "products.description": "Explore innovative products from Bubble Studio for the Cardano ecosystem.",
+  "products.voda.name": "VODA",
+  "products.voda.fullName": "Voice of ADA",
+  "products.voda.description": "A Cardano governance participation platform that empowers every ADA holder to have their voice heard.",
+  "products.voda.linkText": "Visit Website"
 }

@@ -26,6 +26,11 @@ export const NavBar = () => {
       isActive: pathname.endsWith('/blogs')
     },
     {
+      text: t('header.products'),
+      path: `/products`,
+      isActive: pathname.endsWith('/products')
+    },
+    {
       text: t('header.about'),
       path: `/about`,
       isActive: pathname.endsWith('/about')

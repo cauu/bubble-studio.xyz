@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cardano 治理 - 原型 1.1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            cardano: {
+              DEFAULT: '#0033AD',
+              hover: '#002899',
+              light: '#E6EEFF',
+            },
+            slate: {
+              850: '#1e293b', // Darker text for high contrast
+            }
+          },
+          boxShadow: {
+            'nav': '0 1px 0 0 rgba(0, 0, 0, 0.05)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 隐藏滚动条但保留功能 */
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* 页面切换动画 */
+    .page {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    .page.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(2px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 底部安全区域 */
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    
+    /* 点击反馈 - iOS 风格 */
+    .tap-highlight {
+      cursor: pointer;
+      transition: background-color 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tap-highlight:active {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    /* 划线高亮效果 */
+    .text-highlight {
+      background-color: rgba(0, 51, 173, 0.1);
+      border-bottom: 2px solid #0033AD;
+      cursor: pointer;
+    }
+    
+    /* 头像占位符颜色 */
+    .avatar-bg-1 { background: linear-gradient(135deg, #6366F1, #4F46E5); }
+    .avatar-bg-2 { background: linear-gradient(135deg, #10B981, #059669); }
+    .avatar-bg-3 { background: linear-gradient(135deg, #F59E0B, #D97706); }
+    .avatar-bg-4 { background: linear-gradient(135deg, #EC4899, #DB2777); }
+    .avatar-bg-default { background: #CBD5E1; }
+  </style>
+</head>
+<body class="bg-white font-sans text-slate-900 antialiased selection:bg-cardano-light selection:text-cardano">
+
+  <!-- 移动端应用容器 -->
+  <div id="app" class="max-w-lg mx-auto min-h-screen relative bg-white border-x border-gray-50 shadow-2xl shadow-gray-100">
+    
+    <!-- ==================== 1. 提案模块 (Proposals) ==================== -->
+    <div id="page-proposals" class="page active pb-16">
+      
+      <!-- 顶部固定导航栏 -->
+      <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100 transition-shadow duration-200">
+        <div class="px-4 h-14 flex items-center justify-between">
+          <div class="flex items-center gap-2" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+             <!-- 简单的 Logo 示意 -->
+             <div class="w-6 h-6 rounded bg-cardano flex items-center justify-center">
+                <div class="w-3 h-3 bg-white rounded-full"></div>
+             </div>
+             <h1 class="text-lg font-bold tracking-tight">Governance</h1>
+          </div>
+          
+          <div class="flex items-center gap-3">
+             <button onclick="showLoginModal()" id="login-btn" class="px-3 py-1.5 text-xs font-semibold text-cardano bg-cardano-light rounded-full transition-colors hover:bg-cardano hover:text-white">
+              连接钱包
+            </button>
+            <button id="user-avatar" class="hidden w-8 h-8 rounded-full avatar-bg-1 text-white text-xs font-bold flex items-center justify-center ring-2 ring-white shadow-sm tap-highlight" onclick="navigateTo('profile')">
+              U
+            </button>
+          </div>
+        </div>
+
+        <!-- 分段控制器 (Segmented Control) -->
+        <div class="px-4 flex gap-6 text-[15px]">
+          <button class="filter-tab py-3 font-bold text-cardano border-b-[3px] border-cardano" data-filter="all">全部</button>
+          <button class="filter-tab py-3 font-medium text-gray-500 hover:text-gray-900 transition-colors" data-filter="active">进行中</button>
+          <button class="filter-tab py-3 font-medium text-gray-500 hover:text-gray-900 transition-colors" data-filter="completed">已完成</button>
+          <button class="filter-tab py-3 font-medium text-gray-500 hover:text-gray-900 transition-colors" data-filter="closed">已关闭</button>
+        </div>
+      </header>
+
+      <!-- 提案瀑布流 (Timeline) -->
+      <div class="divide-y divide-gray-50">
+        
+        <!-- 提案卡片: Active -->
+        <article class="px-4 py-5 tap-highlight hover:bg-gray-50 transition-colors" onclick="showProposalDetail(1)">
+          <div class="mb-2 flex justify-between items-start gap-4">
+            <h3 class="text-[16px] font-bold leading-snug text-gray-900">关于增加 Cardano 网络参数 K 值的提案</h3>
+            <span class="px-2 py-0.5 rounded-full bg-green-50 text-green-600 text-[10px] font-bold border border-green-100 flex-shrink-0 mt-0.5">Active</span>
+          </div>
+          
+          <p class="text-[14px] leading-relaxed text-gray-500 mb-4 line-clamp-2">建议将 K 参数从 500 增加到 1000。此举旨在降低大型质押池的饱和点，从而鼓励委托分散，进一步促进网络的去中心化程度，减少单一实体的控制力。</p>
+          
+          <!-- 投票快照 -->
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="flex items-center justify-between mb-2">
+               <span class="text-xs font-semibold text-gray-500">当前投票进度</span>
+               <span class="text-xs font-mono text-gray-500">Epoch 420</span>
+            </div>
+            <div class="flex h-2 rounded-full overflow-hidden bg-gray-200">
+              <div class="bg-green-500 w-[65%]"></div>
+              <div class="bg-red-400 w-[25%]"></div>
+              <div class="bg-gray-300 w-[10%]"></div>
+            </div>
+            <div class="flex justify-between mt-1.5 text-[10px] font-medium text-gray-400">
+              <span class="text-green-600">65% 支持</span>
+              <span class="text-red-500">25% 反对</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 提案卡片: Completed -->
+        <article class="px-4 py-5 tap-highlight hover:bg-gray-50 transition-colors" onclick="showProposalDetail(2)">
+          <div class="mb-2 flex justify-between items-start gap-4">
+            <h3 class="text-[16px] font-bold leading-snug text-gray-900">Cardano 财政部资金分配提案 Q1 2024</h3>
+            <span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold border border-blue-100 flex-shrink-0 mt-0.5">Completed</span>
+          </div>
+
+          <p class="text-[14px] leading-relaxed text-gray-500 mb-4 line-clamp-2">确定2024年第一季度 Cardano 财政部的资金分配方案，包括开发者激励、生态建设和社区教育等专项预算。</p>
+          
+          <!-- 结果 -->
+          <div class="flex items-center gap-2">
+             <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+             <span class="text-xs font-medium text-gray-600">已通过 · 78% 赞成</span>
+          </div>
+        </article>
+        
+        <!-- 提案卡片: Closed -->
+        <article class="px-4 py-5 tap-highlight opacity-75 hover:bg-gray-50 transition-colors" onclick="showProposalDetail(3)">
+          <div class="mb-2 flex justify-between items-start gap-4">
+             <h3 class="text-[16px] font-semibold leading-snug text-gray-600">降低最低交易费用提案</h3>
+             <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold border border-gray-200 flex-shrink-0 mt-0.5">Closed</span>
+          </div>
+
+          <p class="text-[14px] leading-relaxed text-gray-400 mb-4 line-clamp-1">建议将最低交易费用降低 50%。</p>
+          
+          <!-- 结果 -->
+          <span class="text-xs text-gray-400">已关闭 · 无效提案</span>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ==================== 2. 提案详情 (Proposal Detail) ==================== -->
+    <div id="page-proposal-detail" class="page pb-20 bg-white">
+      
+      <!-- 详情页头部 -->
+      <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 flex items-center h-14 px-2 shadow-sm">
+        <button onclick="navigateTo('proposals')" class="p-2 mr-2 rounded-full hover:bg-gray-100 transition-colors">
+          <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+        </button>
+        <span class="font-bold text-lg text-gray-900">提案详情</span>
+        <div class="ml-auto flex gap-2">
+            <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500">
+               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"/></svg>
+            </button>
+            <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500">
+               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"/></svg>
+            </button>
+        </div>
+      </header>
+
+      <!-- 提案主体内容 -->
+      <main class="overflow-y-auto">
+        <div class="px-4 py-5">
+          <!-- 提案者信息栏 -->
+          <div class="flex items-center justify-between mb-5">
+             <div class="flex items-center gap-3">
+               <div class="w-11 h-11 rounded-full avatar-bg-1 flex items-center justify-center text-white text-sm font-bold shadow-sm">K</div>
+               <div>
+                 <div class="flex items-center gap-1">
+                   <span class="font-bold text-gray-900">网络参数工作组</span>
+                   <svg class="w-3.5 h-3.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                 </div>
+                 <span class="text-xs text-gray-500">@parameter_wg · 2024-01-15</span>
+               </div>
+             </div>
+             <span class="px-2.5 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold border border-green-100 shadow-sm">Active</span>
+          </div>
+
+          <!-- 核心内容区 -->
+          <article class="prose prose-slate prose-p:text-gray-800 prose-headings:text-gray-900 max-w-none">
+            <h1 class="text-2xl font-extrabold leading-tight mb-4">关于增加 Cardano 网络参数 K 值的提案</h1>
+            
+            <div class="bg-slate-50 border-l-4 border-cardano p-4 mb-6 rounded-r-lg">
+              <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-1">Abstract</h3>
+              <p class="text-sm text-gray-600 m-0">本提案建议将 Cardano 网络的 K 参数从当前的 500 增加到 1000，以进一步促进网络去中心化。</p>
+            </div>
+
+            <p>当前 Cardano 网络的 K 参数设置为 500。这意味着网络在理想情况下会收敛到 500 个饱和的质押池。<span class="text-highlight relative group" onclick="showHighlightComment(this)">然而，实际数据显示，少数大型多池运营商（MPO）控制了不成比例的质押份额。<span class="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded whitespace-nowrap">已有 12 条划线评论</span></span></p>
+
+            <h3 class="text-lg font-bold mt-6 mb-2">提案目标</h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-800">
+              <li>降低单一质押池的饱和上限 (Saturation Point)。</li>
+              <li>激励委托者将 ADA 重新分配给较小的、未饱和的池。</li>
+              <li>提高攻击网络的成本，增强安全性。</li>
+            </ul>
+
+            <h3 class="text-lg font-bold mt-6 mb-2">预期影响</h3>
+            <p>我们预计此变更将在实施后的 3 个 Epoch 内触发约 15% 的总质押量迁移。这将为社区驱动的小型单池运营商（SPO）提供更多生存空间。</p>
+          </article>
+          
+          <div class="mt-4 text-xs text-gray-400 font-mono">
+            最后编辑: 2024-01-15 14:30 UTC
+          </div>
+        </div>
+
+        <!-- 投票状态仪表盘 -->
+        <div class="px-4 py-4 border-t border-b border-gray-100 bg-gray-50/50">
+           <h3 class="text-xs font-bold text-gray-500 uppercase mb-3">Governance Status</h3>
+           <div class="space-y-3">
+             <div class="flex items-center gap-3">
+               <span class="w-12 text-sm font-bold text-green-600 text-right">65%</span>
+               <div class="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                 <div class="h-full bg-green-500 rounded-full" style="width: 65%"></div>
+               </div>
+               <span class="text-xs text-gray-500 w-10">Yes</span>
+             </div>
+             <div class="flex items-center gap-3">
+               <span class="w-12 text-sm font-bold text-red-500 text-right">25%</span>
+               <div class="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                 <div class="h-full bg-red-400 rounded-full" style="width: 25%"></div>
+               </div>
+               <span class="text-xs text-gray-500 w-10">No</span>
+             </div>
+           </div>
+        </div>
+
+        <!-- 评论讨论区 -->
+        <div class="pb-8">
+           <div class="sticky top-14 z-40 bg-white/95 backdrop-blur border-b border-gray-100 px-4 py-3 flex justify-between items-center">
+             <h3 class="font-bold text-lg">讨论 <span class="text-gray-400 text-sm font-normal ml-1">128</span></h3>
+             <!-- 排序/筛选可扩展 -->
+             <button class="text-cardano text-sm font-medium">最新</button>
+           </div>
+           
+           <!-- 评论列表 -->
+           <div class="divide-y divide-gray-50">
+             
+             <!-- 评论 Item 1 (带子评论) -->
+             <div class="px-4 py-4">
+               <div class="flex gap-3">
+                 <div class="w-9 h-9 rounded-full avatar-bg-4 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">A</div>
+                 <div class="flex-1">
+                   <div class="flex items-center justify-between mb-1">
+                      <div class="flex items-center gap-2">
+                        <span class="font-bold text-sm text-gray-900">Alice_DRep</span>
+                        <span class="px-1.5 py-0.5 bg-purple-50 text-purple-600 text-[10px] font-bold rounded border border-purple-100">DRep</span>
+                      </div>
+                      <span class="text-xs text-gray-400">2h</span>
+                   </div>
+                   <p class="text-[15px] text-gray-800 leading-normal mb-2">完全支持。现在的 MPO 垄断确实太严重了，不利于抗审查性。K=1000 是一个合理的中间值。</p>
+                   
+                   <div class="flex items-center gap-6 text-gray-500 mb-3">
+                     <button class="flex items-center gap-1.5 text-xs hover:text-cardano">
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/></svg>
+                       <span>24</span>
+                     </button>
+                     <button class="text-xs font-medium hover:text-cardano">回复</button>
+                   </div>
+
+                   <!-- 二级评论 -->
+                   <div class="pl-3 border-l-2 border-gray-100 mt-2 space-y-3">
+                      <div class="flex gap-2">
+                        <div class="w-6 h-6 rounded-full avatar-bg-2 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">B</div>
+                        <div class="flex-1">
+                          <div class="flex items-center gap-2 mb-0.5">
+                             <span class="font-bold text-xs text-gray-900">Bob_Staker</span>
+                             <span class="text-[10px] text-gray-400">1h</span>
+                          </div>
+                          <p class="text-sm text-gray-700"><span class="text-cardano">@Alice_DRep</span> 是的，但是对于只有刚好满足当前饱和点的小池子，这会不会导致他们的收益波动变大？</p>
+                        </div>
+                      </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+             <!-- 评论 Item 2 (划线评论展示) -->
+             <div class="px-4 py-4 bg-blue-50/30">
+               <div class="flex gap-3">
+                  <div class="w-9 h-9 rounded-full avatar-bg-3 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">C</div>
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between mb-1">
+                      <div class="flex items-center gap-2">
+                        <span class="font-bold text-sm text-gray-900">Charlie_Dev</span>
+                      </div>
+                      <span class="text-xs text-gray-400">3h</span>
+                    </div>
+                    
+                    <!-- 引用划线内容 -->
+                    <div class="mb-2 pl-3 border-l-2 border-cardano text-xs text-gray-500 italic py-1">
+                       "然而，实际数据显示，少数大型多池运营商（MPO）控制了..."
+                    </div>
+
+                    <p class="text-[15px] text-gray-800 leading-normal mb-2">这一数据来源是哪里的？最好能在提案中附上具体的 Koios 或 CExplorer 链接。</p>
+                    
+                    <div class="flex items-center gap-6 text-gray-500">
+                      <button class="flex items-center gap-1.5 text-xs hover:text-cardano">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/></svg>
+                        <span>5</span>
+                      </button>
+                      <button class="text-xs font-medium hover:text-cardano">回复</button>
+                    </div>
+                  </div>
+               </div>
+             </div>
+
+           </div>
+        </div>
+      </main>
+      
+      <!-- 底部评论输入框 -->
+      <div class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white border-t border-gray-200 px-4 py-3 safe-bottom z-50 shadow-lg">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full avatar-bg-1 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">U</div>
+          <div class="flex-1 bg-gray-100 rounded-full flex items-center px-4 py-2">
+             <input type="text" placeholder="发表你的看法..." class="bg-transparent w-full text-sm focus:outline-none placeholder:text-gray-500">
+          </div>
+          <button class="p-2 text-cardano font-bold text-sm disabled:text-gray-300">发布</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 3. 代表模块 (DReps) ==================== -->
+    <div id="page-dreps" class="page pb-16">
+      <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-gray-100">
+        <div class="px-4 h-14 flex items-center justify-between">
+           <h1 class="text-xl font-bold">DReps</h1>
+           <button class="text-cardano text-sm font-medium">排序</button>
+        </div>
+        <!-- 搜索框 -->
+        <div class="px-4 pb-3">
+          <div class="relative group">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-cardano" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+            <input type="text" placeholder="搜索代表名称、ID..." class="w-full pl-9 pr-4 py-2.5 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cardano/20 focus:bg-white transition-all">
+          </div>
+        </div>
+      </header>
+
+      <div class="divide-y divide-gray-50">
+        <!-- DRep 1 -->
+        <div class="px-4 py-4 flex items-start gap-3 tap-highlight hover:bg-gray-50 transition-colors" onclick="showDrepDetail(1)">
+          <div class="w-12 h-12 rounded-full avatar-bg-4 flex items-center justify-center text-white text-lg font-bold flex-shrink-0 shadow-sm">A</div>
+          <div class="flex-1 min-w-0 pt-0.5">
+            <div class="flex items-center justify-between mb-1">
+               <div class="flex items-center gap-1.5">
+                 <h3 class="font-bold text-gray-900">Alice Zhang</h3>
+                 <svg class="w-4 h-4 text-cardano" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+               </div>
+               <button class="text-xs font-semibold text-cardano border border-cardano rounded-full px-3 py-1 hover:bg-cardano hover:text-white transition-colors">Follow</button>
+            </div>
+            <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed">资深区块链开发者，专注于 Cardano 生态建设。主张技术驱动的透明治理。</p>
+            <div class="mt-2 flex gap-4 text-xs text-gray-400">
+               <span>投票参与: <b class="text-gray-700">98%</b></span>
+               <span>粉丝: <b class="text-gray-700">1.2k</b></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DRep 2 -->
+        <div class="px-4 py-4 flex items-start gap-3 tap-highlight hover:bg-gray-50 transition-colors" onclick="showDrepDetail(2)">
+          <div class="w-12 h-12 rounded-full avatar-bg-2 flex items-center justify-center text-white text-lg font-bold flex-shrink-0 shadow-sm">B</div>
+          <div class="flex-1 min-w-0 pt-0.5">
+            <div class="flex items-center justify-between mb-1">
+               <h3 class="font-bold text-gray-900">Bob Smith</h3>
+               <button class="text-xs font-semibold text-cardano border border-cardano rounded-full px-3 py-1 hover:bg-cardano hover:text-white transition-colors">Follow</button>
+            </div>
+            <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed">Cardano 社区早期贡献者，质押池运营商 (SPO)。关注网络参数优化。</p>
+            <div class="mt-2 flex gap-4 text-xs text-gray-400">
+               <span>投票参与: <b class="text-gray-700">85%</b></span>
+               <span>粉丝: <b class="text-gray-700">890</b></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 4. 代表详情 (DRep Detail) ==================== -->
+    <div id="page-drep-detail" class="page pb-16 bg-white">
+      <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 flex items-center h-14 px-2">
+        <button onclick="navigateTo('dreps')" class="p-2 mr-2 rounded-full hover:bg-gray-100">
+          <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+        </button>
+        <span class="font-bold text-lg">Alice Zhang</span>
+      </header>
+
+      <div class="relative">
+         <!-- 封面图占位 -->
+         <div class="h-24 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+         <div class="px-4 relative mb-4">
+            <div class="w-20 h-20 rounded-full avatar-bg-4 border-4 border-white absolute -top-10 flex items-center justify-center text-white text-2xl font-bold shadow-sm">A</div>
+            <div class="pt-12 flex justify-end">
+               <button class="text-sm font-bold bg-black text-white px-4 py-1.5 rounded-full">Follow</button>
+            </div>
+            
+            <div class="mt-2">
+               <h1 class="text-xl font-bold text-gray-900 flex items-center gap-1">
+                 Alice Zhang
+                 <svg class="w-5 h-5 text-cardano" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+               </h1>
+               <p class="text-sm text-gray-500 mb-3">@alice_dev_cardano</p>
+               <p class="text-[15px] text-gray-800 leading-relaxed mb-3">我相信去中心化是区块链的核心价值。作为 DRep，我将始终站在社区利益的角度，推动透明、公平、可持续的治理决策。Building on Cardano since 2018.</p>
+               
+               <div class="flex gap-4 text-sm mb-4">
+                  <span class="text-gray-500"><b class="text-gray-900">234</b> Following</span>
+                  <span class="text-gray-500"><b class="text-gray-900">1,204</b> Followers</span>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- DRep 内容 Tabs -->
+      <div class="flex border-b border-gray-100 px-4 mb-2">
+         <button class="flex-1 py-3 text-sm font-bold text-cardano border-b-2 border-cardano">近期投票</button>
+         <button class="flex-1 py-3 text-sm font-medium text-gray-500">动态</button>
+         <button class="flex-1 py-3 text-sm font-medium text-gray-500">简介</button>
+      </div>
+
+      <!-- 列表内容 -->
+      <div class="divide-y divide-gray-50">
+         <div class="px-4 py-3">
+            <div class="flex items-center gap-2 mb-1">
+               <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100">Voted YES</span>
+               <span class="text-xs text-gray-400">· 2h ago</span>
+            </div>
+            <p class="text-sm font-medium text-gray-900">关于增加 Cardano 网络参数 K 值的提案</p>
+         </div>
+         <div class="px-4 py-3">
+            <div class="flex items-center gap-2 mb-1">
+               <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100">Voted YES</span>
+               <span class="text-xs text-gray-400">· 1d ago</span>
+            </div>
+            <p class="text-sm font-medium text-gray-900">Q1 财政部资金分配提案</p>
+         </div>
+         <div class="px-4 py-3">
+            <div class="flex items-center gap-2 mb-1">
+               <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded border border-red-100">Voted NO</span>
+               <span class="text-xs text-gray-400">· 3d ago</span>
+            </div>
+            <p class="text-sm font-medium text-gray-900">链上身份验证机制提案</p>
+         </div>
+      </div>
+    </div>
+
+    <!-- ==================== 5. 我的模块 (Profile) ==================== -->
+    <div id="page-profile" class="page pb-16">
+      <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 flex items-center justify-between h-14 px-4">
+         <h1 class="text-xl font-bold">Profile</h1>
+         <button onclick="logout()" class="text-sm text-gray-500 font-medium">Log out</button>
+      </header>
+
+      <div class="px-4 pt-6 pb-4">
+         <div class="flex items-start justify-between mb-4">
+            <div class="w-16 h-16 rounded-full avatar-bg-1 flex items-center justify-center text-white text-2xl font-bold shadow-sm">U</div>
+            <button class="text-sm font-semibold border border-gray-300 rounded-full px-4 py-1.5 text-gray-700">Edit Profile</button>
+         </div>
+         <h2 class="text-xl font-bold text-gray-900">User_8x7k2m</h2>
+         <p class="text-sm text-gray-500 font-mono mb-4">addr1q...3x8k</p>
+         
+         <div class="flex gap-4 text-sm">
+            <span class="text-gray-500"><b class="text-gray-900">12</b> Following</span>
+            <span class="text-gray-500"><b class="text-gray-900">4</b> Followers</span>
+         </div>
+      </div>
+
+      <!-- Profile Tabs -->
+      <div class="flex border-b border-gray-100 px-4 sticky top-14 bg-white z-10">
+        <button class="profile-tab flex-1 py-3 text-sm font-bold text-cardano border-b-[3px] border-cardano transition-colors" data-tab="comments">Comments</button>
+        <button class="profile-tab flex-1 py-3 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors" data-tab="highlights">Highlights</button>
+      </div>
+
+      <!-- Tab Contents -->
+      <div id="tab-comments" class="tab-content">
+        <div class="divide-y divide-gray-50">
+           <!-- Comment Item -->
+           <article class="px-4 py-4 hover:bg-gray-50 tap-highlight" onclick="showProposalDetail(1)">
+              <div class="flex items-center gap-2 mb-1.5">
+                 <div class="w-5 h-5 rounded-full avatar-bg-1 flex items-center justify-center text-white text-[10px] font-bold">U</div>
+                 <span class="text-xs font-bold text-gray-900">User_8x7k2m</span>
+                 <span class="text-xs text-gray-400">· 2h</span>
+              </div>
+              <p class="text-[15px] text-gray-800 mb-2">这个提案非常有意义！我完全支持增加K值来促进去中心化。</p>
+              <div class="flex items-center gap-2 p-2 rounded bg-gray-50 border border-gray-100">
+                 <div class="w-1 h-8 bg-cardano rounded-full"></div>
+                 <div class="text-xs text-gray-500 line-clamp-1">Replying to <b class="text-gray-900">关于增加 Cardano 网络参数 K 值的提案</b></div>
+              </div>
+           </article>
+           
+           <article class="px-4 py-4 hover:bg-gray-50 tap-highlight" onclick="showProposalDetail(2)">
+              <div class="flex items-center gap-2 mb-1.5">
+                 <div class="w-5 h-5 rounded-full avatar-bg-1 flex items-center justify-center text-white text-[10px] font-bold">U</div>
+                 <span class="text-xs font-bold text-gray-900">User_8x7k2m</span>
+                 <span class="text-xs text-gray-400">· 1d</span>
+              </div>
+              <p class="text-[15px] text-gray-800 mb-2">财政部资金分配应该更加透明，建议增加社区监督机制。</p>
+              <div class="flex items-center gap-2 p-2 rounded bg-gray-50 border border-gray-100">
+                 <div class="w-1 h-8 bg-blue-500 rounded-full"></div>
+                 <div class="text-xs text-gray-500 line-clamp-1">Replying to <b class="text-gray-900">Q1 财政部资金分配提案</b></div>
+              </div>
+           </article>
+        </div>
+      </div>
+
+      <div id="tab-highlights" class="tab-content hidden">
+         <div class="divide-y divide-gray-50">
+            <!-- Highlight Item -->
+            <article class="px-4 py-4 hover:bg-gray-50 tap-highlight" onclick="showProposalDetail(1)">
+               <div class="flex items-center gap-2 mb-1.5">
+                  <div class="w-5 h-5 rounded-full avatar-bg-1 flex items-center justify-center text-white text-[10px] font-bold">U</div>
+                  <span class="text-xs font-bold text-gray-900">User_8x7k2m</span>
+                  <span class="text-xs text-gray-400">· 2h</span>
+               </div>
+               
+               <!-- 引用划线部分 -->
+               <div class="mb-2 pl-3 border-l-[3px] border-cardano text-sm text-gray-500 italic py-1 bg-cardano-light/20 rounded-r">
+                   "将 K 参数从 500 增加到 1000，以进一步促进网络去中心化"
+               </div>
+               
+               <p class="text-[15px] text-gray-800 mb-2">这是本提案的核心！完全赞同。</p>
+               
+               <div class="text-xs text-gray-400 mt-2">
+                  on <b class="text-gray-600">关于增加 Cardano 网络参数 K 值的提案</b>
+               </div>
+            </article>
+         </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== 6. 全局底部 Tab Bar ==================== -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white/95 backdrop-blur-xl border-t border-gray-200 safe-bottom z-[100]">
+      <div class="flex h-[52px]">
+        <button onclick="navigateTo('proposals')" class="tab-btn flex-1 flex flex-col items-center justify-center gap-0.5 tap-highlight group" data-page="proposals">
+          <svg class="w-6 h-6 transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+          <span class="text-[10px] font-bold">Proposals</span>
+        </button>
+        <button onclick="navigateTo('dreps')" class="tab-btn flex-1 flex flex-col items-center justify-center gap-0.5 tap-highlight group" data-page="dreps">
+          <svg class="w-6 h-6 transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+          <span class="text-[10px] font-bold">DReps</span>
+        </button>
+        <button onclick="navigateTo('profile')" class="tab-btn flex-1 flex flex-col items-center justify-center gap-0.5 tap-highlight group" data-page="profile">
+          <svg class="w-6 h-6 transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+          <span class="text-[10px] font-bold">Profile</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ==================== 7. 登录弹窗 ==================== -->
+    <div id="login-modal" class="fixed inset-0 z-[200] hidden">
+      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="hideLoginModal()"></div>
+      <div class="absolute bottom-0 left-0 right-0 max-w-lg mx-auto bg-white rounded-t-3xl safe-bottom transform transition-transform duration-300">
+        <div class="p-6">
+          <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
+          <h2 class="text-2xl font-bold text-center mb-2">Connect Wallet</h2>
+          <p class="text-sm text-gray-500 text-center mb-8 px-8">连接你的 Cardano 钱包以参与治理讨论和互动。</p>
+          
+          <div class="space-y-3">
+            <button onclick="connectWallet('nami')" class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl border border-gray-100 transition-colors group">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold shadow-sm group-hover:scale-105 transition-transform">N</div>
+                <span class="font-bold text-lg text-gray-800">Nami</span>
+              </div>
+              <span class="text-xs font-semibold bg-gray-200 text-gray-600 px-2 py-1 rounded">Popular</span>
+            </button>
+            <button onclick="connectWallet('eternl')" class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl border border-gray-100 transition-colors group">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center text-white font-bold shadow-sm group-hover:scale-105 transition-transform">E</div>
+                <span class="font-bold text-lg text-gray-800">Eternl</span>
+              </div>
+            </button>
+            <button onclick="connectWallet('flint')" class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl border border-gray-100 transition-colors group">
+              <div class="flex items-center gap-4">
+                 <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-white font-bold shadow-sm group-hover:scale-105 transition-transform">F</div>
+                 <span class="font-bold text-lg text-gray-800">Flint</span>
+              </div>
+            </button>
+          </div>
+
+          <p class="text-[10px] text-gray-400 text-center mt-8">
+            By connecting, you agree to our Terms of Service and Privacy Policy.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ------------------- 路由与导航 -------------------
+    function navigateTo(pageName) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      const targetPage = document.getElementById(`page-${pageName}`);
+      if (targetPage) targetPage.classList.add('active');
+      
+      // 滚动到顶部
+      window.scrollTo(0, 0);
+      
+      updateTabBar(pageName);
+    }
+
+    function updateTabBar(activePage) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const page = btn.dataset.page;
+        const isActive = page === activePage || 
+          (activePage === 'proposal-detail' && page === 'proposals') || 
+          (activePage === 'drep-detail' && page === 'dreps');
+        
+        const icon = btn.querySelector('svg');
+        const text = btn.querySelector('span');
+        
+        if (isActive) {
+           btn.classList.add('text-cardano');
+           btn.classList.remove('text-gray-400');
+           icon.setAttribute('fill', 'currentColor'); // 实心图标
+        } else {
+           btn.classList.remove('text-cardano');
+           btn.classList.add('text-gray-400');
+           icon.setAttribute('fill', 'none'); // 空心图标
+        }
+      });
+    }
+
+    // ------------------- 业务逻辑 -------------------
+    
+    // 跳转详情
+    function showProposalDetail(id) {
+      navigateTo('proposal-detail');
+    }
+
+    function showDrepDetail(id) {
+      navigateTo('drep-detail');
+    }
+
+    // 登录流程
+    function showLoginModal() {
+      document.getElementById('login-modal').classList.remove('hidden');
+    }
+
+    function hideLoginModal() {
+      document.getElementById('login-modal').classList.add('hidden');
+    }
+
+    function connectWallet(walletName) {
+      hideLoginModal();
+      document.getElementById('login-btn').classList.add('hidden');
+      const avatar = document.getElementById('user-avatar');
+      avatar.classList.remove('hidden');
+      avatar.classList.add('flex');
+      
+      // 模拟 Toast
+      alert('已连接 ' + walletName + ' 钱包');
+    }
+
+    function logout() {
+      document.getElementById('login-btn').classList.remove('hidden');
+      const avatar = document.getElementById('user-avatar');
+      avatar.classList.add('hidden');
+      avatar.classList.remove('flex');
+      navigateTo('proposals');
+    }
+
+    // ------------------- UI 交互 -------------------
+
+    // 提案列表筛选 Tab
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.filter-tab').forEach(t => {
+          t.classList.remove('text-cardano', 'font-bold', 'border-cardano');
+          t.classList.add('text-gray-500', 'font-medium', 'border-transparent');
+          t.classList.remove('border-b-[3px]');
+        });
+        this.classList.add('text-cardano', 'font-bold', 'border-cardano', 'border-b-[3px]');
+        this.classList.remove('text-gray-500', 'font-medium', 'border-transparent');
+        
+        // 模拟筛选逻辑 (此处仅做视觉切换)
+      });
+    });
+
+    // Profile 页面 Tab
+    document.querySelectorAll('.profile-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        const tabName = this.dataset.tab;
+        
+        // 样式切换
+        document.querySelectorAll('.profile-tab').forEach(t => {
+          t.classList.remove('text-cardano', 'font-bold', 'border-cardano', 'border-b-[3px]');
+          t.classList.add('text-gray-500', 'font-medium');
+        });
+        this.classList.add('text-cardano', 'font-bold', 'border-cardano', 'border-b-[3px]');
+        this.classList.remove('text-gray-500', 'font-medium');
+        
+        // 内容切换
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+        document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+      });
+    });
+    
+    // 划线评论演示
+    function showHighlightComment(el) {
+       // 实际应用中这里会打开一个评论弹窗或侧边栏
+       // el.classList.add('bg-yellow-200');
+       alert('此处展示针对该划线文本的评论列表');
+    }
+
+    // 初始化
+    updateTabBar('proposals');
+  </script>
+</body>
+</html>

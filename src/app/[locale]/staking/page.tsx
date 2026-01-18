@@ -42,11 +42,11 @@ async function fetchPoolInfo() {
     poolInfo,
     poolStakeSnapshot,
     validatorInfo
-  }
+  };
 }
 
 export default async function Staking() {
-  const { poolInfo, poolStakeSnapshot, validatorInfo } = await fetchPoolInfo() || {
+  const { poolInfo, poolStakeSnapshot, validatorInfo } = (await fetchPoolInfo()) || {
     poolInfo: null,
     poolStakeSnapshot: null,
     validatorInfo: null
