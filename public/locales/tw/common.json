@@ -1,6 +1,7 @@
 {
   "header.blogs": "部落格",
   "header.staking": "質押",
+  "header.products": "產品",
   "header.about": "關於我們",
   "common.poolName": "Pao Pool",
   "common.delegate": "質押",
@@ -75,5 +76,12 @@
   "about.ourTeam.yoyo.description": "把想法變成溫暖的樣子",
   "about.ourTeam.paopao.name": "Paopao",
   "about.ourTeam.paopao.title": "我們的寶貝",
-  "about.ourTeam.paopao.description": "賣萌和打斷工作的專家"
+  "about.ourTeam.paopao.description": "賣萌和打斷工作的專家",
+
+  "products.title": "我們的產品 ✨",
+  "products.description": "探索 Bubble Studio 為 Cardano 生態帶來的創新產品。",
+  "products.voda.name": "VODA",
+  "products.voda.fullName": "Voice of ADA",
+  "products.voda.description": "Cardano 治理參與平台，讓每個 ADA 持有者都能發出自己的聲音。",
+  "products.voda.linkText": "訪問網站"
 }

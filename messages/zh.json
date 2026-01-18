@@ -2,6 +2,7 @@
   "header": {
     "blogs": "博客",
     "staking": "质押",
+    "products": "产品",
     "about": "关于我们"
   },
   "common": {
@@ -156,5 +157,15 @@
     "title_cons": "反对观点",
     "title_our_opinion": "我们的观点",
     "related_tweets": "相关讨论"
+  },
+  "products": {
+    "title": "我们的产品 ✨",
+    "description": "探索 Bubble Studio 为 Cardano 生态带来的创新产品。",
+    "voda": {
+      "name": "VODA",
+      "fullName": "Voice of ADA",
+      "description": "Cardano 社区信息聚合平台，听到 ADA 的声音。",
+      "linkText": "访问网站"
+    }
   }
 }

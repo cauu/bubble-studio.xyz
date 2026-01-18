@@ -2,6 +2,7 @@
   "header": {
     "blogs": "Blog",
     "staking": "Staking",
+    "products": "Products",
     "about": "About Us"
   },
   "common": {
@@ -156,5 +157,15 @@
     "title_cons": "Opposing Views",
     "title_our_opinion": "Our Opinion",
     "related_tweets": "Related Discussions"
+  },
+  "products": {
+    "title": "Our Products ✨",
+    "description": "Explore innovative products from Bubble Studio for the Cardano ecosystem.",
+    "voda": {
+      "name": "VODA",
+      "fullName": "Voice of ADA",
+      "description": "A Cardano community information aggregation platform. Hear the voice of ADA.",
+      "linkText": "Visit Website"
+    }
   }
 }
