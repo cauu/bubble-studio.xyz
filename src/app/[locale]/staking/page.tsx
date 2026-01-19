@@ -84,15 +84,15 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
     alternates: {
       canonical: url,
       languages: {
-        'en': `${baseUrl}/staking`,
-        'zh': `${baseUrl}/zh/staking`,
-        'tw': `${baseUrl}/tw/staking`
+        en: `${baseUrl}/staking`,
+        zh: `${baseUrl}/zh/staking`,
+        tw: `${baseUrl}/tw/staking`
       }
     }
   };
 }
 
-export default async function Staking({ params: { locale } }: Props) {
+export default async function Staking() {
   const { poolInfo, poolStakeSnapshot, validatorInfo } = (await fetchPoolInfo()) || {
     poolInfo: null,
     poolStakeSnapshot: null,

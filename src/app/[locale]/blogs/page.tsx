@@ -40,9 +40,9 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
     alternates: {
       canonical: url,
       languages: {
-        'en': `${baseUrl}/blogs`,
-        'zh': `${baseUrl}/zh/blogs`,
-        'tw': `${baseUrl}/tw/blogs`
+        en: `${baseUrl}/blogs`,
+        zh: `${baseUrl}/zh/blogs`,
+        tw: `${baseUrl}/tw/blogs`
       }
     }
   };

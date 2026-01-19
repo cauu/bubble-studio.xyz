@@ -29,8 +29,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const slug = params.slug;
       // 从 slug 中提取语言（假设格式为 xxx-xxx-xxx-locale）
       const parts = slug.split('-');
-      const possibleLocale = parts[parts.length - 1];
-      const locale = routing.locales.includes(possibleLocale as any) ? possibleLocale : 'en';
+      // const possibleLocale = parts[parts.length - 1];
+      // const locale = routing.locales.includes(possibleLocale as any) ? possibleLocale : 'en';
       const baseSlug = parts.slice(0, -1).join('-');
 
       return routing.locales.map((loc) => {
@@ -49,9 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
 
     // 去重（可能有重复的 URL）
-    const uniqueBlogRoutes = Array.from(
-      new Map(blogRouteEntries.map((entry) => [entry.url, entry])).values()
-    );
+    const uniqueBlogRoutes = Array.from(new Map(blogRouteEntries.map((entry) => [entry.url, entry])).values());
 
     return [...staticRouteEntries, ...uniqueBlogRoutes];
   } catch (error) {
@@ -59,4 +57,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return staticRouteEntries;
   }
 }
-

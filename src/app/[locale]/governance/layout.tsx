@@ -40,9 +40,9 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
     alternates: {
       canonical: url,
       languages: {
-        'en': `${baseUrl}/governance`,
-        'zh': `${baseUrl}/zh/governance`,
-        'tw': `${baseUrl}/tw/governance`
+        en: `${baseUrl}/governance`,
+        zh: `${baseUrl}/zh/governance`,
+        tw: `${baseUrl}/tw/governance`
       }
     }
   };
@@ -51,4 +51,3 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
 export default function GovernanceLayout({ children }: Props) {
   return <>{children}</>;
 }
-

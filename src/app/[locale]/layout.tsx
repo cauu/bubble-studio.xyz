@@ -46,7 +46,7 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
           alt: t('seo.siteName')
         }
       ],
-      alternateLocale: routing.locales.filter(l => l !== locale)
+      alternateLocale: routing.locales.filter((l) => l !== locale)
     },
     twitter: {
       card: 'summary_large_image',
@@ -58,9 +58,9 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
     alternates: {
       canonical: url,
       languages: {
-        'en': baseUrl,
-        'zh': `${baseUrl}/zh`,
-        'tw': `${baseUrl}/tw`
+        en: baseUrl,
+        zh: `${baseUrl}/zh`,
+        tw: `${baseUrl}/tw`
       }
     },
     icons: {

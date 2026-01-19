@@ -1,7 +1,6 @@
 import React from 'react';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
-import { routing } from '@/i18n/routing';
 
 type Props = {
   params: { locale: string };
@@ -40,15 +39,15 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
     alternates: {
       canonical: url,
       languages: {
-        'en': `${baseUrl}/about`,
-        'zh': `${baseUrl}/zh/about`,
-        'tw': `${baseUrl}/tw/about`
+        en: `${baseUrl}/about`,
+        zh: `${baseUrl}/zh/about`,
+        tw: `${baseUrl}/tw/about`
       }
     }
   };
 }
 
-export default async function About({ params: { locale } }: Props) {
+export default async function About() {
   const t = await getTranslations();
 
   return (

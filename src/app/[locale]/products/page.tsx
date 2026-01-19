@@ -39,15 +39,15 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
     alternates: {
       canonical: url,
       languages: {
-        'en': `${baseUrl}/products`,
-        'zh': `${baseUrl}/zh/products`,
-        'tw': `${baseUrl}/tw/products`
+        en: `${baseUrl}/products`,
+        zh: `${baseUrl}/zh/products`,
+        tw: `${baseUrl}/tw/products`
       }
     }
   };
 }
 
-export default async function Products({ params: { locale } }: Props) {
+export default async function Products() {
   const t = await getTranslations();
 
   return (
