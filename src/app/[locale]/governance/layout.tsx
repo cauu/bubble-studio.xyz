@@ -1,23 +1,23 @@
-import { getSortedPostsData } from '@/lib/posts';
-import { BlogsClient } from './BlogsClient';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
+import { ReactNode } from 'react';
 
 type Props = {
+  children: ReactNode;
   params: { locale: string };
 };
 
 export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale });
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz';
-  const url = `${baseUrl}/${locale === 'en' ? '' : locale + '/'}blogs`;
+  const url = `${baseUrl}/${locale === 'en' ? '' : locale + '/'}governance`;
 
   return {
-    title: t('seo.blogs.title'),
-    description: t('seo.blogs.description'),
+    title: t('seo.governance.title'),
+    description: t('seo.governance.description'),
     openGraph: {
-      title: t('seo.blogs.title'),
-      description: t('seo.blogs.description'),
+      title: t('seo.governance.title'),
+      description: t('seo.governance.description'),
       url,
       siteName: t('seo.siteName'),
       type: 'website',
@@ -33,24 +33,22 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
     },
     twitter: {
       card: 'summary_large_image',
-      title: t('seo.blogs.title'),
-      description: t('seo.blogs.description'),
+      title: t('seo.governance.title'),
+      description: t('seo.governance.description'),
       images: [`${baseUrl}/og-default.png`]
     },
     alternates: {
       canonical: url,
       languages: {
-        'en': `${baseUrl}/blogs`,
-        'zh': `${baseUrl}/zh/blogs`,
-        'tw': `${baseUrl}/tw/blogs`
+        'en': `${baseUrl}/governance`,
+        'zh': `${baseUrl}/zh/governance`,
+        'tw': `${baseUrl}/tw/governance`
       }
     }
   };
 }
 
-export default async function Blogs({ params: { locale } }: Props) {
-  const allPosts = await getSortedPostsData(locale as 'zh' | 'en' | 'tw');
-  const allTags = Array.from(new Set(allPosts.flatMap((post) => post.tags)).values());
-
-  return <BlogsClient allPosts={allPosts} allTags={allTags} />;
+export default function GovernanceLayout({ children }: Props) {
+  return <>{children}</>;
 }
+

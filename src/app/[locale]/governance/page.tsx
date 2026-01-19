@@ -13,6 +13,9 @@ import EmptyList from '@/components/EmptyList';
 import { About } from '@/components/governance/About';
 import { ProposalCard } from '@/components/governance/ProposalCard';
 
+// Note: generateMetadata cannot be used in client components
+// Metadata should be handled in a parent layout or wrapper component
+
 export default function Governance() {
   const [currentTab, setCurrentTab] = useState<'actions' | 'topics'>('actions');
   const [actions, setActions] = useState<IGovActionContent[]>([]);

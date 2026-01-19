@@ -1,5 +1,6 @@
-import { getMessages } from 'next-intl/server';
+import { getMessages, getTranslations } from 'next-intl/server';
 import { ReactNode } from 'react';
+import { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
 import { Layout } from '@/components/Layout';
 import { IntlProvider } from '@/components/IntlProvider';
@@ -18,6 +19,62 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
+  const t = await getTranslations({ locale });
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz';
+  const url = baseUrl;
+
+  return {
+    title: {
+      default: t('seo.defaultTitle'),
+      template: `%s | ${t('seo.siteName')}`
+    },
+    description: t('seo.defaultDescription'),
+    metadataBase: new URL(baseUrl),
+    openGraph: {
+      title: t('seo.defaultTitle'),
+      description: t('seo.defaultDescription'),
+      url,
+      siteName: t('seo.siteName'),
+      type: 'website',
+      locale: locale,
+      images: [
+        {
+          url: `${baseUrl}/og-default.png`,
+          width: 1200,
+          height: 630,
+          alt: t('seo.siteName')
+        }
+      ],
+      alternateLocale: routing.locales.filter(l => l !== locale)
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('seo.defaultTitle'),
+      description: t('seo.defaultDescription'),
+      images: [`${baseUrl}/og-default.png`],
+      creator: '@bubblestudio'
+    },
+    alternates: {
+      canonical: url,
+      languages: {
+        'en': baseUrl,
+        'zh': `${baseUrl}/zh`,
+        'tw': `${baseUrl}/tw`
+      }
+    },
+    icons: {
+      icon: GlobalConfig.assetsUrl.favicon
+    },
+    viewport: {
+      width: 'device-width',
+      initialScale: 1,
+      maximumScale: 5
+    },
+    themeColor: '#0ea5e9'
+  };
+}
+
 export default async function LocaleLayout({ children, params: { locale } }: Props) {
   // 获取当前语言的翻译消息
   const messages = await getMessages();
@@ -25,12 +82,6 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   return (
     <html lang={locale}>
       <head>
-        <meta charSet="UTF-8" />
-        <meta name="description" content="Bubble Studio - 扎根于 Cardano 的独立小作坊" />
-        <meta name="title" content="Bubble Studio" />
-        <title>Bubble Studio</title>
-        <link rel="icon" href={GlobalConfig.assetsUrl.favicon} />
-
         {/* 字体优化：预加载关键字体文件 */}
         <link
           rel="preload"
