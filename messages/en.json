@@ -167,5 +167,30 @@
       "description": "A Cardano community information aggregation platform. Hear the voice of ADA.",
       "linkText": "Visit Website"
     }
+  },
+  "seo": {
+    "siteName": "Bubble Studio",
+    "defaultTitle": "Bubble Studio - A Small Family Workshop Rooted in Cardano",
+    "defaultDescription": "Bubble Studio is an independent development team rooted in the Cardano ecosystem. We provide Pao Pool staking services and are committed to bringing innovative products to the Cardano community.",
+    "about": {
+      "title": "About Us - Bubble Studio",
+      "description": "Learn about Bubble Studio, a small family workshop taking root and growing on Cardano. We are committed to bringing fun, elegant, and practical products to the community through AI and Cardano technology."
+    },
+    "products": {
+      "title": "Our Products - Bubble Studio",
+      "description": "Explore innovative products from Bubble Studio for the Cardano ecosystem, including VODA (Voice of ADA) and other governance participation platforms."
+    },
+    "staking": {
+      "title": "Staking - Bubble Studio",
+      "description": "Stake your ADA to Pao Pool and support our development work. We provide transparent and reliable Cardano stake pool services with over a year of stable operation."
+    },
+    "governance": {
+      "title": "Governance - Bubble Studio",
+      "description": "Learn about Cardano governance actions and hot topics, participate in decentralized decision-making, and let every ADA holder have their voice heard."
+    },
+    "blogs": {
+      "title": "Blog - Bubble Studio",
+      "description": "Read the latest articles from Bubble Studio, learn about our development progress, product updates, and community activities in the Cardano ecosystem."
+    }
   }
 }

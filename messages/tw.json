@@ -167,5 +167,30 @@
       "description": "Cardano 社區資訊聚合平台，聽到 ADA 的聲音。",
       "linkText": "訪問網站"
     }
+  },
+  "seo": {
+    "siteName": "Bubble Studio",
+    "defaultTitle": "Bubble Studio - 扎根於 Cardano 的獨立小作坊",
+    "defaultDescription": "Bubble Studio 是一個扎根於 Cardano 生態的獨立開發團隊。我們提供 Pao Pool 質押服務，並致力於為 Cardano 生態帶來創新產品。",
+    "about": {
+      "title": "關於我們 - Bubble Studio",
+      "description": "了解 Bubble Studio 團隊，一個在 Cardano 上生根發芽的小家庭作坊。我們致力於透過 AI 和 Cardano 技術為社群帶來有趣、優雅且實用的產品。"
+    },
+    "products": {
+      "title": "我們的產品 - Bubble Studio",
+      "description": "探索 Bubble Studio 為 Cardano 生態帶來的創新產品，包括 VODA (Voice of ADA) 等治理參與平台。"
+    },
+    "staking": {
+      "title": "質押 - Bubble Studio",
+      "description": "質押您的 ADA 到 Pao Pool，支持我們的開發工作。我們提供透明、可靠的 Cardano 權益池服務，已穩定運行超過一年。"
+    },
+    "governance": {
+      "title": "治理 - Bubble Studio",
+      "description": "了解 Cardano 治理行動和熱門話題，參與去中心化決策，讓每個 ADA 持有者都能發出自己的聲音。"
+    },
+    "blogs": {
+      "title": "部落格 - Bubble Studio",
+      "description": "閱讀 Bubble Studio 的最新文章，了解我們在 Cardano 生態中的開發進展、產品更新和社群動態。"
+    }
   }
 }
