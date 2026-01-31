@@ -44,11 +44,11 @@ export function HomeClient({ latestPosts }: Props) {
   return (
     <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6">
       {/* Hero Section */}
-      <section className="py-12 md:py-20 text-center">
-        <h1 className="text-4xl md:text-6xl font-black text-gray-800 mb-4">Bubble Studio</h1>
-        <p className="text-xl md:text-2xl text-gray-600 mb-6">{t('home.subtitle')}</p>
+      <section className="py-8 md:py-12 text-center">
+        <h1 className="text-4xl md:text-6xl font-black text-gray-800 mb-3">Bubble Studio</h1>
+        <p className="text-xl md:text-2xl text-gray-600 mb-4">{t('home.subtitle')}</p>
         <p className="text-base md:text-lg text-gray-500 max-w-3xl mx-auto leading-relaxed">{t('home.description')}</p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
           <a
             href="#philosophy"
             className="px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-500 text-white font-medium rounded-full hover:shadow-lg transition-shadow"
@@ -65,12 +65,12 @@ export function HomeClient({ latestPosts }: Props) {
       </section>
 
       {/* Philosophy Section */}
-      <section id="philosophy" className="py-12 md:py-16">
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-lg">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">
+      <section id="philosophy" className="py-6 md:py-10">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 text-center">
             {t('home.philosophy.title')}
           </h2>
-          <div className="space-y-4 text-gray-700 leading-relaxed max-w-4xl mx-auto">
+          <div className="space-y-3 text-gray-700 leading-relaxed max-w-4xl mx-auto">
             <p>{t('home.philosophy.paragraph1')}</p>
             <p>{t('home.philosophy.paragraph2')}</p>
             <p className="font-medium text-gray-800">{t('home.philosophy.paragraph3')}</p>
@@ -79,12 +79,12 @@ export function HomeClient({ latestPosts }: Props) {
       </section>
 
       {/* What We Do Section */}
-      <section className="py-12 md:py-16">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">{t('home.whatWeDo.title')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="py-6 md:py-10">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">{t('home.whatWeDo.title')}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {/* Pao Pool */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-            <div className="w-12 h-12 bg-gradient-to-br from-sky-100 to-blue-100 rounded-xl flex items-center justify-center text-sky-500 mb-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="w-12 h-12 bg-gradient-to-br from-sky-100 to-blue-100 rounded-xl flex items-center justify-center text-sky-500 mb-3">
               <PoolIcon />
             </div>
             <h3 className="text-lg font-bold text-gray-800 mb-2">{t('home.whatWeDo.paoPool.title')}</h3>
@@ -92,8 +92,8 @@ export function HomeClient({ latestPosts }: Props) {
           </div>
 
           {/* Governance */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-            <div className="w-12 h-12 bg-gradient-to-br from-sky-100 to-blue-100 rounded-xl flex items-center justify-center text-sky-500 mb-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="w-12 h-12 bg-gradient-to-br from-sky-100 to-blue-100 rounded-xl flex items-center justify-center text-sky-500 mb-3">
               <GovernanceIcon />
             </div>
             <h3 className="text-lg font-bold text-gray-800 mb-2">{t('home.whatWeDo.governance.title')}</h3>
@@ -101,8 +101,8 @@ export function HomeClient({ latestPosts }: Props) {
           </div>
 
           {/* Products */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-            <div className="w-12 h-12 bg-gradient-to-br from-sky-100 to-blue-100 rounded-xl flex items-center justify-center text-sky-500 mb-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="w-12 h-12 bg-gradient-to-br from-sky-100 to-blue-100 rounded-xl flex items-center justify-center text-sky-500 mb-3">
               <ProductIcon />
             </div>
             <h3 className="text-lg font-bold text-gray-800 mb-2">{t('home.whatWeDo.products.title')}</h3>
@@ -112,10 +112,10 @@ export function HomeClient({ latestPosts }: Props) {
       </section>
 
       {/* Support Section */}
-      <section className="py-12 md:py-16">
-        <div className="bg-gradient-to-r from-sky-500 to-blue-500 rounded-2xl md:rounded-3xl p-6 md:p-10 text-center text-white">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">{t('home.support.title')}</h2>
-          <p className="text-white/90 mb-6 max-w-2xl mx-auto">{t('home.support.description')}</p>
+      <section className="py-6 md:py-10">
+        <div className="bg-gradient-to-r from-sky-500 to-blue-500 rounded-2xl md:rounded-3xl p-6 md:p-8 text-center text-white">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">{t('home.support.title')}</h2>
+          <p className="text-white/90 mb-5 max-w-2xl mx-auto">{t('home.support.description')}</p>
           <Link
             href="/staking"
             className="inline-block px-8 py-3 bg-white text-sky-500 font-medium rounded-full hover:shadow-lg transition-shadow"
@@ -127,11 +127,11 @@ export function HomeClient({ latestPosts }: Props) {
 
       {/* Latest Posts Section */}
       {latestPosts.length > 0 && (
-        <section className="py-12 md:py-16">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">
+        <section className="py-6 md:py-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">
             {t('home.latestPosts.title')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {latestPosts.map((post) => (
               <BlogCard key={post.slug} post={post} onClick={handlePostClick} />
             ))}
@@ -140,8 +140,8 @@ export function HomeClient({ latestPosts }: Props) {
       )}
 
       {/* Team Section */}
-      <section className="py-12 md:py-16">
-        <div className="text-center mb-8">
+      <section className="py-6 md:py-10 pb-12 md:pb-16">
+        <div className="text-center mb-6">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{t('home.team.title')}</h2>
           <p className="text-gray-600">{t('home.team.description')}</p>
         </div>
