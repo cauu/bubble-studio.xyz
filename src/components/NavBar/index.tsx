@@ -16,7 +16,7 @@ export const NavBar = () => {
 
   // Check if we're on the home page
   const isHomePage = pathname === '/' || pathname.match(/^\/(en|zh|tw)$/);
-  
+
   const navItems = [
     {
       text: t('header.home'),

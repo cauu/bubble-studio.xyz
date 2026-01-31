@@ -65,10 +65,10 @@
   },
   "hero": {
     "title": "Pao Pool",
-    "description": ""Pao"是中文裡"泡泡"的意思。我們是一個致力於為Cardano生態帶來新穎有趣的應用的獨立家庭開發團隊。Pao Pool 是我們透明、可靠的 Cardano 權益池，已穩定運行超過一年。您的每一份質押，都是對我們開發工作的直接支持。",
+    "description": "Pao 是中文裡「泡泡」的意思。我們是一個致力於為 Cardano 生態帶來新穎有趣的應用的獨立家庭開發團隊。Pao Pool 是我們透明、可靠的 Cardano 權益池，已穩定運行超過一年。您的每一份質押，都是對我們開發工作的直接支持。",
     "tagline": "質押您的 ADA，與我們一同建設。",
     "starknet": {
-      "title": "Bubble Validator️",
+      "title": "Bubble Validator",
       "description": "Bubble Validator 是我們部署在 Starknet 網絡上的驗證者節點。我們團隊目前專注於 Cardano 生態的建設，但仍會持續關注 Starknet 的發展。如果您持有 STRK 代幣，誠邀您質押給我們，以支持我們未來的開發工作。"
     }
   },
@@ -78,15 +78,15 @@
       "steps": {
         "step1": {
           "title": "跳轉至質押頁面",
-          "description": "點擊"質押"按鈕，跳轉至質押頁面。"
+          "description": "點擊「質押」按鈕，跳轉至質押頁面。"
         },
         "step2": {
           "title": "連接錢包",
-          "description": "點擊Connect Wallet按鈕，連接您的 Cardano 錢包。"
+          "description": "點擊 Connect Wallet 按鈕，連接您的 Cardano 錢包。"
         },
         "step3": {
           "title": "確認質押",
-          "description": "點擊"Delegate"並確認交易，即可開始賺取 ADA 獎勵！"
+          "description": "點擊「Delegate」並確認交易，即可開始賺取 ADA 獎勵！"
         }
       }
     },
@@ -95,19 +95,19 @@
       "steps": {
         "step1": {
           "title": "訪問質押頁面",
-          "description": "點擊"質押"按鈕以前往操作頁面。"
+          "description": "點擊「質押」按鈕以前往操作頁面。"
         },
         "step2": {
           "title": "連接錢包",
-          "description": "在頁面右上角，點擊"連接錢包"並授權。"
+          "description": "在頁面右上角，點擊「連接錢包」並授權。"
         },
         "step3": {
           "title": "選擇質押",
-          "description": "錢包連接成功後，在"連接錢包"下方找到並點擊"Stake"按鈕。"
+          "description": "錢包連接成功後，在「連接錢包」下方找到並點擊「Stake」按鈕。"
         },
         "step4": {
           "title": "確認交易",
-          "description": "輸入您要質押的金額及獎勵接收地址，點擊"Delegate"並確認交易，即可開始賺取獎勵。"
+          "description": "輸入您要質押的金額及獎勵接收地址，點擊「Delegate」並確認交易，即可開始賺取獎勵。"
         }
       },
       "note": "詳細教程可參考 <a href='https://www.starknet.io/staking/a-guide-to-delegate-your-stake/#endur' target='_blank' rel='noopener noreferrer'>Starknet 官方指南</a>。"
@@ -170,6 +170,10 @@
     "staking": {
       "title": "質押 - Bubble Studio",
       "description": "質押您的 ADA 到 Pao Pool，支持我們的開發工作。我們提供透明、可靠的 Cardano 權益池服務，已穩定運行超過一年。"
+    },
+    "about": {
+      "title": "關於我們 - Bubble Studio",
+      "description": "了解 Bubble Studio 團隊，一個在 Cardano 上生根發芽的小家庭作坊。"
     },
     "governance": {
       "title": "治理 - Bubble Studio",

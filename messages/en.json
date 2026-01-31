@@ -171,6 +171,10 @@
       "title": "Staking - Bubble Studio",
       "description": "Stake your ADA to Pao Pool and support our development work. We provide transparent and reliable Cardano stake pool services, running stably for over a year."
     },
+    "about": {
+      "title": "About Us - Bubble Studio",
+      "description": "Learn about the Bubble Studio team, a small family workshop rooted in Cardano."
+    },
     "governance": {
       "title": "Governance - Bubble Studio",
       "description": "Learn about Cardano governance actions and hot topics, participate in decentralized decision-making, and let every ADA holder have their voice heard."

@@ -10,6 +10,12 @@ const nextConfig = {
   // 静态文件优化
   compress: true,
 
+  // ESLint 配置 - 忽略 build 时的 warning
+  eslint: {
+    ignoreDuringBuilds: false,
+    dirs: ['src']
+  },
+
   // 实验性功能
   experimental: {
     optimizePackageImports: ['lucide-react']
