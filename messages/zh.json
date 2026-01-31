@@ -1,9 +1,9 @@
 {
   "header": {
+    "home": "首页",
     "blogs": "博客",
     "staking": "质押",
-    "products": "产品",
-    "about": "关于我们"
+    "products": "产品"
   },
   "common": {
     "poolName": "Pao Pool",
@@ -11,49 +11,74 @@
     "stake": "质押",
     "view_detail": "查看详情",
     "back": "返回",
-    "no_data": "暂无数据"
+    "no_data": "暂无数据",
+    "learnMore": "了解更多"
+  },
+  "home": {
+    "subtitle": "扎根于 Cardano 的独立小作坊",
+    "description": "我们相信，区块链可以成为独立开发者和一人公司的商业底盘—无需许可的全球支付平台，永久可验证的数据存储，持续产出现金流的数字地产。",
+    "philosophy": {
+      "title": "我们的理念",
+      "paragraph1": "AI 的繁荣会让人类整体在智力和生产力上发生跃迁，但它不会为每一个个体负责，跟不上 AI 步伐的人会被遥遥的甩到身后。在这种空前的变革力量面前，人性和社会的惯性，很难让我们完成平稳过渡，更可能将我们带入乱纪元的深渊。",
+      "paragraph2": "与其把希望完全寄托给政府和企业，我们更倾向于把机会握在自己手里。",
+      "paragraph3": "因此，我们选择在数字世界建立自己的领土。从区块链开始。"
+    },
+    "whatWeDo": {
+      "title": "我们在做什么",
+      "paoPool": {
+        "title": "Pao Pool",
+        "description": "我们的 Cardano 质押池，已稳定运营超过一年。用户把 ADA 委托给我们时，资产从未离开用户钱包，也没有锁定期。这是一种双赢的众筹——你没有交出你的钱，却支持了我们的开发工作。"
+      },
+      "governance": {
+        "title": "治理参与",
+        "description": "我们积极参与 Cardano 链上治理，为去中心化决策贡献自己的声音。"
+      },
+      "products": {
+        "title": "产品探索",
+        "description": "我们正在构建 VODA（Voice of ADA），一个 Cardano 社区信息聚合平台。"
+      }
+    },
+    "support": {
+      "title": "质押到 Pao Pool",
+      "description": "你的委托是对我们最直接的支持。资金始终在你的钱包里，没有锁定期，随时可以撤回。",
+      "button": "了解更多"
+    },
+    "latestPosts": {
+      "title": "我们在想什么"
+    },
+    "team": {
+      "title": "关于我们",
+      "description": "一个独立的小作坊。",
+      "martin": {
+        "name": "Martin",
+        "role": "产品 & 开发"
+      },
+      "yoyo": {
+        "name": "Yoyo",
+        "role": "设计"
+      },
+      "paopao": {
+        "name": "Paopao",
+        "role": "我们的宝贝"
+      }
+    }
   },
   "hero": {
     "title": "Pao Pool",
-    "description": "“Pao”是中文里“泡泡”的意思。我们是一个致力于为Cardano生态带来新颖有趣的应用的独立家庭开发团队。Pao Pool 是我们透明、可靠的 Cardano 权益池，已稳定运行超过一年。您的每一份质押，都是对我们开发工作的直接支持。",
+    "description": ""Pao"是中文里"泡泡"的意思。我们是一个致力于为Cardano生态带来新颖有趣的应用的独立家庭开发团队。Pao Pool 是我们透明、可靠的 Cardano 权益池，已稳定运行超过一年。您的每一份质押，都是对我们开发工作的直接支持。",
     "tagline": "质押您的 ADA，与我们一同建设。",
     "starknet": {
       "title": "Bubble Validator️",
       "description": "Bubble Validator 是我们部署在 Starknet 网络上的验证者节点。我们团队目前专注于 Cardano 生态的建设，但仍会持续关注 Starknet 的发展。如果您持有 STRK 代币，诚邀您质押给我们，以支持我们未来的开发工作。"
     }
   },
-  "whyUs": {
-    "title": "为什么选择我们？",
-    "reasons": {
-      "supportDevelopment": {
-        "title": "支持独立开发",
-        "description": "我们致力于为 Cardano 生态带来新颖有趣的应用，您的委托是我们创造价值的核心动力。"
-      },
-      "professionalism": {
-        "title": "专业技术保障",
-        "description": "团队拥有丰富的区块链开发经验，以专业技术确保权益池 7x24 小时稳定、安全地运行。"
-      },
-      "ecosystemContribution": {
-        "title": "共建生态",
-        "description": "我们积极参与 Cardano 社区建设，为生态系统的健康发展和持续创新贡献自己的力量。"
-      },
-      "decentralization": {
-        "title": "践行去中心化",
-        "description": "作为独立节点，我们希望通过 Cardano 独特的权益和治理机制持续运营，向世界展示独立创造者在去中心化网络中的无限可能。"
-      },
-      "potentialRewards": {
-        "title": "潜在惊喜奖励",
-        "description": "为了感谢早期支持者，我们将不定期为委托人提供独家礼物或空投。"
-      }
-    }
-  },
   "stakingGuide": {
     "cardano": {
-      "title": "如何质押到 PAO Pool？🎯",
+      "title": "如何质押到 PAO Pool？",
       "steps": {
         "step1": {
           "title": "跳转至质押页面",
-          "description": "点击“质押”按钮，跳转至质押页面。"
+          "description": "点击"质押"按钮，跳转至质押页面。"
         },
         "step2": {
           "title": "连接钱包",
@@ -61,7 +86,7 @@
         },
         "step3": {
           "title": "确认质押",
-          "description": "点击“Delegate”并确认交易，即可开始赚取 ADA 奖励！"
+          "description": "点击"Delegate"并确认交易，即可开始赚取 ADA 奖励！"
         }
       }
     },
@@ -70,19 +95,19 @@
       "steps": {
         "step1": {
           "title": "访问质押页面",
-          "description": "点击“质押”按钮以前往操作页面。"
+          "description": "点击"质押"按钮以前往操作页面。"
         },
         "step2": {
           "title": "连接钱包",
-          "description": "在页面右上角，点击“连接钱包”并授权。"
+          "description": "在页面右上角，点击"连接钱包"并授权。"
         },
         "step3": {
           "title": "选择质押",
-          "description": "钱包连接成功后，在“连接钱包”下方找到并点击“Stake”按钮。"
+          "description": "钱包连接成功后，在"连接钱包"下方找到并点击"Stake"按钮。"
         },
         "step4": {
           "title": "确认交易",
-          "description": "输入您要质押的金额及奖励接收地址，点击“Delegate”并确认交易，即可开始赚取奖励。"
+          "description": "输入您要质押的金额及奖励接收地址，点击"Delegate"并确认交易，即可开始赚取奖励。"
         }
       },
       "note": "详细教程可参考 <a href='https://www.starknet.io/staking/a-guide-to-delegate-your-stake/#endur' target='_blank' rel='noopener noreferrer'>Starknet 官方指南</a>。"
@@ -104,44 +129,6 @@
   "button": {
     "stakeNow": "立即质押到"
   },
-  "about": {
-    "title1": "你好呀！👋 ",
-    "title2": "我们是 Bubble Studio！",
-    "title3": "一个在 Cardano 上生根发芽的小家庭作坊。",
-    "slogan": "扎根于 Cardano 的独立小作坊 💝",
-    "ourDreams": {
-      "title": "我们的梦想 ✨",
-      "description": "在我们看来，未来属于那些能够按照自己的节奏前进的人——主权个人。这个时代赋予了主权个人两个最伟大的礼物：AI 和 Cardano。",
-      "column1": {
-        "title": "AI 的力量",
-        "description": "创造力的「外挂」，小团队也能做很多事。"
-      },
-      "column2": {
-        "title": "Cardano 生态",
-        "description": "金融独立与自由的护城河。"
-      },
-      "vision": "我们希望我们的小作坊能够扎根于 Cardano 生态系统中，通过质押和去中心化治理独立运作，持续发展。同时，我们将继续探索 Cardano 的技术边界，为社区带来有趣、优雅且实用的产品。"
-    },
-    "ourTeam": {
-      "title": "我们的小团队👨‍💻👩‍💻🐾",
-      "description": "一个独立的小作坊。",
-      "martin": {
-        "name": "Martin",
-        "title": "产品&开发",
-        "description": "日常工作就是折腾代码"
-      },
-      "yoyo": {
-        "name": "Yoyo",
-        "title": "设计师",
-        "description": "把想法变成温暖的样子"
-      },
-      "paopao": {
-        "name": "Paopao",
-        "title": "我们的宝贝",
-        "description": "卖萌和打断工作的专家"
-      }
-    }
-  },
   "governance": {
     "actions": "治理行动",
     "hot_topics": "热门话题",
@@ -159,7 +146,7 @@
     "related_tweets": "相关讨论"
   },
   "products": {
-    "title": "我们的产品 ✨",
+    "title": "我们的产品",
     "description": "探索 Bubble Studio 为 Cardano 生态带来的创新产品。",
     "voda": {
       "name": "VODA",
@@ -172,9 +159,9 @@
     "siteName": "Bubble Studio",
     "defaultTitle": "Bubble Studio - 扎根于 Cardano 的独立小作坊",
     "defaultDescription": "Bubble Studio 是一个扎根于 Cardano 生态的独立开发团队。我们提供 Pao Pool 质押服务，并致力于为 Cardano 生态带来创新产品。",
-    "about": {
-      "title": "关于我们 - Bubble Studio",
-      "description": "了解 Bubble Studio 团队，一个在 Cardano 上生根发芽的小家庭作坊。我们致力于通过 AI 和 Cardano 技术为社区带来有趣、优雅且实用的产品。"
+    "home": {
+      "title": "Bubble Studio - 扎根于 Cardano 的独立小作坊",
+      "description": "我们相信，区块链可以成为独立开发者和一人公司的商业底盘。无需许可的全球支付平台，永久可验证的数据存储，持续产出现金流的数字地产。"
     },
     "products": {
       "title": "我们的产品 - Bubble Studio",

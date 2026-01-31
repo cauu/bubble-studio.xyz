@@ -14,16 +14,19 @@ export const NavBar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Check if we're on the home page
+  const isHomePage = pathname === '/' || pathname.match(/^\/(en|zh|tw)$/);
+  
   const navItems = [
+    {
+      text: t('header.home'),
+      path: `/`,
+      isActive: isHomePage
+    },
     {
       text: t('header.staking'),
       path: `/staking`,
       isActive: pathname.endsWith('/staking')
-    },
-    {
-      text: t('header.blogs'),
-      path: `/blogs`,
-      isActive: pathname.endsWith('/blogs')
     },
     {
       text: t('header.products'),
@@ -31,9 +34,9 @@ export const NavBar = () => {
       isActive: pathname.endsWith('/products')
     },
     {
-      text: t('header.about'),
-      path: `/about`,
-      isActive: pathname.endsWith('/about')
+      text: t('header.blogs'),
+      path: `/blogs`,
+      isActive: pathname.includes('/blogs')
     }
   ];
 
