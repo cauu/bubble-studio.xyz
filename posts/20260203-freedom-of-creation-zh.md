@@ -3,7 +3,7 @@ id: 5
 title: "创作的自由：AI 时代的新范式"
 date: "2026-02-03"
 time: "03:54"
-image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260203-freedom-of-creation.png"
+image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260203-freedom-of-creation.jpg"
 author: Martin
 language: zh
 tags:
