@@ -1,10 +1,15 @@
 ---
+id: 10
 title: "Immutable Spec: Converging Requirements, Design, Execution, and Acceptance into a Single Document"
 date: "2026-03-06"
-author: "Martin"
-excerpt: "In traditional development workflows, requirements, designs, development plans, and test records are often scattered across multiple places. Immutable Spec offers a clearer approach: each requirement corresponds to a single spec that carries requirement details, solution design, execution plan, and test acceptance criteria—and only allows appending, never overwriting history."
-tags: ["Software Engineering", "Development Process", "Documentation"]
-coverImage: "/images/blog/immutable-spec-cover.jpg"
+time: "11:30"
+image: "/images/blog/immutable-spec-cover.jpg"
+author: Martin
+language: en
+tags:
+  - "Software Engineering"
+  - "Development Process"
+  - "Documentation"
 ---
 
 ## Introduction

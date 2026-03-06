@@ -1,10 +1,15 @@
 ---
+id: 10
 title: "Immutable Spec：让需求、设计、执行和验收收敛到同一份文档"
 date: "2026-03-06"
-author: "Martin"
-excerpt: "在传统的开发流程中，需求、设计、开发计划、测试记录往往分散在多个地方。Immutable Spec 提供了一种更清晰的做法：每一个需求对应一份 spec，这份 spec 同时承载需求详情、方案设计、执行计划和测试验收标准，并且只允许追加，不允许覆盖历史。"
-tags: ["软件工程", "开发流程", "文档管理"]
-coverImage: "/images/blog/immutable-spec-cover.jpg"
+time: "11:30"
+image: "/images/blog/immutable-spec-cover.jpg"
+author: Martin
+language: zh
+tags:
+  - "软件工程"
+  - "开发流程"
+  - "文档管理"
 ---
 
 ## 引言
