@@ -47,7 +47,8 @@ export async function getStakeAddress(api: CardanoWalletApi): Promise<string> {
   const bytes = hexToBytes(hex);
 
   // Header byte: 0xe0 = mainnet stake, 0xe1 = testnet stake
-  const hrp = bytes[0] === 0xe1 ? 'stake_test' : 'stake';
+  // 0xe1 = mainnet stake address, 0xe0 = testnet
+  const hrp = bytes[0] === 0xe1 ? 'stake' : 'stake_test';
   const words = bech32.toWords(bytes);
   return bech32.encode(hrp, words, 200);
 }
