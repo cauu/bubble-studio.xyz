@@ -17,7 +17,7 @@ interface VerifyError {
 }
 
 export async function verifyAndGetToken(params: VerifyRequest): Promise<VerifyResponse> {
-  const res = await axios.post<VerifyResponse | VerifyError>(`${GlobalConfig.HUB_API_BASE_URL}/auth/verify`, params);
+  const res = await axios.post<VerifyResponse | VerifyError>(`${GlobalConfig.HUB_API_BASE_URL}/subscription/auth/verify`, params);
 
   if ('error' in res.data) {
     throw new SubscriptionError(res.data.error);
