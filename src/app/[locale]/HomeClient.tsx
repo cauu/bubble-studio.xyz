@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation';
 import { PostData } from '@/lib/posts';
 import { BlogCard } from '@/components/blogs/BlogCard';
 import { useRouter } from '@/i18n/navigation';
+import { SubscriptionCard } from '@/components/subscription/SubscriptionCard';
 
 // SVG Icons
 const PoolIcon = () => (
@@ -124,6 +125,9 @@ export function HomeClient({ latestPosts }: Props) {
           </Link>
         </div>
       </section>
+
+      {/* Subscription Section */}
+      <SubscriptionCard />
 
       {/* Latest Posts Section */}
       {latestPosts.length > 0 && (

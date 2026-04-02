@@ -155,6 +155,30 @@
       "linkText": "访问网站"
     }
   },
+  "subscription": {
+    "title": "订阅矿池动态",
+    "description": "质押到 Pao Pool 的用户可以通过钱包签名获取订阅 Token，将 Token 发送给我们的 Telegram Bot 即可接收矿池推送。",
+    "connectWallet": "连接 Cardano 钱包",
+    "selectWallet": "选择您的钱包",
+    "connecting": "正在连接钱包...",
+    "stakeAddress": "质押地址",
+    "generateToken": "生成订阅 Token",
+    "signing": "请在钱包中确认签名...",
+    "tokenReady": "Token 已生成！",
+    "tokenInstruction": "请将此 Token 发送给 Telegram Bot @BubbleStudioBot 以激活订阅。Token 有效期 24 小时，仅可使用一次。",
+    "copy": "复制",
+    "copied": "已复制",
+    "cancel": "取消",
+    "disconnect": "断开连接",
+    "done": "完成",
+    "retry": "重试",
+    "noWallet": "未检测到 Cardano 钱包。请先安装 Nami、Eternl 或 Lace 等钱包扩展。",
+    "connectFailed": "连接钱包失败，请重试。",
+    "signFailed": "签名失败或被用户取消。",
+    "error_signature_invalid": "签名验证失败，请重试。",
+    "error_timestamp_expired": "签名已过期，请重新操作。",
+    "error_not_delegating": "您尚未质押到 Pao Pool，请先质押后再订阅。"
+  },
   "seo": {
     "siteName": "Bubble Studio",
     "defaultTitle": "Bubble Studio - 扎根于 Cardano 的独立小作坊",

@@ -155,6 +155,30 @@
       "linkText": "Visit Website"
     }
   },
+  "subscription": {
+    "title": "Subscribe to Pool Updates",
+    "description": "Users staking to Pao Pool can sign with their wallet to get a subscription token. Send the token to our Telegram Bot to receive pool updates.",
+    "connectWallet": "Connect Cardano Wallet",
+    "selectWallet": "Select your wallet",
+    "connecting": "Connecting wallet...",
+    "stakeAddress": "Stake Address",
+    "generateToken": "Generate Subscription Token",
+    "signing": "Please confirm the signature in your wallet...",
+    "tokenReady": "Token generated!",
+    "tokenInstruction": "Send this token to Telegram Bot @BubbleStudioBot to activate your subscription. The token is valid for 24 hours and can only be used once.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "cancel": "Cancel",
+    "disconnect": "Disconnect",
+    "done": "Done",
+    "retry": "Retry",
+    "noWallet": "No Cardano wallet detected. Please install a wallet extension like Nami, Eternl, or Lace.",
+    "connectFailed": "Failed to connect wallet. Please try again.",
+    "signFailed": "Signing failed or was cancelled.",
+    "error_signature_invalid": "Signature verification failed. Please try again.",
+    "error_timestamp_expired": "Signature has expired. Please try again.",
+    "error_not_delegating": "You are not staking to Pao Pool. Please delegate first before subscribing."
+  },
   "seo": {
     "siteName": "Bubble Studio",
     "defaultTitle": "Bubble Studio - An Indie Studio Rooted in Cardano",
