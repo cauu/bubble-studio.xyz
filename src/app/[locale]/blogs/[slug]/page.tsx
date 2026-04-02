@@ -108,8 +108,9 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
                 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
                 prose-img:rounded-lg prose-img:my-4
                 prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50/50 prose-blockquote:py-1 prose-blockquote:rounded-r-lg
-                prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
-                prose-pre:bg-gray-900 prose-pre:rounded-lg
+                prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-pink-600 prose-code:font-mono
+                prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-lg prose-pre:p-4 prose-pre:overflow-x-auto
+                prose-pre>code:bg-transparent prose-pre>code:text-gray-100 prose-pre>code:p-0
                 prose-li:text-sm prose-li:md:text-base
               "
               dangerouslySetInnerHTML={{ __html: post.contentHtml }}
