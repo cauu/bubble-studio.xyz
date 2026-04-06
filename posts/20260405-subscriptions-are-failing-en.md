@@ -3,7 +3,7 @@ id: 12
 title: "Software Subscriptions Are Failing. The Creator Economy Needs New Infrastructure"
 date: "2026-04-05"
 time: "18:00"
-image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260203-freedom-of-creation.jpg"
+image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260405-subscriptions-are-failing.jpg"
 author: Martin
 language: en
 tags:

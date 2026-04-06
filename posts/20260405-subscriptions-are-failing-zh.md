@@ -3,7 +3,7 @@ id: 12
 title: "软件订阅正在失效，创作者经济需要新的基础设施"
 date: "2026-04-05"
 time: "18:00"
-image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260203-freedom-of-creation.jpg"
+image: "https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260405-subscriptions-are-failing.jpg"
 author: Martin
 language: zh
 tags:
