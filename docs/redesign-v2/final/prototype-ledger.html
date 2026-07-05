@@ -112,10 +112,33 @@ font-size:11px;font-weight:700;line-height:1;
 .mnav a{display:block;padding:13px 8px;font-size:15px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--hairline-soft)}
 .mnav a:last-child{border-bottom:none}
 
-/* ===== hero: 7/5 split, the ledger card IS the artwork ===== */
-.hero{padding:80px 0 0;position:relative;z-index:2}
-.hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:end}
-.hero-copy{padding-bottom:8px}
+/* ===== hero: enlarged, blurred brand-aura backdrop (sky-led, right-weighted) ===== */
+.hero{padding:128px 0 112px;position:relative;z-index:2}
+.hero-aura{
+position:absolute;inset:-130px 0 -40px;
+pointer-events:none;z-index:0;
+background:
+radial-gradient(620px 460px at 70% 32%,rgba(85,202,232,.38),transparent 70%),
+radial-gradient(540px 400px at 26% 14%,rgba(189,145,201,.20),transparent 70%),
+radial-gradient(480px 360px at 54% 80%,rgba(142,197,209,.30),transparent 72%),
+radial-gradient(340px 280px at 88% 70%,rgba(238,201,99,.16),transparent 70%);
+filter:blur(48px);
+-webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 100%);
+mask-image:linear-gradient(180deg,#000 62%,transparent 100%);
+animation:aura-drift 10s ease-in-out infinite alternate;
+}
+@keyframes aura-drift{
+0%{transform:translate3d(0,0,0) scale(1)}
+50%{transform:translate3d(6%,-4%,0) scale(1.12)}
+100%{transform:translate3d(-5%,3%,0) scale(1.04)}
+}
+.hero-grain{
+position:absolute;inset:-130px 0 0;pointer-events:none;z-index:0;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 100%);
+mask-image:linear-gradient(180deg,#000 55%,transparent 100%);
+}
+.hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
 .hero-copy .eyebrow{display:block;margin-bottom:20px}
 .hero h1{font-size:clamp(38px,5vw,60px);line-height:1.15;margin-bottom:18px}
 .hero h1 .hl{color:var(--teal)}
@@ -128,7 +151,6 @@ font-size:11px;font-weight:700;line-height:1;
 .ledger{
 background:var(--blank);border:1px solid var(--hairline);
 border-radius:var(--r-lg);overflow:hidden;
-align-self:end;margin-bottom:-64px;
 }
 .ledger-head{
 display:flex;align-items:center;gap:10px;
@@ -157,7 +179,6 @@ font-size:14px;font-weight:600;
 /* ===== sections: alternating canvas / taupe bands ===== */
 .sec{padding:var(--sp-section) 0}
 .band{background:var(--card);position:relative}
-.sec.band--pull{padding-top:152px}
 .band-mascot{position:absolute;right:9%;top:-26px;width:64px;height:64px;z-index:2}
 .band-mascot .pbody{position:absolute;inset:0;border-radius:50%;background:var(--sky)}
 .band-mascot .hl{position:absolute;width:20px;height:20px;border-radius:50%;background:var(--canvas);top:13px;left:12px}
@@ -320,7 +341,7 @@ margin-bottom:-72px;
 /* ===== responsive ===== */
 @media(max-width:900px){
 .hero-grid{grid-template-columns:1fr;gap:40px}
-.ledger{max-width:520px;margin:0 auto -64px}
+.ledger{max-width:520px;margin:0 auto;width:100%}
 .perks-grid{grid-template-columns:1fr}
 .tier{position:static}
 .band-mascot{right:6%}
@@ -330,18 +351,24 @@ margin-bottom:-72px;
 .menu-btn{display:inline-flex}
 .why-band{grid-template-columns:1fr}
 .sec{padding:72px 0}
-.sec.band--pull{padding-top:128px}
-.hero{padding:56px 0 0}
+.hero{padding:80px 0 72px}
+.hero-aura{filter:blur(36px)}
 .svc{padding:0 0 72px}
 .svc-inner{padding:44px 28px}
-.foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+.foot-grid{grid-template-columns:1fr 1fr;gap:36px 32px}
+.foot-grid>div:first-child{grid-column:1/-1}
 }
 @media(max-width:600px){
 .wrap{padding:0 18px}
 .perk-row{flex-wrap:wrap}
 .perk-row .chip{margin-left:58px}
 .cta-inner{padding:56px 24px}
-.foot-grid{grid-template-columns:1fr}
+.foot{padding:64px 0 24px}
+.foot-grid{gap:32px 20px}
+.foot-col a{padding:8px 0}
+.foot-bottom{flex-direction:column;align-items:flex-start;gap:6px}
+.foot-bottom .sep{display:none}
+.band-mascot{width:56px;height:56px;top:-22px;right:6%}
 .hero-cta{flex-direction:column}
 .hero-cta .btn{width:100%}
 }
@@ -386,6 +413,8 @@ margin-bottom:-72px;
 
 <!-- hero -->
 <section class="hero" aria-labelledby="hero-h1">
+<div class="hero-aura" aria-hidden="true"></div>
+<div class="hero-grain" aria-hidden="true"></div>
 <div class="wrap hero-grid">
 <div class="hero-copy reveal">
 <span class="eyebrow">🫧 Not just a staking pool</span>
@@ -393,9 +422,8 @@ margin-bottom:-72px;
 <p class="hero-sub">把 ADA 委托到 Pao Pool，协议收益照拿；同时你将成为 Pao Studio 的会员——订阅内容、使用产品、参与决策。</p>
 <div class="hero-cta">
 <a class="btn btn-primary btn-lg" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
-<a class="btn btn-ghost btn-lg" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">先看看矿池数据</a>
+<a class="btn btn-ghost btn-lg" href="https://t.me/+1aO8bBE7B7VhOWJl">先订阅看看</a>
 </div>
-<p class="hero-hint">已经是会员？<a href="https://t.me/+1aO8bBE7B7VhOWJl">连接钱包，订阅矿池动态 →</a></p>
 </div>
 <div class="ledger reveal" role="table" aria-label="Pao Pool 矿池数据">
 <div class="ledger-head">
@@ -416,7 +444,7 @@ margin-bottom:-72px;
 </section>
 
 <!-- why -->
-<section class="sec band band--pull" id="why" aria-labelledby="why-h2">
+<section class="sec band" id="why" aria-labelledby="why-h2">
 <div class="wrap">
 <div class="sec-head reveal">
 <span class="chip chip--mint">为什么质押给我们</span>
