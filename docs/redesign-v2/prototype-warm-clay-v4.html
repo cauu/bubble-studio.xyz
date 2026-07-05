@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Studio · 质押即会员</title>
+<meta name="description" content="扎根 Cardano 的独立工作室。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员：每月 ADA 抽奖、独家内容、免费工具。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bubble Studio · 质押即会员">
+<meta property="og:description" content="资产不动，权益到手。把 ADA 委托到 Pao Pool，收益照拿，自动成为会员。">
+<meta name="theme-color" content="#13585d">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫧</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* CJK face — weights aligned with spec: 400/500/700 only (900 dropped; display runs 700) */
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-55-Regular.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2');font-weight:500;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-85-Bold.woff2') format('woff2');font-weight:700;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+
+:root{
+/* ---- DESIGN-bubble-warm palette (verbatim) ---- */
+--canvas:#f9f8f6; --blank:#f9f8f6; --card:#e8e5e0; --dark:#172026;
+--hairline:#e1e0de; --hairline-soft:#eceae6;
+--ink:#0a0a0a; --body-strong:#1a1a1a; --body:#3a3a3a; --muted:#6a6a6a; --muted-soft:#9a9a9a; --on-dark:#ffffff;
+--primary:#0a0a0a; --primary-active:#172026;
+--orange:#e5692e; --lavender:#bd91c9; --sky:#55cae8; --lemon:#eec963; --peach:#ecb8a7; --sea:#488be1; --mint:#8ec5d1; --teal:#13585d;
+/* ---- clay edges: shaded siblings (material depth, not new palette members) ---- */
+--peach-edge:#d69b87; --lemon-edge:#d3a93e; --mint-edge:#6fa9b8; --teal-edge:#0b3b3f;
+--card-edge:#d3cfc6; --blank-edge:#e3e1dc; --orange-edge:#c25320;
+/* ---- radius scale (spec) ---- */
+--r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:24px; --r-pill:999px;
+/* ---- spacing: 4px grid ---- */
+--sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-12:48px; --sp-section:96px;
+/* ---- motion tokens: one curve, two lift levels ---- */
+--spring:cubic-bezier(.34,1.56,.64,1);
+--lift-card:-4px; --lift-btn:-2px;
+--font:'Inter','AlibabaPuHuiTi',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+font-family:var(--font);
+background:var(--canvas);
+color:var(--body);
+font-size:16px;line-height:1.6;font-weight:400;
+-webkit-font-smoothing:antialiased;
+text-rendering:optimizeLegibility;
+}
+/* CJK display: no Latin tracking, looser leading */
+:lang(zh) h1,:lang(zh) h2,:lang(zh) h3{letter-spacing:normal}
+h1,h2,h3{color:var(--ink);font-weight:700}
+.tnum{font-variant-numeric:tabular-nums}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* skip link */
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--on-dark);padding:12px 18px;border-radius:var(--r-md);z-index:100}
+.skip:focus{left:16px;top:16px}
+
+a:focus-visible,button:focus-visible,.btn:focus-visible,select:focus-visible{
+outline:3px solid var(--sea);outline-offset:3px;border-radius:var(--r-md);
+}
+
+/* ===== clay noise (shared) ===== */
+.grain{position:relative}
+.grain::after{
+content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:1;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+opacity:.05;mix-blend-mode:multiply;
+}
+.grain>*{position:relative;z-index:2}
+
+/* flat clay pebbles (replace blurred blobs) */
+.pebble{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+
+/* ===== buttons: clay press ===== */
+.btn{
+display:inline-flex;align-items:center;justify-content:center;gap:8px;
+font-weight:600;font-size:15px;line-height:1;
+padding:14px 22px;border-radius:var(--r-md);
+border:none;cursor:pointer;
+transition:transform .22s var(--spring),box-shadow .22s ease,background .2s ease,border-color .2s ease;
+white-space:nowrap;
+}
+.btn-primary{background:var(--primary);color:var(--on-dark);box-shadow:0 4px 0 rgba(23,32,38,.32)}
+.btn-primary:hover{transform:translateY(var(--lift-btn));background:var(--primary-active);box-shadow:0 6px 0 rgba(23,32,38,.32)}
+.btn-primary:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(23,32,38,.32)}
+.btn-ghost{background:var(--blank);color:var(--ink);border:1px solid var(--hairline);box-shadow:0 4px 0 var(--card-edge)}
+.btn-ghost:hover{transform:translateY(var(--lift-btn));border-color:var(--ink);box-shadow:0 6px 0 var(--card-edge)}
+.btn-ghost:active{transform:translateY(2px);box-shadow:0 1px 0 var(--card-edge)}
+.btn-oncolor{background:var(--blank);color:var(--ink);box-shadow:0 4px 0 var(--teal-edge)}
+.btn-oncolor:hover{transform:translateY(var(--lift-btn));box-shadow:0 6px 0 var(--teal-edge)}
+.btn-oncolor:active{transform:translateY(2px);box-shadow:0 1px 0 var(--teal-edge)}
+.btn-outline{background:transparent;color:var(--on-dark);border:1.5px solid rgba(255,255,255,.75)}
+.btn-outline:hover{transform:translateY(var(--lift-btn));border-color:#fff;background:rgba(255,255,255,.12)}
+.btn-outline:active{transform:translateY(1px)}
+.btn-lg{font-size:16px;padding:16px 28px}
+
+/* ===== chip: ONE pill system (replaces eyebrow/art-chip/tag/badge/pill/road-status) ===== */
+.chip{
+display:inline-flex;align-items:center;gap:7px;
+font-size:13px;font-weight:600;line-height:1;color:var(--ink);
+padding:7px 13px;border-radius:var(--r-pill);
+background:var(--blank);border:1px solid var(--hairline);
+box-shadow:0 2px 0 var(--blank-edge);
+}
+.chip--taupe{background:var(--card);border-color:transparent;box-shadow:none;color:var(--body)}
+.chip--onlight{background:rgba(255,255,255,.55);border-color:rgba(255,255,255,.45);box-shadow:0 2px 0 rgba(0,0,0,.06)}
+.chip--lemon{background:var(--lemon);border-color:transparent;box-shadow:0 2px 0 var(--lemon-edge)}
+.chip--orange{background:var(--orange);border-color:transparent;color:var(--ink);box-shadow:0 2px 0 var(--orange-edge)}
+.chip--eyebrow{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.55}}
+.dot-live{animation:pulse 1.6s ease-in-out infinite}
+
+/* ===== announcement bar ===== */
+.announce{
+background:var(--teal);color:var(--on-dark);
+font-size:13.5px;font-weight:600;text-align:center;
+padding:10px 24px;
+}
+.announce a{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.announce a:hover{color:var(--lemon)}
+
+/* ===== nav ===== */
+.nav{
+position:sticky;top:0;z-index:50;
+background:rgba(249,248,246,.88);backdrop-filter:blur(14px);
+border-bottom:1px solid var(--hairline);
+}
+.nav-inner{display:flex;align-items:center;gap:24px;height:72px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:18px;color:var(--ink)}
+.brand img{height:30px;width:auto}
+.nav-links{display:flex;gap:6px;margin-left:14px}
+.nav-links a{font-size:14.5px;font-weight:500;color:var(--body);padding:9px 13px;border-radius:var(--r-pill);transition:background .18s,color .18s}
+.nav-links a:hover{background:var(--card);color:var(--ink)}
+.nav-links a[aria-current="true"]{background:var(--card);color:var(--ink)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.lang{
+font-family:var(--font);font-size:13.5px;font-weight:500;color:var(--body);
+background:var(--blank);border:1px solid var(--hairline);
+padding:9px 12px;border-radius:var(--r-md);cursor:pointer;
+box-shadow:0 2px 0 var(--blank-edge);
+}
+.lang:hover{border-color:var(--ink)}
+/* mobile menu */
+.menu-btn{
+display:none;align-items:center;justify-content:center;
+width:42px;height:42px;flex:none;
+background:var(--blank);border:1px solid var(--hairline);border-radius:var(--r-md);
+box-shadow:0 3px 0 var(--card-edge);cursor:pointer;color:var(--ink);
+}
+.menu-btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--card-edge)}
+.mnav{display:none;border-top:1px solid var(--hairline);background:var(--canvas);padding:8px 24px 16px}
+.mnav.open{display:block}
+.mnav a{display:block;padding:13px 8px;font-size:15px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--hairline-soft)}
+.mnav a:last-child{border-bottom:none}
+
+/* ===== hero: solid signature peach, 7/5 split, flat pebble decor ===== */
+.hero{padding:40px 0 0}
+.hero-panel{
+position:relative;overflow:hidden;
+border-radius:var(--r-xl);
+background:var(--peach);
+box-shadow:0 8px 0 var(--peach-edge),inset 0 2px 0 rgba(255,255,255,.35);
+padding:64px 56px;
+display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;
+}
+.pebble.p-lemon{width:240px;height:240px;background:var(--lemon);top:-90px;right:26%;opacity:.55}
+.pebble.p-mintring{width:190px;height:190px;border:26px solid var(--mint);bottom:-80px;left:-40px;opacity:.5}
+.hero-copy{position:relative;z-index:2}
+.hero-copy .chip--eyebrow{margin-bottom:24px}
+.hero h1{
+font-size:clamp(36px,4.8vw,58px);line-height:1.15;
+margin-bottom:20px;
+}
+.hero h1 .l2{display:block}
+.hero-sub{font-size:17px;color:var(--body-strong);max-width:30em;margin-bottom:28px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px}
+.hero-hint{font-size:14px;color:var(--body-strong);font-weight:500}
+.hero-hint a{font-weight:700;text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
+.hero-hint a:hover{color:var(--teal)}
+
+/* hero art: clay plate + lemon pebble core + overhanging clay chips */
+.hero-art{position:relative;z-index:2}
+.art-plate{
+background:var(--blank);border:1px solid var(--hairline);
+border-radius:var(--r-xl);
+box-shadow:0 6px 0 var(--peach-edge),inset 0 1px 0 rgba(255,255,255,.6);
+aspect-ratio:1/.92;
+display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+text-align:center;padding:32px;
+}
+.pebble-stage{position:relative;width:200px;height:200px;display:grid;place-items:center}
+.pebble-core{position:absolute;inset:0;border-radius:50%;background:var(--lemon);box-shadow:0 6px 0 var(--lemon-edge),inset 0 3px 0 rgba(255,255,255,.35)}
+.pebble-stage .emoji{position:relative;font-size:86px;line-height:1;animation:float 4.5s ease-in-out infinite}
+.art-plate .ph{font-size:13px;font-weight:600;color:var(--muted)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.art-chip{position:absolute;z-index:3}
+.chip-a{top:20px;left:-14px}
+.art-stat{
+position:absolute;right:-14px;bottom:32px;z-index:3;
+background:var(--blank);border:1px solid var(--hairline);border-radius:var(--r-lg);
+padding:12px 18px;box-shadow:0 4px 0 var(--peach-edge);
+display:flex;flex-direction:column;gap:2px;text-align:left;
+}
+.art-stat .n{font-size:20px;font-weight:700;color:var(--ink);line-height:1.1}
+.art-stat .l{font-size:12px;font-weight:500;color:var(--muted)}
+.mini{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none}
+
+/* ===== stats: taupe band, four identical stat cells ===== */
+.stats{padding:24px 0 0}
+.stats-band{
+background:var(--card);border-radius:var(--r-xl);
+box-shadow:0 5px 0 var(--card-edge),inset 0 1px 0 rgba(255,255,255,.5);
+padding:24px;
+display:flex;flex-wrap:wrap;align-items:center;gap:16px;
+}
+.stat{
+background:var(--blank);border:1px solid var(--hairline);border-radius:var(--r-lg);
+padding:16px 20px;flex:1;min-width:150px;
+display:flex;flex-direction:column;gap:4px;
+box-shadow:0 3px 0 var(--card-edge);
+}
+.stat .num{font-size:24px;font-weight:700;color:var(--ink);line-height:1.1}
+.stat .lab{font-size:12.5px;font-weight:500;color:var(--muted)}
+.stat-link{margin-left:auto;padding:0 8px;font-size:14px;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.stat-link:hover{color:var(--teal)}
+
+/* ===== section rhythm: 96px top, no inline patches ===== */
+.sec{padding:var(--sp-section) 0 0}
+.sec-head{max-width:46rem;margin-bottom:48px}
+.sec-head .chip--eyebrow{background:var(--card);border-color:transparent;box-shadow:none;margin-bottom:16px}
+.sec-head h2{font-size:clamp(28px,3.4vw,40px);line-height:1.2;margin-bottom:16px}
+.sec-head p{font-size:17px;color:var(--body)}
+
+/* ===== why: horizontal taupe soft-cards (form contrast vs. perks) ===== */
+.why-band{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.why-card{
+background:var(--card);border-radius:var(--r-xl);padding:32px;
+display:flex;gap:20px;align-items:flex-start;
+box-shadow:0 5px 0 var(--card-edge),inset 0 1px 0 rgba(255,255,255,.5);
+transition:transform .3s var(--spring),box-shadow .3s ease;
+}
+.why-card:hover{transform:translateY(var(--lift-card));box-shadow:0 9px 0 var(--card-edge),0 16px 24px rgba(60,45,25,.08)}
+.why-icon{
+width:56px;height:56px;border-radius:var(--r-lg);flex:none;
+display:grid;place-items:center;font-size:26px;
+box-shadow:0 3px 0 rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.4);
+}
+.why-icon.mint{background:var(--mint)}
+.why-icon.peach{background:var(--peach)}
+.why-body .chip{margin-bottom:12px}
+.why-body h3{font-size:20px;line-height:1.3;margin-bottom:8px}
+.why-body p{font-size:15px;line-height:1.6;color:var(--body)}
+
+/* ===== perks: saturated clay cards — ink on lemon/peach/mint, white on teal only ===== */
+.perks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.perk{
+border-radius:var(--r-xl);padding:32px;
+display:flex;flex-direction:column;gap:14px;
+position:relative;overflow:hidden;
+transition:transform .3s var(--spring),box-shadow .3s ease;
+box-shadow:0 5px 0 var(--edge-c),inset 0 2px 0 rgba(255,255,255,.3);
+}
+.perk:hover{transform:translateY(var(--lift-card));box-shadow:0 9px 0 var(--edge-c),0 18px 28px rgba(60,45,25,.10)}
+.perk .icon{
+width:54px;height:54px;border-radius:var(--r-lg);flex:none;
+display:grid;place-items:center;font-size:26px;
+background:rgba(255,255,255,.55);
+box-shadow:0 3px 0 rgba(0,0,0,.08);
+}
+.perk h3{font-size:20px;line-height:1.3}
+.perk p{font-size:15px;line-height:1.6;color:var(--body)}
+.perk .chip{align-self:flex-start;margin-top:auto}
+.perk.lemon{background:var(--lemon);--edge-c:var(--lemon-edge)}
+.perk.peach{background:var(--peach);--edge-c:var(--peach-edge)}
+.perk.mint{background:var(--mint);--edge-c:var(--mint-edge)}
+.perk.teal{background:var(--teal);--edge-c:var(--teal-edge)}
+.perk.teal h3{color:var(--on-dark)}
+.perk.teal p{color:rgba(255,255,255,.88)}
+.perk.teal .icon{background:rgba(255,255,255,.14);box-shadow:0 3px 0 rgba(0,0,0,.28)}
+
+/* ===== roadmap: blank content cards, orange reserved as the single live accent ===== */
+.road-list{display:flex;flex-direction:column;gap:16px}
+.road-item{
+background:var(--blank);border:1px solid var(--hairline);
+border-radius:var(--r-lg);
+padding:22px 26px;
+display:flex;align-items:center;gap:22px;
+box-shadow:0 4px 0 var(--card-edge);
+transition:transform .3s var(--spring),box-shadow .3s ease,border-color .2s;
+}
+.road-item:hover{transform:translateY(var(--lift-card));box-shadow:0 8px 0 var(--card-edge),0 14px 20px rgba(60,45,25,.07)}
+.road-item.live{border-color:var(--orange);box-shadow:0 4px 0 var(--orange-edge)}
+.road-item.live:hover{box-shadow:0 8px 0 var(--orange-edge),0 14px 20px rgba(60,45,25,.07)}
+.road-date{font-size:13px;font-weight:600;color:var(--ink);min-width:130px;flex:none}
+.road-main{flex:1;display:flex;align-items:center;gap:13px;min-width:0}
+.road-bigdot{width:11px;height:11px;border-radius:50%;flex:none;background:var(--muted-soft)}
+.road-title{font-size:17px;font-weight:600;color:var(--ink)}
+.road-status{margin-left:auto;flex:none}
+@media(max-width:560px){.road-item{flex-wrap:wrap;gap:12px}.road-date{min-width:0}.road-status{margin-left:0}}
+
+/* ===== closing band: teal — the one dark anchor ===== */
+.cta-band{padding:var(--sp-section) 0}
+.cta-inner{
+position:relative;overflow:hidden;
+background:var(--teal);
+border-radius:var(--r-xl);
+box-shadow:0 8px 0 var(--teal-edge),inset 0 2px 0 rgba(255,255,255,.12);
+padding:72px 56px;text-align:center;color:var(--on-dark);
+}
+.pebble.p-cta-lemon{width:150px;height:150px;background:var(--lemon);top:-44px;right:-32px;opacity:.9}
+.pebble.p-cta-peachring{width:150px;height:150px;border:20px solid var(--peach);bottom:-56px;left:-36px;opacity:.85}
+.cta-inner h2{font-size:clamp(26px,3vw,36px);line-height:1.2;margin-bottom:14px;color:var(--on-dark)}
+.cta-inner p{font-size:17px;margin-bottom:28px;color:rgba(255,255,255,.92);max-width:38em;margin-left:auto;margin-right:auto}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ===== footer: taupe, three balanced columns, mascot inline (no sticker card) ===== */
+.foot{background:var(--card);padding:72px 0 28px}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:40px;align-items:start}
+.foot-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:var(--ink);margin-bottom:16px}
+.foot-brand img{height:28px}
+.foot-blurb{font-size:14px;color:var(--body);max-width:24em;line-height:1.6}
+.foot-mascot{display:flex;align-items:center;gap:12px;margin-top:20px}
+.pebble-mini{
+width:44px;height:44px;border-radius:50%;flex:none;
+background:var(--lemon);box-shadow:0 3px 0 var(--lemon-edge),inset 0 2px 0 rgba(255,255,255,.35);
+display:grid;place-items:center;font-size:22px;
+}
+.foot-mascot .ph{font-size:12px;font-weight:600;color:var(--body)}
+.foot-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--body);margin-bottom:16px}
+.foot-col a{display:block;font-size:14.5px;font-weight:500;color:var(--body);padding:5px 0;transition:color .15s}
+.foot-col a:hover{color:var(--ink)}
+.foot-bottom{
+margin-top:48px;padding-top:24px;border-top:1px solid var(--card-edge);
+font-size:13.5px;color:var(--body);
+display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+}
+.foot-bottom a{font-weight:600;color:var(--body)}
+.foot-bottom a:hover{color:var(--ink)}
+.foot-bottom .sep{color:var(--muted-soft)}
+
+/* ===== scroll-in: JS-gated so no-JS users see everything ===== */
+.js .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s var(--spring)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* ===== responsive ===== */
+@media(max-width:860px){
+.hero-panel{grid-template-columns:1fr;padding:40px 28px;gap:32px}
+.hero-art{max-width:420px;margin:0 auto;width:100%}
+.art-plate{aspect-ratio:16/10}
+.nav-links{display:none}
+.menu-btn{display:inline-flex}
+.perks-grid{grid-template-columns:1fr}
+.why-band{grid-template-columns:1fr}
+.foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+.sec{padding:72px 0 0}
+.cta-band{padding:72px 0}
+}
+@media(min-width:861px){
+.mnav{display:none!important}
+}
+@media(max-width:600px){
+.wrap{padding:0 18px}
+.hero-panel{padding:32px 20px}
+.art-chip,.art-stat{display:none}
+.stats-band{display:grid;grid-template-columns:1fr 1fr;padding:20px}
+.stat-link{grid-column:1/-1;margin-left:0;text-align:center;padding-top:4px}
+.cta-inner{padding:48px 24px}
+.foot-grid{grid-template-columns:1fr}
+.hero-cta{flex-direction:column}
+.hero-cta .btn{width:100%}
+}
+
+@media(prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+.js .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+
+<!-- announcement -->
+<div class="announce" role="region" aria-label="公告">
+四月会员 ADA 抽奖进行中 · 截止 <span class="tnum">4/30</span> — <a href="#roadmap">参加 →</a>
+</div>
+
+<!-- nav -->
+<nav class="nav" aria-label="主导航">
+<div class="wrap nav-inner">
+<a class="brand" href="#main" aria-label="Bubble Studio 首页">
+<img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Bubble Studio 标志">
+<span>Bubble Studio</span>
+</a>
+<div class="nav-links">
+<a href="#perks">会员权益</a>
+<a href="#why">为什么是 Pao Pool</a>
+<a href="#roadmap">近期动态</a>
+<a href="/blogs">博客</a>
+</div>
+<div class="nav-right">
+<select class="lang" id="lang" aria-label="语言选择">
+<option>中文</option><option>EN</option><option>繁體</option>
+</select>
+<a class="btn btn-primary" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mnav" aria-label="打开菜单">
+<svg width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true"><path d="M1 1h16M1 7h16M1 13h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+</div>
+</div>
+<div class="mnav" id="mnav">
+<a href="#perks">会员权益</a>
+<a href="#why">为什么是 Pao Pool</a>
+<a href="#roadmap">近期动态</a>
+<a href="/blogs">博客</a>
+</div>
+</nav>
+
+<main id="main">
+
+<!-- hero -->
+<section class="hero" aria-labelledby="hero-h1">
+<div class="wrap">
+<div class="hero-panel grain reveal">
+<span class="pebble p-lemon" aria-hidden="true"></span>
+<span class="pebble p-mintring" aria-hidden="true"></span>
+<div class="hero-copy">
+<span class="chip chip--onlight chip--eyebrow">🫧 Stake as a Service</span>
+<h1 id="hero-h1">质押即会员<span class="l2">资产不动，权益到手</span></h1>
+<p class="hero-sub">扎根 Cardano 的独立工作室。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员。</p>
+<div class="hero-cta">
+<a class="btn btn-primary btn-lg" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+<a class="btn btn-ghost btn-lg" href="#why">了解 Pao Pool</a>
+</div>
+<p class="hero-hint">已经是会员？<a href="https://t.me/+1aO8bBE7B7VhOWJl">连接钱包，订阅矿池动态 →</a></p>
+</div>
+<div class="hero-art" role="img" aria-label="Paopao 插画占位 · 抽奖场景">
+<div class="art-plate">
+<div class="pebble-stage" aria-hidden="true">
+<span class="pebble-core"></span>
+<span class="emoji">🫧</span>
+</div>
+<span class="ph">Paopao 插画占位</span>
+</div>
+<span class="chip art-chip chip-a" aria-hidden="true"><span class="mini" style="background:var(--orange)"></span>四月抽奖进行中</span>
+<span class="art-stat tnum" aria-hidden="true"><span class="n">≈ 2.2%</span><span class="l">APY · 质押年化</span></span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- stats -->
+<section class="stats" aria-label="矿池数据">
+<div class="wrap">
+<div class="stats-band reveal">
+<div class="stat"><span class="num">PAO</span><span class="lab">Pao Pool · 矿池代号</span></div>
+<div class="stat"><span class="num tnum">1.2M ADA</span><span class="lab">矿池质押量</span></div>
+<div class="stat"><span class="num tnum">~2.2%</span><span class="lab">质押年化</span></div>
+<div class="stat"><span class="num tnum">15</span><span class="lab">委托人</span></div>
+<a class="stat-link" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">在 CardanoScan 查看 →</a>
+</div>
+</div>
+</section>
+
+<!-- why -->
+<section class="sec" id="why" aria-labelledby="why-h2">
+<div class="wrap">
+<div class="sec-head reveal">
+<span class="chip chip--eyebrow">为什么是 Pao Pool</span>
+<h2 id="why-h2">把 ADA 放这儿，好事自己来</h2>
+<p>资产还在你钱包里，协议收益照拿，同时自动解锁这些会员福利，没有额外费用。</p>
+</div>
+<div class="why-band">
+<div class="why-card reveal">
+<div class="why-icon mint" aria-hidden="true">🔐</div>
+<div class="why-body">
+<span class="chip">非托管</span>
+<h3>资产始终在你手里</h3>
+<p>委托不转移所有权，ADA 一直留在你的钱包，随时可取消或转移委托。</p>
+</div>
+</div>
+<div class="why-card reveal">
+<div class="why-icon peach" aria-hidden="true">🪙</div>
+<div class="why-body">
+<span class="chip">零额外费用</span>
+<h3>会员权益免费附赠</h3>
+<p>照常领取协议质押收益，会员福利在此之上自动叠加，不收一分额外费用。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- perks -->
+<section class="sec" id="perks" aria-labelledby="perks-h2">
+<div class="wrap">
+<div class="sec-head reveal">
+<span class="chip chip--eyebrow">会员权益</span>
+<h2 id="perks-h2">委托一次，福利不断</h2>
+<p>四项会员专属权益，链上透明、即刻生效。</p>
+</div>
+<div class="perks-grid">
+<article class="perk lemon reveal">
+<div class="icon" aria-hidden="true">🎟️</div>
+<h3>每月 ADA 抽奖</h3>
+<p>会员专属、真实奖励，开奖透明、链上可查。</p>
+<span class="chip chip--onlight">每月开奖一次</span>
+</article>
+<article class="perk peach reveal">
+<div class="icon" aria-hidden="true">📰</div>
+<h3>独家内容</h3>
+<p>深度文章、视频和分析，比公开发布更早送达会员。</p>
+<span class="chip chip--onlight">会员抢先看</span>
+</article>
+<article class="perk mint reveal">
+<div class="icon" aria-hidden="true">🎁</div>
+<h3>免费产品 VODA</h3>
+<p>VODA 及未来每一款工具，会员全部免费、零成本。</p>
+<span class="chip chip--onlight">会员 $0</span>
+</article>
+<article class="perk teal reveal">
+<div class="icon" aria-hidden="true">🤖</div>
+<h3>Telegram Bot</h3>
+<p>自动推送矿池动态、治理更新和互动工具，一站直达。</p>
+<span class="chip chip--lemon">实时推送</span>
+</article>
+</div>
+</div>
+</section>
+
+<!-- roadmap -->
+<section class="sec" id="roadmap" aria-labelledby="road-h2">
+<div class="wrap">
+<div class="sec-head reveal">
+<span class="chip chip--eyebrow">近期动态</span>
+<h2 id="road-h2">接下来要发生什么</h2>
+<p>从抽奖到深度内容，跟上 Bubble Studio 的节奏。</p>
+</div>
+<div class="road-list">
+<div class="road-item live reveal">
+<span class="road-date tnum">2026.04.01 — 04.30</span>
+<div class="road-main">
+<span class="road-bigdot dot-live" style="background:var(--orange)" aria-hidden="true"></span>
+<span class="road-title">四月会员 ADA 抽奖</span>
+</div>
+<span class="chip chip--orange road-status"><span class="dot dot-live" style="background:var(--ink)" aria-hidden="true"></span>进行中</span>
+</div>
+<div class="road-item reveal">
+<span class="road-date tnum">2026.04.18</span>
+<div class="road-main">
+<span class="road-bigdot" aria-hidden="true"></span>
+<span class="road-title">Cardano Chang 硬分叉深度解读</span>
+</div>
+<span class="chip chip--taupe road-status">即将发布</span>
+</div>
+<div class="road-item reveal">
+<span class="road-date tnum">2026.04.25</span>
+<div class="road-main">
+<span class="road-bigdot" aria-hidden="true"></span>
+<span class="road-title">Cardano 治理系统入门 — 视频教程</span>
+</div>
+<span class="chip chip--taupe road-status">制作中</span>
+</div>
+<div class="road-item reveal">
+<span class="road-date tnum">2026.05</span>
+<div class="road-main">
+<span class="road-bigdot" aria-hidden="true"></span>
+<span class="road-title">Catalyst Fund 14 投票指南</span>
+</div>
+<span class="chip chip--taupe road-status">筹备中</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- closing band -->
+<section class="cta-band" aria-label="安心承诺">
+<div class="wrap">
+<div class="cta-inner grain reveal">
+<span class="pebble p-cta-lemon" aria-hidden="true"></span>
+<span class="pebble p-cta-peachring" aria-hidden="true"></span>
+<h2>随时可退，收益不停</h2>
+<p>委托不锁仓、不转移所有权，ADA 始终在你自己的钱包里。会员身份，只是顺带的好处。</p>
+<div class="cta-actions">
+<a class="btn btn-oncolor btn-lg" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+<a class="btn btn-outline btn-lg" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">先看看矿池数据</a>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<!-- footer -->
+<footer class="foot">
+<div class="wrap">
+<div class="foot-grid">
+<div>
+<div class="foot-brand">
+<img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Bubble Studio 标志">
+<span>Bubble Studio</span>
+</div>
+<p class="foot-blurb">扎根 Cardano 的独立工作室。做有趣的工具，写有深度的内容。由 Martin、Yoyo 和 Paopao 用咖啡驱动。</p>
+<div class="foot-mascot">
+<span class="pebble-mini" aria-hidden="true">🫧</span>
+<span class="ph">Paopao 插画占位</span>
+</div>
+</div>
+<nav class="foot-col" aria-label="探索">
+<h4>探索</h4>
+<a href="#perks">会员权益</a>
+<a href="#why">为什么是 Pao Pool</a>
+<a href="#roadmap">近期动态</a>
+<a href="/blogs">博客</a>
+<a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan</a>
+</nav>
+<nav class="foot-col" aria-label="社区">
+<h4>社区</h4>
+<a href="https://x.com/cauu_128">X</a>
+<a href="https://t.me/+1aO8bBE7B7VhOWJl">Telegram</a>
+<a href="mailto:contact@bubble-studio.xyz">Email</a>
+</nav>
+</div>
+<div class="foot-bottom">
+<span>由 Martin、Yoyo 和 Paopao 用咖啡驱动 ☕</span>
+<span class="sep">·</span><a href="/privacy">隐私政策</a>
+<span class="sep">·</span><a href="/terms">服务条款</a>
+<span class="sep">·</span><span class="tnum">© 2024–2026 Bubble Studio</span>
+</div>
+</div>
+</footer>
+
+<script>
+(function(){
+/* JS gate: reveal styles only apply when JS is present (no-JS users see full page) */
+document.documentElement.classList.add('js');
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+/* staggered scroll-in */
+if(!reduce&&'IntersectionObserver' in window){
+var io=new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){var el=e.target;setTimeout(function(){el.classList.add('in')},(el.dataset.d?+el.dataset.d:0));io.unobserve(el)}
+});
+},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.perks-grid .reveal, .road-list .reveal, .why-band .reveal').forEach(function(el,i){el.dataset.d=(i%4)*70});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+}else{
+document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+}
+/* nav scroll-spy */
+var ids=['why','perks','roadmap'];
+var links={};
+document.querySelectorAll('.nav-links a').forEach(function(a){var h=a.getAttribute('href');if(h&&h[0]==='#')links[h.slice(1)]=a});
+var secs=ids.map(function(id){return document.getElementById(id)}).filter(Boolean);
+if('IntersectionObserver' in window&&secs.length){
+var so=new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){
+Object.keys(links).forEach(function(k){links[k].removeAttribute('aria-current')});
+if(links[e.target.id])links[e.target.id].setAttribute('aria-current','true');
+}
+});
+},{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(function(s){so.observe(s)});
+}
+/* mobile menu */
+var mb=document.getElementById('menuBtn'),mn=document.getElementById('mnav');
+if(mb&&mn){
+mb.addEventListener('click',function(){
+var open=mn.classList.toggle('open');
+mb.setAttribute('aria-expanded',open?'true':'false');
+mb.setAttribute('aria-label',open?'关闭菜单':'打开菜单');
+});
+mn.querySelectorAll('a').forEach(function(a){
+a.addEventListener('click',function(){mn.classList.remove('open');mb.setAttribute('aria-expanded','false')});
+});
+}
+})();
+</script>
+</body>
+</html>

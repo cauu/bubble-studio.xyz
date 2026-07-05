@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Studio · 质押即会员</title>
+<meta name="description" content="扎根 Cardano 的独立工作室。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员。">
+<meta name="theme-color" content="#f9f8f6">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫧</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-55-Regular.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2');font-weight:500;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-85-Bold.woff2') format('woff2');font-weight:700;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-115-Black.woff2') format('woff2');font-weight:900;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+
+:root{
+--canvas:#f9f8f6; --blank:#ffffff; --card:#e8e5e0; --dark:#172026;
+--hairline:#e1e0de; --hairline-soft:#eceae6;
+--ink:#0a0a0a; --body:#3a3a3a; --muted:#6a6a6a; --muted-soft:#9a9a9a; --on-dark:#ffffff;
+--primary:#0a0a0a; --primary-active:#172026;
+--orange:#e5692e; --lavender:#bd91c9; --sky:#55cae8; --lemon:#eec963; --peach:#ecb8a7; --sea:#488be1; --mint:#8ec5d1; --teal:#13585d;
+--r-md:12px; --r-lg:16px; --r-xl:24px;
+--font:'Inter','AlibabaPuHuiTi',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+--spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+font-family:var(--font);
+background:var(--canvas);
+color:var(--body);
+line-height:1.6;
+-webkit-font-smoothing:antialiased;
+text-rendering:optimizeLegibility;
+}
+:lang(zh) h1,:lang(zh) h2,:lang(zh) h3{letter-spacing:normal}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* skip link */
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--on-dark);padding:12px 18px;border-radius:var(--r-md);z-index:100}
+.skip:focus{left:16px;top:16px}
+
+a:focus-visible,button:focus-visible,.btn:focus-visible,select:focus-visible{
+outline:3px solid var(--sea);outline-offset:3px;border-radius:var(--r-md);
+}
+
+/* buttons */
+.btn{
+display:inline-flex;align-items:center;gap:8px;
+font-weight:700;font-size:15px;line-height:1;
+padding:14px 22px;border-radius:var(--r-md);
+border:none;cursor:pointer;
+transition:transform .25s var(--spring),box-shadow .25s ease,background .2s ease;
+white-space:nowrap;
+}
+.btn-primary{background:var(--primary);color:var(--on-dark)}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);background:var(--primary-active);box-shadow:0 10px 24px rgba(23,32,38,.22)}
+.btn-primary:active{transform:translateY(-1px) scale(.99)}
+.btn-ghost{background:var(--blank);color:var(--ink);border:1.5px solid var(--hairline)}
+.btn-ghost:hover{transform:translateY(-3px) scale(1.02);border-color:var(--ink);box-shadow:0 8px 18px rgba(10,10,10,.08)}
+.btn-lg{font-size:16px;padding:17px 28px}
+
+/* pill */
+.pill{
+display:inline-flex;align-items:center;gap:7px;
+font-size:13px;font-weight:700;
+padding:7px 14px;border-radius:999px;line-height:1;
+}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.55}}
+.dot-live{animation:pulse 1.6s ease-in-out infinite}
+
+/* ===== announcement bar ===== */
+.announce{
+background:var(--teal);color:var(--on-dark);
+font-size:13.5px;font-weight:600;text-align:center;
+padding:10px 24px;
+}
+.announce a{font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.announce a:hover{color:var(--lemon)}
+
+/* ===== nav ===== */
+.nav{
+position:sticky;top:0;z-index:50;
+background:rgba(249,248,246,.86);backdrop-filter:blur(14px);
+border-bottom:1px solid var(--hairline);
+}
+.nav-inner{display:flex;align-items:center;gap:24px;height:72px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;font-size:18px;color:var(--ink)}
+.brand img{height:30px;width:auto}
+.nav-links{display:flex;gap:6px;margin-left:14px}
+.nav-links a{font-size:14.5px;font-weight:600;color:var(--body);padding:9px 13px;border-radius:var(--r-md);transition:background .18s,color .18s}
+.nav-links a:hover{background:var(--card);color:var(--ink)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.lang{
+font-family:var(--font);font-size:13.5px;font-weight:600;color:var(--body);
+background:var(--blank);border:1.5px solid var(--hairline);
+padding:9px 12px;border-radius:var(--r-md);cursor:pointer;
+}
+.lang:hover{border-color:var(--ink)}
+
+/* ===== hero ===== */
+.hero{padding:46px 0 30px}
+.hero-panel{
+position:relative;overflow:hidden;
+border-radius:var(--r-xl);
+background:linear-gradient(135deg,var(--peach) 0%,var(--lemon) 52%,var(--mint) 100%);
+padding:54px 56px;
+display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;
+}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(6px);opacity:.55;pointer-events:none}
+.hero-blob.b1{width:260px;height:260px;background:var(--sky);top:-90px;right:18%;}
+.hero-blob.b2{width:180px;height:180px;background:var(--lavender);bottom:-70px;left:8%;}
+.hero-copy{position:relative;z-index:2}
+.eyebrow{
+display:inline-flex;align-items:center;gap:8px;
+font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+color:var(--ink);background:rgba(255,255,255,.7);
+padding:8px 15px;border-radius:999px;margin-bottom:22px;
+}
+.hero h1{
+font-size:clamp(38px,5.4vw,64px);font-weight:900;line-height:1.08;
+color:var(--ink);margin-bottom:20px;
+}
+.hero h1 .l2{display:block}
+.hero-sub{font-size:18px;color:var(--body);max-width:30em;margin-bottom:28px;font-weight:500}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:18px}
+.hero-hint{font-size:14px;color:var(--body);font-weight:600}
+.hero-hint a{font-weight:800;text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
+.hero-hint a:hover{color:var(--teal)}
+
+.hero-art{
+position:relative;z-index:2;
+background:rgba(255,255,255,.55);
+border:2px dashed rgba(10,10,10,.18);
+border-radius:var(--r-xl);
+aspect-ratio:1/1;
+display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+text-align:center;
+}
+.hero-art .emoji{font-size:84px;line-height:1}
+.hero-art .ph{font-size:14px;font-weight:700;color:var(--ink)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero-art .emoji{animation:float 4.5s ease-in-out infinite}
+
+/* ===== stats ===== */
+.stats{padding:18px 0 8px}
+.stats-bar{
+background:var(--card);border-radius:var(--r-xl);
+padding:26px 30px;
+display:flex;flex-wrap:wrap;align-items:center;gap:18px;
+}
+.stat{
+background:var(--blank);border-radius:var(--r-lg);
+padding:16px 22px;flex:1;min-width:140px;
+display:flex;flex-direction:column;gap:4px;
+}
+.stat .num{font-size:24px;font-weight:900;color:var(--ink);line-height:1.1}
+.stat .lab{font-size:12.5px;font-weight:600;color:var(--muted)}
+.stat-link{margin-left:auto;font-size:14px;font-weight:800;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.stat-link:hover{color:var(--teal)}
+
+/* ===== section heads ===== */
+.sec{padding:78px 0}
+.sec-head{max-width:46rem;margin-bottom:46px}
+.sec-head .eyebrow{background:var(--card)}
+.sec-head h2{font-size:clamp(28px,3.6vw,42px);font-weight:900;color:var(--ink);line-height:1.12;margin-bottom:16px}
+.sec-head p{font-size:18px;color:var(--body);font-weight:500}
+
+/* ===== perks ===== */
+.perks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.perk{
+border-radius:var(--r-xl);padding:30px 30px 32px;
+display:flex;flex-direction:column;gap:16px;
+transition:transform .3s var(--spring),box-shadow .3s ease;
+position:relative;overflow:hidden;
+}
+.perk:hover{transform:translateY(-6px)}
+.perk .icon{
+width:54px;height:54px;border-radius:var(--r-lg);
+display:flex;align-items:center;justify-content:center;font-size:26px;flex:none;
+background:rgba(255,255,255,.45);
+}
+.perk h3{font-size:21px;font-weight:800;line-height:1.25}
+.perk p{font-size:15.5px;line-height:1.55;font-weight:500}
+.perk .tag{
+align-self:flex-start;margin-top:auto;
+font-size:12px;font-weight:800;
+padding:6px 12px;border-radius:999px;line-height:1;
+background:rgba(255,255,255,.45);
+}
+/* color variants */
+.perk.peach{background:var(--peach);color:var(--ink)}
+.perk.peach p{color:var(--ink)}
+.perk.sky{background:var(--sky);color:var(--on-dark)}
+.perk.sky .icon{background:rgba(255,255,255,.25)}
+.perk.sky .tag{background:rgba(255,255,255,.22)}
+.perk.lavender{background:var(--lavender);color:var(--on-dark)}
+.perk.lavender .icon{background:rgba(255,255,255,.25)}
+.perk.lavender .tag{background:rgba(255,255,255,.22)}
+.perk.teal{background:var(--teal);color:var(--on-dark)}
+.perk.teal .icon{background:rgba(255,255,255,.16)}
+.perk.teal .tag{background:rgba(255,255,255,.16)}
+
+/* ===== why callout (decorative panel band) ===== */
+.why-band{
+display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px;
+}
+.why-card{border-radius:var(--r-xl);padding:34px;display:flex;flex-direction:column;gap:14px;color:var(--ink)}
+.why-card.mint{background:var(--mint)}
+.why-card.peach{background:var(--peach)}
+.why-card h3{font-size:20px;font-weight:800}
+.why-card p{font-size:15.5px;font-weight:500;color:var(--ink)}
+.why-card .badge{
+align-self:flex-start;font-size:12px;font-weight:800;
+background:rgba(255,255,255,.5);padding:6px 13px;border-radius:999px;
+}
+
+/* ===== roadmap ===== */
+.road-list{display:flex;flex-direction:column;gap:16px}
+.road-item{
+background:var(--blank);border:1.5px solid var(--hairline);
+border-radius:var(--r-xl);
+padding:24px 28px;
+display:flex;align-items:center;gap:22px;
+transition:transform .28s var(--spring),box-shadow .28s ease,border-color .2s;
+}
+.road-item:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(10,10,10,.06)}
+.road-item.live{background:linear-gradient(120deg,#fff 0%,#fdf3ec 100%);border-color:var(--orange)}
+.road-date{
+font-size:13px;font-weight:800;color:var(--ink);
+min-width:130px;flex:none;
+}
+.road-main{flex:1;display:flex;align-items:center;gap:13px;min-width:0}
+.road-bigdot{width:13px;height:13px;border-radius:50%;flex:none}
+.road-title{font-size:17px;font-weight:700;color:var(--ink)}
+.road-status{margin-left:auto;flex:none}
+@media(max-width:560px){.road-item{flex-wrap:wrap;gap:12px}.road-date{min-width:0}.road-status{margin-left:0}}
+
+/* ===== footer cta band ===== */
+.cta-band{padding:30px 0 90px}
+.cta-inner{
+background:linear-gradient(120deg,var(--sky) 0%,var(--sea) 100%);
+border-radius:var(--r-xl);
+padding:54px;text-align:center;color:var(--on-dark);
+position:relative;overflow:hidden;
+}
+.cta-inner h2{font-size:clamp(26px,3.4vw,38px);font-weight:900;margin-bottom:14px;color:var(--on-dark)}
+.cta-inner p{font-size:17px;font-weight:500;margin-bottom:26px;opacity:.95}
+.cta-inner .btn-primary{background:var(--blank);color:var(--ink)}
+.cta-inner .btn-primary:hover{background:var(--canvas)}
+
+/* ===== footer ===== */
+.foot{background:var(--card);padding:62px 0 30px}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr auto;gap:40px;align-items:start}
+.foot-brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:18px;color:var(--ink);margin-bottom:16px}
+.foot-brand img{height:28px}
+.foot-blurb{font-size:14.5px;color:var(--body);max-width:24em;font-weight:500;line-height:1.6}
+.foot-col h4{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:16px}
+.foot-col a{display:block;font-size:14.5px;font-weight:600;color:var(--body);padding:5px 0;transition:color .15s}
+.foot-col a:hover{color:var(--ink)}
+.foot-art{
+background:var(--blank);border:2px dashed rgba(10,10,10,.16);
+border-radius:var(--r-lg);
+padding:22px;width:150px;text-align:center;
+display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.foot-art .emoji{font-size:42px}
+.foot-art .ph{font-size:12px;font-weight:700;color:var(--ink)}
+.foot-bottom{
+margin-top:46px;padding-top:24px;border-top:1px solid var(--hairline);
+font-size:13.5px;color:var(--muted);font-weight:500;
+display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+}
+.foot-bottom a{font-weight:700;color:var(--body)}
+.foot-bottom a:hover{color:var(--ink)}
+.foot-bottom .sep{color:var(--muted-soft)}
+
+/* ===== scroll-in ===== */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s var(--spring)}
+.reveal.in{opacity:1;transform:none}
+
+/* ===== responsive ===== */
+@media(max-width:860px){
+.hero-panel{grid-template-columns:1fr;padding:38px 32px;gap:28px}
+.hero-art{max-width:380px;margin:0 auto;width:100%}
+.nav-links{display:none}
+.perks-grid{grid-template-columns:1fr}
+.why-band{grid-template-columns:1fr}
+.foot-grid{grid-template-columns:1fr 1fr;gap:30px}
+.foot-art{grid-column:1/-1;width:100%;max-width:200px}
+.sec{padding:60px 0}
+}
+@media(max-width:600px){
+.wrap{padding:0 18px}
+.hero-panel{padding:30px 22px}
+.stats-bar{flex-direction:column;align-items:stretch;padding:20px}
+.stat-link{margin-left:0;text-align:center;padding-top:6px}
+.cta-inner{padding:38px 24px}
+.foot-grid{grid-template-columns:1fr}
+.hero-cta{flex-direction:column}
+.hero-cta .btn{width:100%;justify-content:center}
+}
+
+@media(prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+.reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+
+<!-- announcement -->
+<div class="announce" role="region" aria-label="公告">
+四月会员 ADA 抽奖进行中 · 截止 4/30 — <a href="#roadmap">参加 →</a>
+</div>
+
+<!-- nav -->
+<nav class="nav" aria-label="主导航">
+<div class="wrap nav-inner">
+<a class="brand" href="#" aria-label="Bubble Studio 首页">
+<img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Bubble Studio 标志">
+<span>Bubble Studio</span>
+</a>
+<div class="nav-links">
+<a href="#perks">会员权益</a>
+<a href="#why">为什么是 Pao Pool</a>
+<a href="#roadmap">近期动态</a>
+<a href="/blogs">博客</a>
+</div>
+<div class="nav-right">
+<label class="skip" for="lang">语言选择</label>
+<select class="lang" id="lang" aria-label="语言选择">
+<option>中文</option><option>EN</option><option>繁體</option>
+</select>
+<a class="btn btn-primary" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+</div>
+</div>
+</nav>
+
+<main id="main">
+
+<!-- hero -->
+<section class="hero" aria-labelledby="hero-h1">
+<div class="wrap">
+<div class="hero-panel reveal">
+<span class="hero-blob b1" aria-hidden="true"></span>
+<span class="hero-blob b2" aria-hidden="true"></span>
+<div class="hero-copy">
+<span class="eyebrow">🫧 Stake as a Service</span>
+<h1 id="hero-h1">质押即会员<span class="l2">资产不动，权益到手</span></h1>
+<p class="hero-sub">扎根 Cardano 的独立工作室。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员。</p>
+<div class="hero-cta">
+<a class="btn btn-primary btn-lg" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+<a class="btn btn-ghost btn-lg" href="#why">了解 Pao Pool</a>
+</div>
+<p class="hero-hint">已经是会员？<a href="https://t.me/+1aO8bBE7B7VhOWJl">连接钱包，订阅矿池动态 →</a></p>
+</div>
+<div class="hero-art" role="img" aria-label="Paopao 插画占位">
+<span class="emoji" aria-hidden="true">🫧</span>
+<span class="ph">Paopao 插画占位</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- stats -->
+<section class="stats" aria-label="矿池数据">
+<div class="wrap">
+<div class="stats-bar reveal">
+<div class="stat"><span class="num">PAO</span><span class="lab">ticker</span></div>
+<div class="stat"><span class="num">1.2M ADA</span><span class="lab">矿池质押量</span></div>
+<div class="stat"><span class="num">~2.2%</span><span class="lab">质押年化</span></div>
+<div class="stat"><span class="num">15</span><span class="lab">委托人</span></div>
+<a class="stat-link" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">在 CardanoScan 查看 →</a>
+</div>
+</div>
+</section>
+
+<!-- why -->
+<section class="sec" id="why" aria-labelledby="why-h2">
+<div class="wrap">
+<div class="sec-head reveal">
+<span class="eyebrow">为什么是 Pao Pool</span>
+<h2 id="why-h2">把 ADA 放这儿，好事自己来</h2>
+<p>资产还在你钱包里，协议收益照拿，同时自动解锁这些会员福利，没有额外费用。</p>
+</div>
+<div class="why-band">
+<div class="why-card mint reveal">
+<span class="badge">非托管</span>
+<h3>资产始终在你手里</h3>
+<p>委托不转移所有权，ADA 一直留在你的钱包，随时可取消或转移委托。</p>
+</div>
+<div class="why-card peach reveal">
+<span class="badge">零额外费用</span>
+<h3>会员权益免费附赠</h3>
+<p>照常领取协议质押收益，会员福利在此之上自动叠加，不收一分额外费用。</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- perks -->
+<section class="sec" id="perks" aria-labelledby="perks-h2" style="padding-top:0">
+<div class="wrap">
+<div class="sec-head reveal">
+<span class="eyebrow">会员权益</span>
+<h2 id="perks-h2">委托一次，福利不断</h2>
+<p>四项会员专属权益，链上透明、即刻生效。</p>
+</div>
+<div class="perks-grid">
+<article class="perk peach reveal">
+<div class="icon" aria-hidden="true">🎟️</div>
+<h3>每月 ADA 抽奖</h3>
+<p>会员专属、真实奖励，开奖透明、链上可查。</p>
+<span class="tag">产品片段</span>
+</article>
+<article class="perk sky reveal">
+<div class="icon" aria-hidden="true">📰</div>
+<h3>独家内容</h3>
+<p>深度文章、视频和分析，比公开发布更早送达会员。</p>
+<span class="tag">产品片段</span>
+</article>
+<article class="perk lavender reveal">
+<div class="icon" aria-hidden="true">🎁</div>
+<h3>免费产品 VODA</h3>
+<p>VODA 及未来每一款工具，会员全部免费、零成本。</p>
+<span class="tag">产品片段</span>
+</article>
+<article class="perk teal reveal">
+<div class="icon" aria-hidden="true">🤖</div>
+<h3>Telegram Bot</h3>
+<p>自动推送矿池动态、治理更新和互动工具，一站直达。</p>
+<span class="tag">产品片段</span>
+</article>
+</div>
+</div>
+</section>
+
+<!-- roadmap -->
+<section class="sec" id="roadmap" aria-labelledby="road-h2" style="padding-top:0">
+<div class="wrap">
+<div class="sec-head reveal">
+<span class="eyebrow">近期动态</span>
+<h2 id="road-h2">接下来要发生什么</h2>
+<p>从抽奖到深度内容，跟上 Bubble Studio 的节奏。</p>
+</div>
+<div class="road-list">
+<div class="road-item live reveal">
+<span class="road-date">2026.04.01 — 04.30</span>
+<div class="road-main">
+<span class="road-bigdot dot-live" style="background:var(--orange)" aria-hidden="true"></span>
+<span class="road-title">四月会员 ADA 抽奖</span>
+</div>
+<span class="pill road-status" style="background:var(--orange);color:var(--on-dark)"><span class="dot dot-live" style="background:#fff" aria-hidden="true"></span>进行中</span>
+</div>
+<div class="road-item reveal">
+<span class="road-date">2026.04.18</span>
+<div class="road-main">
+<span class="road-bigdot" style="background:var(--lavender)" aria-hidden="true"></span>
+<span class="road-title">Cardano Chang 硬分叉深度解读</span>
+</div>
+<span class="pill road-status" style="background:var(--lavender);color:var(--on-dark)">即将发布</span>
+</div>
+<div class="road-item reveal">
+<span class="road-date">2026.04.25</span>
+<div class="road-main">
+<span class="road-bigdot" style="background:var(--sky)" aria-hidden="true"></span>
+<span class="road-title">Cardano 治理系统入门 — 视频教程</span>
+</div>
+<span class="pill road-status" style="background:var(--sky);color:var(--on-dark)">制作中</span>
+</div>
+<div class="road-item reveal">
+<span class="road-date">2026.05</span>
+<div class="road-main">
+<span class="road-bigdot" style="background:var(--mint)" aria-hidden="true"></span>
+<span class="road-title">Catalyst Fund 14 投票指南</span>
+</div>
+<span class="pill road-status" style="background:var(--mint);color:var(--ink)">筹备中</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- cta band -->
+<section class="cta-band" aria-label="行动号召">
+<div class="wrap">
+<div class="cta-inner reveal">
+<h2>资产不动，权益到手</h2>
+<p>把 ADA 委托到 Pao Pool，照常赚收益，自动成为会员。</p>
+<a class="btn btn-primary btn-lg" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+</div>
+</div>
+</section>
+
+</main>
+
+<!-- footer -->
+<footer class="foot">
+<div class="wrap">
+<div class="foot-grid">
+<div>
+<div class="foot-brand">
+<img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Bubble Studio 标志">
+<span>Bubble Studio</span>
+</div>
+<p class="foot-blurb">扎根 Cardano 的独立工作室。做有趣的工具，写有深度的内容。由 Martin、Yoyo 和 Paopao 用咖啡驱动。</p>
+</div>
+<nav class="foot-col" aria-label="探索">
+<h4>探索</h4>
+<a href="#perks">会员权益</a>
+<a href="#why">为什么是 Pao Pool</a>
+<a href="#roadmap">近期动态</a>
+<a href="/blogs">博客</a>
+<a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan</a>
+</nav>
+<nav class="foot-col" aria-label="社区">
+<h4>社区</h4>
+<a href="https://x.com/cauu_128">X</a>
+<a href="https://t.me/+1aO8bBE7B7VhOWJl">Telegram</a>
+<a href="mailto:contact@bubble-studio.xyz">Email</a>
+</nav>
+<div class="foot-art" role="img" aria-label="Paopao 插画占位">
+<span class="emoji" aria-hidden="true">🫧</span>
+<span class="ph">Paopao 插画占位</span>
+</div>
+</div>
+<div class="foot-bottom">
+<span>由 Martin、Yoyo 和 Paopao 用咖啡驱动 ☕</span>
+<span class="sep">·</span><a href="/privacy">隐私政策</a>
+<span class="sep">·</span><a href="/terms">服务条款</a>
+<span class="sep">·</span><span>© 2024–2026 Bubble Studio</span>
+</div>
+</div>
+</footer>
+
+<script>
+(function(){
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+var els=document.querySelectorAll('.reveal');
+var io=new IntersectionObserver(function(entries){
+entries.forEach(function(e,i){
+if(e.isIntersecting){
+var el=e.target;
+setTimeout(function(){el.classList.add('in')}, (el.dataset.d?+el.dataset.d:0));
+io.unobserve(el);
+}
+});
+},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+// stagger siblings within shared parents
+document.querySelectorAll('.perks-grid .reveal, .road-list .reveal, .why-band .reveal').forEach(function(el,i){
+el.dataset.d=(i%4)*70;
+});
+els.forEach(function(el){io.observe(el)});
+})();
+</script>
+</body>
+</html>

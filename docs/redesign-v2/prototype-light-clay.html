@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Studio — Light · Clay-style prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ===== CJK face: AlibabaPuHuiTi, scoped to CJK glyphs only (per DESIGN-bubble-light) ===== */
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-55-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F; }
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F; }
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-85-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F; }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --canvas:#f9f8f6; --blank:#ffffff; --soft:#ebebf4; --card:#e7e8f4; --dark:#172026;
+    --hairline:#d1d2d8; --hairline-soft:#ebebf4;
+    --ink:#0a0a0a; --body:#44454e; --muted:#6d6e76; --muted-soft:#909198; --on-dark:#ffffff;
+    --primary:#0a0a0a; --primary-active:#172026;
+    --orange:#e5692e; --lavender:#bd91c9; --sky:#55cae8; --lemon:#eec963;
+    --grass:#a1cd5a; --sea:#488be1; --mint:#8ec5d1; --incana:#13585d;
+    --r-md:12px; --r-lg:16px; --r-xl:24px; --r-2xl:32px;
+    --font:'Inter','AlibabaPuHuiTi',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+    --maxw:1180px;
+  }
+  html { font-size:16px; scroll-behavior:smooth; }
+  body { font-family:var(--font); background:var(--canvas); color:var(--ink); line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .container { max-width:var(--maxw); margin:0 auto; padding:0 32px; }
+  @media (max-width:600px){ .container{ padding:0 20px; } }
+
+  .eyebrow { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink); }
+  .icon svg { stroke:currentColor; stroke-width:1.75; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .icon-box { width:44px; height:44px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .icon-box svg { width:22px; height:22px; stroke-width:1.75; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:46px; padding:13px 24px; border-radius:var(--r-md); font-family:var(--font); font-size:15px; font-weight:600; cursor:pointer; text-decoration:none; border:1px solid transparent; transition:background .2s, border-color .2s, transform .15s; }
+  .btn-primary { background:var(--primary); color:var(--on-dark); }
+  .btn-primary:hover { background:var(--primary-active); transform:translateY(-1px); }
+  .btn-ghost { background:transparent; color:var(--ink); border-color:var(--hairline); }
+  .btn-ghost:hover { border-color:var(--ink); }
+  .btn-light { background:var(--blank); color:var(--ink); }
+  .btn-light:hover { transform:translateY(-1px); }
+  .link-arrow { display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:600; color:var(--ink); text-decoration:none; }
+  .link-arrow:hover { gap:10px; }
+
+  /* ANNOUNCEMENT BAR */
+  .topbar { background:var(--incana); color:var(--on-dark); text-align:center; font-size:13px; padding:9px 20px; }
+  .topbar a { color:var(--on-dark); font-weight:600; text-decoration:underline; text-underline-offset:2px; margin-left:6px; }
+  .topbar .dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--lemon); margin-right:8px; vertical-align:middle; animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.35;} }
+
+  /* NAV */
+  .nav { position:sticky; top:0; z-index:20; background:rgba(249,248,246,.85); backdrop-filter:saturate(180%) blur(12px); border-bottom:1px solid var(--hairline); }
+  .nav-in { display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .nav-l { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .nav-l img { width:30px; height:30px; border-radius:8px; }
+  .nav-l b { font-size:17px; font-weight:700; letter-spacing:-.3px; color:var(--ink); }
+  .nav-c { display:flex; gap:28px; }
+  .nav-c a { font-size:14px; font-weight:500; color:var(--muted); text-decoration:none; transition:color .2s; }
+  .nav-c a:hover { color:var(--ink); }
+  .nav-r { display:flex; align-items:center; gap:14px; }
+  .nav-r select { background:var(--blank); border:1px solid var(--hairline); border-radius:var(--r-md); padding:7px 10px; font-size:13px; color:var(--muted); cursor:pointer; font-family:var(--font); }
+  @media (max-width:860px){ .nav-c{ display:none; } }
+  @media (max-width:600px){ .nav-r .btn{ display:none; } }
+
+  /* HERO — full-bleed claymation scene, headline overlaid on the dark lower band (clay-style) */
+  .hero-scene { position:relative; min-height:700px; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden;
+    background:linear-gradient(180deg,#7fd6ee 0%,#9bd9ea 20%,var(--grass) 50%,#4f9a76 72%,var(--incana) 100%); }
+  /* darken lower half so white text stays legible regardless of illustration */
+  .hero-scene::after { content:''; position:absolute; left:0; right:0; bottom:0; height:60%; z-index:1;
+    background:linear-gradient(180deg,transparent 0%,rgba(9,42,45,.45) 55%,rgba(9,42,45,.72) 100%); }
+  /* floating watercolor illustration in the upper scene */
+  .hero-illust { position:absolute; top:84px; left:0; right:0; z-index:1; text-align:center; }
+  .hero-illust .si { font-size:104px; filter:drop-shadow(0 14px 22px rgba(0,0,0,.18)); }
+  .hero-illust .cap { display:block; margin-top:8px; font-size:13px; color:rgba(255,255,255,.8); }
+  /* bottom text band: headline left, copy + CTA right */
+  .hero-overlay { position:relative; z-index:2; display:grid; grid-template-columns:1.5fr 1fr; gap:48px; align-items:end; padding-top:140px; padding-bottom:76px; }
+  .hero-eyebrow { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--lemon); margin-bottom:18px; }
+  .hero h1 { font-weight:800; font-size:68px; line-height:1.04; letter-spacing:normal; color:#fff; }
+  .hero-aside p { font-size:18px; line-height:1.55; color:rgba(255,255,255,.92); margin-bottom:22px; }
+  .hero-cta { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn-lemon { background:var(--lemon); color:var(--ink); }
+  .btn-lemon:hover { transform:translateY(-1px); filter:brightness(1.03); }
+  .hero-sub { margin-top:14px; font-size:13px; color:rgba(255,255,255,.82); }
+  .hero-sub a { color:#fff; font-weight:600; text-decoration:underline; text-underline-offset:2px; }
+  @media (max-width:860px){
+    .hero-scene{ min-height:600px; }
+    .hero-overlay{ grid-template-columns:1fr; gap:22px; padding-top:120px; padding-bottom:52px; }
+    .hero h1{ font-size:44px; }
+    .hero-illust .si{ font-size:76px; }
+  }
+  @media (max-width:600px){
+    .hero h1{ font-size:34px; }
+    .hero-aside p{ font-size:16px; }
+    .hero-cta .btn{ width:100%; }
+  }
+
+  /* STATS STRIP */
+  .stats { padding:40px 0; }
+  .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .stat { background:var(--blank); border:1px solid var(--hairline); border-radius:var(--r-lg); padding:22px 24px; }
+  .stat .k { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.6px; color:var(--muted-soft); margin-bottom:8px; }
+  .stat .v { font-size:30px; font-weight:700; color:var(--ink); line-height:1; }
+  .stat .v small { font-size:14px; font-weight:600; color:var(--muted); margin-left:3px; }
+  .stat.link { display:flex; flex-direction:column; justify-content:center; }
+  .stat.link a { font-size:15px; font-weight:600; color:var(--ink); text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+  .stat .tick { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.5px; color:var(--ink); background:var(--card); border-radius:9999px; padding:3px 10px; margin-bottom:10px; }
+  @media (max-width:860px){ .stats-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* SECTION HEAD */
+  .sec { padding:80px 0; }
+  .sec-head { max-width:680px; margin-bottom:44px; }
+  .sec-head.center { margin-left:auto; margin-right:auto; text-align:center; }
+  .sec-head .eyebrow { display:inline-block; margin-bottom:12px; }
+  .sec-head h2 { font-weight:800; font-size:40px; line-height:1.15; letter-spacing:normal; color:var(--ink); margin-bottom:14px; }
+  .sec-head p { font-size:17px; color:var(--muted); line-height:1.6; }
+  @media (max-width:600px){ .sec{ padding:56px 0; } .sec-head h2{ font-size:30px; } }
+
+  /* ALTERNATING FEATURE PANELS */
+  .feat { padding:36px 0; }
+  .feat-row { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+  .feat-row.reverse .feat-text { order:2; }
+  .feat-text .eyebrow { display:inline-block; margin-bottom:14px; }
+  .feat-text h2 { font-weight:700; font-size:32px; line-height:1.2; letter-spacing:normal; color:var(--ink); margin-bottom:14px; }
+  .feat-text p { font-size:17px; color:var(--muted); line-height:1.65; margin-bottom:20px; }
+  .feat-list { list-style:none; margin:0 0 22px; display:flex; flex-direction:column; gap:10px; }
+  .feat-list li { display:flex; align-items:flex-start; gap:10px; font-size:15px; color:var(--body); }
+  .feat-list .ic { color:var(--ink); margin-top:1px; flex-shrink:0; display:inline-flex; }
+  .feat-list .ic svg { width:18px; height:18px; }
+  .feat-panel { position:relative; height:360px; border-radius:var(--r-2xl); overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .panel-sky { background:var(--sky); }
+  .panel-lavender { background:var(--lavender); }
+  .panel-incana { background:var(--incana); }
+  .panel-illust { width:200px; height:150px; border-radius:var(--r-lg); border:2px dashed rgba(255,255,255,.6); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:rgba(255,255,255,.92); font-size:12px; text-align:center; padding:10px; }
+  .panel-illust .si { font-size:40px; }
+  .panel-frag { position:absolute; bottom:26px; right:26px; background:rgba(255,255,255,.95); border-radius:var(--r-md); padding:10px 14px; box-shadow:0 8px 24px rgba(0,0,0,.12); font-size:12px; color:var(--ink); max-width:200px; }
+  .panel-frag b { display:block; font-size:13px; margin-bottom:2px; }
+  .panel-frag span { color:var(--muted); }
+  @media (max-width:860px){ .feat-row{ grid-template-columns:1fr; gap:28px; } .feat-row.reverse .feat-text{ order:0; } .feat-panel{ height:280px; } }
+
+  /* PERKS GRID */
+  .grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .perk { background:var(--blank); border:1px solid var(--hairline); border-radius:var(--r-lg); padding:24px; transition:transform .15s, box-shadow .2s; }
+  .perk:hover { transform:translateY(-3px); box-shadow:0 12px 30px rgba(16,18,38,.08); }
+  .perk .icon-box { margin-bottom:14px; }
+  .perk h3 { font-size:16px; font-weight:600; margin-bottom:6px; color:var(--ink); }
+  .perk p { font-size:14px; color:var(--muted); line-height:1.55; }
+  .perk:nth-child(1) .icon-box { background:rgba(229,105,46,.14); color:var(--orange); }
+  .perk:nth-child(2) .icon-box { background:rgba(72,139,225,.14); color:var(--sea); }
+  .perk:nth-child(3) .icon-box { background:rgba(161,205,90,.18); color:var(--grass); }
+  .perk:nth-child(4) .icon-box { background:rgba(189,145,201,.20); color:var(--lavender); }
+  @media (max-width:860px){ .grid4{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .grid4{ grid-template-columns:1fr; } }
+
+  /* ROADMAP */
+  .road { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .road-card { background:var(--blank); border:1px solid var(--hairline); border-radius:var(--r-lg); padding:22px; position:relative; }
+  .road-card .when { font-size:12px; color:var(--muted-soft); margin-bottom:10px; }
+  .road-card .tag { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:600; color:var(--ink); background:var(--card); border-radius:9999px; padding:3px 10px; margin-bottom:12px; }
+  .road-card.live .tag { background:rgba(229,105,46,.16); }
+  .road-card .tag .d { width:6px; height:6px; border-radius:50%; background:var(--incana); }
+  .road-card.live .tag .d { background:var(--orange); }
+  .road-card .t { font-size:15px; font-weight:600; color:var(--ink); line-height:1.4; }
+  @media (max-width:860px){ .road{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .road{ grid-template-columns:1fr; } }
+
+  /* CTA BAND */
+  .cta-band { padding:40px 0 88px; }
+  .cta-in { position:relative; overflow:hidden; border-radius:var(--r-2xl); padding:72px 48px; text-align:center;
+    background:linear-gradient(135deg,#d8f0e6 0%,#e7e8f4 50%,#cdeefb 100%); }
+  .cta-in h2 { font-weight:800; font-size:40px; line-height:1.15; letter-spacing:normal; color:var(--ink); margin-bottom:12px; }
+  .cta-in p { font-size:17px; color:var(--body); margin-bottom:28px; }
+  .cta-in .hero-cta { margin-bottom:0; justify-content:center; }
+  @media (max-width:600px){ .cta-in{ padding:48px 24px; } .cta-in h2{ font-size:28px; } }
+
+  /* FOOTER */
+  .foot { background:var(--soft); border-top:1px solid var(--hairline); padding:64px 0 32px; }
+  .foot-top { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; padding-bottom:40px; border-bottom:1px solid var(--hairline); }
+  .foot-brand .nav-l { margin-bottom:14px; }
+  .foot-brand p { font-size:14px; color:var(--muted); max-width:260px; line-height:1.6; }
+  .foot-col h4 { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--muted-soft); margin-bottom:14px; }
+  .foot-col a { display:block; font-size:14px; color:var(--body); text-decoration:none; margin-bottom:10px; transition:color .2s; }
+  .foot-col a:hover { color:var(--ink); }
+  .foot-bot { display:flex; align-items:center; justify-content:space-between; padding-top:24px; flex-wrap:wrap; gap:12px; }
+  .foot-bot .made { font-size:13px; color:var(--muted); }
+  .foot-bot .copy { font-size:12px; color:var(--muted-soft); }
+  @media (max-width:860px){ .foot-top{ grid-template-columns:1fr 1fr; gap:28px; } }
+  @media (max-width:520px){ .foot-top{ grid-template-columns:1fr; } }
+</style>
+</head>
+
+<body>
+
+  <!-- ANNOUNCEMENT -->
+  <div class="topbar"><span class="dot"></span>四月会员 ADA 抽奖进行中 · 截止 4/30<a href="#roadmap">参加 &rarr;</a></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container nav-in">
+      <a href="#" class="nav-l">
+        <img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="">
+        <b>Bubble Studio</b>
+      </a>
+      <div class="nav-c">
+        <a href="#perks">会员权益</a>
+        <a href="#why">为什么是 Pao Pool</a>
+        <a href="#roadmap">近期动态</a>
+        <a href="/blogs">博客</a>
+      </div>
+      <div class="nav-r">
+        <select aria-label="语言"><option>中文</option><option>EN</option><option>繁體</option></select>
+        <a href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" target="_blank" class="btn btn-primary">质押到 Pao Pool</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-scene">
+      <div class="hero-illust">
+        <span class="si">&#x1FAE7;</span>
+        <span class="cap">Paopao 水彩主插画 · 全幅场景占位</span>
+      </div>
+      <div class="container hero-overlay">
+        <div class="hero-copy">
+          <div class="hero-eyebrow">Stake as a Service</div>
+          <h1>质押即会员<br>资产不动，权益到手</h1>
+        </div>
+        <div class="hero-aside">
+          <p>扎根 Cardano 的独立工作室。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员。</p>
+          <div class="hero-cta">
+            <a href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" target="_blank" class="btn btn-light">质押到 Pao Pool</a>
+            <a href="#why" class="btn btn-lemon">了解 Pao Pool</a>
+          </div>
+          <p class="hero-sub">已经是会员？<a href="#subscribe">连接钱包，订阅矿池动态 &rarr;</a></p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="container stats-grid">
+      <div class="stat"><div class="tick">PAO</div><div class="k">矿池质押量</div><div class="v">1.2M<small>ADA</small></div></div>
+      <div class="stat"><div class="k">质押年化</div><div class="v">~2.2<small>%</small></div></div>
+      <div class="stat"><div class="k">委托人</div><div class="v">15</div></div>
+      <div class="stat link"><a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" target="_blank">在 CardanoScan 查看 &rarr;</a></div>
+    </div>
+  </section>
+
+  <!-- WHY / INTRO -->
+  <section class="sec" id="why" style="padding-bottom:0;">
+    <div class="container">
+      <div class="sec-head center">
+        <div class="eyebrow">为什么是 Pao Pool</div>
+        <h2>把 ADA 放这儿，好事自己来</h2>
+        <p>资产还在你钱包里，协议收益照拿，同时自动解锁这些会员福利。委托到 Pao Pool，以下权益自动生效，没有额外费用。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE PANELS (3 alternating) -->
+  <section class="feat container" id="perks">
+    <div class="feat-row">
+      <div class="feat-text">
+        <div class="eyebrow">会员权益 · 01</div>
+        <h2>每月 ADA 抽奖</h2>
+        <p>会员专属、真实奖励。只要在质押中，每个月都自动获得抽奖资格，开奖透明、链上可查。</p>
+        <ul class="feat-list">
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>无需报名，质押即获资格</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>奖励以 ADA 直接发放</li>
+        </ul>
+        <a href="#roadmap" class="link-arrow">查看本月抽奖 &rarr;</a>
+      </div>
+      <div class="feat-panel panel-sky">
+        <div class="panel-illust"><span class="si">&#x1F381;</span>Paopao 抽奖插画</div>
+        <div class="panel-frag"><b>四月抽奖</b><span>15 名委托人 · 进行中</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feat container">
+    <div class="feat-row reverse">
+      <div class="feat-text">
+        <div class="eyebrow">会员权益 · 02</div>
+        <h2>独家内容，优先送达</h2>
+        <p>深度文章、视频和分析，比公开发布更早送达会员。Telegram Bot 自动推送矿池动态、治理更新和互动工具，一站直达。</p>
+        <ul class="feat-list">
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>文章 / 视频会员抢先看</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Telegram Bot 自动推送</li>
+        </ul>
+        <a href="/blogs" class="link-arrow">查看全部文章 &rarr;</a>
+      </div>
+      <div class="feat-panel panel-lavender">
+        <div class="panel-illust"><span class="si">&#x1F4F0;</span>Paopao 阅读插画</div>
+        <div class="panel-frag"><b>Telegram Bot</b><span>动态 · 治理 · 工具推送</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feat container">
+    <div class="feat-row">
+      <div class="feat-text">
+        <div class="eyebrow">会员权益 · 03</div>
+        <h2>免费使用全部产品</h2>
+        <p>VODA 及未来每一款工具，会员全部免费、零成本。我们做的工具，会员第一时间用得上、用得起。</p>
+        <ul class="feat-list">
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>VODA 等工具零成本</li>
+          <li><span class="ic"><svg viewBox="0 0 24 24"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>新工具会员优先体验</li>
+        </ul>
+        <a href="#" class="link-arrow">了解 VODA &rarr;</a>
+      </div>
+      <div class="feat-panel panel-incana">
+        <div class="panel-illust"><span class="si">&#x1F4BB;</span>Paopao 使用电脑插画</div>
+        <div class="panel-frag"><b>VODA</b><span>会员免费 · 持续更新</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="sec" id="roadmap" style="padding-top:0;">
+    <div class="container">
+      <div class="sec-head">
+        <div class="eyebrow">近期动态</div>
+        <h2>我们正在做的事</h2>
+      </div>
+      <div class="road">
+        <div class="road-card live">
+          <div class="when">2026.04.01 — 04.30</div>
+          <div class="tag"><span class="d"></span>进行中</div>
+          <div class="t">四月会员 ADA 抽奖</div>
+        </div>
+        <div class="road-card">
+          <div class="when">2026.04.18</div>
+          <div class="tag"><span class="d"></span>即将发布</div>
+          <div class="t">Cardano Chang 硬分叉深度解读</div>
+        </div>
+        <div class="road-card">
+          <div class="when">2026.04.25</div>
+          <div class="tag"><span class="d"></span>制作中</div>
+          <div class="t">Cardano 治理系统入门 — 视频教程</div>
+        </div>
+        <div class="road-card">
+          <div class="when">2026.05</div>
+          <div class="tag"><span class="d"></span>筹备中</div>
+          <div class="t">Catalyst Fund 14 投票指南</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="container">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <a href="#" class="nav-l">
+            <img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="">
+            <b>Bubble Studio</b>
+          </a>
+          <p>扎根 Cardano 的独立工作室。做有趣的工具，写有深度的内容。由 Martin、Yoyo 和 Paopao 用咖啡驱动。</p>
+        </div>
+        <div class="foot-col">
+          <h4>工作室</h4>
+          <a href="#why">为什么是 Pao Pool</a>
+          <a href="#perks">会员权益</a>
+          <a href="/blogs">博客</a>
+        </div>
+        <div class="foot-col">
+          <h4>矿池</h4>
+          <a href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" target="_blank">质押到 Pao Pool</a>
+          <a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" target="_blank">CardanoScan</a>
+          <a href="#roadmap">近期动态</a>
+        </div>
+        <div class="foot-col">
+          <h4>社区</h4>
+          <a href="https://x.com/cauu_128" target="_blank">X</a>
+          <a href="https://t.me/+1aO8bBE7B7VhOWJl" target="_blank">Telegram</a>
+          <a href="mailto:contact@bubble-studio.xyz">Email</a>
+        </div>
+      </div>
+      <div class="foot-bot">
+        <span class="made">由 Martin、Yoyo 和 Paopao 用咖啡驱动 &#x2615;</span>
+        <span class="copy">&copy; 2024&ndash;2026 Bubble Studio</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

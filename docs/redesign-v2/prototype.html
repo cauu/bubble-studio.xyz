@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Studio - Redesign Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ========== Reset & Base ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Deep sea frame */
+  --body-bg: #0b1d3a;
+  --dot-color: rgba(255,255,255,0.04);
+
+  /* Warm canvas */
+  --card-bg: #faf6f0;
+  --card-bg-alt: #fef9f0;
+  --white: #ffffff;
+
+  /* Text */
+  --text-primary: #1a1a2e;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #f0ece6;
+
+  /* Accent */
+  --coral: #e86c3a;
+  --coral-hover: #d45a2a;
+  --coral-light: rgba(232,108,58,0.1);
+  --teal: #3a9e8f;
+  --teal-light: rgba(58,158,143,0.1);
+  --cardano-blue: #0033ad;
+  --cardano-blue-light: rgba(0,51,173,0.08);
+
+  /* Shadows */
+  --shadow-sm: 0px 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0px 2px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0px 4px 20px rgba(0,0,0,0.1);
+
+  /* Radius */
+  --r-card: 24px;
+  --r-section: 16px;
+  --r-btn: 12px;
+  --r-sm: 8px;
+  --r-pill: 100px;
+}
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--body-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  /* Dot pattern - bubble hint */
+  background-image: radial-gradient(var(--dot-color) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  min-height: 100vh;
+  padding: 20px 16px 40px;
+}
+
+/* ========== Main Card Container ========== */
+.main-card {
+  max-width: 940px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+}
+
+/* ========== Mini Toolbar ========== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 32px;
+}
+
+.toolbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.toolbar-logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.toolbar-logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toolbar-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.toolbar-icon:hover {
+  background: rgba(0,0,0,0.05);
+  color: var(--text-primary);
+}
+
+.toolbar-icon svg { width: 18px; height: 18px; }
+
+.lang-switch {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px solid #e5e2dd;
+  border-radius: var(--r-sm);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.lang-switch:hover { border-color: var(--coral); color: var(--coral); }
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: #e5e2dd;
+  margin: 0 6px;
+}
+
+/* ========== Hero Section ========== */
+.hero {
+  text-align: center;
+  padding: 20px 32px 48px;
+}
+
+.hero-illustration {
+  position: relative;
+  width: 280px;
+  height: 200px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hand-drawn style bubble scene (placeholder) */
+.hero-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-paopao {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 80px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+  animation: gentle-float 4s ease-in-out infinite;
+}
+
+@keyframes gentle-float {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-50%, calc(-50% - 8px)); }
+}
+
+/* Decorative bubbles around Paopao */
+.bubble-deco {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(58,158,143,0.3);
+  background: rgba(58,158,143,0.06);
+}
+.bubble-deco.b1 { width: 24px; height: 24px; top: 20px; left: 30px; animation: bubble-rise 5s ease-in-out infinite; }
+.bubble-deco.b2 { width: 16px; height: 16px; top: 60px; right: 40px; animation: bubble-rise 4s ease-in-out infinite 1s; }
+.bubble-deco.b3 { width: 32px; height: 32px; bottom: 20px; left: 60px; animation: bubble-rise 6s ease-in-out infinite 0.5s; }
+.bubble-deco.b4 { width: 12px; height: 12px; top: 40px; right: 80px; animation: bubble-rise 3.5s ease-in-out infinite 1.5s; }
+.bubble-deco.b5 { width: 20px; height: 20px; bottom: 30px; right: 50px; animation: bubble-rise 4.5s ease-in-out infinite 0.8s; }
+
+@keyframes bubble-rise {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-12px) scale(1.1); opacity: 1; }
+}
+
+.hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 52px;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.hero-tagline {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ========== Section Divider ========== */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e5e2dd, transparent);
+  margin: 0 32px;
+}
+
+/* ========== Stake Membership Card ========== */
+.stake-section {
+  padding: 48px 32px;
+}
+
+.stake-card {
+  background: var(--card-bg-alt);
+  border-radius: var(--r-section);
+  padding: 36px 32px;
+  border: 1px solid #f0ebe3;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle watermark bubble in background */
+.stake-card::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,108,58,0.04) 0%, transparent 70%);
+  top: -60px;
+  right: -60px;
+  pointer-events: none;
+}
+
+.stake-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--coral);
+  background: var(--coral-light);
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  margin-bottom: 16px;
+}
+
+.stake-heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.stake-desc {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 28px;
+  max-width: 500px;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.metric-item {
+  background: var(--white);
+  border-radius: var(--r-sm);
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s;
+}
+.metric-item:hover { box-shadow: var(--shadow-md); }
+
+.metric-icon { font-size: 20px; margin-bottom: 6px; }
+
+.metric-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* CTA Button */
+.stake-cta {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--coral);
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  border: none;
+  border-radius: var(--r-btn);
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: -0.2px;
+}
+.stake-cta:hover {
+  background: var(--coral-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(232,108,58,0.3);
+}
+
+.stake-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.pool-ticker {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--cardano-blue);
+  background: var(--cardano-blue-light);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.stake-meta a {
+  color: var(--teal);
+  text-decoration: none;
+  font-weight: 500;
+}
+.stake-meta a:hover { text-decoration: underline; }
+
+.stake-safety {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+/* ========== What's Coming Section ========== */
+.coming-section {
+  padding: 48px 32px;
+}
+
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0ebe3;
+  transition: background 0.15s;
+}
+.timeline-item:last-child { border-bottom: none; }
+.timeline-item:hover { background: rgba(0,0,0,0.01); margin: 0 -8px; padding: 16px 8px; border-radius: var(--r-sm); }
+
+.timeline-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.timeline-content { flex: 1; min-width: 0; }
+
+.timeline-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.timeline-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.timeline-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tag-article { background: var(--teal-light); color: var(--teal); }
+.tag-video { background: #fef3c7; color: #b45309; }
+.tag-event { background: var(--coral-light); color: var(--coral); }
+
+.view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--teal);
+  text-decoration: none;
+  transition: gap 0.2s;
+}
+.view-all-link:hover { gap: 8px; }
+
+/* ========== Member Perks Section ========== */
+.perks-section {
+  padding: 40px 32px;
+  background: #f7f3ed;
+}
+
+.perks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.perk-card {
+  background: var(--white);
+  border-radius: var(--r-section);
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+.perk-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.perk-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.perk-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.perk-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.perks-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+}
+
+/* ========== Footer ========== */
+.footer {
+  padding: 32px 32px;
+  text-align: center;
+  border-top: 1px solid #ede8e0;
+}
+
+.footer-made {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.footer-socials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.footer-social-link {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid #e5e2dd;
+}
+.footer-social-link:hover {
+  color: var(--coral);
+  border-color: var(--coral);
+  background: var(--coral-light);
+}
+.footer-social-link svg { width: 16px; height: 16px; }
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 640px) {
+  body { padding: 10px 8px 24px; }
+
+  .toolbar { padding: 16px 20px; }
+  .hero { padding: 12px 20px 36px; }
+  .hero-title { font-size: 36px; letter-spacing: -1px; }
+  .hero-tagline { font-size: 15px; }
+  .hero-illustration { width: 220px; height: 160px; }
+  .hero-paopao { font-size: 60px; }
+
+  .stake-section { padding: 32px 20px; }
+  .stake-card { padding: 28px 20px; }
+  .stake-heading { font-size: 22px; }
+  .metrics-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .metric-value { font-size: 18px; }
+  .metric-item { padding: 12px 8px; }
+
+  .coming-section { padding: 32px 20px; }
+
+  .perks-section { padding: 32px 20px; }
+  .perks-grid { grid-template-columns: 1fr; }
+  .perk-card {
+    display: flex;
+    text-align: left;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 20px;
+  }
+  .perk-icon { margin-bottom: 0; font-size: 24px; }
+  .perk-text { flex: 1; }
+
+  .footer { padding: 24px 20px; }
+}
+
+/* ========== Annotation Labels (prototype only) ========== */
+.proto-label {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: white;
+  background: var(--coral);
+  padding: 3px 8px;
+  border-radius: 4px;
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  z-index: 10;
+}
+
+.proto-note {
+  font-size: 11px;
+  color: #b08968;
+  background: #fef3e2;
+  border: 1px dashed #d4a574;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+</style>
+</head>
+<body>
+
+<div class="main-card">
+
+  <!-- ===== Mini Toolbar ===== -->
+  <nav class="toolbar">
+    <a href="#" class="toolbar-logo">
+      <img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Bubble Studio" class="toolbar-logo-img">
+      <span class="toolbar-logo-text">Bubble Studio</span>
+    </a>
+    <div class="toolbar-actions">
+      <!-- X (Twitter) -->
+      <a href="https://x.com/cauu_128" target="_blank" class="toolbar-icon" title="X / Twitter">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <!-- Telegram -->
+      <a href="https://t.me/+1aO8bBE7B7VhOWJl" target="_blank" class="toolbar-icon" title="Telegram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+      <div class="toolbar-divider"></div>
+      <button class="lang-switch">EN</button>
+    </div>
+  </nav>
+
+  <!-- ===== Hero Section ===== -->
+  <section class="hero">
+    <div class="hero-illustration">
+      <div class="hero-scene">
+        <!-- Decorative bubbles -->
+        <div class="bubble-deco b1"></div>
+        <div class="bubble-deco b2"></div>
+        <div class="bubble-deco b3"></div>
+        <div class="bubble-deco b4"></div>
+        <div class="bubble-deco b5"></div>
+        <!-- Paopao placeholder (replace with hand-drawn illustration) -->
+        <div class="hero-paopao">🐾</div>
+      </div>
+    </div>
+    <h1 class="hero-title">Bubble Studio</h1>
+    <p class="hero-tagline">A tiny studio making fun stuff on Cardano.<br>Independent, family-run, and a little bit bubbly.</p>
+
+    <div class="proto-note" style="max-width:400px; margin: 20px auto 0;">
+      🎨 Prototype note: The 🐾 emoji is a placeholder. The final version should have a hand-drawn Paopao illustration — the soul of the brand.
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== Stake Membership Card ===== -->
+  <section class="stake-section">
+    <div class="stake-card">
+      <div class="stake-badge">🏊 Membership</div>
+      <h2 class="stake-heading">Stake to Pao Pool,<br>become a member.</h2>
+      <p class="stake-desc">Delegate your ADA to support our independent development. Members enjoy exclusive content, early access, and free tools.</p>
+
+      <div class="metrics-grid">
+        <div class="metric-item">
+          <div class="metric-icon">💰</div>
+          <div class="metric-value">1.2M</div>
+          <div class="metric-label">Live Stake (ADA)</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-icon">📈</div>
+          <div class="metric-value">2.2%</div>
+          <div class="metric-label">Est. APR</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-icon">👥</div>
+          <div class="metric-value">15</div>
+          <div class="metric-label">Delegators</div>
+        </div>
+      </div>
+
+      <button class="stake-cta">🎯 Stake to Pao Pool</button>
+
+      <div class="stake-meta">
+        <span>Pool Ticker: <span class="pool-ticker">PAO</span></span>
+        <span>·</span>
+        <a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" target="_blank">View on CardanoScan →</a>
+      </div>
+
+      <p class="stake-safety">Your ADA never leaves your wallet. Staking is safe and non-custodial.</p>
+    </div>
+
+    <div class="proto-note" style="margin-top: 16px;">
+      💡 Prototype note: The "Connect Wallet → Get Token" flow (current SubscriptionCard) will be integrated here as a second step after the Stake CTA, or as a collapsible "Already a member?" panel below.
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== What's Coming Section ===== -->
+  <section class="coming-section">
+    <h2 class="section-title">What's Coming</h2>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-icon">📝</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Cardano Chang Hard Fork Deep Dive</div>
+          <div class="timeline-meta">
+            <span>Apr 18</span>
+            <span class="timeline-tag tag-article">Article</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-icon">🎬</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Cardano Governance System Explained (Video)</div>
+          <div class="timeline-meta">
+            <span>Apr 25</span>
+            <span class="timeline-tag tag-video">Video</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-icon">🎯</div>
+        <div class="timeline-content">
+          <div class="timeline-title">Catalyst Fund 14 Voting Guide</div>
+          <div class="timeline-meta">
+            <span>May 1</span>
+            <span class="timeline-tag tag-event">Event</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-icon">🔧</div>
+        <div class="timeline-content">
+          <div class="timeline-title">VODA v2.0 — New DRep Analytics Dashboard</div>
+          <div class="timeline-meta">
+            <span>May 10</span>
+            <span class="timeline-tag tag-event">Release</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="/blogs" class="view-all-link">View all posts →</a>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== Member Perks Section ===== -->
+  <section class="perks-section">
+    <h2 class="section-title">Member Perks</h2>
+
+    <div class="perks-grid">
+      <div class="perk-card">
+        <div class="perk-icon">📬</div>
+        <div class="perk-text">
+          <div class="perk-title">Content Delivery</div>
+          <div class="perk-desc">Articles, videos, and event updates delivered to you first.</div>
+        </div>
+      </div>
+
+      <div class="perk-card">
+        <div class="perk-icon">🤖</div>
+        <div class="perk-text">
+          <div class="perk-title">TG Bot Access</div>
+          <div class="perk-desc">Interactive Telegram bot for instant notifications and tools.</div>
+        </div>
+      </div>
+
+      <div class="perk-card">
+        <div class="perk-icon">🔧</div>
+        <div class="perk-text">
+          <div class="perk-title">Free Apps</div>
+          <div class="perk-desc">Full access to all tools we build, including VODA governance app.</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="perks-note">More channels (Email, WhatsApp) coming soon...</p>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <p class="footer-made">Made with ☕ by Martin, Yoyo & Paopao 🐾</p>
+    <div class="footer-socials">
+      <a href="https://x.com/cauu_128" target="_blank" class="footer-social-link" title="X">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://t.me/+1aO8bBE7B7VhOWJl" target="_blank" class="footer-social-link" title="Telegram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+      <a href="mailto:martincai@sign.global" class="footer-social-link" title="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+      </a>
+    </div>
+    <p class="footer-copy">© 2024–2026 Bubble Studio. All rights reserved.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

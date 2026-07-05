@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>项目 · Pao Studio</title>
+<meta name="description" content="Pao Studio 的项目：VODA、Cardano 治理产品、Pao Pool、Telegram Bot。会员全部免费。">
+<meta name="theme-color" content="#13585d">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫧</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-55-Regular.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2');font-weight:500;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-85-Bold.woff2') format('woff2');font-weight:700;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+
+:root{
+--canvas:#f9f8f6; --blank:#f9f8f6; --soft:#ebebf4; --card:#e7e8f4; --dark:#172026;
+--hairline:#d1d2d8; --hairline-soft:#ebebf4;
+--ink:#0a0a0a; --body-strong:#172026; --body:#44454e; --muted:#6d6e76; --muted-soft:#909198; --on-dark:#ffffff;
+--primary:#0a0a0a; --primary-active:#172026;
+--orange:#e5692e; --lavender:#bd91c9; --sky:#55cae8; --lemon:#eec963; --grass:#a1cd5a; --sea:#488be1; --mint:#8ec5d1; --teal:#13585d;
+--r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:24px; --r-pill:999px;
+--sp-section:96px;
+--font:'Inter','AlibabaPuHuiTi',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+--ease:cubic-bezier(.22,.9,.35,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--canvas);color:var(--body);font-size:16px;line-height:1.6;font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+:lang(zh) h1,:lang(zh) h2,:lang(zh) h3{letter-spacing:normal}
+h1,h2,h3{color:var(--ink);font-weight:700}
+.tnum{font-variant-numeric:tabular-nums}
+::selection{background:var(--sea);color:#fff}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--on-dark);padding:12px 18px;border-radius:var(--r-md);z-index:100}
+.skip:focus{left:16px;top:16px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+a:focus-visible,button:focus-visible,.btn:focus-visible,select:focus-visible{outline:3px solid var(--sea);outline-offset:3px;border-radius:var(--r-md)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;line-height:1;padding:14px 22px;border-radius:var(--r-md);border:none;cursor:pointer;white-space:nowrap;transition:background .2s var(--ease),border-color .2s var(--ease)}
+.btn-primary{background:var(--primary);color:var(--on-dark)}
+.btn-primary:hover{background:var(--primary-active)}
+.btn-ghost{background:var(--blank);color:var(--ink);border:1px solid var(--hairline)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-oncolor{background:var(--blank);color:var(--ink)}
+.btn-oncolor:hover{background:var(--card)}
+
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;line-height:1;color:var(--ink);padding:7px 13px;border-radius:var(--r-pill);background:var(--card)}
+.chip--blank{background:var(--blank);border:1px solid var(--hairline)}
+.chip--mint{background:var(--mint)}
+.chip--grass{background:var(--grass)}
+.chip--lemon{background:var(--lemon)}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.55}}
+.dot-live{animation:pulse 1.6s ease-in-out infinite}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(249,248,246,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--hairline)}
+.nav-inner{display:flex;align-items:center;gap:24px;height:68px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:17px;color:var(--ink)}
+.brand img{height:28px;width:auto}
+.nav-links{display:flex;gap:4px;margin-left:12px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--body);padding:9px 13px;border-radius:var(--r-pill);transition:background .18s,color .18s}
+.nav-links a:hover{background:var(--card);color:var(--ink)}
+.nav-links a[aria-current="page"]{background:var(--card);color:var(--ink)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.lang{font-family:var(--font);font-size:13.5px;font-weight:500;color:var(--body);background:var(--blank);border:1px solid var(--hairline);padding:9px 12px;border-radius:var(--r-md);cursor:pointer}
+.lang:hover{border-color:var(--ink)}
+.menu-btn{display:none;align-items:center;justify-content:center;width:42px;height:42px;flex:none;background:var(--blank);border:1px solid var(--hairline);border-radius:var(--r-md);cursor:pointer;color:var(--ink)}
+.mnav{display:none;border-top:1px solid var(--hairline);background:var(--canvas);padding:8px 24px 16px}
+.mnav.open{display:block}
+.mnav a{display:block;padding:13px 8px;font-size:15px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--hairline-soft)}
+.mnav a:last-child{border-bottom:none}
+
+/* page head: display title + one-line context */
+.page-head{padding:64px 0 0}
+.page-head h1{font-size:clamp(36px,4.5vw,52px);line-height:1.15;margin-bottom:12px}
+.page-head p{font-size:16.5px;color:var(--muted)}
+
+/* project cards: flat on canvas */
+.band{padding:32px 0 0}
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.proj{
+background:var(--blank);border:1px solid var(--hairline);
+border-radius:var(--r-lg);padding:28px;
+display:flex;flex-direction:column;gap:14px;
+transition:border-color .2s var(--ease);
+}
+.proj:hover{border-color:var(--teal)}
+.ptile{
+width:48px;height:48px;border-radius:var(--r-md);flex:none;
+display:grid;place-items:center;
+font-size:15px;font-weight:700;color:var(--ink);
+}
+.ptile.sky{background:var(--sky)}
+.ptile.mint{background:var(--mint)}
+.ptile.lavender{background:var(--lavender)}
+.ptile.grass{background:var(--grass)}
+.proj h3{font-size:19px;line-height:1.3}
+.proj p{font-size:14.5px;color:var(--body);flex:1}
+.proj-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.proj-link{font-size:14px;font-weight:600;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.proj-link:hover{color:var(--teal)}
+.band-mascot{position:absolute;right:9%;top:-26px;width:64px;height:64px;z-index:2}
+.band-mascot .pbody{position:absolute;inset:0;border-radius:50%;background:var(--sky)}
+.band-mascot .hl{position:absolute;width:20px;height:20px;border-radius:50%;background:var(--canvas);top:13px;left:12px}
+.band-mascot .sat{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--lavender);right:-2px;top:-3px}
+
+/* note strip */
+.note{padding:72px 0 96px}
+.note-inner{
+background:var(--blank);border:1px solid var(--hairline);border-radius:var(--r-lg);
+padding:32px 36px;
+display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+}
+.note-inner .ck{width:22px;height:22px;border-radius:50%;flex:none;background:var(--teal);color:var(--on-dark);display:grid;place-items:center;font-size:12px;font-weight:700}
+.note-inner p{flex:1;font-size:15px;color:var(--body);min-width:220px}
+.note-inner p b{color:var(--ink);font-weight:600}
+
+/* footer */
+.foot{background:var(--soft);padding:88px 0 28px;position:relative}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:40px;align-items:start}
+.foot-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;color:var(--ink);margin-bottom:16px}
+.foot-brand img{height:26px}
+.foot-blurb{font-size:14px;color:var(--body);max-width:24em;line-height:1.6}
+.foot-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--body);margin-bottom:16px}
+.foot-col a{display:block;font-size:14.5px;font-weight:500;color:var(--body);padding:5px 0;transition:color .15s}
+.foot-col a:hover{color:var(--ink)}
+.foot-bottom{margin-top:48px;padding-top:24px;border-top:1px solid var(--hairline);font-size:13.5px;color:var(--body);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.foot-bottom a{font-weight:600}
+.foot-bottom a:hover{color:var(--ink)}
+.foot-bottom .sep{color:var(--muted-soft)}
+
+.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.js .reveal.in{opacity:1;transform:none}
+
+@media(max-width:860px){
+.nav-links{display:none}
+.menu-btn{display:inline-flex}
+.page-head{padding:44px 0 0}
+.band{padding:28px 0 0}
+.note{padding:56px 0 72px}
+.foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+.band-mascot{right:6%}
+}
+@media(max-width:600px){
+.wrap{padding:0 18px}
+.proj-grid{grid-template-columns:1fr}
+.foot-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+.js .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+
+<nav class="nav" aria-label="主导航">
+<div class="wrap nav-inner">
+<a class="brand" href="prototype-ledger.html" aria-label="Pao Studio 首页">
+<img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Pao Studio 标志">
+<span>Pao Studio</span>
+</a>
+<div class="nav-links">
+<a href="prototype-ledger.html">首页</a>
+<a href="blog.html">博客</a>
+<a href="projects.html" aria-current="page">项目</a>
+</div>
+<div class="nav-right">
+<select class="lang" id="lang" aria-label="语言选择">
+<option>中文</option><option>EN</option><option>繁體</option>
+</select>
+<a class="btn btn-primary" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mnav" aria-label="打开菜单">
+<svg width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true"><path d="M1 1h16M1 7h16M1 13h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+</div>
+</div>
+<div class="mnav" id="mnav">
+<a href="prototype-ledger.html">首页</a>
+<a href="blog.html">博客</a>
+<a href="projects.html">项目</a>
+</div>
+</nav>
+
+<main id="main">
+
+<!-- page head -->
+<header class="page-head">
+<div class="wrap reveal">
+<h1>项目</h1>
+<p>我们正在做的工具与产品，会员全部免费。</p>
+</div>
+</header>
+
+<!-- all projects -->
+<section class="band" aria-label="全部项目">
+<div class="wrap">
+<div class="proj-grid">
+<article class="proj reveal">
+<div class="ptile sky" aria-hidden="true">VODA</div>
+<h3>VODA</h3>
+<p>VODA 及未来每一款工具，会员全部免费、零成本。质押到 Pao Pool 即自动解锁。</p>
+<div class="proj-foot">
+<span class="chip chip--lemon"><span class="dot dot-live" style="background:var(--orange)" aria-hidden="true"></span>Beta 进行中</span>
+<a class="proj-link" href="#">了解 VODA →</a>
+</div>
+</article>
+<article class="proj reveal">
+<div class="ptile mint" aria-hidden="true">PAO</div>
+<h3>Pao Pool</h3>
+<p>Cardano 质押矿池。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员。</p>
+<div class="proj-foot">
+<span class="chip chip--grass">运行中</span>
+<a class="proj-link" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan →</a>
+</div>
+</article>
+<article class="proj reveal">
+<div class="ptile lavender" aria-hidden="true">GOV</div>
+<h3>Cardano 治理产品</h3>
+<p>以产品化手段推动 Cardano 治理的下一次跃迁，让治理参与像用普通 App 一样简单。</p>
+<div class="proj-foot">
+<span class="chip">开发中</span>
+<a class="proj-link" href="blog.html">进展周报 →</a>
+</div>
+</article>
+<article class="proj reveal">
+<div class="ptile grass" aria-hidden="true">BOT</div>
+<h3>Telegram Bot</h3>
+<p>自动推送矿池动态、治理更新和互动工具，一站直达。</p>
+<div class="proj-foot">
+<span class="chip chip--grass">运行中</span>
+<a class="proj-link" href="https://t.me/+1aO8bBE7B7VhOWJl">加入 Telegram →</a>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<!-- membership note -->
+<section class="note" aria-label="会员说明">
+<div class="wrap">
+<div class="note-inner reveal">
+<span class="ck" aria-hidden="true">✓</span>
+<p><b>会员权益免费附赠</b> — 照常领取协议质押收益，会员福利在此之上自动叠加，不收一分额外费用。</p>
+<a class="btn btn-primary" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer class="foot">
+<div class="band-mascot" aria-hidden="true">
+<span class="pbody"></span><span class="hl"></span><span class="sat"></span>
+</div>
+<div class="wrap">
+<div class="foot-grid">
+<div>
+<div class="foot-brand">
+<img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Pao Studio 标志">
+<span>Pao Studio</span>
+</div>
+<p class="foot-blurb">扎根 Cardano 的「一人公司」实验。做有趣的产品，写有深度的内容。</p>
+</div>
+<nav class="foot-col" aria-label="探索">
+<h4>探索</h4>
+<a href="prototype-ledger.html">首页</a>
+<a href="blog.html">博客</a>
+<a href="projects.html">项目</a>
+<a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan</a>
+</nav>
+<nav class="foot-col" aria-label="社区">
+<h4>社区</h4>
+<a href="https://x.com/cauu_128">X</a>
+<a href="https://t.me/+1aO8bBE7B7VhOWJl">Telegram</a>
+<a href="mailto:contact@bubble-studio.xyz">Email</a>
+</nav>
+</div>
+<div class="foot-bottom">
+<a href="/privacy">隐私政策</a>
+<span class="sep">·</span><a href="/terms">服务条款</a>
+<span class="sep">·</span><span class="tnum">© 2024–2026 Pao Studio</span>
+</div>
+</div>
+</footer>
+
+<script>
+(function(){
+document.documentElement.classList.add('js');
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+if(!reduce&&'IntersectionObserver' in window){
+var io=new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){var el=e.target;setTimeout(function(){el.classList.add('in')},(el.dataset.d?+el.dataset.d:0));io.unobserve(el)}
+});
+},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.proj-grid .reveal').forEach(function(el,i){el.dataset.d=(i%3)*70});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+}else{
+document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+}
+var mb=document.getElementById('menuBtn'),mn=document.getElementById('mnav');
+if(mb&&mn){
+mb.addEventListener('click',function(){
+var open=mn.classList.toggle('open');
+mb.setAttribute('aria-expanded',open?'true':'false');
+mb.setAttribute('aria-label',open?'关闭菜单':'打开菜单');
+});
+}
+})();
+</script>
+</body>
+</html>

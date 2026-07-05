@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Studio - Prototype v2 (Hand-drawn)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ========== Reset ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --body-bg: #0f2240;
+  --card-bg: #faf6ef;
+  --card-alt: #fef8ee;
+  --white: #ffffff;
+  --ink: #1a1a2e;
+  --ink-light: #5a5a72;
+  --ink-faint: #9a9aad;
+  --coral: #e86c3a;
+  --coral-hover: #d45a2a;
+  --teal: #2d8f7b;
+  --teal-light: rgba(45,143,123,0.1);
+  --cardano-blue: #0033ad;
+  --sketch-border: #c4b8a8;
+  --pencil: #b8a88c;
+}
+
+/* SVG filter for hand-drawn wobbly edges */
+svg.filters { position: absolute; width: 0; height: 0; }
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--body-bg);
+  color: var(--ink);
+  line-height: 1.6;
+  /* hand-drawn dot grid */
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 28px 28px, 14px 14px;
+  background-position: 0 0, 7px 7px;
+  min-height: 100vh;
+  padding: 24px 16px 48px;
+}
+
+/* ========== The "Paper" Card ========== */
+.paper {
+  max-width: 880px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border-radius: 6px;
+  /* hand-drawn shadow: layered, slightly offset, not perfect */
+  box-shadow:
+    3px 4px 0px 0px #0a1a30,
+    6px 8px 0px -1px #071425;
+  /* subtle paper texture via noise */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Paper edge roughness - top wavy border */
+.paper::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -10px; right: -10px;
+  height: 8px;
+  background: var(--card-bg);
+  filter: url(#roughen);
+  z-index: 2;
+}
+
+/* ========== Doodle elements (inline SVGs) ========== */
+.doodle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ========== Hand-drawn font for annotations ========== */
+.handwritten {
+  font-family: 'Caveat', cursive;
+}
+
+/* ========== Toolbar ========== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  border-bottom: 2px dashed var(--sketch-border);
+}
+
+.toolbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.toolbar-logo img {
+  width: 34px;
+  height: 34px;
+}
+
+.toolbar-logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-link {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-light);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+.toolbar-link:hover { color: var(--coral); background: rgba(232,108,58,0.06); }
+.toolbar-link svg { width: 16px; height: 16px; }
+
+.lang-btn {
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink-light);
+  background: none;
+  border: 1.5px solid var(--sketch-border);
+  border-radius: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.lang-btn:hover { border-color: var(--coral); color: var(--coral); }
+
+/* ========== Hero ========== */
+.hero {
+  text-align: center;
+  padding: 32px 28px 40px;
+  position: relative;
+}
+
+/* Sketchy bubble scene */
+.hero-scene {
+  position: relative;
+  width: 300px;
+  height: 220px;
+  margin: 0 auto 20px;
+}
+
+/* The paopao character - big friendly presence */
+.paopao-main {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Hand-drawn circle */
+  border: 3px solid var(--ink);
+  border-radius: 58% 50% 54% 48% / 50% 56% 46% 52%;
+  background: #fde8d0;
+  box-shadow: 3px 4px 0px var(--ink);
+  animation: wobble 6s ease-in-out infinite;
+}
+
+@keyframes wobble {
+  0%, 100% { border-radius: 58% 50% 54% 48% / 50% 56% 46% 52%; transform: translate(-50%, -50%) rotate(-1deg); }
+  25% { border-radius: 52% 56% 48% 54% / 54% 48% 52% 50%; transform: translate(-50%, calc(-50% - 4px)) rotate(1deg); }
+  50% { border-radius: 50% 54% 52% 50% / 48% 52% 50% 54%; transform: translate(-50%, -50%) rotate(-0.5deg); }
+  75% { border-radius: 54% 48% 56% 52% / 52% 50% 48% 56%; transform: translate(-50%, calc(-50% - 2px)) rotate(0.5deg); }
+}
+
+.paopao-face {
+  font-size: 52px;
+  line-height: 1;
+  transform: rotate(-5deg);
+}
+
+/* Hand-drawn bubbles */
+.sketch-bubble {
+  position: absolute;
+  border: 2px solid var(--teal);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+.sketch-bubble::after {
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  background: rgba(255,255,255,0.6);
+  border-radius: 50%;
+  top: 15%;
+  left: 20%;
+}
+.sb1 { width: 28px; height: 28px; top: 15px; left: 20px; border-radius: 55% 48% 52% 50%; transform: rotate(12deg); animation: float-up 5s ease-in-out infinite; }
+.sb2 { width: 18px; height: 18px; top: 50px; right: 25px; border-radius: 48% 54% 50% 52%; transform: rotate(-8deg); animation: float-up 4s ease-in-out infinite 1s; }
+.sb3 { width: 36px; height: 36px; bottom: 10px; left: 40px; border-radius: 52% 50% 48% 54%; transform: rotate(5deg); animation: float-up 6s ease-in-out infinite 0.5s; }
+.sb4 { width: 14px; height: 14px; top: 30px; right: 70px; border-radius: 50% 52% 48% 54%; animation: float-up 3.5s ease-in-out infinite 1.5s; }
+.sb5 { width: 22px; height: 22px; bottom: 25px; right: 35px; border-radius: 54% 48% 52% 50%; transform: rotate(-3deg); animation: float-up 4.5s ease-in-out infinite 0.8s; }
+.sb6 { width: 10px; height: 10px; top: 80px; left: 10px; border-radius: 50%; animation: float-up 3s ease-in-out infinite 2s; }
+
+@keyframes float-up {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-14px); opacity: 0.7; }
+}
+
+/* Hand-drawn arrow doodle */
+.hero-arrow {
+  position: absolute;
+  right: 20px;
+  bottom: -10px;
+  color: var(--pencil);
+  transform: rotate(15deg);
+}
+
+.hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 46px;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 10px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Hand-drawn underline under title */
+.hero-title::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 5%;
+  right: 5%;
+  height: 8px;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 5 Q25 1, 50 4.5 T100 4 T150 5 T200 3.5' stroke='%23e86c3a' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center;
+  background-size: 100% 100%;
+  opacity: 0.7;
+}
+
+.hero-tagline {
+  font-size: 17px;
+  color: var(--ink-light);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+/* Hand-written annotation */
+.hero-note {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: var(--coral);
+  margin-top: 16px;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+.hero-note::before { content: '↓ '; }
+
+/* ========== Section Separator: hand-drawn wavy line ========== */
+.wavy-sep {
+  display: block;
+  margin: 0 28px;
+  height: 12px;
+  opacity: 0.3;
+}
+
+/* ========== Stake Card ========== */
+.stake-section {
+  padding: 40px 28px;
+}
+
+.stake-card {
+  background: var(--white);
+  border: 2.5px solid var(--ink);
+  border-radius: 4px;
+  padding: 32px 28px;
+  position: relative;
+  /* hand-drawn shadow */
+  box-shadow: 4px 5px 0px var(--ink);
+  transform: rotate(-0.3deg);
+}
+
+/* "Membership" tape label */
+.tape-label {
+  position: absolute;
+  top: -14px;
+  left: 24px;
+  background: var(--coral);
+  color: white;
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 4px 16px;
+  transform: rotate(-2deg);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  z-index: 3;
+}
+
+.stake-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  margin-bottom: 6px;
+  margin-top: 8px;
+}
+
+.stake-sub {
+  color: var(--ink-light);
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* Metrics: sketchy boxes */
+.metrics-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.metric-box {
+  flex: 1;
+  border: 2px solid var(--ink);
+  border-radius: 3px;
+  padding: 14px 10px;
+  text-align: center;
+  background: var(--card-bg);
+  box-shadow: 2px 3px 0px var(--ink);
+  transition: transform 0.15s;
+}
+.metric-box:hover { transform: translate(-1px, -1px); box-shadow: 3px 4px 0px var(--ink); }
+.metric-box:nth-child(1) { transform: rotate(-0.5deg); }
+.metric-box:nth-child(2) { transform: rotate(0.3deg); }
+.metric-box:nth-child(3) { transform: rotate(-0.2deg); }
+
+.metric-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--ink);
+}
+
+.metric-unit {
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+/* CTA: big sketchy button */
+.stake-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+  background: var(--coral);
+  border: 2.5px solid var(--ink);
+  border-radius: 4px;
+  box-shadow: 3px 4px 0px var(--ink);
+  cursor: pointer;
+  transition: all 0.1s;
+  letter-spacing: -0.3px;
+}
+.stake-btn:hover {
+  background: var(--coral-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 5px 0px var(--ink);
+}
+.stake-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--ink);
+}
+
+.stake-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--ink-faint);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pool-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 11px;
+  background: rgba(0,51,173,0.06);
+  color: var(--cardano-blue);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,51,173,0.15);
+}
+
+.stake-footer a { color: var(--teal); text-decoration: none; font-weight: 500; }
+.stake-footer a:hover { text-decoration: underline; }
+
+/* Handwritten safety note */
+.safety-note {
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  color: var(--ink-faint);
+  text-align: center;
+  margin-top: 14px;
+  transform: rotate(-0.5deg);
+}
+
+/* ========== What's Coming ========== */
+.coming-section {
+  padding: 40px 28px;
+}
+
+.section-heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Sketchy circle around heading */
+.section-heading .circle-deco {
+  position: absolute;
+  top: -8px; left: -12px; right: -12px; bottom: -8px;
+  border: 2px solid var(--coral);
+  border-radius: 58% 42% 55% 45% / 48% 55% 45% 52%;
+  opacity: 0.25;
+  transform: rotate(-1deg);
+  pointer-events: none;
+}
+
+.event-list {
+  list-style: none;
+}
+
+.event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1.5px dashed var(--sketch-border);
+}
+.event-item:last-child { border-bottom: none; }
+
+/* Hand-drawn icon circles */
+.event-icon {
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  border: 2px solid var(--ink);
+  border-radius: 52% 48% 50% 50% / 48% 52% 48% 52%;
+  background: var(--white);
+  box-shadow: 2px 2px 0px var(--ink);
+}
+.event-item:nth-child(odd) .event-icon { transform: rotate(-3deg); }
+.event-item:nth-child(even) .event-icon { transform: rotate(2deg); }
+
+.event-body { flex: 1; }
+
+.event-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.event-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+
+.event-tag {
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0px 8px;
+  border-radius: 3px;
+}
+.tag-article { background: var(--teal-light); color: var(--teal); }
+.tag-video { background: #fef3c7; color: #a16207; }
+.tag-event { background: rgba(232,108,58,0.1); color: var(--coral); }
+.tag-release { background: rgba(0,51,173,0.08); color: var(--cardano-blue); }
+
+.view-all {
+  display: inline-block;
+  margin-top: 18px;
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--teal);
+  text-decoration: none;
+  border-bottom: 2px solid var(--teal);
+  transition: all 0.15s;
+  transform: rotate(-1deg);
+}
+.view-all:hover { color: var(--coral); border-color: var(--coral); }
+
+/* ========== Perks ========== */
+.perks-section {
+  padding: 36px 28px;
+  background: #f4efe6;
+  border-top: 2px dashed var(--sketch-border);
+  border-bottom: 2px dashed var(--sketch-border);
+}
+
+.perks-row {
+  display: flex;
+  gap: 14px;
+}
+
+.perk {
+  flex: 1;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  background: var(--white);
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: 3px 3px 0px var(--ink);
+  transition: transform 0.15s;
+}
+.perk:nth-child(1) { transform: rotate(-1.2deg); }
+.perk:nth-child(2) { transform: rotate(0.8deg); }
+.perk:nth-child(3) { transform: rotate(-0.5deg); }
+.perk:hover { transform: translate(-1px, -2px) rotate(0deg); }
+
+.perk-ico { font-size: 28px; margin-bottom: 10px; }
+
+.perk-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.perk-txt {
+  font-size: 12px;
+  color: var(--ink-light);
+  line-height: 1.5;
+}
+
+.perks-coming {
+  font-family: 'Caveat', cursive;
+  font-size: 17px;
+  color: var(--ink-faint);
+  text-align: center;
+  margin-top: 16px;
+  transform: rotate(-0.8deg);
+}
+
+/* ========== Footer ========== */
+.footer {
+  padding: 28px;
+  text-align: center;
+}
+
+.footer-crew {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: var(--ink-light);
+  margin-bottom: 14px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.footer-link {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--sketch-border);
+  border-radius: 4px;
+  color: var(--ink-light);
+  text-decoration: none;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.06);
+  transition: all 0.1s;
+}
+.footer-link:hover {
+  color: var(--coral);
+  border-color: var(--coral);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.08);
+}
+.footer-link svg { width: 14px; height: 14px; }
+
+.footer-copy {
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 600px) {
+  body { padding: 10px 6px 24px; }
+  .toolbar { padding: 14px 16px; }
+  .hero { padding: 20px 16px 32px; }
+  .hero-title { font-size: 32px; }
+  .hero-scene { width: 220px; height: 170px; }
+  .paopao-main { width: 90px; height: 90px; }
+  .paopao-face { font-size: 40px; }
+  .stake-section, .coming-section { padding: 28px 16px; }
+  .stake-card { padding: 24px 16px; }
+  .stake-title { font-size: 22px; }
+  .metrics-row { gap: 6px; }
+  .metric-box { padding: 10px 6px; }
+  .metric-num { font-size: 18px; }
+  .perks-section { padding: 28px 16px; }
+  .perks-row { flex-direction: column; }
+  .perk { transform: none !important; }
+  .perk:nth-child(1) { transform: rotate(-0.5deg) !important; }
+  .perk:nth-child(2) { transform: rotate(0.3deg) !important; }
+  .perk:nth-child(3) { transform: rotate(-0.3deg) !important; }
+  .footer { padding: 20px 16px; }
+}
+
+/* ========== Sketchy decorative doodles ========== */
+.doodle-star {
+  position: absolute;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<!-- SVG Filters for roughness -->
+<svg class="filters">
+  <filter id="roughen">
+    <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="4" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+  </filter>
+</svg>
+
+<div class="paper">
+
+  <!-- ===== Toolbar ===== -->
+  <nav class="toolbar">
+    <a href="#" class="toolbar-logo">
+      <img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Bubble Studio">
+      <span class="toolbar-logo-text">Bubble Studio</span>
+    </a>
+    <div class="toolbar-right">
+      <a href="https://x.com/cauu_128" target="_blank" class="toolbar-link" title="X">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://t.me/+1aO8bBE7B7VhOWJl" target="_blank" class="toolbar-link" title="Telegram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+      <button class="lang-btn">EN</button>
+    </div>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="hero-scene">
+      <div class="sketch-bubble sb1"></div>
+      <div class="sketch-bubble sb2"></div>
+      <div class="sketch-bubble sb3"></div>
+      <div class="sketch-bubble sb4"></div>
+      <div class="sketch-bubble sb5"></div>
+      <div class="sketch-bubble sb6"></div>
+      <div class="paopao-main">
+        <div class="paopao-face">🐾</div>
+      </div>
+      <!-- hand-drawn arrow pointing down -->
+      <svg class="hero-arrow" width="40" height="50" viewBox="0 0 40 50" fill="none">
+        <path d="M20 2 Q18 15, 22 25 T18 42" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M10 36 L18 44 L26 36" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <h1 class="hero-title">Bubble Studio</h1>
+    <p class="hero-tagline">
+      A tiny family workshop, taking root and growing on Cardano.
+    </p>
+    <span class="hero-note handwritten">stake below to join us!</span>
+  </section>
+
+  <!-- wavy separator -->
+  <svg class="wavy-sep" viewBox="0 0 800 12" preserveAspectRatio="none">
+    <path d="M0 6 Q50 0, 100 6 T200 6 T300 6 T400 6 T500 6 T600 6 T700 6 T800 6" stroke="#c4b8a8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  </svg>
+
+  <!-- ===== Stake Card ===== -->
+  <section class="stake-section">
+    <div class="stake-card">
+      <div class="tape-label">🏊 Membership</div>
+
+      <h2 class="stake-title">Stake to Pao Pool,<br>become a member.</h2>
+      <p class="stake-sub">
+        Delegate your ADA to support our indie dev work.<br>
+        Members get exclusive content, early access & free tools.
+      </p>
+
+      <div class="metrics-row">
+        <div class="metric-box">
+          <div class="metric-num">1.2M</div>
+          <div class="metric-unit">ADA staked</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-num">~2.2%</div>
+          <div class="metric-unit">est. APR</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-num">15</div>
+          <div class="metric-unit">delegators</div>
+        </div>
+      </div>
+
+      <button class="stake-btn" onclick="window.open('https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm','_blank')">
+        Stake to Pao Pool →
+      </button>
+
+      <div class="stake-footer">
+        <span>Ticker: <span class="pool-id">PAO</span></span>
+        <a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" target="_blank">view on CardanoScan →</a>
+      </div>
+      <p class="safety-note">* your ADA never leaves your wallet — staking is safe!</p>
+    </div>
+
+    <!-- doodle annotation -->
+    <p class="handwritten" style="color: var(--pencil); font-size: 17px; margin-top: 12px; transform: rotate(-1deg); text-align: center;">
+      ← already staked? connect wallet to get your member token
+    </p>
+  </section>
+
+  <!-- wavy separator -->
+  <svg class="wavy-sep" viewBox="0 0 800 12" preserveAspectRatio="none">
+    <path d="M0 6 Q50 2, 100 6 T200 6 T300 6 T400 6 T500 6 T600 6 T700 6 T800 6" stroke="#c4b8a8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  </svg>
+
+  <!-- ===== What's Coming ===== -->
+  <section class="coming-section">
+    <h2 class="section-heading">
+      What's Coming
+      <span class="circle-deco"></span>
+    </h2>
+
+    <ul class="event-list">
+      <li class="event-item">
+        <div class="event-icon">📝</div>
+        <div class="event-body">
+          <div class="event-title">Cardano Chang 硬分叉深度解读</div>
+          <div class="event-meta">
+            <span>Apr 18</span>
+            <span class="event-tag tag-article">article</span>
+          </div>
+        </div>
+      </li>
+      <li class="event-item">
+        <div class="event-icon">🎬</div>
+        <div class="event-body">
+          <div class="event-title">Cardano 治理系统入门视频</div>
+          <div class="event-meta">
+            <span>Apr 25</span>
+            <span class="event-tag tag-video">video</span>
+          </div>
+        </div>
+      </li>
+      <li class="event-item">
+        <div class="event-icon">🎯</div>
+        <div class="event-body">
+          <div class="event-title">Catalyst Fund 14 投票指南</div>
+          <div class="event-meta">
+            <span>May 1</span>
+            <span class="event-tag tag-event">event</span>
+          </div>
+        </div>
+      </li>
+      <li class="event-item">
+        <div class="event-icon">🔧</div>
+        <div class="event-body">
+          <div class="event-title">VODA v2.0 — DRep 数据面板上线</div>
+          <div class="event-meta">
+            <span>May 10</span>
+            <span class="event-tag tag-release">release</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <a href="/blogs" class="view-all handwritten">see all posts →</a>
+  </section>
+
+  <!-- ===== Member Perks ===== -->
+  <section class="perks-section">
+    <h2 class="section-heading">
+      Member Perks
+      <span class="circle-deco"></span>
+    </h2>
+
+    <div class="perks-row">
+      <div class="perk">
+        <div class="perk-ico">📬</div>
+        <div class="perk-name">Content Push</div>
+        <div class="perk-txt">Articles, videos, event alerts — delivered first to you.</div>
+      </div>
+      <div class="perk">
+        <div class="perk-ico">🤖</div>
+        <div class="perk-name">TG Bot</div>
+        <div class="perk-txt">Chat with our Telegram bot for instant info & tools.</div>
+      </div>
+      <div class="perk">
+        <div class="perk-ico">🔧</div>
+        <div class="perk-name">Free Apps</div>
+        <div class="perk-txt">Full access to everything we build, like VODA governance.</div>
+      </div>
+    </div>
+
+    <p class="perks-coming handwritten">...more channels (email, whatsapp) on the way!</p>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <p class="footer-crew handwritten">
+      Made with lots of ☕ by Martin, Yoyo & Paopao 🐾
+    </p>
+    <div class="footer-links">
+      <a href="https://x.com/cauu_128" target="_blank" class="footer-link" title="X">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://t.me/+1aO8bBE7B7VhOWJl" target="_blank" class="footer-link" title="Telegram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+      <a href="mailto:martincai@sign.global" class="footer-link" title="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+      </a>
+    </div>
+    <p class="footer-copy">© 2024–2026 Bubble Studio</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

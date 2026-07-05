@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Studio · 质押即会员</title>
+<meta name="description" content="扎根 Cardano 的独立工作室。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员：每月 ADA 抽奖、独家内容、免费工具。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bubble Studio · 质押即会员">
+<meta property="og:description" content="资产不动，权益到手。把 ADA 委托到 Pao Pool，收益照拿，自动成为会员。">
+<meta name="theme-color" content="#13585d">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫧</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-55-Regular.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2');font-weight:500;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+@font-face{font-family:'AlibabaPuHuiTi';src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-85-Bold.woff2') format('woff2');font-weight:700;font-display:swap;unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F;}
+
+:root{
+--canvas:#f9f8f6; --blank:#f9f8f6; --card:#e8e5e0; --dark:#172026;
+--hairline:#e1e0de; --hairline-soft:#eceae6;
+--ink:#0a0a0a; --body-strong:#1a1a1a; --body:#3a3a3a; --muted:#6a6a6a; --muted-soft:#9a9a9a; --on-dark:#ffffff;
+--primary:#0a0a0a; --primary-active:#172026;
+--orange:#e5692e; --lavender:#bd91c9; --sky:#55cae8; --lemon:#eec963; --peach:#ecb8a7; --sea:#488be1; --mint:#8ec5d1; --teal:#13585d;
+--r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:24px; --r-pill:999px;
+--sp-section:96px;
+--font:'Inter','AlibabaPuHuiTi',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+--spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+font-family:var(--font);
+background:var(--canvas);color:var(--body);
+font-size:16px;line-height:1.6;font-weight:400;
+-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+overflow-x:hidden;
+}
+:lang(zh) h1,:lang(zh) h2,:lang(zh) h3{letter-spacing:normal}
+h1,h2,h3{color:var(--ink);font-weight:700}
+.tnum{font-variant-numeric:tabular-nums}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--on-dark);padding:12px 18px;border-radius:var(--r-md);z-index:100}
+.skip:focus{left:16px;top:16px}
+a:focus-visible,button:focus-visible,.btn:focus-visible,select:focus-visible{outline:3px solid var(--sea);outline-offset:3px;border-radius:var(--r-md)}
+
+/* ===== buttons ===== */
+.btn{
+display:inline-flex;align-items:center;justify-content:center;gap:8px;
+font-weight:600;font-size:15px;line-height:1;
+padding:14px 22px;border-radius:var(--r-md);
+border:none;cursor:pointer;white-space:nowrap;
+transition:transform .25s var(--spring),background .2s ease,border-color .2s ease;
+}
+.btn-primary{background:var(--primary);color:var(--on-dark)}
+.btn-primary:hover{background:var(--primary-active);transform:translateY(-2px) rotate(-1deg)}
+.btn-ghost{background:var(--blank);color:var(--ink);border:1px solid var(--hairline)}
+.btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px) rotate(1deg)}
+.btn-oncolor{background:var(--blank);color:var(--ink)}
+.btn-oncolor:hover{background:#efedea;transform:translateY(-2px) rotate(-1deg)}
+.btn-outline{background:transparent;color:var(--on-dark);border:1.5px solid rgba(255,255,255,.75)}
+.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.1);transform:translateY(-2px)}
+.btn-lg{font-size:16px;padding:16px 28px}
+
+/* ===== chips & stickers ===== */
+.chip{
+display:inline-flex;align-items:center;gap:7px;
+font-size:13px;font-weight:600;line-height:1;color:var(--ink);
+padding:7px 13px;border-radius:var(--r-pill);
+background:var(--card);
+}
+.chip--blank{background:var(--blank);border:1px solid var(--hairline)}
+.chip--lemon{background:var(--lemon)}
+.chip--mint{background:var(--mint)}
+.chip--peach{background:var(--peach)}
+.tilt-l{transform:rotate(-4deg)}
+.tilt-r{transform:rotate(3deg)}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.55}}
+.dot-live{animation:pulse 1.6s ease-in-out infinite}
+
+/* washi tape */
+.tape{
+position:absolute;top:-11px;left:50%;
+width:88px;height:22px;border-radius:2px;
+transform:translateX(-50%) rotate(-3deg);
+opacity:.85;
+}
+.tape--lemon{background:var(--lemon)}
+.tape--mint{background:var(--mint)}
+.tape--peach{background:var(--peach)}
+.tape--sky{background:var(--sky)}
+
+/* ===== announce / nav ===== */
+.announce{background:var(--teal);color:var(--on-dark);font-size:13.5px;font-weight:600;text-align:center;padding:10px 24px}
+.announce a{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.announce a:hover{color:var(--lemon)}
+.nav{position:sticky;top:0;z-index:50;background:rgba(249,248,246,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--hairline)}
+.nav-inner{display:flex;align-items:center;gap:24px;height:68px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:17px;color:var(--ink)}
+.brand img{height:28px;width:auto}
+.nav-links{display:flex;gap:4px;margin-left:12px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--body);padding:9px 13px;border-radius:var(--r-pill);transition:background .18s,color .18s}
+.nav-links a:hover{background:var(--card);color:var(--ink)}
+.nav-links a[aria-current="true"]{background:var(--card);color:var(--ink)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.lang{font-family:var(--font);font-size:13.5px;font-weight:500;color:var(--body);background:var(--blank);border:1px solid var(--hairline);padding:9px 12px;border-radius:var(--r-md);cursor:pointer}
+.lang:hover{border-color:var(--ink)}
+.menu-btn{display:none;align-items:center;justify-content:center;width:42px;height:42px;flex:none;background:var(--blank);border:1px solid var(--hairline);border-radius:var(--r-md);cursor:pointer;color:var(--ink)}
+.mnav{display:none;border-top:1px solid var(--hairline);background:var(--canvas);padding:8px 24px 16px}
+.mnav.open{display:block}
+.mnav a{display:block;padding:13px 8px;font-size:15px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--hairline-soft)}
+.mnav a:last-child{border-bottom:none}
+
+/* ===== hero: mascot center stage ===== */
+.hero{padding:64px 0 56px;text-align:center;position:relative}
+.hero .chip{margin-bottom:20px;letter-spacing:.1em;text-transform:uppercase;font-size:12px;font-weight:700}
+.hero h1{font-size:clamp(38px,5.6vw,64px);line-height:1.15;max-width:16em;margin:0 auto 8px}
+.hero-stage{position:relative;width:min(420px,86vw);margin:32px auto 28px;height:200px}
+.paopao{position:absolute;left:50%;top:0;transform:translateX(-50%);width:180px;height:180px}
+.paopao .pbody{position:absolute;inset:0;border-radius:50%;background:var(--peach)}
+.paopao .hl{position:absolute;width:54px;height:54px;border-radius:50%;background:var(--canvas);top:36px;left:34px}
+.paopao .hl2{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--canvas);opacity:.7;top:92px;left:98px}
+.paopao .sat{position:absolute;width:30px;height:30px;border-radius:50%;background:var(--sky);right:-8px;top:-4px}
+.paopao .sat2{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--lemon);left:-14px;bottom:26px}
+.paopao--float{animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateX(-50%) translateY(0) rotate(0)}50%{transform:translateX(-50%) translateY(-10px) rotate(-2deg)}}
+.hero-stage .ph{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.stick-a{position:absolute;left:-6px;top:22px}
+.stick-b{position:absolute;right:-10px;bottom:18px}
+.hero-sub{font-size:17px;color:var(--body-strong);max-width:30em;margin:36px auto 28px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:16px}
+.hero-hint{font-size:14px;color:var(--body)}
+.hero-hint a{font-weight:600;text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
+.hero-hint a:hover{color:var(--teal)}
+
+/* ===== ticker ===== */
+.ticker{background:var(--card);overflow:hidden;padding:14px 0}
+.ticker-track{display:flex;white-space:nowrap;width:max-content;animation:scroll 36s linear infinite}
+.ticker span{font-size:14px;font-weight:600;color:var(--body);letter-spacing:.04em;padding-right:12px}
+.ticker .sep{color:var(--orange)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* ===== stats: sticker sheet ===== */
+.stats{padding:64px 0 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.stat{
+position:relative;background:var(--blank);border:1px solid var(--hairline);
+border-radius:var(--r-lg);padding:26px 22px 22px;text-align:center;
+transition:transform .3s var(--spring);
+}
+.stat:nth-child(1){transform:rotate(-1.5deg)}
+.stat:nth-child(2){transform:rotate(1deg)}
+.stat:nth-child(3){transform:rotate(-1deg)}
+.stat:nth-child(4){transform:rotate(1.5deg)}
+.stat:hover{transform:rotate(0) translateY(-4px)}
+.stat .num{font-size:26px;font-weight:700;color:var(--ink);line-height:1.1;display:block}
+.stat .lab{font-size:12px;font-weight:500;color:var(--muted);margin-top:6px;display:block}
+.stats-link{display:block;text-align:center;margin-top:24px;font-size:14px;font-weight:600;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.stats-link:hover{color:var(--teal)}
+
+/* ===== sections ===== */
+.sec{padding:var(--sp-section) 0 0}
+.sec-head{text-align:center;max-width:44rem;margin:0 auto 48px}
+.sec-head .chip{margin-bottom:16px;letter-spacing:.1em;text-transform:uppercase;font-size:12px;font-weight:700}
+.sec-head h2{font-size:clamp(28px,3.6vw,42px);line-height:1.18;margin-bottom:14px}
+.sec-head p{font-size:16px;color:var(--body)}
+
+/* ===== why: taped notes ===== */
+.why-band{display:grid;grid-template-columns:1fr 1fr;gap:28px;max-width:60rem;margin:0 auto}
+.why-card{
+position:relative;background:var(--card);border-radius:var(--r-lg);
+padding:36px 32px 32px;
+transition:transform .3s var(--spring);
+}
+.why-card:nth-child(1){transform:rotate(-1deg)}
+.why-card:nth-child(2){transform:rotate(1deg)}
+.why-card:hover{transform:rotate(0) translateY(-4px)}
+.why-card .chip{margin-bottom:14px}
+.why-card h3{font-size:21px;line-height:1.3;margin-bottom:8px}
+.why-card p{font-size:15px;color:var(--body)}
+
+/* ===== perks: rotated saturated tiles ===== */
+.perks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+.perk{
+border-radius:var(--r-xl);padding:32px;
+display:flex;flex-direction:column;gap:14px;
+transition:transform .3s var(--spring);
+}
+.perk:nth-child(1){transform:rotate(-1.2deg)}
+.perk:nth-child(2){transform:rotate(1deg)}
+.perk:nth-child(3){transform:rotate(1.2deg)}
+.perk:nth-child(4){transform:rotate(-1deg)}
+.perk:hover{transform:rotate(0) translateY(-5px)}
+.perk .icon{
+width:54px;height:54px;border-radius:var(--r-lg);flex:none;
+display:grid;place-items:center;font-size:26px;
+background:rgba(255,255,255,.5);
+}
+.perk h3{font-size:20px;line-height:1.3}
+.perk p{font-size:15px;line-height:1.6;color:var(--body)}
+.perk .chip{align-self:flex-start;margin-top:auto;background:rgba(255,255,255,.55)}
+.perk.lemon{background:var(--lemon)}
+.perk.peach{background:var(--peach)}
+.perk.mint{background:var(--mint)}
+.perk.teal{background:var(--teal)}
+.perk.teal h3{color:var(--on-dark)}
+.perk.teal p{color:rgba(255,255,255,.88)}
+.perk.teal .icon{background:rgba(255,255,255,.14)}
+.perk.teal .chip{background:var(--lemon)}
+
+/* ===== roadmap: sticky notes ===== */
+.road-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px}
+.road-note{
+position:relative;background:var(--blank);border:1px solid var(--hairline);
+border-radius:var(--r-lg);padding:30px 24px 24px;
+display:flex;flex-direction:column;gap:10px;
+transition:transform .3s var(--spring);
+}
+.road-note:nth-child(odd){transform:rotate(-1deg)}
+.road-note:nth-child(even){transform:rotate(1deg)}
+.road-note:hover{transform:rotate(0) translateY(-4px)}
+.road-note.live{background:var(--lemon);border-color:transparent}
+.road-note .date{font-size:12.5px;font-weight:600;color:var(--muted)}
+.road-note.live .date{color:var(--body)}
+.road-note h3{font-size:17px;line-height:1.35;flex:1}
+.road-note .chip{align-self:flex-start}
+.road-note.live .chip{background:var(--blank)}
+
+/* ===== cta ===== */
+.cta-band{padding:var(--sp-section) 0}
+.cta-inner{
+position:relative;overflow:hidden;
+background:var(--teal);border-radius:var(--r-xl);
+padding:72px 56px;text-align:center;color:var(--on-dark);
+}
+.cta-bub{position:absolute;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none}
+.cta-bub.b1{width:220px;height:220px;top:-70px;right:-50px}
+.cta-bub.b2{width:150px;height:150px;bottom:-60px;left:-30px}
+.cta-inner .chip{margin-bottom:20px}
+.cta-inner h2{font-size:clamp(28px,3.6vw,40px);line-height:1.18;margin-bottom:14px;color:var(--on-dark);position:relative}
+.cta-inner p{font-size:17px;margin-bottom:28px;color:rgba(255,255,255,.92);max-width:36em;margin-left:auto;margin-right:auto;position:relative}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* ===== footer ===== */
+.foot{background:var(--card);padding:72px 0 28px}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:40px;align-items:start}
+.foot-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;color:var(--ink);margin-bottom:16px}
+.foot-brand img{height:26px}
+.foot-blurb{font-size:14px;color:var(--body);max-width:24em;line-height:1.6}
+.foot-mascot{display:flex;align-items:center;gap:14px;margin-top:24px}
+.foot-mascot .mini{position:relative;width:52px;height:52px;flex:none}
+.foot-mascot .mini .pbody{position:absolute;inset:0;border-radius:50%;background:var(--peach)}
+.foot-mascot .mini .hl{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--card);top:11px;left:10px}
+.foot-mascot .mini .sat{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--sky);right:-2px;top:-2px}
+.foot-mascot .ph{font-size:12px;font-weight:600;color:var(--body)}
+.foot-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--body);margin-bottom:16px}
+.foot-col a{display:block;font-size:14.5px;font-weight:500;color:var(--body);padding:5px 0;transition:color .15s}
+.foot-col a:hover{color:var(--ink)}
+.foot-bottom{margin-top:48px;padding-top:24px;border-top:1px solid #d3cfc6;font-size:13.5px;color:var(--body);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.foot-bottom a{font-weight:600}
+.foot-bottom a:hover{color:var(--ink)}
+.foot-bottom .sep{color:var(--muted-soft)}
+
+/* ===== reveal ===== */
+.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s var(--spring)}
+.js .reveal.in{opacity:1;transform:none}
+.js .stat.reveal,.js .why-card.reveal,.js .perk.reveal,.js .road-note.reveal{transform:translateY(18px) rotate(0)}
+.js .stat.reveal.in:nth-child(1),.js .why-card.reveal.in:nth-child(1){transform:rotate(-1.5deg)}
+.js .stat.reveal.in:nth-child(2),.js .why-card.reveal.in:nth-child(2){transform:rotate(1deg)}
+.js .stat.reveal.in:nth-child(3){transform:rotate(-1deg)}
+.js .stat.reveal.in:nth-child(4){transform:rotate(1.5deg)}
+.js .perk.reveal.in:nth-child(1){transform:rotate(-1.2deg)}
+.js .perk.reveal.in:nth-child(2){transform:rotate(1deg)}
+.js .perk.reveal.in:nth-child(3){transform:rotate(1.2deg)}
+.js .perk.reveal.in:nth-child(4){transform:rotate(-1deg)}
+.js .road-note.reveal.in:nth-child(odd){transform:rotate(-1deg)}
+.js .road-note.reveal.in:nth-child(even){transform:rotate(1deg)}
+
+/* ===== responsive ===== */
+@media(max-width:860px){
+.nav-links{display:none}
+.menu-btn{display:inline-flex}
+.stats-grid{grid-template-columns:1fr 1fr}
+.perks-grid{grid-template-columns:1fr}
+.why-band{grid-template-columns:1fr}
+.sec{padding:72px 0 0}
+.cta-band{padding:72px 0}
+.foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+}
+@media(max-width:600px){
+.wrap{padding:0 18px}
+.hero{padding:48px 0 48px}
+.stick-a{left:-2px}
+.stick-b{right:-2px}
+.stats-grid{grid-template-columns:1fr 1fr;gap:14px}
+.cta-inner{padding:56px 24px}
+.foot-grid{grid-template-columns:1fr}
+.hero-cta{flex-direction:column;align-items:stretch;max-width:320px;margin:0 auto 16px}
+}
+@media(prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+.ticker-track{animation:none}
+.js .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+
+<div class="announce" role="region" aria-label="公告">
+四月会员 ADA 抽奖进行中 · 截止 <span class="tnum">4/30</span> — <a href="#roadmap">参加 →</a>
+</div>
+
+<nav class="nav" aria-label="主导航">
+<div class="wrap nav-inner">
+<a class="brand" href="#main" aria-label="Bubble Studio 首页">
+<img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Bubble Studio 标志">
+<span>Bubble Studio</span>
+</a>
+<div class="nav-links">
+<a href="#perks">会员权益</a>
+<a href="#why">为什么是 Pao Pool</a>
+<a href="#roadmap">近期动态</a>
+<a href="/blogs">博客</a>
+</div>
+<div class="nav-right">
+<select class="lang" id="lang" aria-label="语言选择">
+<option>中文</option><option>EN</option><option>繁體</option>
+</select>
+<a class="btn btn-primary" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mnav" aria-label="打开菜单">
+<svg width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true"><path d="M1 1h16M1 7h16M1 13h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+</div>
+</div>
+<div class="mnav" id="mnav">
+<a href="#perks">会员权益</a>
+<a href="#why">为什么是 Pao Pool</a>
+<a href="#roadmap">近期动态</a>
+<a href="/blogs">博客</a>
+</div>
+</nav>
+
+<main id="main">
+
+<!-- hero -->
+<section class="hero" aria-labelledby="hero-h1">
+<div class="wrap">
+<span class="chip reveal">🫧 Stake as a Service</span>
+<h1 id="hero-h1" class="reveal">质押即会员，资产不动，权益到手</h1>
+<div class="hero-stage reveal">
+<div class="paopao paopao--float" role="img" aria-label="Paopao 插画占位">
+<span class="pbody"></span><span class="hl"></span><span class="hl2"></span><span class="sat"></span><span class="sat2"></span>
+</div>
+<span class="chip chip--lemon tilt-l stick-a" aria-hidden="true"><span class="dot dot-live" style="background:var(--orange)"></span>四月抽奖进行中</span>
+<span class="chip chip--mint tilt-r stick-b tnum" aria-hidden="true">≈ 2.2% APY</span>
+<span class="ph">Paopao 插画占位</span>
+</div>
+<p class="hero-sub reveal">扎根 Cardano 的独立工作室。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员。</p>
+<div class="hero-cta reveal">
+<a class="btn btn-primary btn-lg" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+<a class="btn btn-ghost btn-lg" href="#why">了解 Pao Pool</a>
+</div>
+<p class="hero-hint reveal">已经是会员？<a href="https://t.me/+1aO8bBE7B7VhOWJl">连接钱包，订阅矿池动态 →</a></p>
+</div>
+</section>
+
+<!-- ticker -->
+<div class="ticker" aria-hidden="true">
+<div class="ticker-track">
+<span>每月 ADA 抽奖 <span class="sep">·</span> 非托管，随时可退 <span class="sep">·</span> 零额外费用 <span class="sep">·</span> 独家内容抢先看 <span class="sep">·</span> 免费产品 VODA <span class="sep">·</span> Telegram Bot 实时推送 <span class="sep">·</span> </span>
+<span>每月 ADA 抽奖 <span class="sep">·</span> 非托管，随时可退 <span class="sep">·</span> 零额外费用 <span class="sep">·</span> 独家内容抢先看 <span class="sep">·</span> 免费产品 VODA <span class="sep">·</span> Telegram Bot 实时推送 <span class="sep">·</span> </span>
+</div>
+</div>
+
+<!-- stats -->
+<section class="stats" aria-label="矿池数据">
+<div class="wrap">
+<div class="stats-grid">
+<div class="stat reveal"><span class="tape tape--sky" aria-hidden="true"></span><span class="num">PAO</span><span class="lab">Pao Pool · 矿池代号</span></div>
+<div class="stat reveal"><span class="tape tape--lemon" aria-hidden="true"></span><span class="num tnum">1.2M ADA</span><span class="lab">矿池质押量</span></div>
+<div class="stat reveal"><span class="tape tape--mint" aria-hidden="true"></span><span class="num tnum">~2.2%</span><span class="lab">质押年化</span></div>
+<div class="stat reveal"><span class="tape tape--peach" aria-hidden="true"></span><span class="num tnum">15</span><span class="lab">委托人</span></div>
+</div>
+<a class="stats-link reveal" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">在 CardanoScan 查看 →</a>
+</div>
+</section>
+
+<!-- why -->
+<section class="sec" id="why" aria-labelledby="why-h2">
+<div class="wrap">
+<div class="sec-head reveal">
+<span class="chip">为什么是 Pao Pool</span>
+<h2 id="why-h2">把 ADA 放这儿，好事自己来</h2>
+<p>资产还在你钱包里，协议收益照拿，同时自动解锁这些会员福利，没有额外费用。</p>
+</div>
+<div class="why-band">
+<div class="why-card reveal">
+<span class="tape tape--mint" aria-hidden="true"></span>
+<span class="chip chip--blank">非托管</span>
+<h3>资产始终在你手里</h3>
+<p>委托不转移所有权，ADA 一直留在你的钱包，随时可取消或转移委托。</p>
+</div>
+<div class="why-card reveal">
+<span class="tape tape--peach" aria-hidden="true"></span>
+<span class="chip chip--blank">零额外费用</span>
+<h3>会员权益免费附赠</h3>
+<p>照常领取协议质押收益，会员福利在此之上自动叠加，不收一分额外费用。</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- perks -->
+<section class="sec" id="perks" aria-labelledby="perks-h2">
+<div class="wrap">
+<div class="sec-head reveal">
+<span class="chip">会员权益</span>
+<h2 id="perks-h2">委托一次，福利不断</h2>
+<p>四项会员专属权益，链上透明、即刻生效。</p>
+</div>
+<div class="perks-grid">
+<article class="perk lemon reveal">
+<div class="icon" aria-hidden="true">🎟️</div>
+<h3>每月 ADA 抽奖</h3>
+<p>会员专属、真实奖励，开奖透明、链上可查。</p>
+<span class="chip">每月开奖一次</span>
+</article>
+<article class="perk peach reveal">
+<div class="icon" aria-hidden="true">📰</div>
+<h3>独家内容</h3>
+<p>深度文章、视频和分析，比公开发布更早送达会员。</p>
+<span class="chip">会员抢先看</span>
+</article>
+<article class="perk mint reveal">
+<div class="icon" aria-hidden="true">🎁</div>
+<h3>免费产品 VODA</h3>
+<p>VODA 及未来每一款工具，会员全部免费、零成本。</p>
+<span class="chip">会员 $0</span>
+</article>
+<article class="perk teal reveal">
+<div class="icon" aria-hidden="true">🤖</div>
+<h3>Telegram Bot</h3>
+<p>自动推送矿池动态、治理更新和互动工具，一站直达。</p>
+<span class="chip">实时推送</span>
+</article>
+</div>
+</div>
+</section>
+
+<!-- roadmap -->
+<section class="sec" id="roadmap" aria-labelledby="road-h2">
+<div class="wrap">
+<div class="sec-head reveal">
+<span class="chip">近期动态</span>
+<h2 id="road-h2">接下来要发生什么</h2>
+<p>从抽奖到深度内容，跟上 Bubble Studio 的节奏。</p>
+</div>
+<div class="road-grid">
+<div class="road-note live reveal">
+<span class="tape tape--peach" aria-hidden="true"></span>
+<span class="date tnum">2026.04.01 — 04.30</span>
+<h3>四月会员 ADA 抽奖</h3>
+<span class="chip"><span class="dot dot-live" style="background:var(--orange)" aria-hidden="true"></span>进行中</span>
+</div>
+<div class="road-note reveal">
+<span class="tape tape--sky" aria-hidden="true"></span>
+<span class="date tnum">2026.04.18</span>
+<h3>Cardano Chang 硬分叉深度解读</h3>
+<span class="chip">即将发布</span>
+</div>
+<div class="road-note reveal">
+<span class="tape tape--mint" aria-hidden="true"></span>
+<span class="date tnum">2026.04.25</span>
+<h3>Cardano 治理系统入门 — 视频教程</h3>
+<span class="chip">制作中</span>
+</div>
+<div class="road-note reveal">
+<span class="tape tape--lemon" aria-hidden="true"></span>
+<span class="date tnum">2026.05</span>
+<h3>Catalyst Fund 14 投票指南</h3>
+<span class="chip">筹备中</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- closing band -->
+<section class="cta-band" aria-label="安心承诺">
+<div class="wrap">
+<div class="cta-inner reveal">
+<span class="cta-bub b1" aria-hidden="true"></span>
+<span class="cta-bub b2" aria-hidden="true"></span>
+<span class="chip chip--lemon tilt-l">非托管 · 零额外费用</span>
+<h2>随时可退，收益不停</h2>
+<p>委托不锁仓、不转移所有权，ADA 始终在你自己的钱包里。会员身份，只是顺带的好处。</p>
+<div class="cta-actions">
+<a class="btn btn-oncolor btn-lg" href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">质押到 Pao Pool</a>
+<a class="btn btn-outline btn-lg" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">先看看矿池数据</a>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer class="foot">
+<div class="wrap">
+<div class="foot-grid">
+<div>
+<div class="foot-brand">
+<img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="Bubble Studio 标志">
+<span>Bubble Studio</span>
+</div>
+<p class="foot-blurb">扎根 Cardano 的独立工作室。做有趣的工具，写有深度的内容。由 Martin、Yoyo 和 Paopao 用咖啡驱动。</p>
+<div class="foot-mascot">
+<div class="mini" role="img" aria-label="Paopao 插画占位">
+<span class="pbody"></span><span class="hl"></span><span class="sat"></span>
+</div>
+<span class="ph">Paopao 插画占位</span>
+</div>
+</div>
+<nav class="foot-col" aria-label="探索">
+<h4>探索</h4>
+<a href="#perks">会员权益</a>
+<a href="#why">为什么是 Pao Pool</a>
+<a href="#roadmap">近期动态</a>
+<a href="/blogs">博客</a>
+<a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan</a>
+</nav>
+<nav class="foot-col" aria-label="社区">
+<h4>社区</h4>
+<a href="https://x.com/cauu_128">X</a>
+<a href="https://t.me/+1aO8bBE7B7VhOWJl">Telegram</a>
+<a href="mailto:contact@bubble-studio.xyz">Email</a>
+</nav>
+</div>
+<div class="foot-bottom">
+<span>由 Martin、Yoyo 和 Paopao 用咖啡驱动 ☕</span>
+<span class="sep">·</span><a href="/privacy">隐私政策</a>
+<span class="sep">·</span><a href="/terms">服务条款</a>
+<span class="sep">·</span><span class="tnum">© 2024–2026 Bubble Studio</span>
+</div>
+</div>
+</footer>
+
+<script>
+(function(){
+document.documentElement.classList.add('js');
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+if(!reduce&&'IntersectionObserver' in window){
+var io=new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){var el=e.target;setTimeout(function(){el.classList.add('in')},(el.dataset.d?+el.dataset.d:0));io.unobserve(el)}
+});
+},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.stats-grid .reveal, .perks-grid .reveal, .road-grid .reveal, .why-band .reveal').forEach(function(el,i){el.dataset.d=(i%4)*70});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+}else{
+document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+}
+var ids=['why','perks','roadmap'];
+var links={};
+document.querySelectorAll('.nav-links a').forEach(function(a){var h=a.getAttribute('href');if(h&&h[0]==='#')links[h.slice(1)]=a});
+var secs=ids.map(function(id){return document.getElementById(id)}).filter(Boolean);
+if('IntersectionObserver' in window&&secs.length){
+var so=new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){
+Object.keys(links).forEach(function(k){links[k].removeAttribute('aria-current')});
+if(links[e.target.id])links[e.target.id].setAttribute('aria-current','true');
+}
+});
+},{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(function(s){so.observe(s)});
+}
+var mb=document.getElementById('menuBtn'),mn=document.getElementById('mnav');
+if(mb&&mn){
+mb.addEventListener('click',function(){
+var open=mn.classList.toggle('open');
+mb.setAttribute('aria-expanded',open?'true':'false');
+mb.setAttribute('aria-label',open?'关闭菜单':'打开菜单');
+});
+mn.querySelectorAll('a').forEach(function(a){
+a.addEventListener('click',function(){mn.classList.remove('open');mb.setAttribute('aria-expanded','false')});
+});
+}
+})();
+</script>
+</body>
+</html>

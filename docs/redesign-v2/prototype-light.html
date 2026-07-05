@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Studio — Light theme prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ===== CJK face: AlibabaPuHuiTi, scoped to CJK glyphs only (per DESIGN-bubble-light) ===== */
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-55-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F; }
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F; }
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-85-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F; }
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-115-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:swap; unicode-range:U+4E00-9FFF,U+3400-4DBF,U+F900-FAFF,U+20000-2A6DF,U+2A700-2B73F,U+2B740-2B81F,U+2B820-2CEAF,U+2F800-2FA1F; }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    /* surface */
+    --canvas:#f9f8f6; --blank:#ffffff; --soft:#ebebf4; --card:#e7e8f4; --dark:#172026;
+    --hairline:#d1d2d8; --hairline-soft:#ebebf4;
+    /* text */
+    --ink:#0a0a0a; --body:#44454e; --muted:#6d6e76; --muted-soft:#909198; --on-dark:#ffffff;
+    /* primary */
+    --primary:#0a0a0a; --primary-active:#172026;
+    /* 8 brand colors */
+    --orange:#e5692e; --lavender:#bd91c9; --sky:#55cae8; --lemon:#eec963;
+    --grass:#a1cd5a; --sea:#488be1; --mint:#8ec5d1; --incana:#13585d;
+    /* radius */
+    --r-md:12px; --r-lg:16px; --r-xl:24px;
+    --font: 'Inter','AlibabaPuHuiTi',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+  }
+  html { font-size:16px; }
+  body {
+    font-family:var(--font);
+    background:var(--soft);
+    color:var(--ink);
+    line-height:1.55;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .icon svg { width:18px; height:18px; stroke:currentColor; stroke-width:1.75; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .icon-box { width:40px; height:40px; border-radius:10px; background:var(--card); display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .icon-box svg { width:20px; height:20px; stroke:var(--ink); stroke-width:1.75; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* PAGE CARD — canvas floor on a lavender backdrop */
+  .card { max-width:920px; margin:40px auto; background:var(--canvas); border-radius:var(--r-xl); overflow:hidden; box-shadow:0 1px 2px rgba(16,18,38,.04), 0 20px 50px rgba(16,18,38,.10); }
+  @media (max-width:960px){ .card{ margin:16px; border-radius:var(--r-lg); } }
+
+  /* TOP NAV */
+  .bar { display:flex; justify-content:space-between; align-items:center; padding:16px 40px; height:64px; border-bottom:1px solid var(--hairline); background:var(--canvas); }
+  .bar-l { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .bar-l img { width:30px; height:30px; border-radius:8px; }
+  .bar-l b { font-size:17px; font-weight:700; letter-spacing:-.3px; color:var(--ink); }
+  .bar-r { display:flex; align-items:center; gap:14px; }
+  .bar-r a { color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; transition:color .2s; }
+  .bar-r a:hover { color:var(--ink); }
+  .bar-r select { background:var(--blank); border:1px solid var(--hairline); border-radius:var(--r-md); padding:5px 10px; font-size:13px; color:var(--muted); cursor:pointer; font-family:var(--font); }
+  @media (max-width:600px){ .bar{ padding:12px 20px; } }
+
+  /* HERO */
+  .hero { padding:48px 40px 36px; text-align:center; }
+  .hero-illust { width:120px; height:120px; margin:0 auto 20px; background:var(--card); border-radius:var(--r-xl); display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--muted-soft); font-size:10px; text-align:center; padding:10px; gap:4px; }
+  .hero-illust .si { font-size:28px; opacity:.55; }
+  .hero-banner { display:inline-flex; align-items:center; gap:8px; margin-bottom:20px; padding:6px 16px; background:var(--card); border:1px solid var(--hairline); border-radius:9999px; font-size:13px; color:var(--body); }
+  .hero-banner .dot { width:6px; height:6px; border-radius:50%; background:var(--orange); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+  .hero-banner a { color:var(--ink); font-weight:600; text-decoration:underline; text-underline-offset:2px; }
+  .eyebrow { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink); margin-bottom:10px; }
+  /* CJK display: weight 700, letter-spacing normal (NOT negative) per spec; headline stays ink */
+  .hero-h { font-weight:700; font-size:36px; line-height:1.25; letter-spacing:normal; color:var(--ink); margin-bottom:14px; }
+  .hero-p { font-size:16px; color:var(--muted); line-height:1.65; max-width:540px; margin:0 auto 24px; }
+  .btn-primary { display:inline-block; padding:13px 28px; min-height:44px; background:var(--primary); color:var(--on-dark); border:none; border-radius:var(--r-md); font-family:var(--font); font-size:15px; font-weight:600; cursor:pointer; text-decoration:none; transition:background .2s, transform .15s; }
+  .btn-primary:hover { background:var(--primary-active); transform:translateY(-1px); }
+  .sub-hint { margin-top:16px; font-size:14px; color:var(--muted); }
+  .sub-hint a { color:var(--ink); font-weight:600; text-decoration:underline; text-underline-offset:2px; }
+  @media (max-width:600px){ .hero{ padding:32px 20px 28px; } .hero-illust{ width:100px; height:100px; } .hero-h{ font-size:28px; } .btn-primary{ width:100%; } }
+
+  /* STAKE DETAIL */
+  .stake-detail { padding:40px; }
+  .lab { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink); margin-bottom:6px; }
+  .stake-detail h2 { font-weight:700; font-size:24px; letter-spacing:normal; margin-bottom:8px; }
+  .stake-detail > p { font-size:15px; color:var(--muted); margin-bottom:24px; }
+  .stake-inner { background:var(--blank); border:1px solid var(--hairline); border-radius:var(--r-lg); padding:28px; }
+  .ben-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:24px; }
+  .ben-item { display:flex; align-items:flex-start; gap:10px; }
+  .ben-item .icon { flex-shrink:0; display:inline-flex; margin-top:2px; }
+  .ben-item:nth-child(1) .icon { color:var(--orange); }
+  .ben-item:nth-child(2) .icon { color:var(--sea); }
+  .ben-item:nth-child(3) .icon { color:var(--grass); }
+  .ben-item:nth-child(4) .icon { color:var(--lavender); }
+  .ben-item strong { font-size:14px; font-weight:600; display:block; color:var(--ink); }
+  .ben-item span { font-size:13px; color:var(--muted); }
+  .pool-row { display:flex; align-items:center; gap:20px; padding-top:20px; border-top:1px solid var(--hairline-soft); flex-wrap:wrap; }
+  .pool-ticker { font-size:11px; font-weight:700; color:var(--ink); background:var(--card); padding:4px 10px; border-radius:9999px; letter-spacing:.5px; }
+  .ps { display:flex; flex-direction:column; }
+  .ps-l { font-size:10px; font-weight:600; color:var(--muted-soft); text-transform:uppercase; letter-spacing:.5px; }
+  .ps-v { font-weight:700; font-size:16px; color:var(--ink); }
+  .ps-u { font-size:11px; color:var(--muted); font-weight:500; }
+  .pool-link { margin-left:auto; font-size:13px; color:var(--muted); text-decoration:none; font-weight:500; }
+  .pool-link:hover { color:var(--ink); }
+  @media (max-width:600px){ .stake-detail{ padding:32px 20px; } .ben-grid{ grid-template-columns:1fr; gap:14px; } }
+
+  .div { border:none; border-top:1px solid var(--hairline); margin:0 40px; }
+  @media (max-width:600px){ .div{ margin:0 20px; } }
+
+  /* WHAT'S COMING */
+  .coming { padding:48px 40px; }
+  .coming h2 { font-weight:700; font-size:24px; letter-spacing:normal; margin-bottom:24px; }
+  .tl { position:relative; padding-left:24px; }
+  .tl::before { content:''; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--hairline); }
+  .tl-i { position:relative; padding-bottom:24px; }
+  .tl-i:last-child { padding-bottom:0; }
+  .tl-dot { position:absolute; left:-21px; top:5px; width:8px; height:8px; border-radius:50%; background:var(--incana); border:2px solid var(--canvas); }
+  .tl-dot.live { background:var(--orange); box-shadow:0 0 0 3px rgba(229,105,46,.18); }
+  .tl-d { font-size:12px; color:var(--muted-soft); margin-bottom:2px; }
+  .tl-t { font-size:15px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .tl-m { display:flex; gap:6px; align-items:center; }
+  .tl-tag { font-size:11px; font-weight:600; color:var(--ink); background:var(--card); padding:2px 9px; border-radius:9999px; }
+  .tl-tag.live { color:var(--ink); background:rgba(229,105,46,.16); }
+  .tl-s { font-size:11px; color:var(--muted-soft); }
+  .tl-s.live { color:var(--ink); font-weight:600; }
+  .coming-f { margin-top:20px; }
+  .coming-f a, .perks-note a { font-size:14px; color:var(--muted); text-decoration:none; font-weight:500; }
+  .coming-f a:hover { color:var(--ink); }
+  @media (max-width:600px){ .coming{ padding:36px 20px; } }
+
+  /* PERKS — saturated brand feature cards */
+  .perks { padding:48px 40px; }
+  .perks h2 { font-weight:700; font-size:24px; letter-spacing:normal; margin-bottom:8px; }
+  .perks > p { font-size:15px; color:var(--muted); margin-bottom:24px; }
+  .pg { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .pc { border-radius:var(--r-xl); padding:28px; transition:transform .15s; }
+  .pc:hover { transform:translateY(-3px); }
+  .pc:nth-child(1) { background:var(--sky); color:#fff; }
+  .pc:nth-child(2) { background:var(--lavender); color:#fff; }
+  .pc:nth-child(3) { grid-column:1 / -1; background:var(--incana); color:#fff; }
+  .pc-h { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .pc .icon-box { background:rgba(255,255,255,.22); }
+  .pc .icon-box svg { stroke:#fff; }
+  .pc h3 { font-size:18px; font-weight:600; }
+  .pc p { font-size:14px; line-height:1.6; opacity:.92; }
+  .pc-ill { display:flex; align-items:center; gap:24px; }
+  .pc-ill .illust { flex-shrink:0; width:150px; height:96px; background:rgba(255,255,255,.16); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.8); font-size:10px; text-align:center; padding:6px; }
+  .perks-note { font-size:13px; color:var(--muted-soft); margin-top:18px; font-style:italic; }
+  @media (max-width:600px){ .perks{ padding:36px 20px; } .pg{ grid-template-columns:1fr; } .pc:nth-child(3){ grid-column:auto; } .pc-ill{ flex-direction:column; } .pc-ill .illust{ width:100%; height:80px; } }
+
+  /* FOOTER — light, never dark */
+  .foot { padding:36px 40px; text-align:center; border-top:1px solid var(--hairline); background:var(--soft); }
+  .foot-ill { width:64px; height:48px; margin:0 auto 12px; background:var(--card); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--muted-soft); font-size:9px; }
+  .foot-made { font-size:14px; color:var(--body); margin-bottom:10px; }
+  .foot-links { display:flex; justify-content:center; gap:16px; margin-bottom:10px; }
+  .foot-links a { font-size:14px; color:var(--muted); text-decoration:none; font-weight:500; }
+  .foot-links a:hover { color:var(--ink); }
+  .foot-copy { font-size:12px; color:var(--muted-soft); }
+  @media (max-width:600px){ .foot{ padding:28px 20px; } }
+</style>
+</head>
+
+<body>
+<main class="card">
+
+  <!-- TOP NAV -->
+  <nav class="bar">
+    <a href="#" class="bar-l">
+      <img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/bubble-logo.png" alt="">
+      <b>Bubble Studio</b>
+    </a>
+    <div class="bar-r">
+      <a href="https://x.com/cauu_128" target="_blank">X</a>
+      <a href="https://t.me/+1aO8bBE7B7VhOWJl" target="_blank">Telegram</a>
+      <select aria-label="语言"><option>中文</option><option>EN</option><option>繁體</option></select>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-illust"><div class="si">&#x1FAE7;</div>Paopao 水彩插画<br>120&times;120px</div>
+    <div class="hero-banner"><span class="dot"></span>四月会员抽奖进行中 · 截止 4/30<a href="#lottery">参加 &rarr;</a></div><br>
+    <div class="eyebrow">Stake as a Service</div>
+    <h1 class="hero-h">质押即会员，<br><span class="a">资产不动，权益到手</span></h1>
+    <p class="hero-p">我们是扎根 Cardano 的独立工作室，做有趣的工具，写有深度的内容。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员。</p>
+    <a href="https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" target="_blank" class="btn-primary">质押到 Pao Pool</a>
+    <p class="sub-hint">已经是会员？<a href="#subscribe">连接钱包，订阅矿池动态 &rarr;</a></p>
+  </section>
+
+  <!-- STAKE DETAIL -->
+  <section class="stake-detail">
+    <div class="lab">为什么是 Pao Pool</div>
+    <h2>把 ADA 放这儿，好事自己来</h2>
+    <p>资产还在你钱包里，协议收益照拿，同时自动解锁这些会员福利。</p>
+    <div class="stake-inner">
+      <div class="ben-grid">
+        <div class="ben-item">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/><path d="M12 12V3"/><path d="m8 7 4-4 4 4"/><rect x="2" y="12" width="20" height="4" rx="1"/></svg></span>
+          <div><strong>每月 ADA 抽奖</strong><span>会员专属，真实奖励</span></div>
+        </div>
+        <div class="ben-item">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="m9 10 2 2 4-4"/></svg></span>
+          <div><strong>独家内容</strong><span>深度文章 & 视频优先送达</span></div>
+        </div>
+        <div class="ben-item">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
+          <div><strong>免费产品</strong><span>VODA 及所有工具零成本</span></div>
+        </div>
+        <div class="ben-item">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01"/><path d="M12 10h.01"/><path d="M16 10h.01"/></svg></span>
+          <div><strong>Telegram Bot</strong><span>动态、治理、工具一站推送</span></div>
+        </div>
+      </div>
+      <div class="pool-row">
+        <span class="pool-ticker">PAO</span>
+        <div class="ps"><span class="ps-l">质押量</span><span class="ps-v">1.2M <span class="ps-u">ADA</span></span></div>
+        <div class="ps"><span class="ps-l">年化</span><span class="ps-v">~2.2<span class="ps-u">%</span></span></div>
+        <div class="ps"><span class="ps-l">委托人</span><span class="ps-v">15</span></div>
+        <a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" target="_blank" class="pool-link">CardanoScan &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="div">
+
+  <!-- WHAT'S COMING -->
+  <section class="coming">
+    <div class="lab">近期动态</div>
+    <h2>我们正在做的事</h2>
+    <div class="tl">
+      <div class="tl-i" id="lottery">
+        <div class="tl-dot live"></div>
+        <div class="tl-d">2026.04.01 — 04.30</div>
+        <div class="tl-t">四月会员 ADA 抽奖</div>
+        <div class="tl-m"><span class="tl-tag live">抽奖</span><span class="tl-s live">进行中</span></div>
+      </div>
+      <div class="tl-i">
+        <div class="tl-dot"></div>
+        <div class="tl-d">2026.04.18</div>
+        <div class="tl-t">Cardano Chang 硬分叉深度解读</div>
+        <div class="tl-m"><span class="tl-tag">文章</span><span class="tl-s">即将发布</span></div>
+      </div>
+      <div class="tl-i">
+        <div class="tl-dot"></div>
+        <div class="tl-d">2026.04.25</div>
+        <div class="tl-t">Cardano 治理系统入门 &mdash; 视频教程</div>
+        <div class="tl-m"><span class="tl-tag">视频</span><span class="tl-s">制作中</span></div>
+      </div>
+      <div class="tl-i">
+        <div class="tl-dot"></div>
+        <div class="tl-d">2026.05</div>
+        <div class="tl-t">Catalyst Fund 14 投票指南</div>
+        <div class="tl-m"><span class="tl-tag">指南</span><span class="tl-s">筹备中</span></div>
+      </div>
+    </div>
+    <div class="coming-f"><a href="/blogs">查看全部文章 &rarr;</a></div>
+  </section>
+
+  <hr class="div">
+
+  <!-- PERKS -->
+  <section class="perks">
+    <div class="lab">会员权益</div>
+    <h2>质押即享</h2>
+    <p>委托到 Pao Pool，以下权益自动生效，没有额外费用。</p>
+    <div class="pg">
+      <div class="pc">
+        <div class="pc-h"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="m9 10 2 2 4-4"/></svg></div><h3>优先获取内容</h3></div>
+        <p>文章、视频、深度分析，比公开发布更早送达。</p>
+      </div>
+      <div class="pc">
+        <div class="pc-h"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01"/><path d="M12 10h.01"/><path d="M16 10h.01"/></svg></div><h3>Telegram Bot</h3></div>
+        <p>自动推送矿池动态、治理更新，以及互动工具。</p>
+      </div>
+      <div class="pc pc-ill">
+        <div class="illust">Paopao 使用电脑<br>插画 150&times;96px</div>
+        <div>
+          <div class="pc-h"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></div><h3>免费使用全部产品</h3></div>
+          <p>VODA 及未来每一款工具，会员全部免费。</p>
+        </div>
+      </div>
+    </div>
+    <p class="perks-note">更多渠道（Email、WhatsApp）即将上线...</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot-ill">Paopao 探头</div>
+    <p class="foot-made">由 Martin、Yoyo 和 Paopao 用咖啡驱动</p>
+    <div class="foot-links">
+      <a href="https://x.com/cauu_128" target="_blank">X</a>
+      <a href="https://t.me/+1aO8bBE7B7VhOWJl" target="_blank">Telegram</a>
+      <a href="mailto:contact@bubble-studio.xyz">Email</a>
+    </div>
+    <p class="foot-copy">&copy; 2024&ndash;2026 Bubble Studio</p>
+  </footer>
+
+</main>
+</body>
+</html>
