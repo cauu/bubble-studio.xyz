@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
+import { Category, deriveCategory } from './categories';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -15,6 +16,8 @@ export interface PostData {
   time: string;
   image: string;
   tags: string[];
+  category: Category;
+  featured?: boolean;
   [key: string]: any;
 }
 
@@ -33,19 +36,24 @@ export async function getSortedPostsData(locale: 'zh' | 'en' | 'tw'): Promise<Po
       // 使用 gray-matter 解析 frontmatter
       const matterResult = matter(fileContents);
 
+      const data = matterResult.data as {
+        title: string;
+        date: string;
+        author: string;
+        time: string;
+        image: string;
+        tags: string[];
+        language: string;
+        category?: Category;
+        featured?: boolean;
+      };
+
       // 组合数据
       return {
         slug,
         abstract: `${matterResult.content.slice(0, 80)}...`,
-        ...(matterResult.data as {
-          title: string;
-          date: string;
-          author: string;
-          time: string;
-          image: string;
-          tags: string[];
-          language: string;
-        })
+        ...data,
+        category: data.category ?? deriveCategory(data.tags, data.title)
       };
     })
   );
@@ -85,18 +93,22 @@ export async function getPostData(slug: string, locale: string = 'en') {
   const processedContent = await remark().use(html).process(matterResult.content);
   const contentHtml = processedContent.toString();
 
+  const data = matterResult.data as {
+    id: string;
+    title: string;
+    date: string;
+    author: string;
+    image: string;
+    tags: string[];
+    language: string;
+    category?: Category;
+  };
+
   // 组合数据
   return {
     slug,
     contentHtml,
-    ...(matterResult.data as {
-      id: string;
-      title: string;
-      date: string;
-      author: string;
-      image: string;
-      tags: string[];
-      language: string;
-    })
+    ...data,
+    category: data.category ?? deriveCategory(data.tags, data.title)
   };
 }

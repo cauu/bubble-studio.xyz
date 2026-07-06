@@ -1,6 +1,7 @@
 import { getMessages, getTranslations } from 'next-intl/server';
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import { routing } from '@/i18n/routing';
 import { Layout } from '@/components/Layout';
 import { IntlProvider } from '@/components/IntlProvider';
@@ -9,6 +10,13 @@ import { NextIntlClientProvider } from 'next-intl';
 
 import '@/globals.css';
 import { GlobalConfig } from '@/constants';
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter',
+  display: 'swap'
+});
 
 type Props = {
   children: ReactNode;
@@ -53,7 +61,7 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
       title: t('seo.defaultTitle'),
       description: t('seo.defaultDescription'),
       images: [`${baseUrl}/og-default.png`],
-      creator: '@bubblestudio'
+      creator: '@cauu_128'
     },
     alternates: {
       canonical: url,
@@ -71,7 +79,7 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
       initialScale: 1,
       maximumScale: 5
     },
-    themeColor: '#0ea5e9'
+    themeColor: '#13585d'
   };
 }
 
@@ -80,8 +88,10 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={inter.variable}>
       <head>
+        {/* Hidden reveal state only applies when JS runs (no-JS safety gate) */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         {/* 字体优化：预加载关键字体文件 */}
         <link
           rel="preload"
@@ -97,8 +107,6 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
           type="font/woff2"
           crossOrigin="anonymous"
         />
-
-        {/* 可选：预加载次要字体（按需加载） */}
         <link
           rel="prefetch"
           href="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-65-Medium.woff2"
@@ -106,15 +114,8 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
           type="font/woff2"
           crossOrigin="anonymous"
         />
-        <link
-          rel="prefetch"
-          href="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/fonts/AlibabaPuHuiTi-3-115-Black.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
       </head>
-      <body>
+      <body className="font-sans">
         <NextIntlClientProvider messages={messages} locale={locale}>
           <IntlProvider messages={messages}>
             <Layout>{children}</Layout>

@@ -11,7 +11,7 @@ const RelayStatusIndicator: React.FC<RelayStatusIndicatorProps> = ({ onlineCount
     <div
       key={index}
       className={`w-2 h-2 rounded-full transition-all duration-300 ${
-        index < onlineCount ? 'bg-gradient-to-br from-green-400 to-blue-400 shadow-sm' : 'bg-gray-300'
+        index < onlineCount ? 'bg-brand-grass' : 'bg-hairline'
       }`}
     />
   ));

@@ -9,6 +9,7 @@ import { IGovActionContent } from '@/types/governance';
 import { getDurationString } from '@/utils';
 import { useParams } from 'next/navigation';
 import { useRouter } from '@/i18n/navigation';
+import { Button } from '@/components/ui/Button';
 
 // 投票组织组件
 // const VotingOrganization = ({ organization }) => {
@@ -57,7 +58,7 @@ const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 
 export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => {
   const currentProposal = useMemo(() => proposal, [proposal]);
-  const t = useTranslations('common');
+  const t = useTranslations();
   const params = useParams();
   const router = useRouter();
   const locale = params.locale as string;
@@ -157,30 +158,35 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
   const isHotTopic = HOT_TOPICS.includes(currentProposal?.id);
 
   return (
-    <div className="md:card bg-white p-4 relative">
-      {isHotTopic && <div className="vote-badge md:block hidden">{`${t('governance.hot')}!`}</div>}
-
+    <div className="bg-white rounded-lg p-5 md:p-6 relative shadow-card">
       {/* 投票内容 */}
       {currentProposal && (
-        <div className="border-3 border-[#0a2463] rounded-lg flex flex-col space-y-2 md:space-y-4">
-          <h3 className="text-base md:text-xl font-bold text-[#0a2463]">{currentProposal.title}</h3>
+        <div className="flex flex-col space-y-3 md:space-y-4">
+          <div className="flex items-start justify-between gap-3">
+            <h3 className="text-base md:text-xl text-ink">{currentProposal.title}</h3>
+            {isHotTopic && (
+              <span className="hidden md:inline-flex items-center text-[13px] font-semibold leading-none text-ink px-[13px] py-[7px] rounded-pill bg-brand-lemon flex-none">
+                {`${t('governance.hot')}!`}
+              </span>
+            )}
+          </div>
 
-          <div className="flex justify-between flex-col md:flex-row">
+          <div className="flex justify-between flex-col md:flex-row gap-1 text-muted">
             <div className="flex items-center text-sm">
               <Calendar size={16} className="mr-1" />
-              <span>
+              <span className="tnum">
                 {t('governance.submit_at')}: {dayjs(currentProposal?.metadata.createdDate).format('YYYY-MM-DD HH:mm')}
               </span>
             </div>
             <div className="flex items-center text-sm">
               <Calendar size={16} className="mr-1" />
-              <span>
+              <span className="tnum">
                 {t('governance.expire_at')}: {dayjs(currentProposal?.metadata.expiryDate).format('YYYY-MM-DD HH:mm')}
               </span>
             </div>
-            <div className="flex items-center text-sm font-bold text-[#3f8efc]">
+            <div className="flex items-center text-sm font-semibold text-brand-incana">
               <Clock size={16} className="mr-1" />
-              <span>
+              <span className="tnum">
                 {t('governance.remaining_time')}: {duration}
               </span>
             </div>
@@ -202,13 +208,13 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             </div>
           </div> */}
 
-          <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-            <h3 className="font-bold text-[#0a2463] flex mb-1 items-center">
-              <MessageCircle size={20} className="mr-2 text-[#3f8efc]" />
+          <div className="rounded-md p-4 bg-surface-soft">
+            <h3 className="text-ink flex mb-1 items-center text-[15px]">
+              <MessageCircle size={18} className="mr-2 text-brand-sea" />
               {t('governance.title_proposal_content')}
             </h3>
 
-            <div className="text-sm text-gray-900 leading-relaxed line-clamp-5 md:line-clamp-none">
+            <div className="text-sm text-body leading-relaxed line-clamp-5 md:line-clamp-none">
               <ReactMarkdown>{currentProposal?.opinions.summary}</ReactMarkdown>
             </div>
           </div>
@@ -221,13 +227,13 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
 
           <div className="grid-cols-1 md:grid-cols-2 gap-4 hidden md:grid">
             {/* 正方观点 */}
-            <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff] hidden md:block">
-              <h3 className="font-bold text-[#0a2463] flex items-center">
-                <CheckCircle size={20} className="mr-2 text-[#06D6A0]" />
+            <div className="rounded-md p-4 bg-surface-soft hidden md:block">
+              <h3 className="text-ink flex items-center text-[15px] mb-1">
+                <CheckCircle size={18} className="mr-2 text-brand-grass" />
                 {t('governance.title_pros')}
               </h3>
 
-              <ul className="point-list pros text-sm text-gray-900 leading-relaxed">
+              <ul className="list-disc pl-5 marker:text-brand-grass text-sm text-body leading-relaxed space-y-1">
                 {currentProposal?.opinions.pros.map((point, index) => (
                   <li key={index}>{point}</li>
                 ))}
@@ -235,13 +241,13 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
             </div>
 
             {/* 反方观点 */}
-            <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff] hidden md:block">
-              <h3 className="font-bold text-[#0a2463] flex mb-1 items-center">
-                <XCircle size={20} className="mr-2 text-[#EF476F]" />
+            <div className="rounded-md p-4 bg-surface-soft hidden md:block">
+              <h3 className="text-ink flex mb-1 items-center text-[15px]">
+                <XCircle size={18} className="mr-2 text-brand-orange" />
                 {t('governance.title_cons')}
               </h3>
 
-              <ul className="point-list cons text-sm text-gray-900 leading-relaxed">
+              <ul className="list-disc pl-5 marker:text-brand-orange text-sm text-body leading-relaxed space-y-1">
                 {currentProposal?.opinions.cons.map((point, index) => (
                   <li key={index}>{point}</li>
                 ))}
@@ -250,25 +256,21 @@ export const GovActionCard = ({ proposal }: { proposal: IGovActionContent }) => 
           </div>
 
           {/* 我们的观点 */}
-          <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-            <h3 className="font-bold text-[#0a2463] flex mb-1 items-center">
-              <Lightbulb size={20} className="mr-2 text-[#3f8efc]" />
+          <div className="rounded-md p-4 bg-surface-soft">
+            <h3 className="text-ink flex mb-1 items-center text-[15px]">
+              <Lightbulb size={18} className="mr-2 text-brand-incana" />
               {t('governance.title_our_opinion')}
             </h3>
 
-            {/* <p className="text-sm text-gray-900">{currentProposal.opinions.myOpinion}</p> */}
-            <div className="text-sm text-gray-900 leading-relaxed line-clamp-5 md:line-clamp-none">
+            <div className="text-sm text-body leading-relaxed line-clamp-5 md:line-clamp-none">
               <ReactMarkdown>{currentProposal?.opinions.myOpinion}</ReactMarkdown>
             </div>
           </div>
 
           <div className="flex justify-end">
-            <button
-              className="btn px-4 py-2 bg-[#3f8efc] text-white"
-              onClick={() => router.push(`/action-detail/${currentProposal.id}`)}
-            >
+            <Button variant="primary" size="md" onClick={() => router.push(`/action-detail/${currentProposal.id}`)}>
               {t('common.view_detail')}
-            </button>
+            </Button>
           </div>
         </div>
       )}

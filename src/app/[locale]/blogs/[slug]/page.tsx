@@ -1,7 +1,9 @@
-import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 
 import { getPostData } from '@/lib/posts';
+import { CATEGORY_CHIP } from '@/lib/categories';
+import { Chip } from '@/components/ui/Chip';
 
 import Comments from '@/components/Comments';
 
@@ -37,7 +39,7 @@ export async function generateMetadata({ params: { locale, slug } }: Props) {
           }
         ],
         publishedTime: post.date,
-        authors: ['Bubble Studio'],
+        authors: ['Pao Studio'],
         tags: post.tags
       },
 
@@ -47,7 +49,7 @@ export async function generateMetadata({ params: { locale, slug } }: Props) {
         title: post.title,
         description,
         images: [post.image || `${baseUrl}/og-default.png`],
-        creator: '@bubblestudio' // 根据实际修改
+        creator: '@cauu_128'
       }
     };
   } catch (error) {
@@ -60,6 +62,8 @@ export async function generateMetadata({ params: { locale, slug } }: Props) {
 }
 
 export default async function PostPage({ params: { locale, slug } }: Props) {
+  const t = await getTranslations({ locale });
+
   try {
     const post = await getPostData(slug, locale);
 
@@ -69,62 +73,35 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
     }
 
     return (
-      <div className="max-w-4xl mx-auto px-0 md:px-4 pt-0 pb-4 md:py-8">
-        <article className="bg-white md:rounded-lg md:shadow-lg overflow-hidden">
-          {/* 封面图 - 移动端更紧凑 */}
-          {post.image && (
-            <div className="relative h-[200px] md:h-[400px]">
-              <img src={post.image} alt={post.title} className="object-cover h-full w-full" />
+      <div className="max-w-[760px] mx-auto px-6 max-[600px]:px-[18px] pt-16 pb-24 max-[860px]:pt-11 max-[860px]:pb-[72px]">
+        <article>
+          <header className="mb-8">
+            <h1 className="text-[clamp(28px,3.6vw,40px)] leading-[1.2] mb-4">{post.title}</h1>
+            <div className="flex flex-wrap items-center gap-3 pb-6 border-b border-hairline">
+              <Chip color={CATEGORY_CHIP[post.category]}>{t(`blog.categories.${post.category}`)}</Chip>
+              <span className="text-[13.5px] font-semibold text-muted tnum">{post.date.replaceAll('-', '.')}</span>
+              <span className="text-muted-soft" aria-hidden="true">
+                ·
+              </span>
+              <span className="text-[13.5px] font-semibold text-muted">{post.author}</span>
             </div>
-          )}
+          </header>
 
-          <div className="px-4 py-4 md:p-8">
-            {/* 标题区域 - 移动端放在最前面，类似Twitter */}
-            <h1 className="text-xl md:text-3xl font-bold text-gray-900 mb-3 md:mb-4 leading-tight">{post.title}</h1>
+          {post.image && <img src={post.image} alt={post.title} className="rounded-lg w-full mb-8" />}
 
-            {/* 元信息 */}
-            <div className="flex items-center gap-2 mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-100">
-              <div className="flex flex-wrap gap-1.5 md:gap-2">
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 md:px-3 py-0.5 md:py-1 bg-blue-50 text-blue-600 text-xs md:text-sm rounded-full font-medium"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <span className="text-gray-400 text-xs md:text-sm">·</span>
-              <p className="text-gray-500 text-xs md:text-sm">{format(new Date(post.date), 'yyyy年MM月dd日')}</p>
-            </div>
-
-            {/* 正文内容 - 移动端使用更小的字体 */}
-            <div
-              className="prose prose-sm md:prose-lg max-w-none 
-                prose-headings:text-gray-900 prose-headings:font-bold
-                prose-h2:text-lg prose-h2:md:text-2xl prose-h2:mt-6 prose-h2:mb-3
-                prose-h3:text-base prose-h3:md:text-xl prose-h3:mt-4 prose-h3:mb-2
-                prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-sm prose-p:md:text-base
-                prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-                prose-img:rounded-lg prose-img:my-4
-                prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50/50 prose-blockquote:py-1 prose-blockquote:rounded-r-lg
-                prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-pink-600 prose-code:font-mono
-                prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-lg prose-pre:p-4 prose-pre:overflow-x-auto
-                prose-pre>code:bg-transparent prose-pre>code:text-gray-100 prose-pre>code:p-0
-                prose-li:text-sm prose-li:md:text-base
-              "
-              dangerouslySetInnerHTML={{ __html: post.contentHtml }}
-            />
-          </div>
+          <div
+            className="prose prose-sm md:prose-lg max-w-none prose-a:underline prose-a:underline-offset-[3px] prose-a:decoration-hairline hover:prose-a:text-brand-incana prose-img:rounded-lg"
+            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+          />
         </article>
 
-        <div className="px-4 md:px-0">
+        <div className="mt-12 pt-8 border-t border-hairline">
           <Comments term={post.id} language={locale as any} />
         </div>
       </div>
     );
   } catch (error) {
     console.error('Failed to fetch post:', error);
-    // notFound();
+    notFound();
   }
 }

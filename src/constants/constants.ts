@@ -3,6 +3,20 @@ const ASSETS_BASE_URL = 'https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@m
 export const GlobalConfig = {
   POOL_ID: 'pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
 
+  DELEGATE_URL: 'https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
+
+  CARDANOSCAN_POOL_URL: 'https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
+
+  CONTACT_EMAIL: 'contact@bubble-studio.xyz',
+
+  // Koios pool_info has no APY field; keep as a config constant
+  POOL_APY: '~2.2%',
+
+  POOL_FALLBACK: {
+    stake: '1.2M ADA',
+    delegators: '15'
+  },
+
   HUB_API_BASE_URL: 'https://hub.bubble-studio.xyz/api/v1',
 
   STARKNET_VALIDATOR_ADDRESS: '0x07cd517c4373c8f6e879b24cefae63cedb3ef7e06f5fef033cde6ab734da441e',
