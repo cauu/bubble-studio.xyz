@@ -10,6 +10,7 @@ tags:
   - "AI"
   - "Economy"
   - "Macro"
+category: ai
 ---
 
 ## I. 1928-1929: The Death Knell Amid Euphoria

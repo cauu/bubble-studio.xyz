@@ -8,6 +8,8 @@ author: Martin
 language: en
 tags:
   - "Bubble Studio"
+category: essay
+featured: true
 ---
 
 Here, we wish to elaborate on the identity, mission, and the fundamental judgments upon which Bubble Studio acts. This article will answer two core questions: **Who are we? What do we plan to do?**

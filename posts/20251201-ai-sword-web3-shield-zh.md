@@ -9,6 +9,7 @@ language: zh
 tags:
   - "Cardano"
   - "Indie"
+category: ai
 ---
 我们正处于人类工作范式发生剧烈转变的前夜。
 

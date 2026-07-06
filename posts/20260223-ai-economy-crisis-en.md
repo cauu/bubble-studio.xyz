@@ -10,6 +10,7 @@ tags:
   - "AI"
   - "Economy"
   - "Macro"
+category: ai
 ---
 
 I recently came across an article by CitriniResearch that looks back from 2028 at a global economic crisis triggered by AI. While it's a fictional scenario, the logic chain it lays out deserves serious consideration.

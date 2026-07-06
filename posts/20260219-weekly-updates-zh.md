@@ -9,6 +9,7 @@ language: zh
 tags:
   - "Cardano"
   - "Bubble Studio"
+category: weekly
 ---
 
 ## 总结

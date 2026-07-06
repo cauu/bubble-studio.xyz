@@ -8,6 +8,8 @@ author: Martin
 language: tw
 tags:
   - "Bubble Studio"
+category: essay
+featured: true
 ---
 
 在此，我們希望闡述泡泡工作室(Bubble Studio)的身份、使命以及我們賴以行動的基本判斷。這篇文章將解答兩個核心問題：**我們是誰？我們計畫做什麼？**

@@ -11,6 +11,7 @@ tags:
   - "Cardano"
   - "Ethereum"
   - "Blockchain"
+category: cardano
 ---
 For the past few years, when the blockchain world talked about “composability,” it usually meant **Ethereum-style synchronous calls**: contracts behaving like public APIs, calling one another directly and composing complex behavior inside a single transaction. This Lego-like model fueled the rise of DeFi, and it also made execution-oriented agents such as those enabled by EIP-4337 increasingly powerful.
 

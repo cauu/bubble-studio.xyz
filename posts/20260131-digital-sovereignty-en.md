@@ -10,6 +10,7 @@ tags:
   - "Cardano"
   - "Indie"
   - "AI"
+category: essay
 ---
 
 *Why I Chose Plan B*

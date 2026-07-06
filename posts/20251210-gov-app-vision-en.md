@@ -8,6 +8,7 @@ author: Martin
 language: en
 tags:
   - "Cardano"
+category: cardano
 ---
 The year 2025 is a truly remarkable milestone for Cardano.  
 This year, we not only witnessed the birth and growth of many high-quality projects, but more importantly:  

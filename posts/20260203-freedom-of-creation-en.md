@@ -10,6 +10,7 @@ tags:
   - "AI"
   - "Creation"
   - "Vibe Coding"
+category: ai
 ---
 In early 2026, I had a vague but persistent feeling: large language models have become the **universal compiler** of our world.
 

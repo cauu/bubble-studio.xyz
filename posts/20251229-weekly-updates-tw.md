@@ -9,6 +9,7 @@ language: tw
 tags:
   - "Cardano"
   - "Bubble Studio"
+category: weekly
 ---
 ## 本週摘要
 
