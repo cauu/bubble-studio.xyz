@@ -24,8 +24,8 @@ export const GlobalConfig = {
   assetsBaseUrl: ASSETS_BASE_URL,
 
   assetsUrl: {
-    favicon: `${ASSETS_BASE_URL}/images/logos/bubble-logo.png`,
-    bubbleLogo: `${ASSETS_BASE_URL}/images/logos/bubble-logo.png`,
+    favicon: `${ASSETS_BASE_URL}/images/logos/pao_favicon.ico`,
+    bubbleLogo: `${ASSETS_BASE_URL}/images/logos/pao_logo.svg`,
     cardanoWhiteLogo: `${ASSETS_BASE_URL}/images/logos/cardano_white.png`,
     cardanoBlueLogo: `${ASSETS_BASE_URL}/images/logos/cardano_blue.png`,
     starknetLogo: `${ASSETS_BASE_URL}/images/logos/starknet.png`
@@ -33,6 +33,7 @@ export const GlobalConfig = {
 
   social: {
     twitter: 'https://x.com/cauu_128',
+    github: 'https://github.com/cauu',
     telegram: 'https://t.me/+1aO8bBE7B7VhOWJl'
   }
 };

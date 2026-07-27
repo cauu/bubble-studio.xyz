@@ -14,7 +14,10 @@ export const Hero = ({ stats }: { stats: PoolStats }) => {
   const isLatin = locale === 'en';
 
   return (
-    <section className="relative z-[2] pt-32 pb-28 max-[860px]:pt-20 max-[860px]:pb-[72px]" aria-labelledby="hero-h1">
+    <section
+      className="relative z-[2] overflow-hidden pt-32 pb-28 max-[860px]:pt-20 max-[860px]:pb-[72px]"
+      aria-labelledby="hero-h1"
+    >
       <div className="hero-aura animate-aura-drift" aria-hidden="true" />
       <div className="hero-grain" aria-hidden="true" />
 
@@ -35,20 +38,13 @@ export const Hero = ({ stats }: { stats: PoolStats }) => {
             {t('title2')}
             <span className="text-brand-incana">{t('title2Highlight')}</span>
           </h1>
-          <p className="text-[17px] text-body-strong max-w-[28em] mb-7">{t('sub')}</p>
+          <p className="mb-7 max-w-[31em] text-[17px] text-body-strong">{t('sub')}</p>
           <div className="flex flex-wrap gap-3 max-[600px]:flex-col">
             <Button href={GlobalConfig.DELEGATE_URL} variant="primary" size="lg" className="max-[600px]:w-full">
               {tNav('stakeCta')}
             </Button>
-            <Button
-              href={GlobalConfig.social.telegram}
-              variant="ghost"
-              size="lg"
-              className="max-[600px]:w-full"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t('ctaSubscribe')}
+            <Button href="#why" variant="ghost" size="lg" className="max-[600px]:w-full">
+              {t('ctaLearn')}
             </Button>
           </div>
         </Reveal>

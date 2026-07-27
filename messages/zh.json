@@ -10,12 +10,12 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "🫧 Not just a staking pool",
-      "title1": "不只是质押矿池",
-      "title2": "质押，即",
-      "title2Highlight": "会员",
-      "sub": "把 ADA 委托到 Pao Pool，协议收益照拿；同时你将成为 Pao Studio 的会员——订阅内容、使用产品、参与决策。",
-      "ctaSubscribe": "先订阅看看"
+      "eyebrow": "Pao Studio",
+      "title1": "首个以 Cardano",
+      "title2": "为基石的",
+      "title2Highlight": "一人公司",
+      "sub": "探索如何借助 AI 和区块链，经营一家面向全球、能够长期运转的线上公司。",
+      "ctaLearn": "了解我们在做什么"
     },
     "ledger": {
       "title": "Pao Pool",
@@ -28,72 +28,84 @@
         "apy": "质押年化",
         "delegators": "委托人"
       },
-      "foot": "会员权益已激活 · 零额外费用"
+      "foot": "质押即参与 · 非托管 · 零额外费用"
     },
     "why": {
-      "chip": "为什么质押给我们",
-      "title": "一场关于「一人公司」的实验",
-      "sub": "我们在探索 AI 时代，个体如何靠 AI 与区块链构建可持续的价值循环。Pao Pool 是这场实验的起点。",
+      "title": "为什么是现在",
       "cards": {
         "c1": {
-          "chip": "愿景",
-          "title": "AI 时代的可持续价值循环",
-          "body": "一个人，加上 AI 和区块链，能不能长期地创造价值、获得回报？Pao Studio 就是这个问题的实验场。"
+          "title": "生产力的变革，让雇佣关系不再是唯一答案",
+          "body": "AI 让个体获得接近团队的执行能力，但也让岗位被重组、替代或拆解，固定雇佣关系变得越来越脆弱。\n自由职业者、独立创作者和一人公司，将成为这场变革的直接受益者。"
         },
         "c2": {
-          "chip": "定位",
-          "title": "Pao Pool 是这家公司的用户锚点",
-          "body": "它不只是一个矿池——每一位质押者，都是 Pao Studio 的用户与成员，是这家一人公司的根基。"
+          "title": "Cardano 重塑生产关系",
+          "body": "Cardano 高度去中心化，允许任何人运行节点、创建 stake pool，并在开放网络中建立自己的可信身份。\n结合流动性质押机制，个体可以在不托管用户资产的前提下，建立现金流、信用和用户关系。"
         },
         "c3": {
-          "chip": "意义",
-          "title": "你的质押会改变什么",
-          "body": "它帮我们解决最基本的生存问题，也和我们一起向所有人证明：以 Cardano 矿池为基础的一人公司，是可行的。"
+          "title": "AI 与区块链在此交汇",
+          "body": "当个体同时拥有生产力、现金流和用户关系，公司的起点就会被重新定义。\n新的个人商业形态，将从一个人、一组 Agent 和一个开放网络开始。"
+        }
+      }
+    },
+    "model": {
+      "title": "我们打算怎么做",
+      "summary": "我们的首要目标，是建立多元化收入，让公司可以持续运转。\n只有解决了最基本的生存压力，我们才有机会长期探索 AI、Cardano 与一人公司结合的更多可能性。",
+      "items": {
+        "income": {
+          "title": "建立可持续收入",
+          "body": "以 Cardano stake pool 作为基础收入来源，覆盖 AI、服务器和节点维护成本。\n同时通过投资、咨询服务和产品收入，建立额外现金流保障。"
+        },
+        "identity": {
+          "title": "为会员创造额外价值",
+          "body": "我们会通过社交平台为质押用户提供优质的内容推送服务，质押用户还可以优先或免费使用我们开发的产品。\n我们希望打破 Web2 与 Web3 的边界，让质押关系成为产品迭代的起点。"
+        },
+        "relationship": {
+          "title": "参与开源与治理",
+          "body": "我们会通过开源项目、工具建设和治理参与，持续为 Cardano 生态贡献价值。\n我们不仅使用 Cardano，也希望参与建设它。"
         }
       }
     },
     "perks": {
-      "chip": "会员权益",
-      "title": "质押不止是质押",
-      "sub": "委托的那一刻起，你就是 Pao Studio 的会员——内容、产品、决策，全部向你打开。",
+      "title": "为什么质押给我们",
+      "sub": "质押给 Pao Pool，支持我们长期运营。\n你在获得协议质押收益的同时，还能得到内容、产品和社区服务上的持续回馈。",
       "head": {
-        "list": "权益清单",
-        "status": "状态"
+        "list": "参与者权益",
+        "status": "方式"
       },
       "items": {
         "i1": {
-          "title": "定期 ADA 抽奖",
-          "body": "会员专属、真实奖励，开奖透明、链上可查。",
-          "chip": "定期开奖"
+          "title": "参与活动与社区",
+          "body": "优先参与 Pao Studio 发起的线上讨论、会员活动与社区实验。",
+          "chip": "共同参与"
         },
         "i2": {
-          "title": "深度内容",
-          "body": "我们对 Cardano、投资与 AI 的持续思考，会员优先送达。",
-          "chip": "会员抢先看"
+          "title": "持续获得高质量内容",
+          "body": "获得 AI、Cardano 和交易相关的独家内容推送服务。",
+          "chip": "优先获取"
         },
         "i3": {
-          "title": "产品全部能力",
-          "body": "VODA 及未来每一款产品，会员解锁全部能力、零成本。",
-          "chip": "会员 $0"
+          "title": "获得产品会员权益",
+          "body": "按各产品规则获得 Pao Studio 产品的会员能力、早期体验或专属权益。",
+          "chip": "产品权益"
         },
         "i4": {
-          "title": "讨论与决策",
-          "body": "加入会员社区，参与讨论，和我们一起决定 Pao Studio 的方向。",
-          "chip": "参与决策"
+          "title": "参与早期产品共创",
+          "body": "提出真实问题、试用尚未发布的功能，并参与影响产品下一步方向。",
+          "chip": "共同创造"
         }
       },
       "tier": {
-        "cap": "会员费用",
-        "priceSuffix": " / 永久",
-        "body": "质押收益照拿，会员身份自动附赠，不收一分额外费用。",
+        "cap": "额外会员费用",
+        "priceSuffix": " / 额外费用",
+        "body": "无需购买订阅。委托给 Pao Pool，即可建立你的会员身份。",
         "fine": "非托管 · 不锁仓 · 随时可退"
       }
     },
     "services": {
-      "chip": "其他服务 · 承接中",
-      "title": "咨询与开发合作",
-      "body": "让 Pao Studio 活下去，是现阶段的核心任务。我们承接 Cardano、AI 与产品开发相关的咨询和 Freelance 合作，欢迎聊聊。",
-      "cta": "邮件联系"
+      "chip": "产品开发 · 咨询与合作",
+      "title": "一起构建 AI 与区块链产品",
+      "body": "我们提供 AI Agent、Cardano 与区块链相关的产品开发与咨询服务。\n如果你有明确的产品需求，或正在寻找长期合作的技术伙伴，欢迎联系我们。",
+      "cta": "联系我们"
     }
   },
   "hero": {
@@ -180,11 +192,11 @@
   },
   "seo": {
     "siteName": "Pao Studio",
-    "defaultTitle": "Pao Studio · 不只是质押矿池",
-    "defaultDescription": "把 ADA 委托到 Pao Pool，收益照拿，同时成为 Pao Studio 会员：定期 ADA 抽奖、深度内容、产品全部能力、参与决策。",
+    "defaultTitle": "Pao Studio · AI 时代的一人公司实验",
+    "defaultDescription": "借助 AI Agent 放大个人生产力，以 Cardano stake pool 锚定身份、会员关系和持续收入。",
     "home": {
-      "title": "Pao Studio · 不只是质押矿池",
-      "description": "质押，即会员。把 ADA 委托到 Pao Pool，收益照拿，同时拥有 Pao Studio 的会员身份。"
+      "title": "Pao Studio · AI 时代的一人公司实验",
+      "description": "探索一个人如何借助 AI Agent 与 Cardano，经营一家长期、可信、可持续的公司。"
     },
     "staking": {
       "title": "质押 - Pao Studio",
@@ -220,8 +232,7 @@
     "explore": "探索",
     "community": "社区",
     "staking": "质押",
-    "governance": "治理",
-    "mascotAlt": "Paopao 插画占位"
+    "governance": "治理"
   },
   "blog": {
     "title": "博客",
@@ -247,39 +258,34 @@
   },
   "projects": {
     "title": "项目",
-    "sub": "我们正在做的工具与产品，会员全部免费。",
     "ariaAll": "全部项目",
-    "ariaNote": "会员说明",
-    "items": {
-      "voda": {
-        "name": "VODA",
-        "body": "VODA 及未来每一款工具，会员全部免费、零成本。质押到 Pao Pool 即自动解锁。",
-        "status": "Beta 进行中",
-        "link": "了解 VODA →"
+    "visit": "访问项目",
+    "categories": {
+      "infrastructure": {
+        "title": "基础设施",
+        "description": "为 Cardano 产品和 AI Agent 提供底层能力。"
       },
-      "pool": {
-        "name": "Pao Pool",
-        "body": "Cardano 质押矿池。将 ADA 委托到 Pao Pool，照常赚收益，自动成为会员。",
-        "status": "运行中",
-        "link": "CardanoScan →"
-      },
-      "gov": {
-        "name": "Cardano 治理产品",
-        "body": "以产品化手段推动 Cardano 治理的下一次跃迁，让治理参与像用普通 App 一样简单。",
-        "status": "开发中",
-        "link": "进展周报 →"
-      },
-      "bot": {
-        "name": "Telegram Bot",
-        "body": "自动推送矿池动态、治理更新和互动工具，一站直达。",
-        "status": "运行中",
-        "link": "加入 Telegram →"
+      "applications": {
+        "title": "应用",
+        "description": "面向用户的链上产品与社区体验。"
       }
     },
-    "note": {
-      "lead": "会员权益免费附赠",
-      "body": " — 照常领取协议质押收益，会员福利在此之上自动叠加，不收一分额外费用。",
-      "cta": "质押到 Pao Pool"
+    "items": {
+      "ouroPass": {
+        "description": "基于 Cardano 的去中心化身份与订阅基础设施。"
+      },
+      "utxray": {
+        "description": "面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。"
+      },
+      "ouroOps": {
+        "description": "面向 AI Agent 的 Cardano Stake Pool 运维工具。"
+      },
+      "lottery": {
+        "description": "基于 Cardano 构建的去中心化彩票应用。"
+      },
+      "voda": {
+        "description": "用于追踪 Cardano 社区与治理动态的应用。"
+      }
     }
   }
 }

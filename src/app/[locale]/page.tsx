@@ -4,6 +4,7 @@ import { getPoolInfo } from '@/services/pool';
 import { GlobalConfig } from '@/constants';
 import { Hero } from '@/components/home/Hero';
 import { WhyBand } from '@/components/home/WhyBand';
+import { ModelBand } from '@/components/home/ModelBand';
 import { Perks } from '@/components/home/Perks';
 import { ServicesBand } from '@/components/home/ServicesBand';
 import type { PoolStats } from '@/components/home/PoolLedgerCard';
@@ -93,6 +94,7 @@ export default async function HomePage() {
     <>
       <Hero stats={stats} />
       <WhyBand />
+      <ModelBand />
       <Perks />
       <ServicesBand />
     </>

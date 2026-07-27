@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { GlobalConfig } from '@/constants';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
-import { SectionHead } from '@/components/ui/SectionHead';
 import { Reveal } from '@/components/ui/Reveal';
 
 const itemKeys = [
@@ -18,10 +17,13 @@ export const Perks = () => {
   const tNav = useTranslations('nav');
 
   return (
-    <section id="perks" className="py-section max-[860px]:py-[72px]" aria-labelledby="perks-h2">
+    <section id="perks" className="bg-surface-card py-section max-[860px]:py-[72px]" aria-labelledby="perks-h2">
       <div className="wrap">
-        <Reveal>
-          <SectionHead chip={t('chip')} chipColor="sky" titleId="perks-h2" title={t('title')} sub={t('sub')} />
+        <Reveal className="mb-12 max-w-[46rem]">
+          <h2 id="perks-h2" className="mb-3.5 text-[clamp(30px,4vw,46px)] leading-[1.15] text-balance">
+            {t('title')}
+          </h2>
+          <p className="whitespace-pre-line text-[16.5px] leading-relaxed text-body">{t('sub')}</p>
         </Reveal>
 
         <div className="grid grid-cols-[1.45fr_1fr] gap-6 items-start max-[900px]:grid-cols-1">

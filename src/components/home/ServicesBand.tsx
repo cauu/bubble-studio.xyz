@@ -8,7 +8,7 @@ export const ServicesBand = () => {
   const t = useTranslations('home.services');
 
   return (
-    <section className="pb-section max-[860px]:pb-[72px]" aria-labelledby="svc-h2">
+    <section className="py-section max-[860px]:py-[72px]" aria-labelledby="svc-h2">
       <div className="wrap">
         <Reveal className="relative overflow-hidden bg-surface-card rounded-xl px-14 py-16 max-[860px]:px-7 max-[860px]:py-11 flex items-center justify-between gap-8 flex-wrap shadow-[0_1px_2px_rgba(23,32,38,.04),0_12px_32px_rgba(23,32,38,.07),inset_0_1px_0_rgba(255,255,255,.5)]">
           <span
@@ -27,7 +27,7 @@ export const ServicesBand = () => {
             <h2 id="svc-h2" className="text-[clamp(26px,3.2vw,36px)] leading-[1.2] mb-3">
               {t('title')}
             </h2>
-            <p className="text-base text-body">{t('body')}</p>
+            <p className="whitespace-pre-line text-base text-body">{t('body')}</p>
           </div>
 
           <div className="relative flex flex-col items-start gap-3">

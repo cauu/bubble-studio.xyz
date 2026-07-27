@@ -32,7 +32,7 @@ export function BlogsClient({ allPosts }: BlogsClientProps) {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative overflow-x-hidden">
       <div className="page-aura animate-aura-drift" aria-hidden="true" />
 
       <header className="pt-16 max-[860px]:pt-11">

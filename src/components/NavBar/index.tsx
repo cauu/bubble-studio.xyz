@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { GlobalConfig } from '@/constants';
 import { Button } from '@/components/ui/Button';
+import { PaoLogo } from '@/components/PaoLogo';
 
 export const NavBar = () => {
   const t = useTranslations();
@@ -31,8 +32,7 @@ export const NavBar = () => {
     >
       <div className="mx-auto max-w-wrap px-6 max-[600px]:px-[18px] flex items-center gap-6 h-[68px]">
         <Link href="/" className="flex items-center gap-[11px] font-bold text-[17px] text-ink" prefetch>
-          <img src={GlobalConfig.assetsUrl.bubbleLogo} alt={`Pao Studio ${t('nav.logoAlt')}`} className="h-7 w-auto" />
-          <span>Pao Studio</span>
+          <PaoLogo alt={`Pao Studio ${t('nav.logoAlt')}`} height={28} className="h-7 w-auto" priority />
         </Link>
 
         <div className="ml-3 hidden min-[861px]:flex gap-1">

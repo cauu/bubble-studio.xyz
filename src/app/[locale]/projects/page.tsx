@@ -1,8 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
 import { Metadata } from 'next';
-import { GlobalConfig } from '@/constants';
-import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { ProjectCard, ProjectCardProps } from '@/components/projects/ProjectCard';
 
@@ -24,7 +22,7 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
       url,
       siteName: t('seo.siteName'),
       type: 'website',
-      locale: locale
+      locale
     },
     alternates: {
       canonical: url,
@@ -37,96 +35,105 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
   };
 }
 
-export default function ProjectsPage({ params: { locale } }: Props) {
+export default function ProjectsPage() {
   const t = useTranslations('projects');
 
-  const cards: ProjectCardProps[] = [
+  const infrastructure: ProjectCardProps[] = [
     {
-      tile: 'VODA',
-      tileColor: 'sky',
-      name: t('items.voda.name'),
-      body: t('items.voda.body'),
-      status: t('items.voda.status'),
-      statusColor: 'lemon',
-      live: true,
-      linkLabel: t('items.voda.link'),
-      linkHref: GlobalConfig.social.telegram,
-      external: true
+      type: t('categories.infrastructure.title'),
+      title: 'Ouro Pass',
+      description: t('items.ouroPass.description'),
+      projectHref: 'https://ouro-pass.paopao.studio/',
+      githubHref: 'https://github.com/cauu/ouro-pass',
+      screenshot: '/images/projects/ouro-pass.jpg',
+      visitLabel: t('visit')
     },
     {
-      tile: 'PAO',
-      tileColor: 'mint',
-      name: t('items.pool.name'),
-      body: t('items.pool.body'),
-      status: t('items.pool.status'),
-      statusColor: 'grass',
-      linkLabel: t('items.pool.link'),
-      linkHref: GlobalConfig.CARDANOSCAN_POOL_URL,
-      external: true
+      type: t('categories.infrastructure.title'),
+      title: 'utxray',
+      description: t('items.utxray.description'),
+      projectHref: 'https://utxray.paopao.studio/',
+      githubHref: 'https://github.com/cauu/utxray',
+      screenshot: '/images/projects/utxray.jpg',
+      visitLabel: t('visit')
     },
     {
-      tile: 'GOV',
-      tileColor: 'lavender',
-      name: t('items.gov.name'),
-      body: t('items.gov.body'),
-      status: t('items.gov.status'),
-      statusColor: 'card',
-      linkLabel: t('items.gov.link'),
-      linkHref: locale === 'en' ? '/blogs' : `/${locale}/blogs`
+      type: t('categories.infrastructure.title'),
+      title: 'Ouro Ops',
+      description: t('items.ouroOps.description'),
+      projectHref: 'https://ouro-ops.paopao.studio/',
+      githubHref: 'https://github.com/cauu/ouro-ops',
+      screenshot: '/images/projects/ouro-ops.jpg',
+      visitLabel: t('visit')
+    }
+  ];
+
+  const applications: ProjectCardProps[] = [
+    {
+      type: t('categories.applications.title'),
+      title: 'Cardano Lottery',
+      description: t('items.lottery.description'),
+      projectHref: 'https://lottery.paopao.studio/',
+      screenshot: '/images/projects/cardano-lottery.jpg',
+      visitLabel: t('visit')
     },
     {
-      tile: 'BOT',
-      tileColor: 'grass',
-      name: t('items.bot.name'),
-      body: t('items.bot.body'),
-      status: t('items.bot.status'),
-      statusColor: 'grass',
-      linkLabel: t('items.bot.link'),
-      linkHref: GlobalConfig.social.telegram,
-      external: true
+      type: t('categories.applications.title'),
+      title: 'VODA',
+      description: t('items.voda.description'),
+      projectHref: 'https://voda.bubble-studio.xyz/',
+      screenshot: '/images/projects/voda.jpg',
+      visitLabel: t('visit')
+    }
+  ];
+
+  const groups = [
+    {
+      key: 'infrastructure',
+      title: t('categories.infrastructure.title'),
+      description: t('categories.infrastructure.description'),
+      cards: infrastructure
+    },
+    {
+      key: 'applications',
+      title: t('categories.applications.title'),
+      description: t('categories.applications.description'),
+      cards: applications
     }
   ];
 
   return (
-    <div className="relative">
+    <div className="relative overflow-x-hidden pb-24 max-[860px]:pb-[72px]">
       <div className="page-aura animate-aura-drift" aria-hidden="true" />
 
       <header className="pt-16 max-[860px]:pt-11">
         <Reveal className="wrap">
-          <h1 className="text-[clamp(36px,4.5vw,52px)] leading-[1.15] mb-3">{t('title')}</h1>
-          <p className="text-[16.5px] text-muted">{t('sub')}</p>
+          <h1 className="text-[clamp(36px,4.5vw,52px)] leading-[1.15]">{t('title')}</h1>
         </Reveal>
       </header>
 
-      <section className="pt-8 max-[860px]:pt-7" aria-label={t('ariaAll')}>
+      <section className="pt-12 max-[860px]:pt-10" aria-label={t('ariaAll')}>
         <div className="wrap">
-          <div className="grid grid-cols-2 gap-6 max-[600px]:grid-cols-1">
-            {cards.map((card, i) => (
-              <Reveal key={card.tile} delay={(i % 2) * 70}>
-                <ProjectCard {...card} />
-              </Reveal>
+          <div className="space-y-20 max-[860px]:space-y-16">
+            {groups.map((group) => (
+              <div key={group.key}>
+                <Reveal className="mb-8 max-[600px]:mb-6">
+                  <div className="flex items-baseline gap-4 max-[600px]:block">
+                    <h2 className="text-[26px] leading-tight">{group.title}</h2>
+                    <p className="mt-2 text-[14.5px] text-muted min-[601px]:mt-0">{group.description}</p>
+                  </div>
+                </Reveal>
+
+                <div className="grid grid-cols-2 gap-x-8 gap-y-10 max-[600px]:grid-cols-1 max-[600px]:gap-y-8">
+                  {group.cards.map((card, index) => (
+                    <Reveal key={card.title} className="h-full" delay={(index % 2) * 70}>
+                      <ProjectCard {...card} />
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="pt-[72px] pb-24 max-[860px]:pt-14 max-[860px]:pb-[72px]" aria-label={t('ariaNote')}>
-        <div className="wrap">
-          <Reveal className="bg-white rounded-lg px-9 py-8 max-[600px]:px-6 flex items-center gap-5 flex-wrap shadow-card">
-            <span
-              className="w-[22px] h-[22px] rounded-full flex-none grid place-items-center text-xs font-bold bg-brand-incana text-on-dark"
-              aria-hidden="true"
-            >
-              ✓
-            </span>
-            <p className="flex-1 text-[15px] text-body min-w-[220px]">
-              <b className="text-ink font-semibold">{t('note.lead')}</b>
-              {t('note.body')}
-            </p>
-            <Button href={GlobalConfig.DELEGATE_URL} variant="primary" size="md">
-              {t('note.cta')}
-            </Button>
-          </Reveal>
         </div>
       </section>
     </div>
