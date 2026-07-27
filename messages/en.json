@@ -1,10 +1,4 @@
 {
-  "header": {
-    "home": "Home",
-    "blogs": "Blog",
-    "staking": "Staking",
-    "products": "Products"
-  },
   "common": {
     "poolName": "Pao Pool",
     "delegate": "Delegate",
@@ -15,52 +9,103 @@
     "learnMore": "Learn More"
   },
   "home": {
-    "subtitle": "An indie studio rooted in Cardano",
-    "description": "We believe blockchain can be the business chassis for indie developers and one-person companies—a permissionless global payment platform, permanently verifiable data storage, and digital real estate that generates continuous cash flow.",
-    "philosophy": {
-      "title": "Our Philosophy",
-      "paragraph1": "The rise of AI will propel humanity as a whole to new heights in intelligence and productivity, but it won't take responsibility for every individual. Those who can't keep up with AI's pace will be left far behind. Faced with this unprecedented force of change, human nature and social inertia make a smooth transition unlikely—more likely, we'll be plunged into an era of chaos.",
-      "paragraph2": "Rather than placing all our hopes on governments and corporations, we prefer to keep our opportunities in our own hands.",
-      "paragraph3": "That's why we choose to build our own territory in the digital world. Starting with blockchain."
+    "hero": {
+      "eyebrow": "Pao Studio",
+      "title1": "The first one-person company",
+      "title2": "built on ",
+      "title2Highlight": "Cardano",
+      "sub": "Exploring how one person can use AI and blockchain to build a global online company that lasts.",
+      "ctaLearn": "See what we’re building"
     },
-    "whatWeDo": {
-      "title": "What We Do",
-      "paoPool": {
-        "title": "Pao Pool",
-        "description": "Our Cardano stake pool, running stably for over a year. When you delegate ADA to us, your assets never leave your wallet and there's no lock-up period. It's a win-win crowdfunding—you haven't handed over your money, yet you've supported our development work."
+    "ledger": {
+      "title": "Pao Pool",
+      "ariaLabel": "Pao Pool stats",
+      "liveLink": "Live · CardanoScan →",
+      "staticLink": "CardanoScan →",
+      "rows": {
+        "ticker": "Ticker",
+        "stake": "Live stake",
+        "apy": "Est. APY",
+        "delegators": "Delegators"
       },
-      "governance": {
-        "title": "Governance",
-        "description": "We actively participate in Cardano on-chain governance, contributing our voice to decentralized decision-making."
-      },
-      "products": {
-        "title": "Products",
-        "description": "We're building VODA (Voice of ADA), a Cardano community information aggregation platform."
+      "foot": "Stake to participate · Non-custodial · Zero extra fees"
+    },
+    "why": {
+      "title": "Why now",
+      "cards": {
+        "c1": {
+          "title": "Employment is no longer the only path",
+          "body": "AI gives individuals the execution power of a team. It is also reshaping, unbundling, and replacing jobs, making traditional employment less secure.\nFreelancers, independent creators, and one-person companies are positioned to benefit directly from this shift."
+        },
+        "c2": {
+          "title": "Cardano reshapes economic relationships",
+          "body": "Cardano is highly decentralized: anyone can run a node, operate a stake pool, and build a verifiable identity on an open network.\nWith liquid staking, individuals can build cash flow, reputation, and user relationships without taking custody of user assets."
+        },
+        "c3": {
+          "title": "Where AI and blockchain converge",
+          "body": "When individuals control their own productivity, cash flow, and user relationships, the starting point of a company changes.\nA new kind of personal business can begin with one person, a team of agents, and an open network."
+        }
       }
     },
-    "support": {
-      "title": "Stake to Pao Pool",
-      "description": "Your delegation is the most direct way to support us. Funds stay in your wallet, no lock-up period, withdraw anytime.",
-      "button": "Learn More"
-    },
-    "latestPosts": {
-      "title": "What We're Thinking"
-    },
-    "team": {
-      "title": "About Us",
-      "description": "An indie studio.",
-      "martin": {
-        "name": "Martin",
-        "role": "Product & Dev"
-      },
-      "yoyo": {
-        "name": "Yoyo",
-        "role": "Design"
-      },
-      "paopao": {
-        "name": "Paopao",
-        "role": "Our Baby"
+    "model": {
+      "title": "How we plan to make it work",
+      "summary": "Our first priority is to build multiple revenue streams so the company can keep running.\nOnce the basic pressure to survive is off the table, we can keep exploring what becomes possible when AI, Cardano, and a one-person company come together.",
+      "items": {
+        "income": {
+          "title": "Build sustainable revenue",
+          "body": "Pao Pool provides a baseline source of income to cover AI, server, and node operating costs.\nInvestment returns, consulting work, and product revenue provide additional cash flow."
+        },
+        "identity": {
+          "title": "Create more value for members",
+          "body": "We use social platforms to deliver high-quality content to delegators. Delegators also receive priority or free access to products we build.\nOur goal is to bridge Web2 and Web3, making delegation the starting point for how our products evolve."
+        },
+        "relationship": {
+          "title": "Contribute to open source and governance",
+          "body": "We contribute to the Cardano ecosystem through open-source projects, tools, and governance.\nWe do not just use Cardano—we want to help build it."
+        }
       }
+    },
+    "perks": {
+      "title": "Why stake with us",
+      "sub": "Delegate to Pao Pool and support our long-term operation.\nAlongside Cardano protocol staking rewards, you’ll receive ongoing value through our content, products, and community.",
+      "head": {
+        "list": "Participant benefits",
+        "status": "Access"
+      },
+      "items": {
+        "i1": {
+          "title": "Join activities and community",
+          "body": "Get priority access to discussions, member activities, and community experiments run by Pao Studio.",
+          "chip": "Participate"
+        },
+        "i2": {
+          "title": "Receive exclusive content",
+          "body": "Get exclusive content and updates on AI, Cardano, and trading.",
+          "chip": "Early access"
+        },
+        "i3": {
+          "title": "Unlock product membership benefits",
+          "body": "Receive member features, early access, or exclusive benefits according to each Pao Studio product’s rules.",
+          "chip": "Product access"
+        },
+        "i4": {
+          "title": "Co-create products from the beginning",
+          "body": "Bring real problems, test unreleased features, and help shape what we build next.",
+          "chip": "Co-create"
+        }
+      },
+      "tier": {
+        "cap": "Additional membership fee",
+        "priceSuffix": " / extra fees",
+        "body": "No subscription required. Delegating to Pao Pool gives you member status.",
+        "fine": "Non-custodial · No lock-up · Leave anytime"
+      }
+    },
+    "services": {
+      "chip": "Product Development · Consulting",
+      "title": "Build AI and blockchain products with us",
+      "body": "We provide product development and consulting services for AI agents, Cardano, and blockchain.\nIf you have a clear product brief or are looking for a long-term technical partner, get in touch.",
+      "cta": "Contact us"
     }
   },
   "hero": {
@@ -145,67 +190,102 @@
     "title_our_opinion": "Our Opinion",
     "related_tweets": "Related Discussions"
   },
-  "products": {
-    "title": "Our Products",
-    "description": "Explore innovative products Bubble Studio brings to the Cardano ecosystem.",
-    "voda": {
-      "name": "VODA",
-      "fullName": "Voice of ADA",
-      "description": "Cardano community information aggregation platform, hear the voice of ADA.",
-      "linkText": "Visit Website"
-    }
-  },
-  "subscription": {
-    "title": "Subscribe to Pool Updates",
-    "description": "Users staking to Pao Pool can sign with their wallet to get a subscription token. Send the token to our Telegram Bot to receive pool updates.",
-    "connectWallet": "Connect Cardano Wallet",
-    "selectWallet": "Select your wallet",
-    "connecting": "Connecting wallet...",
-    "stakeAddress": "Stake Address",
-    "generateToken": "Generate Subscription Token",
-    "signing": "Please confirm the signature in your wallet...",
-    "tokenReady": "Token generated!",
-    "tokenInstruction": "Send this token to Telegram Bot @BubbleStudioBot to activate your subscription. The token is valid for 24 hours and can only be used once.",
-    "copy": "Copy",
-    "copied": "Copied",
-    "cancel": "Cancel",
-    "disconnect": "Disconnect",
-    "done": "Done",
-    "retry": "Retry",
-    "noWallet": "No Cardano wallet detected. Please install a wallet extension like Nami, Eternl, or Lace.",
-    "connectFailed": "Failed to connect wallet. Please try again.",
-    "signFailed": "Signing failed or was cancelled.",
-    "error_signature_invalid": "Signature verification failed. Please try again.",
-    "error_timestamp_expired": "Signature has expired. Please try again.",
-    "error_not_delegating": "You are not staking to Pao Pool. Please delegate first before subscribing."
-  },
   "seo": {
-    "siteName": "Bubble Studio",
-    "defaultTitle": "Bubble Studio - An Indie Studio Rooted in Cardano",
-    "defaultDescription": "Bubble Studio is an independent development team rooted in the Cardano ecosystem. We provide Pao Pool staking services and are committed to bringing innovative products to the Cardano ecosystem.",
+    "siteName": "Pao Studio",
+    "defaultTitle": "Pao Studio · A One-Person Company for the AI Era",
+    "defaultDescription": "We amplify individual productivity with AI agents and use a Cardano stake pool to anchor identity, membership, and recurring income.",
     "home": {
-      "title": "Bubble Studio - An Indie Studio Rooted in Cardano",
-      "description": "We believe blockchain can be the business chassis for indie developers and one-person companies. A permissionless global payment platform, permanently verifiable data storage, and digital real estate that generates continuous cash flow."
-    },
-    "products": {
-      "title": "Our Products - Bubble Studio",
-      "description": "Explore innovative products Bubble Studio brings to the Cardano ecosystem, including VODA (Voice of ADA) and other governance participation platforms."
+      "title": "Pao Studio · A One-Person Company for the AI Era",
+      "description": "An experiment in building a durable, trusted, and sustainable company with AI agents and Cardano."
     },
     "staking": {
-      "title": "Staking - Bubble Studio",
+      "title": "Staking - Pao Studio",
       "description": "Stake your ADA to Pao Pool and support our development work. We provide transparent and reliable Cardano stake pool services, running stably for over a year."
     },
-    "about": {
-      "title": "About Us - Bubble Studio",
-      "description": "Learn about the Bubble Studio team, a small family workshop rooted in Cardano."
-    },
     "governance": {
-      "title": "Governance - Bubble Studio",
+      "title": "Governance - Pao Studio",
       "description": "Learn about Cardano governance actions and hot topics, participate in decentralized decision-making, and let every ADA holder have their voice heard."
     },
     "blogs": {
-      "title": "Blog - Bubble Studio",
-      "description": "Read the latest articles from Bubble Studio, learn about our development progress in the Cardano ecosystem, product updates, and community news."
+      "title": "Blog - Pao Studio",
+      "description": "Read the latest articles from Pao Studio, learn about our development progress in the Cardano ecosystem, product updates, and community news."
+    },
+    "projects": {
+      "title": "Projects - Pao Studio",
+      "description": "Projects by Pao Studio: VODA, Pao Pool, a Cardano governance product, and the Telegram bot — all free for members."
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "projects": "Projects",
+    "stakeCta": "Stake to Pao Pool",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "skipToContent": "Skip to content",
+    "langLabel": "Language",
+    "mainNav": "Main navigation",
+    "logoAlt": "logo"
+  },
+  "footer": {
+    "blurb": "A “one-person company” experiment rooted in Cardano. Building playful products, writing content with depth.",
+    "explore": "Explore",
+    "community": "Community",
+    "staking": "Staking",
+    "governance": "Governance"
+  },
+  "blog": {
+    "title": "Blog",
+    "sub": "Thoughts and notes on Cardano, AI, and independent development.",
+    "featured": "Featured",
+    "all": "All",
+    "allPosts": "All posts",
+    "filterLabel": "Post categories",
+    "count": "{count, plural, one {# post} other {# posts}}",
+    "empty": "No posts yet",
+    "categories": {
+      "ai": "AI",
+      "cardano": "Cardano",
+      "engineering": "Engineering",
+      "weekly": "Weekly",
+      "essay": "Essay"
+    },
+    "thead": {
+      "date": "Date",
+      "title": "Title",
+      "category": "Category"
+    }
+  },
+  "projects": {
+    "title": "Projects",
+    "ariaAll": "All projects",
+    "visit": "Visit project",
+    "categories": {
+      "infrastructure": {
+        "title": "Infrastructure",
+        "description": "Core capabilities for Cardano products and AI agents."
+      },
+      "applications": {
+        "title": "Applications",
+        "description": "On-chain products and community experiences for users."
+      }
+    },
+    "items": {
+      "ouroPass": {
+        "description": "Decentralized identity and subscription infrastructure built on Cardano."
+      },
+      "utxray": {
+        "description": "An agent-first debugger and quality gate for Cardano smart contracts."
+      },
+      "ouroOps": {
+        "description": "A Cardano stake pool operations tool built for AI agents."
+      },
+      "lottery": {
+        "description": "A decentralized lottery application built on Cardano."
+      },
+      "voda": {
+        "description": "An app for following Cardano community and governance updates."
+      }
     }
   }
 }

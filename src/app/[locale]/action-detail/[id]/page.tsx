@@ -12,6 +12,7 @@ import { useParams, useRouter } from 'next/navigation';
 import governanceData from '@/data/gov-contents-2025-05-15.json';
 import { IGovActionContent } from '@/types/governance';
 import { getDurationString } from '@/utils';
+import { Button } from '@/components/ui/Button';
 
 const HOT_TOPICS = ['GA:14', 'GA:13', 'GA:18'];
 
@@ -23,7 +24,7 @@ export interface Tweet {
 }
 
 export default function GovActionDetail() {
-  const t = useTranslations('common');
+  const t = useTranslations();
   const router = useRouter();
   const params = useParams();
 
@@ -75,125 +76,132 @@ export default function GovActionDetail() {
   const isHotTopic = HOT_TOPICS.includes(currentProposal?.id);
 
   return (
-    <div className="mb-4 shadow-md md:card bg-white p-4 relative">
-      {isHotTopic && <div className="vote-badge md:block hidden">{`${t('governance.hot')}!`}</div>}
-
-      {/* 投票内容 */}
-      {currentProposal && (
-        <div className="border-3 border-[#0a2463] rounded-lg flex flex-col space-y-2 md:space-y-4">
-          <h3 className="text-base md:text-xl font-bold text-[#0a2463]">{currentProposal.title}</h3>
-
-          <div className="flex flex-col md:flex-row justify-between">
-            <div className="flex items-center text-sm">
-              <Calendar size={16} className="mr-1" />
-              <span>
-                {t('governance.submit_at')}: {dayjs(currentProposal?.metadata.createdDate).format('YYYY-MM-DD HH:mm')}
-              </span>
+    <div className="wrap pt-10 pb-24 max-[860px]:pt-7 max-[860px]:pb-[72px]">
+      <div className="bg-white rounded-lg p-5 md:p-6 relative shadow-card">
+        {/* 投票内容 */}
+        {currentProposal && (
+          <div className="flex flex-col space-y-3 md:space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="text-base md:text-xl text-ink">{currentProposal.title}</h3>
+              {isHotTopic && (
+                <span className="hidden md:inline-flex items-center text-[13px] font-semibold leading-none text-ink px-[13px] py-[7px] rounded-pill bg-brand-lemon flex-none">
+                  {`${t('governance.hot')}!`}
+                </span>
+              )}
             </div>
-            <div className="flex items-center text-sm">
-              <Calendar size={16} className="mr-1" />
-              <span>
-                {t('governance.expire_at')}: {dayjs(currentProposal?.metadata.expiryDate).format('YYYY-MM-DD HH:mm')}
-              </span>
-            </div>
-            <div className="flex items-center text-sm font-bold text-[#3f8efc]">
-              <Clock size={16} className="mr-1" />
-              <span>
-                {t('governance.remaining_time')}: {duration}
-              </span>
-            </div>
-          </div>
 
-          <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-            <h3 className="font-bold text-[#0a2463] mb-1 flex items-center">
-              <MessageCircle size={20} className="mr-2 text-[#3f8efc]" />
-              {t('governance.title_proposal_content')}
-            </h3>
-
-            <div className="text-sm text-gray-900 leading-relaxed">
-              <ReactMarkdown>{currentProposal?.opinions.summary}</ReactMarkdown>
+            <div className="flex flex-col md:flex-row justify-between gap-1 text-muted">
+              <div className="flex items-center text-sm">
+                <Calendar size={16} className="mr-1" />
+                <span className="tnum">
+                  {t('governance.submit_at')}: {dayjs(currentProposal?.metadata.createdDate).format('YYYY-MM-DD HH:mm')}
+                </span>
+              </div>
+              <div className="flex items-center text-sm">
+                <Calendar size={16} className="mr-1" />
+                <span className="tnum">
+                  {t('governance.expire_at')}: {dayjs(currentProposal?.metadata.expiryDate).format('YYYY-MM-DD HH:mm')}
+                </span>
+              </div>
+              <div className="flex items-center text-sm font-semibold text-brand-incana">
+                <Clock size={16} className="mr-1" />
+                <span className="tnum">
+                  {t('governance.remaining_time')}: {duration}
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
-            {/* 正方观点 */}
-            <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-              <h3 className="font-bold text-[#0a2463] mb-1 flex items-center">
-                <CheckCircle size={20} className="mr-2 text-[#06D6A0]" />
-                {t('governance.title_pros')}
+            <div className="rounded-md p-4 bg-surface-soft">
+              <h3 className="text-ink mb-1 flex items-center text-[15px]">
+                <MessageCircle size={18} className="mr-2 text-brand-sea" />
+                {t('governance.title_proposal_content')}
               </h3>
 
-              <ul className="point-list pros text-sm text-gray-900 leading-relaxed">
-                {currentProposal?.opinions.pros.map((point, index) => (
-                  <li key={index}>{point}</li>
-                ))}
-              </ul>
+              <div className="text-sm text-body leading-relaxed">
+                <ReactMarkdown>{currentProposal?.opinions.summary}</ReactMarkdown>
+              </div>
             </div>
 
-            {/* 反方观点 */}
-            <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-              <h3 className="font-bold text-[#0a2463] mb-1 flex items-center">
-                <XCircle size={20} className="mr-2 text-[#EF476F]" />
-                {t('governance.title_cons')}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
+              {/* 正方观点 */}
+              <div className="rounded-md p-4 bg-surface-soft">
+                <h3 className="text-ink mb-1 flex items-center text-[15px]">
+                  <CheckCircle size={18} className="mr-2 text-brand-grass" />
+                  {t('governance.title_pros')}
+                </h3>
+
+                <ul className="list-disc pl-5 marker:text-brand-grass text-sm text-body leading-relaxed space-y-1">
+                  {currentProposal?.opinions.pros.map((point, index) => (
+                    <li key={index}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 反方观点 */}
+              <div className="rounded-md p-4 bg-surface-soft">
+                <h3 className="text-ink mb-1 flex items-center text-[15px]">
+                  <XCircle size={18} className="mr-2 text-brand-orange" />
+                  {t('governance.title_cons')}
+                </h3>
+
+                <ul className="list-disc pl-5 marker:text-brand-orange text-sm text-body leading-relaxed space-y-1">
+                  {currentProposal?.opinions.cons.map((point, index) => (
+                    <li key={index}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* 我们的观点 */}
+            <div className="rounded-md p-4 bg-surface-soft">
+              <h3 className="text-ink mb-1 flex items-center text-[15px]">
+                <Lightbulb size={18} className="mr-2 text-brand-incana" />
+                {t('governance.title_our_opinion')}
               </h3>
-
-              <ul className="point-list cons text-sm text-gray-900 leading-relaxed">
-                {currentProposal?.opinions.cons.map((point, index) => (
-                  <li key={index}>{point}</li>
-                ))}
-              </ul>
+              <div className="text-sm text-body leading-relaxed">
+                <ReactMarkdown>{currentProposal?.opinions.myOpinion}</ReactMarkdown>
+              </div>
             </div>
-          </div>
 
-          {/* 我们的观点 */}
-          <div className="border-2 border-[#0a2463] rounded-lg p-3 bg-[#e6f0ff]">
-            <h3 className="font-bold text-[#0a2463] mb-1 flex items-center">
-              <Lightbulb size={20} className="mr-2 text-[#3f8efc]" />
-              {t('governance.title_our_opinion')}
-            </h3>
-            <div className="text-sm text-gray-900 leading-relaxed">
-              <ReactMarkdown>{currentProposal?.opinions.myOpinion}</ReactMarkdown>
-            </div>
-          </div>
-
-          {/* 推文讨论列表 */}
-          <div className="my-6 flex flex-col flex-1">
-            <h3 className="font-bold text-[#0a2463] mb-2 mt-2 flex items-center">{t('governance.related_tweets')}</h3>
-            <div className="md:columns-1 lg:columns-2 gap-2 md:block flex flex-col flex-1">
-              {tweets.map((tweet) => (
-                <Link
-                  key={tweet.tweetId}
-                  href={`https://x.com/${tweet.author.screen_name}/status/${tweet.tweetId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-1 break-inside-avoid md:mb-2"
-                >
-                  <div className="flex flex-1 items-start p-4 border-2 border-[#0a2463] rounded-lg bg-[#f7faff] hover:shadow-lg transition overflow-hidden">
-                    <Image
-                      src={tweet?.author?.avatar || ''}
-                      alt={tweet?.author?.name}
-                      width={24}
-                      height={24}
-                      className="rounded-full mr-3 h-6 w-6"
-                    />
-                    <div className="flex-1 flex flex-col overflow-hidden">
-                      <div className="font-bold text-[#0a2463] text-sm">{tweet.author.name}</div>
-                      <div className="text-xs text-gray-900 mt-1">
-                        <ReactMarkdown>{tweet.text}</ReactMarkdown>
+            {/* 推文讨论列表 */}
+            <div className="my-6 flex flex-col flex-1">
+              <h3 className="text-ink mb-2 mt-2 flex items-center text-[15px]">{t('governance.related_tweets')}</h3>
+              <div className="md:columns-1 lg:columns-2 gap-2 md:block flex flex-col flex-1">
+                {tweets.map((tweet) => (
+                  <Link
+                    key={tweet.tweetId}
+                    href={`https://x.com/${tweet.author.screen_name}/status/${tweet.tweetId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-1 break-inside-avoid md:mb-2"
+                  >
+                    <div className="flex flex-1 items-start p-4 rounded-md bg-surface-soft transition-colors duration-200 ease-brand hover:bg-hairline-soft overflow-hidden">
+                      <Image
+                        src={tweet?.author?.avatar || ''}
+                        alt={tweet?.author?.name}
+                        width={24}
+                        height={24}
+                        className="rounded-full mr-3 h-6 w-6"
+                      />
+                      <div className="flex-1 flex flex-col overflow-hidden">
+                        <div className="font-semibold text-ink text-sm">{tweet.author.name}</div>
+                        <div className="text-xs text-body mt-1">
+                          <ReactMarkdown>{tweet.text}</ReactMarkdown>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div className="flex justify-end mt-4">
-        <button className="btn px-4 py-2 bg-[#3f8efc] text-white" onClick={() => router.push(`/${locale}/governance`)}>
-          {t('common.back')}
-        </button>
+        <div className="flex justify-end mt-4">
+          <Button variant="primary" size="md" onClick={() => router.push(`/${locale}/governance`)}>
+            {t('common.back')}
+          </Button>
+        </div>
       </div>
     </div>
   );

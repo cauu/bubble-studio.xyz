@@ -23,7 +23,7 @@ export default function Governance() {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
-  const t = useTranslations('common');
+  const t = useTranslations();
   const params = useParams();
   const locale = params.locale as string;
 
@@ -64,45 +64,43 @@ export default function Governance() {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="flex space-x-6 justify-center">
-      <div className="flex flex-col space-y-0 md:space-y-6 flex-1">
-        <div className="md:card bg-white px-2 md:p-4">
-          <div className="flex border-gray-200 items-stretch">
-            {TABS_PC.map((tab) => {
-              return (
-                <button
-                  key={tab.id}
-                  id={tab.id}
-                  className={clsx('flex-1 py-3 font-bold flex items-center justify-center', {
-                    'border-b-2 border-[#3f8efc]': currentTab === tab.id
-                  })}
-                  onClick={() => setCurrentTab(tab.id as 'actions' | 'topics')}
-                >
-                  {tab.icon}
-                  <span className="text-sm md:text-base">{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
+    <div className="wrap pt-10 pb-24 max-[860px]:pt-7 max-[860px]:pb-[72px] flex gap-6 justify-center">
+      <div className="flex flex-col gap-4 md:gap-6 flex-1 min-w-0">
+        <div className="flex flex-wrap gap-2">
+          {TABS_PC.map((tab) => {
+            return (
+              <button
+                key={tab.id}
+                id={tab.id}
+                aria-pressed={currentTab === tab.id}
+                className={clsx(
+                  'flex items-center text-sm font-semibold px-5 py-2.5 rounded-pill transition-all duration-200 ease-brand hover:text-ink',
+                  currentTab === tab.id
+                    ? 'bg-white text-ink shadow-[0_1px_2px_rgba(23,32,38,.06),0_4px_12px_rgba(23,32,38,.08)]'
+                    : 'text-body hover:bg-[rgba(255,255,255,.75)]'
+                )}
+                onClick={() => setCurrentTab(tab.id as 'actions' | 'topics')}
+              >
+                {tab.icon}
+                <span className="text-sm md:text-base">{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {currentTab === 'actions' && (
-          <div className="flex flex-col space-y-4 md:space-y-6">
+          <div className="flex flex-col gap-4 md:gap-6">
             {actions.length > 0 ? (
               actions.map((item) => {
-                return (
-                  <div key={item.id} className="governance-content border-t shadow-md md:border-y-0 md:shadow-none">
-                    <GovActionCard key={item.id} proposal={item} />
-                  </div>
-                );
+                return <GovActionCard key={item.id} proposal={item} />;
               })
             ) : (
-              <div>{t('governance.no_data')}</div>
+              <div className="text-muted text-sm">{t('governance.no_data')}</div>
             )}
           </div>
         )}
         {currentTab === 'topics' && (
-          <div className="flex flex-col space-y-4 md:space-y-6">
+          <div className="flex flex-col gap-4 md:gap-6">
             {proposals.length > 0 ? (
               proposals.map((item) => {
                 return <ProposalCard key={item} />;
@@ -114,7 +112,7 @@ export default function Governance() {
         )}
       </div>
 
-      <div className="space-y-6 w-72 sticky top-6 self-start hidden lg:flex lg:flex-col">
+      <div className="space-y-6 w-72 sticky top-24 self-start hidden lg:flex lg:flex-col">
         <About />
       </div>
     </div>

@@ -9,6 +9,7 @@ language: en
 tags:
   - "Cardano"
   - "Indie"
+category: ai
 ---
 We are standing on the eve of a drastic shift in the paradigm of human work.
 

@@ -8,6 +8,7 @@ author: Martin
 language: tw
 tags:
   - "Cardano"
+category: cardano
 ---
 2025 年，對於 Cardano 來說，是意義非凡的一年。  
 這一年，我們不僅見證了大量高品質項目的誕生與發展，更重要的是：  

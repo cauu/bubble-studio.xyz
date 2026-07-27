@@ -32,7 +32,7 @@ export default function Comments({ term, language }: CommentsProps) {
         reactionsEnabled="1"
         emitMetadata="0"
         inputPosition="top"
-        theme="preferred_color_scheme"
+        theme="light"
         lang={lang}
         loading="eager"
       />

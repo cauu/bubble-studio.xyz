@@ -10,6 +10,7 @@ tags:
   - "Health"
   - "Longevity"
   - "Life Practice"
+category: essay
 ---
 
 When people talk about longevity, they often focus on finding a single "magic solution." A more viable path is to treat aging as a measurable, understandable, and intervenable process—then continuously improve through long-term, stable, and actionable lifestyle changes. This is a systems engineering approach with four core elements: cognition, testing, lifestyle, and continuous iteration.

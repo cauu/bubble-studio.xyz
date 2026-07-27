@@ -3,18 +3,17 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 
 export const About: React.FC = () => {
-  const t = useTranslations('common');
+  const t = useTranslations();
 
   return (
-    <div className="card bg-white p-5">
-      <h2 className="text-2xl title-font mb-4 flex items-center text-[#0a2463] font-bold">
-        <Info className="w-6 h-6 mr-2" />
+    <div className="bg-white rounded-lg p-5 shadow-card">
+      <h2 className="text-lg mb-4 flex items-center text-ink">
+        <Info className="w-5 h-5 mr-2 text-brand-incana" />
         {t('governance.about_title')}
       </h2>
 
-      <div className="border-3 border-[#0a2463] rounded-lg p-4 mb-4 bg-[#e6f0ff]">
-        <p className="text-sm mb-3 leading-relaxed">{t('governance.about_content')}</p>
-        {/* <p className="text-sm leading-relaxed">通过参与投票和提案，您可以直接影响Cardano的未来发展方向。</p> */}
+      <div className="rounded-md p-4 bg-surface-soft">
+        <p className="text-sm leading-relaxed text-body">{t('governance.about_content')}</p>
       </div>
 
       {/* <div className="space-y-3">

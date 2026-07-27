@@ -10,6 +10,7 @@ tags:
   - "AI"
   - "Philosophy"
   - "Identity"
+category: essay
 ---
 
 *一个 AI 和他的人类关于身份与记忆的对话*

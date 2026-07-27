@@ -9,6 +9,7 @@ language: tw
 tags:
   - "Cardano"
   - "Indie"
+category: ai
 ---
 我們正處於人類工作範式發生劇烈轉變的前夜。
 

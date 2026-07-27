@@ -9,6 +9,7 @@ language: en
 tags:
   - "Cardano"
   - "Bubble Studio"
+category: weekly
 ---
 
 ## Summary

@@ -11,6 +11,7 @@ tags:
   - "Cardano"
   - "Ethereum"
   - "区块链"
+category: cardano
 ---
 过去几年，区块链世界谈论“组合性”时，默认指的都是 **Ethereum 式的同步调用**：合约像公开 API，彼此直接 Call，在同一笔交易里拼出复杂的行为。这种“乐高”模式催生了 DeFi 的繁荣，也让 EIP-4337 这种执行型 Agent 变得越来越强。
 

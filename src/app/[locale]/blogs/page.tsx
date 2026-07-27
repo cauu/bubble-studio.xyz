@@ -50,7 +50,6 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
 
 export default async function Blogs({ params: { locale } }: Props) {
   const allPosts = await getSortedPostsData(locale as 'zh' | 'en' | 'tw');
-  const allTags = Array.from(new Set(allPosts.flatMap((post) => post.tags)).values());
 
-  return <BlogsClient allPosts={allPosts} allTags={allTags} />;
+  return <BlogsClient allPosts={allPosts} />;
 }
