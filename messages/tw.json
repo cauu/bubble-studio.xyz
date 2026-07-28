@@ -213,12 +213,17 @@
     "projects": {
       "title": "項目 - Pao Studio",
       "description": "Pao Studio 的項目：VODA、Pao Pool、Cardano 治理產品與 Telegram Bot。會員全部免費。"
+    },
+    "skills": {
+      "title": "工程 Skills - Pao Studio",
+      "description": "Pao Studio 為 Coding Agent 打造的開源工程 Skills，涵蓋需求、設計、開發、測試與程式碼審查。"
     }
   },
   "nav": {
     "home": "首頁",
     "blog": "博客",
     "projects": "項目",
+    "skills": "Skills",
     "stakeCta": "質押到 Pao Pool",
     "openMenu": "打開選單",
     "closeMenu": "關閉選單",
@@ -254,6 +259,41 @@
       "date": "日期",
       "title": "標題",
       "category": "分類"
+    }
+  },
+  "skills": {
+    "eyebrow": "開源 · AGENT SKILLS",
+    "title": "為 Coding Agent 打造的工程 Skills",
+    "sub": "我們將需求、設計、開發與程式碼審查中使用的工程方法，整理成一組小而專注、可獨立安裝的 Skills。",
+    "installLabel": "安裝",
+    "copyLabel": "複製 {skill} 的安裝指令",
+    "copiedLabel": "已複製",
+    "viewDefinition": "查看定義",
+    "items": {
+      "immutableSpec": {
+        "tag": "可持續迭代協議",
+        "description": "讓使用者與 AI 圍繞同一份 Spec 及其關聯文件持續推進專案，每一輪計畫、決策、執行結果與驗收證據都有記錄可查。"
+      },
+      "challenge": {
+        "tag": "開發前檢查",
+        "description": "在開始開發前，先確認問題是否真實、方案是否過度複雜，以及關鍵假設是否成立，避免做錯或做得太多。"
+      },
+      "codebaseDesign": {
+        "tag": "程式碼設計",
+        "description": "在寫程式前先釐清模組職責與互動方式，讓複雜邏輯留在合適的位置，後續更容易修改與測試。"
+      },
+      "tdd": {
+        "tag": "開發",
+        "description": "一次處理一個具體行為：先寫一個會失敗的測試，再加入剛好足以讓測試通過的程式碼。"
+      },
+      "codeReview": {
+        "tag": "程式碼審查",
+        "description": "由三個彼此隔離的 Reviewer 分別檢查同一份程式碼，再核實並合併問題，最後交由人決定是否處理。"
+      },
+      "codebaseMap": {
+        "tag": "程式碼庫導覽",
+        "description": "為程式碼庫維護一份精簡的導覽地圖，記錄重要目錄、模組職責與關鍵入口，方便人與 Agent 快速找到程式碼。"
+      }
     }
   },
   "projects": {

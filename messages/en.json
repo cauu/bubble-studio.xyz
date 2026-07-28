@@ -213,12 +213,17 @@
     "projects": {
       "title": "Projects - Pao Studio",
       "description": "Projects by Pao Studio: VODA, Pao Pool, a Cardano governance product, and the Telegram bot — all free for members."
+    },
+    "skills": {
+      "title": "Engineering Skills - Pao Studio",
+      "description": "Open-source engineering skills for coding agents, covering requirements, design, development, testing, and code review."
     }
   },
   "nav": {
     "home": "Home",
     "blog": "Blog",
     "projects": "Projects",
+    "skills": "Skills",
     "stakeCta": "Stake to Pao Pool",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
@@ -254,6 +259,41 @@
       "date": "Date",
       "title": "Title",
       "category": "Category"
+    }
+  },
+  "skills": {
+    "eyebrow": "OPEN SOURCE · AGENT SKILLS",
+    "title": "Engineering skills for coding agents",
+    "sub": "We’ve packaged the methods we use for requirements, design, development, and code review into small, focused skills you can install independently.",
+    "installLabel": "Install",
+    "copyLabel": "Copy the install command for {skill}",
+    "copiedLabel": "Copied",
+    "viewDefinition": "View definition",
+    "items": {
+      "immutableSpec": {
+        "tag": "Continuous iteration protocol",
+        "description": "Keeps people and AI working from the same spec and linked documents, with every plan, decision, outcome, and piece of validation evidence recorded as the project evolves."
+      },
+      "challenge": {
+        "tag": "Pre-build check",
+        "description": "Before implementation starts, check whether the problem is real, the solution is unnecessarily complex, and its key assumptions actually hold."
+      },
+      "codebaseDesign": {
+        "tag": "Code design",
+        "description": "Define module responsibilities and interactions before writing code, so complexity stays in the right place and the system remains easier to change and test."
+      },
+      "tdd": {
+        "tag": "Development",
+        "description": "Work one behavior at a time: write a failing test first, then add only enough code to make it pass."
+      },
+      "codeReview": {
+        "tag": "Code review",
+        "description": "Have three isolated reviewers inspect the same changes independently, then verify and merge their findings for a human to decide what to address."
+      },
+      "codebaseMap": {
+        "tag": "Repository navigation",
+        "description": "Maintain a concise map of important directories, module responsibilities, and entry points so people and agents can find their way through the codebase quickly."
+      }
     }
   },
   "projects": {

@@ -4,7 +4,7 @@ import { routing } from '@/i18n/routing';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz';
-  const staticRoutes = ['', 'projects', 'staking', 'governance', 'blogs'];
+  const staticRoutes = ['', 'projects', 'skills', 'governance', 'blogs'];
 
   // 生成静态路由（所有语言版本）
   const staticRouteEntries = routing.locales.flatMap((locale) =>
