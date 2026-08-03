@@ -93,9 +93,9 @@ export default async function HomePage() {
   return (
     <>
       <Hero stats={stats} />
+      <Perks />
       <WhyBand />
       <ModelBand />
-      <Perks />
       <ServicesBand />
     </>
   );

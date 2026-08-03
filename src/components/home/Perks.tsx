@@ -19,11 +19,11 @@ export const Perks = () => {
   return (
     <section id="perks" className="bg-surface-card py-section max-[860px]:py-[72px]" aria-labelledby="perks-h2">
       <div className="wrap">
-        <Reveal className="mb-12 max-w-[46rem]">
+        <Reveal className="mb-12 max-w-[50rem]">
           <h2 id="perks-h2" className="mb-3.5 text-[clamp(30px,4vw,46px)] leading-[1.15] text-balance">
             {t('title')}
           </h2>
-          <p className="whitespace-pre-line text-[16.5px] leading-relaxed text-body">{t('sub')}</p>
+          <p className="whitespace-pre-line text-pretty text-[16.5px] leading-relaxed text-body">{t('sub')}</p>
         </Reveal>
 
         <div className="grid grid-cols-[1.45fr_1fr] gap-6 items-start max-[900px]:grid-cols-1">
@@ -64,7 +64,14 @@ export const Perks = () => {
               $0<small className="text-lg font-semibold text-white/85">{t('tier.priceSuffix')}</small>
             </span>
             <p className="text-[14.5px] text-white/90 mt-1.5 mb-[22px]">{t('tier.body')}</p>
-            <Button href={GlobalConfig.DELEGATE_URL} variant="oncolor" size="lg" className="self-stretch">
+            <Button
+              href={GlobalConfig.DELEGATE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="oncolor"
+              size="lg"
+              className="self-stretch"
+            >
               {tNav('stakeCta')}
             </Button>
             <span className="text-[12.5px] text-white/75 mt-3 text-center">{t('tier.fine')}</span>

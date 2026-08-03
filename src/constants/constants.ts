@@ -3,7 +3,7 @@ const ASSETS_BASE_URL = 'https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@m
 export const GlobalConfig = {
   POOL_ID: 'pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
 
-  DELEGATE_URL: 'https://tool.jamonbread.io/delegate/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
+  DELEGATE_URL: 'https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
 
   CARDANOSCAN_POOL_URL: 'https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
 

@@ -12,7 +12,7 @@ export const WhyBand = () => {
   const t = useTranslations('home.why');
 
   return (
-    <section id="why" className="bg-surface-card py-section max-[860px]:py-[72px]" aria-labelledby="why-h2">
+    <section id="why" className="py-section max-[860px]:py-[72px]" aria-labelledby="why-h2">
       <div className="wrap">
         <Reveal className="mb-12">
           <h2 id="why-h2" className="text-[clamp(30px,4vw,46px)] leading-[1.15] text-balance">
