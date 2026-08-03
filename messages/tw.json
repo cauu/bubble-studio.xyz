@@ -1,7 +1,7 @@
 {
   "common": {
     "poolName": "Pao Pool",
-    "delegate": "質押",
+    "delegate": "委託",
     "stake": "質押",
     "view_detail": "查看詳情",
     "back": "返回",
@@ -92,7 +92,7 @@
     },
     "perks": {
       "title": "質押成為一種新的訂閱方式",
-      "sub": "傳統訂閱模式要求使用者定期付費。Pao Studio 嘗試以 Cardano 原生質押機制，建立一種新的訂閱方式。\n使用者只需將 ADA 委託給 Pao Pool，無需額外付費、鎖定或託管，照常獲得質押獎勵。礦池營運收入用於維持 Pao Pool 運作，並支持 Pao Studio 提供相應的內容和產品服務。",
+      "sub": "傳統訂閱模式要求使用者定期付費。Pao Studio 嘗試以 Cardano 原生質押機制，建立一種新的訂閱方式。\n對一般 ADA 持有者來說，參與質押的具體操作是委託。使用者將 ADA 委託給 Pao Pool，無需額外付費、鎖定或託管，照常獲得質押獎勵。礦池營運收入用於維持 Pao Pool 運作，並支持 Pao Studio 提供相應的內容和產品服務。",
       "head": {
         "list": "模式如何運作",
         "status": "對應關係"
@@ -104,9 +104,9 @@
           "chip": "非託管"
         },
         "i2": {
-          "title": "質押關係對應會員身份",
+          "title": "委託關係對應會員身份",
           "body": "系統可以依鏈上委託狀態識別會員，並開放相應的內容、產品功能、優先體驗和會員活動。",
-          "chip": "質押即會員"
+          "chip": "委託即會員"
         },
         "i3": {
           "title": "礦池收入用於公司營運",
@@ -127,7 +127,7 @@
       }
     },
     "stakeBenefits": {
-      "title": "現在質押，可以獲得...",
+      "title": "現在委託給 Pao Pool，可以獲得...",
       "items": {
         "raffle": {
           "label": "不定期開放",
@@ -273,7 +273,7 @@
     "blog": "博客",
     "projects": "項目",
     "skills": "Skills",
-    "stakeCta": "質押到 Pao Pool",
+    "stakeCta": "委託給 Pao Pool",
     "openMenu": "打開選單",
     "closeMenu": "關閉選單",
     "skipToContent": "跳到主要內容",

@@ -1,14 +1,5 @@
 import { useTranslations } from 'next-intl';
-import {
-  ArrowDown,
-  Bot,
-  Boxes,
-  BriefcaseBusiness,
-  Building2,
-  ChartNoAxesCombined,
-  Landmark,
-  Server
-} from 'lucide-react';
+import { Bot, Boxes, BriefcaseBusiness, Building2, ChartNoAxesCombined, Landmark, Server } from 'lucide-react';
 import clsx from 'clsx';
 import { Reveal } from '@/components/ui/Reveal';
 
@@ -99,23 +90,20 @@ export const ModelBand = () => {
             </div>
 
             <div className="relative hidden min-[901px]:block" aria-hidden="true">
-              <span className="absolute bottom-[12.5%] left-1/2 top-[12.5%] w-px bg-hairline" />
+              <span className="absolute bottom-[12.5%] left-1/2 top-[12.5%] w-[2px] -translate-x-1/2 bg-brand-mint" />
               {sources.map((source) => (
                 <span
                   key={source.key}
                   className={clsx('absolute left-0 h-[2px] w-1/2', source.topClass, source.lineClass)}
                 />
               ))}
-              <span className="absolute left-1/2 right-0 top-1/2 h-[2px] -translate-y-1/2 bg-primary" />
-              <span className="absolute left-1/2 top-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-primary text-xs font-bold text-on-dark shadow-soft">
-                4→1
-              </span>
+              <span className="absolute left-1/2 right-0 top-1/2 h-[2px] -translate-y-1/2 bg-brand-mint" />
+              <span className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-[5px] border-white bg-brand-mint shadow-soft" />
             </div>
 
-            <div className="hidden items-center justify-center py-5 max-[900px]:flex" aria-hidden="true">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-primary text-on-dark shadow-soft">
-                <ArrowDown size={19} />
-              </span>
+            <div className="relative hidden h-16 items-center justify-center max-[900px]:flex" aria-hidden="true">
+              <span className="absolute bottom-0 top-0 w-[2px] bg-brand-mint" />
+              <span className="relative h-9 w-9 rounded-full border-[5px] border-white bg-brand-mint shadow-soft" />
             </div>
 
             <div className="relative overflow-hidden rounded-xl bg-brand-incana p-7 text-on-dark shadow-[0_18px_44px_rgba(19,88,93,.22),inset_0_1px_0_rgba(255,255,255,.14)] max-[600px]:p-5">

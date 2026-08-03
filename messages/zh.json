@@ -1,7 +1,7 @@
 {
   "common": {
     "poolName": "Pao Pool",
-    "delegate": "质押",
+    "delegate": "委托",
     "stake": "质押",
     "view_detail": "查看详情",
     "back": "返回",
@@ -92,7 +92,7 @@
     },
     "perks": {
       "title": "质押成为一种新的订阅方式",
-      "sub": "传统订阅模式要求用户定期付费。Pao Studio 尝试基于 Cardano 原生质押机制，建立一种新的订阅方式。\n用户只需将 ADA 委托给 Pao Pool，无需额外付费、锁仓或托管，照常获得质押奖励。矿池运营收入用于维持 Pao Pool 运行，并支持 Pao Studio 提供相应的内容和产品服务。",
+      "sub": "传统订阅模式要求用户定期付费。Pao Studio 尝试基于 Cardano 原生质押机制，建立一种新的订阅方式。\n用户将 ADA 委托给 Pao Pool，无需额外付费、锁仓或托管，照常获得质押奖励。矿池运营收入用于维持 Pao Pool 运行，并支持 Pao Studio 提供相应的内容和产品服务。",
       "head": {
         "list": "模式如何运作",
         "status": "对应关系"
@@ -104,9 +104,9 @@
           "chip": "非托管"
         },
         "i2": {
-          "title": "质押关系对应会员身份",
+          "title": "委托关系对应会员身份",
           "body": "系统可以根据链上委托状态识别会员，并开放相应的内容、产品功能、早期体验和会员活动。",
-          "chip": "质押即会员"
+          "chip": "委托即会员"
         },
         "i3": {
           "title": "矿池收入用于公司运营",
@@ -127,7 +127,7 @@
       }
     },
     "stakeBenefits": {
-      "title": "现在质押，可以获得...",
+      "title": "现在委托给 Pao Pool，可以获得...",
       "items": {
         "raffle": {
           "label": "不定期开放",
@@ -146,7 +146,7 @@
         },
         "opensource": {
           "title": "支持 Cardano 开源产品开发",
-          "body": "将 ADA 委托给 Pao Pool，支持我们为 Cardano 生态开发开源产品。"
+          "body": "将 ADA 委托给 Pao Pool，支持我们为 Cardano 的开源生态贡献产品。"
         }
       }
     },
@@ -273,7 +273,7 @@
     "blog": "博客",
     "projects": "项目",
     "skills": "Skills",
-    "stakeCta": "质押到 Pao Pool",
+    "stakeCta": "委托给 Pao Pool",
     "openMenu": "打开菜单",
     "closeMenu": "关闭菜单",
     "skipToContent": "跳到主要内容",
