@@ -55,7 +55,14 @@ export const NavBar = () => {
 
         <div className="ml-auto flex items-center gap-3">
           <LanguageSwitcher />
-          <Button href={GlobalConfig.DELEGATE_URL} variant="primary" size="md" className="max-[600px]:hidden">
+          <Button
+            href={GlobalConfig.DELEGATE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="primary"
+            size="md"
+            className="max-[600px]:hidden"
+          >
             {t('nav.stakeCta')}
           </Button>
           <button
@@ -92,6 +99,8 @@ export const NavBar = () => {
         ))}
         <a
           href={GlobalConfig.DELEGATE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={closeMenu}
           className="block px-2 py-[13px] text-[15px] font-semibold text-ink"
         >

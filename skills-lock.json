@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "shuorenhua": {
+      "source": "MrGeDiao/shuorenhua",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "31086a6c860d25355b69498d6f37527cbabfbd562bc9155452443480adba6d95"
+    }
+  }
+}

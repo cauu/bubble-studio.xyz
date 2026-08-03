@@ -30,17 +30,46 @@ export const Hero = ({ stats }: { stats: PoolStats }) => {
             id="hero-h1"
             className={clsx(
               'leading-[1.15] mb-[18px] text-balance',
-              isLatin ? 'text-[clamp(34px,3.8vw,46px)] tracking-[-1.5px]' : 'text-[clamp(38px,5vw,60px)]'
+              isLatin
+                ? 'text-[clamp(34px,3.8vw,46px)] tracking-[-1.5px]'
+                : 'text-[clamp(38px,4vw,52px)] max-[900px]:text-[clamp(26px,7.5vw,38px)]'
             )}
           >
-            {t('title1')}
-            <br />
-            {t('title2')}
-            <span className="text-brand-incana">{t('title2Highlight')}</span>
+            {isLatin ? (
+              <>
+                {t('title1')}
+                <br />
+                {t('title2')}
+                <span className="text-brand-incana">{t('title2Highlight')}</span>
+              </>
+            ) : (
+              <>
+                <span className="max-[900px]:hidden">
+                  <span className="whitespace-nowrap">{t('title1')}</span>
+                  <br />
+                  {t('title2')}
+                  <span className="text-brand-incana">{t('title2Highlight')}</span>
+                </span>
+                <span className="hidden max-[900px]:block">
+                  <span className="block whitespace-nowrap">{t('mobileTitle1')}</span>
+                  <span className="block whitespace-nowrap">
+                    {t('mobileTitle2')}
+                    <span className="text-brand-incana">{t('title2Highlight')}</span>
+                  </span>
+                </span>
+              </>
+            )}
           </h1>
-          <p className="mb-7 max-w-[31em] text-[17px] text-body-strong">{t('sub')}</p>
+          <p className="mb-7 max-w-[31em] whitespace-pre-line text-[17px] text-body-strong">{t('sub')}</p>
           <div className="flex flex-wrap gap-3 max-[600px]:flex-col">
-            <Button href={GlobalConfig.DELEGATE_URL} variant="primary" size="lg" className="max-[600px]:w-full">
+            <Button
+              href={GlobalConfig.DELEGATE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="primary"
+              size="lg"
+              className="max-[600px]:w-full"
+            >
               {tNav('stakeCta')}
             </Button>
             <Button href="#why" variant="ghost" size="lg" className="max-[600px]:w-full">
