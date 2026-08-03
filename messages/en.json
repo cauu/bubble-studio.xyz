@@ -126,6 +126,30 @@
         "fine": "Non-custodial · No lock-up · Change pools anytime"
       }
     },
+    "stakeBenefits": {
+      "title": "Stake now to get...",
+      "items": {
+        "raffle": {
+          "label": "Occasional",
+          "title": "Token raffles",
+          "body": "Token raffles for delegators, with potential prizes including ADA, SNEK, and other assets. Prizes and eligibility are defined in the rules for each raffle."
+        },
+        "strategy": {
+          "label": "Content service",
+          "title": "Crypto trading strategy updates",
+          "body": "Practical crypto trading strategy content covering market views, trade rationale, execution conditions, and risk considerations."
+        },
+        "agent": {
+          "label": "Coming Soon",
+          "title": "Trading Agent beta access",
+          "body": "Once beta testing begins, Pao Pool delegators will receive early access and can take part in product feedback."
+        },
+        "opensource": {
+          "title": "Support Cardano open-source development",
+          "body": "Delegating ADA to Pao Pool supports our open-source product development for the Cardano ecosystem."
+        }
+      }
+    },
     "services": {
       "chip": "Product Development · Consulting",
       "title": "AI and Cardano product development",

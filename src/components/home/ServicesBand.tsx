@@ -8,7 +8,7 @@ export const ServicesBand = () => {
   const t = useTranslations('home.services');
 
   return (
-    <section className="py-section max-[860px]:py-[72px]" aria-labelledby="svc-h2">
+    <section className="bg-white py-section max-[860px]:py-[72px]" aria-labelledby="svc-h2">
       <div className="wrap">
         <Reveal className="relative overflow-hidden bg-surface-card rounded-xl px-14 py-16 max-[860px]:px-7 max-[860px]:py-11 flex items-center justify-between gap-8 flex-wrap shadow-[0_1px_2px_rgba(23,32,38,.04),0_12px_32px_rgba(23,32,38,.07),inset_0_1px_0_rgba(255,255,255,.5)]">
           <span

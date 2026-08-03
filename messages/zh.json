@@ -126,6 +126,30 @@
         "fine": "非托管 · 不锁仓 · 可随时更换矿池"
       }
     },
+    "stakeBenefits": {
+      "title": "现在质押，可以获得...",
+      "items": {
+        "raffle": {
+          "label": "不定期开放",
+          "title": "Token 抽奖",
+          "body": "面向委托者开展 Token 抽奖，奖品可能包括 ADA、SNEK 等资产。奖品内容和参与条件以每期活动规则为准。"
+        },
+        "strategy": {
+          "label": "内容服务",
+          "title": "Crypto 交易策略推送",
+          "body": "提供具体的 Crypto 交易策略内容，包括市场判断、交易逻辑、执行条件和风险说明。"
+        },
+        "agent": {
+          "label": "Coming Soon",
+          "title": "交易 Agent 内测权限",
+          "body": "交易 Agent 开放内测后，Pao Pool 委托者可以优先使用，并参与早期产品反馈。"
+        },
+        "opensource": {
+          "title": "支持 Cardano 开源产品开发",
+          "body": "将 ADA 委托给 Pao Pool，支持我们为 Cardano 生态开发开源产品。"
+        }
+      }
+    },
     "services": {
       "chip": "产品开发 · 咨询与合作",
       "title": "AI 与 Cardano 产品开发",
