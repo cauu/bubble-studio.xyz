@@ -14,10 +14,10 @@ jobs:
       #  your build commands
       # - run: |
       #    ng build --prod
-      - uses: amondnet/vercel-action@v25 #deploy
+      - uses: amondnet/vercel-action@v42 #deploy
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          vercel-version: '47.2.2'
+          vercel-version: '58.0.0'
           #   github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
           vercel-args: '--prod' #Optional
           vercel-org-id: ${{ secrets.ORG_ID}} #Required
