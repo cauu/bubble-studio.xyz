@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { Bot, Boxes, BriefcaseBusiness, Building2, ChartNoAxesCombined, Landmark, Server } from 'lucide-react';
 import clsx from 'clsx';
+import { DottedGlowBackground } from '@/components/ui/DottedGlowBackground';
 import { Reveal } from '@/components/ui/Reveal';
 
 const growthSources = [
@@ -32,8 +33,12 @@ export const ModelBand = () => {
   const t = useTranslations('home.model');
 
   return (
-    <section className="bg-surface-card py-section max-[860px]:py-[72px]" aria-labelledby="model-h2">
-      <div className="wrap">
+    <section
+      className="relative isolate overflow-hidden bg-surface-card py-section max-[860px]:py-[72px]"
+      aria-labelledby="model-h2"
+    >
+      <DottedGlowBackground className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-[70%] [mask-image:radial-gradient(75%_62%_at_78%_44%,black,transparent)] max-[700px]:w-full max-[700px]:opacity-60" />
+      <div className="wrap relative z-10">
         <Reveal className="mx-auto mb-12 max-w-[1040px] max-[860px]:mb-9">
           <h2 id="model-h2" className="text-[clamp(30px,4vw,46px)] leading-[1.15] text-balance">
             {t('title')}
