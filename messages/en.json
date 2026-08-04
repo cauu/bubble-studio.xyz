@@ -52,6 +52,11 @@
     "model": {
       "title": "Revenue Mix",
       "summary": "For a one-person company, survival comes first. Pao Studio aims to use pool operating revenue as its main source for covering basic expenses, while continuing to explore income from trading, value-added product services, consulting, and project development.",
+      "structure": {
+        "exploreLabel": "Income sources under development",
+        "foundationLabel": "Baseline income for survival",
+        "supportsLabel": "Used to support"
+      },
       "sources": {
         "pool": {
           "eyebrow": "Basic Income",
@@ -151,6 +156,10 @@
       }
     },
     "services": {
+      "workEyebrow": "Product Development",
+      "workTitle": "Products in development",
+      "workBody": "Pao Studio currently builds Cardano infrastructure and user-facing on-chain applications. These are some of the projects already online.",
+      "allProjects": "View all projects",
       "chip": "Product Development · Consulting",
       "title": "AI and Cardano product development",
       "body": "Pao Studio provides product development and consulting for AI agents, Cardano, and blockchain.\nFor a specific product requirement, email the project background, current problem, and scope. Pao Studio will assess whether the engagement is a suitable fit.",

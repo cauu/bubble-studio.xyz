@@ -52,6 +52,11 @@
     "model": {
       "title": "收入構成",
       "summary": "對一人公司來說，先要解決的是生存問題。Pao Studio 希望將礦池營運收入作為支應基本開支的主要來源，同時繼續探索交易、產品增值服務、顧問與專案開發等其他收入。",
+      "structure": {
+        "exploreLabel": "持續探索的收入來源",
+        "foundationLabel": "滿足生存的基礎收入",
+        "supportsLabel": "用於支持"
+      },
       "sources": {
         "pool": {
           "eyebrow": "Basic Income",
@@ -151,6 +156,10 @@
       }
     },
     "services": {
+      "workEyebrow": "產品開發",
+      "workTitle": "正在做的產品",
+      "workBody": "Pao Studio 目前主要開發 Cardano 基礎設施和面向使用者的鏈上應用。以下是部分已經上線的項目。",
+      "allProjects": "查看全部項目",
       "chip": "產品開發 · 顧問與合作",
       "title": "AI 與 Cardano 產品開發",
       "body": "Pao Studio 提供 AI Agent、Cardano 和區塊鏈相關的產品開發與顧問服務。\n如有明確的產品需求，可以透過電子郵件提供專案背景、目前問題和合作範圍。Pao Studio 將依專案情況評估是否適合承接。",
