@@ -29,6 +29,23 @@ const uses = [
   { key: 'operations', icon: Building2 }
 ] as const;
 
+const FlowArrow = ({ direction }: { direction: 'up' | 'down' }) => (
+  <div className="flex h-12 items-center gap-3 max-[600px]:h-10 max-[600px]:gap-2.5" aria-hidden="true">
+    <span className="h-px flex-1 bg-hairline" />
+    <svg
+      viewBox="0 0 36 22"
+      className={clsx(
+        'h-[22px] w-9 text-primary/40 max-[600px]:h-5 max-[600px]:w-8',
+        direction === 'up' && 'rotate-180'
+      )}
+      focusable="false"
+    >
+      <path d="M18 21 2 3h32L18 21Z" fill="currentColor" />
+    </svg>
+    <span className="h-px flex-1 bg-hairline" />
+  </div>
+);
+
 export const ModelBand = () => {
   const t = useTranslations('home.model');
 
@@ -84,63 +101,61 @@ export const ModelBand = () => {
             })}
           </div>
 
-          <div className="relative my-5 flex items-center justify-center" aria-hidden="true">
-            <span className="h-px w-full bg-hairline" />
-            <span className="absolute grid h-9 w-9 place-items-center rounded-full border-4 border-white bg-brand-sky shadow-soft">
-              <span className="h-2 w-2 rounded-full bg-primary/60" />
-            </span>
+          <FlowArrow direction="down" />
+
+          <div className="grid grid-cols-[.75fr_1.25fr] gap-10 rounded-xl bg-brand-incana p-7 text-on-dark shadow-[0_18px_44px_rgba(19,88,93,.22),inset_0_1px_0_rgba(255,255,255,.14)] max-[800px]:grid-cols-1 max-[800px]:gap-7 max-[600px]:p-5">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-lemon">
+                {t('structure.supportsLabel')}
+              </span>
+              <h3 className="mt-2 text-[24px] leading-tight text-white">{t('cashflow.title')}</h3>
+              <p className="mt-3 max-w-[500px] text-[14px] leading-relaxed text-white/80">{t('cashflow.body')}</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5 max-[420px]:grid-cols-1">
+              {uses.map((use) => {
+                const Icon = use.icon;
+
+                return (
+                  <div key={use.key} className="flex min-h-[72px] items-center gap-3 rounded-md bg-white/10 px-4 py-3">
+                    <Icon className="flex-none text-brand-lemon" size={18} strokeWidth={1.8} aria-hidden="true" />
+                    <span className="text-[13px] font-semibold leading-snug text-white">
+                      {t(`cashflow.uses.${use.key}`)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-xl bg-brand-incana p-7 text-on-dark shadow-[0_18px_44px_rgba(19,88,93,.22),inset_0_1px_0_rgba(255,255,255,.14)] max-[600px]:p-5">
-            <div className="grid grid-cols-[.9fr_1.1fr] gap-10 max-[800px]:grid-cols-1 max-[800px]:gap-7">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-lemon">
-                  {t('structure.foundationLabel')}
-                </span>
-                <div className="mt-5 flex items-start gap-4">
-                  <span
-                    className="grid h-12 w-12 flex-none place-items-center rounded-md bg-brand-sky text-ink"
-                    aria-hidden="true"
-                  >
-                    <Landmark size={21} strokeWidth={1.8} />
+          <FlowArrow direction="up" />
+
+          <div className="relative overflow-hidden rounded-xl border border-hairline-soft bg-surface-soft px-7 py-6 shadow-soft max-[600px]:px-5 max-[600px]:py-5">
+            <div className="flex items-center gap-5 max-[700px]:grid max-[700px]:grid-cols-[52px_minmax(0,1fr)] max-[700px]:items-start max-[500px]:gap-4">
+              <span
+                className="grid h-[52px] w-[52px] flex-none place-items-center rounded-md bg-brand-sky text-ink shadow-soft"
+                aria-hidden="true"
+              >
+                <Landmark size={22} strokeWidth={1.9} />
+              </span>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2.5 max-[500px]:items-start max-[500px]:flex-col max-[500px]:gap-1">
+                  <span className="text-[11px] font-bold uppercase tracking-[.14em] text-primary">
+                    {t('sources.pool.eyebrow')}
                   </span>
-                  <div>
-                    <span className="block text-[11px] font-bold uppercase tracking-[.1em] text-white/65">
-                      {t('sources.pool.eyebrow')}
-                    </span>
-                    <h3 className="mt-1 text-[26px] leading-tight text-white">{t('sources.pool.title')}</h3>
-                    <p className="mt-2 text-[14px] leading-relaxed text-white/80">{t('sources.pool.body')}</p>
-                  </div>
+                  <span className="h-3 w-px bg-hairline max-[500px]:hidden" aria-hidden="true" />
+                  <span className="text-[11px] font-bold tracking-[.08em] text-muted">
+                    {t('structure.foundationLabel')}
+                  </span>
                 </div>
-                <span className="mt-5 inline-flex rounded-pill bg-white/12 px-3 py-1.5 text-xs font-semibold text-white">
-                  {t('sources.pool.role')}
-                </span>
+                <h3 className="mt-1.5 text-[25px] leading-tight text-ink">{t('sources.pool.title')}</h3>
+                <p className="mt-2 max-w-[660px] text-[13.5px] leading-relaxed text-body">{t('sources.pool.body')}</p>
               </div>
 
-              <div className="border-l border-white/15 pl-8 max-[800px]:border-l-0 max-[800px]:border-t max-[800px]:pl-0 max-[800px]:pt-7">
-                <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-lemon">
-                  {t('structure.supportsLabel')}
-                </span>
-                <h3 className="mt-2 text-[24px] leading-tight text-white">{t('cashflow.title')}</h3>
-                <p className="mt-3 max-w-[500px] text-[14px] leading-relaxed text-white/80">{t('cashflow.body')}</p>
-                <div className="mt-5 grid grid-cols-2 gap-2.5 max-[420px]:grid-cols-1">
-                  {uses.map((use) => {
-                    const Icon = use.icon;
-
-                    return (
-                      <div
-                        key={use.key}
-                        className="flex min-h-[68px] items-center gap-3 rounded-md bg-white/10 px-3 py-2.5"
-                      >
-                        <Icon className="flex-none text-brand-lemon" size={18} strokeWidth={1.8} aria-hidden="true" />
-                        <span className="text-[13px] font-semibold leading-snug text-white">
-                          {t(`cashflow.uses.${use.key}`)}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+              <span className="flex-none rounded-pill border border-hairline-soft bg-white px-3.5 py-2 text-xs font-semibold text-body shadow-soft max-[700px]:col-start-2 max-[700px]:justify-self-start">
+                {t('sources.pool.role')}
+              </span>
             </div>
           </div>
         </Reveal>

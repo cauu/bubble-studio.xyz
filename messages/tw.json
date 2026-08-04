@@ -53,16 +53,16 @@
       "title": "收入構成",
       "summary": "對一人公司來說，先要解決的是生存問題。Pao Studio 希望將礦池營運收入作為支應基本開支的主要來源，同時繼續探索交易、產品增值服務、顧問與專案開發等其他收入。",
       "structure": {
-        "exploreLabel": "持續探索的收入來源",
-        "foundationLabel": "滿足生存的基礎收入",
+        "exploreLabel": "持續探索的成長收入",
+        "foundationLabel": "基礎收入",
         "supportsLabel": "用於支持"
       },
       "sources": {
         "pool": {
-          "eyebrow": "Basic Income",
+          "eyebrow": "Foundation",
           "title": "礦池營運收入",
-          "body": "來自 Pao Pool 的營運收入。",
-          "role": "基礎收入"
+          "body": "希望以礦池營運收入優先支應公司的基本營運成本。",
+          "role": "支應基本營運成本"
         },
         "trading": {
           "eyebrow": "Trading",
@@ -84,9 +84,8 @@
         }
       },
       "cashflow": {
-        "eyebrow": "四路收入匯入",
         "title": "Pao Studio 現金流",
-        "body": "四類收入共同支持公司的日常營運與後續開發，降低對單一收入來源的依賴。",
+        "body": "來自礦池及其他業務的收入，用於支持公司的日常營運與後續開發。",
         "uses": {
           "infrastructure": "節點與伺服器",
           "ai": "AI 服務",
