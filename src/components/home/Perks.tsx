@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { GlobalConfig } from '@/constants';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
+import { GrainientBackground } from '@/components/ui/GrainientBackground';
 import { Reveal } from '@/components/ui/Reveal';
 
 const itemKeys = [
@@ -17,8 +18,13 @@ export const Perks = () => {
   const tNav = useTranslations('nav');
 
   return (
-    <section id="perks" className="bg-surface-card py-section max-[860px]:py-[72px]" aria-labelledby="perks-h2">
-      <div className="wrap">
+    <section
+      id="perks"
+      className="relative isolate overflow-hidden bg-surface-card py-section max-[860px]:py-[72px]"
+      aria-labelledby="perks-h2"
+    >
+      <GrainientBackground className="pointer-events-none absolute inset-0 -z-10 opacity-[.58] [mask-image:linear-gradient(115deg,black_0%,black_55%,transparent_96%)] max-[700px]:opacity-[.38]" />
+      <div className="wrap relative z-10">
         <Reveal className="mb-12 max-w-[50rem]">
           <h2 id="perks-h2" className="mb-3.5 text-[clamp(30px,4vw,46px)] leading-[1.15] text-balance">
             {t('title')}

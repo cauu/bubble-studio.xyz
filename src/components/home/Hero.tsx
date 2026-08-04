@@ -15,13 +15,13 @@ export const Hero = ({ stats }: { stats: PoolStats }) => {
 
   return (
     <section
-      className="relative z-[2] overflow-hidden pt-32 pb-28 max-[860px]:pt-20 max-[860px]:pb-[72px]"
+      className="relative z-[2] overflow-hidden pb-24 pt-28 max-[860px]:pb-[72px] max-[860px]:pt-20"
       aria-labelledby="hero-h1"
     >
       <div className="hero-aura animate-aura-drift" aria-hidden="true" />
       <div className="hero-grain" aria-hidden="true" />
 
-      <div className="wrap grid grid-cols-[1.2fr_1fr] gap-14 items-center relative z-[1] max-[900px]:grid-cols-1 max-[900px]:gap-10">
+      <div className="wrap relative z-[1] grid grid-cols-[1.32fr_.88fr] items-center gap-12 max-[900px]:grid-cols-1 max-[900px]:gap-10">
         <Reveal>
           <span className="block text-xs font-bold tracking-[.12em] uppercase text-brand-incana mb-5">
             {t('eyebrow')}
@@ -31,8 +31,8 @@ export const Hero = ({ stats }: { stats: PoolStats }) => {
             className={clsx(
               'leading-[1.15] mb-[18px] text-balance',
               isLatin
-                ? 'text-[clamp(34px,3.8vw,46px)] tracking-[-1.5px]'
-                : 'text-[clamp(38px,4vw,52px)] max-[900px]:text-[clamp(26px,7.5vw,38px)]'
+                ? 'text-[clamp(42px,4.8vw,60px)] tracking-[-2px]'
+                : 'text-[clamp(44px,4.7vw,60px)] max-[900px]:text-[clamp(28px,7.5vw,40px)]'
             )}
           >
             {isLatin ? (
@@ -47,8 +47,10 @@ export const Hero = ({ stats }: { stats: PoolStats }) => {
                 <span className="max-[900px]:hidden">
                   <span className="whitespace-nowrap">{t('title1')}</span>
                   <br />
-                  {t('title2')}
-                  <span className="text-brand-incana">{t('title2Highlight')}</span>
+                  <span className="whitespace-nowrap">
+                    {t('title2')}
+                    <span className="text-brand-incana">{t('title2Highlight')}</span>
+                  </span>
                 </span>
                 <span className="hidden max-[900px]:block">
                   <span className="block whitespace-nowrap">{t('mobileTitle1')}</span>

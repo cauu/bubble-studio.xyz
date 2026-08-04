@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Bot, CandlestickChart, Code2, Gift, Sparkles } from 'lucide-react';
+import { NoiseTexture } from '@/components/ui/NoiseTexture';
 import { Reveal } from '@/components/ui/Reveal';
 
 const StrategyChart = () => (
@@ -82,8 +83,18 @@ export const StakeBenefits = () => {
   const t = useTranslations('home.stakeBenefits');
 
   return (
-    <section className="bg-white py-section max-[860px]:py-[72px]" aria-labelledby="stake-benefits-h2">
-      <div className="wrap">
+    <section
+      className="relative isolate overflow-hidden bg-white py-section max-[860px]:py-[72px]"
+      aria-labelledby="stake-benefits-h2"
+    >
+      <NoiseTexture
+        frequency={0.48}
+        octaves={5}
+        slope={0.13}
+        noiseOpacity={0.34}
+        className="-z-10 opacity-[.28] [mask-image:radial-gradient(70%_65%_at_82%_16%,black,transparent)] max-[700px]:opacity-[.16]"
+      />
+      <div className="wrap relative z-10">
         <Reveal className="mb-9 max-w-[760px]">
           <h2 id="stake-benefits-h2" className="text-[clamp(30px,4vw,46px)] leading-[1.15] text-balance">
             {t('title')}
