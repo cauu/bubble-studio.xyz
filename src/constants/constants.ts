@@ -7,7 +7,7 @@ export const GlobalConfig = {
 
   CARDANOSCAN_POOL_URL: 'https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
 
-  CONTACT_EMAIL: 'contact@bubble-studio.xyz',
+  CONTACT_EMAIL: 'martincauu@gmail.com',
 
   // Koios pool_info has no APY field; keep as a config constant
   POOL_APY: '~2.2%',

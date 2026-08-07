@@ -6,7 +6,7 @@ import { Hero } from '@/components/home/Hero';
 import { ModelBand } from '@/components/home/ModelBand';
 import { Perks } from '@/components/home/Perks';
 import { StakeBenefits } from '@/components/home/StakeBenefits';
-import { ServicesBand } from '@/components/home/ServicesBand';
+import { ServicesBand, ServicesContact } from '@/components/home/ServicesBand';
 import type { PoolStats } from '@/components/home/PoolLedgerCard';
 
 type Props = {
@@ -95,8 +95,9 @@ export default async function HomePage() {
       <Hero stats={stats} />
       <Perks />
       <StakeBenefits />
-      <ModelBand />
       <ServicesBand />
+      <ModelBand />
+      <ServicesContact />
     </>
   );
 }
