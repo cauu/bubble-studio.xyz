@@ -42,13 +42,10 @@ export const ServicesBand = () => {
   ];
 
   return (
-    <section className="bg-white py-section max-[860px]:py-[72px]" aria-labelledby="svc-h2">
+    <section className="bg-surface-card py-section max-[860px]:py-[72px]" aria-labelledby="svc-h2">
       <div className="wrap">
         <Reveal className="mb-10 flex items-end justify-between gap-8 max-[760px]:items-start max-[760px]:flex-col">
           <div className="max-w-[760px]">
-            <span className="mb-4 block text-xs font-bold uppercase tracking-[.12em] text-brand-incana">
-              {t('workEyebrow')}
-            </span>
             <h2 id="svc-h2" className="text-[clamp(30px,4vw,46px)] leading-[1.15] text-balance">
               {t('workTitle')}
             </h2>
@@ -74,8 +71,22 @@ export const ServicesBand = () => {
             </Reveal>
           ))}
         </div>
+      </div>
+    </section>
+  );
+};
 
-        <Reveal className="relative mt-12 flex flex-wrap items-center justify-between gap-8 overflow-hidden rounded-xl bg-surface-card px-14 py-12 shadow-[0_1px_2px_rgba(23,32,38,.04),0_12px_32px_rgba(23,32,38,.07),inset_0_1px_0_rgba(255,255,255,.5)] max-[860px]:px-7 max-[860px]:py-10">
+export const ServicesContact = () => {
+  const t = useTranslations('home.services');
+
+  return (
+    <section
+      id="contact"
+      className="scroll-mt-[84px] bg-white pb-section max-[860px]:pb-[72px]"
+      aria-labelledby="services-contact-h2"
+    >
+      <div className="wrap">
+        <Reveal className="relative flex flex-wrap items-center justify-between gap-8 overflow-hidden rounded-xl bg-surface-card px-14 py-12 shadow-[0_1px_2px_rgba(23,32,38,.04),0_12px_32px_rgba(23,32,38,.07),inset_0_1px_0_rgba(255,255,255,.5)] max-[860px]:px-7 max-[860px]:py-10">
           <span
             className="absolute rounded-full bg-[rgba(249,248,246,.6)] pointer-events-none w-[200px] h-[200px] -top-[70px] right-[22%]"
             aria-hidden="true"
@@ -89,15 +100,26 @@ export const ServicesBand = () => {
             <Chip color="blank" className="mb-4">
               {t('chip')}
             </Chip>
-            <h3 className="mb-3 text-[clamp(26px,3.2vw,36px)] leading-[1.2]">{t('title')}</h3>
+            <h2 id="services-contact-h2" className="mb-3 text-[clamp(26px,3.2vw,36px)] leading-[1.2]">
+              {t('title')}
+            </h2>
             <p className="whitespace-pre-line text-base text-body">{t('body')}</p>
           </div>
 
-          <div className="relative flex flex-col items-start gap-3">
-            <Button href={`mailto:${GlobalConfig.CONTACT_EMAIL}`} variant="primary" size="lg">
-              {t('cta')}
+          <div className="relative grid w-[300px] shrink-0 grid-cols-1 gap-3 max-[980px]:w-full">
+            <Button href={`mailto:${GlobalConfig.CONTACT_EMAIL}`} variant="primary" size="lg" className="w-full">
+              {t('emailCta')}
             </Button>
-            <span className="text-[13px] text-body tnum">{GlobalConfig.CONTACT_EMAIL}</span>
+            <Button
+              href={GlobalConfig.social.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="ghost"
+              size="lg"
+              className="w-full"
+            >
+              {t('telegramCta')}
+            </Button>
           </div>
         </Reveal>
       </div>

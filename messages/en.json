@@ -16,7 +16,7 @@
       "title2Highlight": "Cardano",
       "mobileTitle1": "A one-person company",
       "mobileTitle2": "built on ",
-      "sub": "Exploring a one-person company model supported by a Cardano stake pool and sharing practical experience.\nThe aim is for Cardano to become new infrastructure for one-person companies in the future.",
+      "sub": "Exploring a one-person company model supported by a Cardano stake pool and sharing practical experience.\nThrough our work, we hope to make Cardano new infrastructure for one-person companies.",
       "ctaLearn": "How the company operates"
     },
     "ledger": {
@@ -95,7 +95,7 @@
       }
     },
     "perks": {
-      "title": "Staking as a new subscription model",
+      "title": "Stake to subscribe",
       "sub": "Traditional subscriptions require users to pay recurring fees. Pao Studio is testing a new subscription model based on Cardano native staking.\nFor most ADA holders, participating in staking means delegating to a stake pool. Users delegate ADA to Pao Pool with no additional payment, lock-up, or custody, while continuing to receive staking rewards as usual. Pool operating revenue keeps Pao Pool running and supports the content and product services provided by Pao Studio.",
       "head": {
         "list": "How the model works",
@@ -131,7 +131,7 @@
       }
     },
     "stakeBenefits": {
-      "title": "Delegate to Pao Pool now to get...",
+      "title": "Stake now to get...",
       "items": {
         "raffle": {
           "label": "Occasional",
@@ -155,14 +155,14 @@
       }
     },
     "services": {
-      "workEyebrow": "Product Development",
-      "workTitle": "Products in development",
-      "workBody": "Pao Studio currently builds Cardano infrastructure and user-facing on-chain applications. These are some of the projects already online.",
+      "workTitle": "Project list",
+      "workBody": "Pao Studio experiments with different kinds of products, including open-source Cardano infrastructure, Web3 applications, and AI applications.",
       "allProjects": "View all projects",
       "chip": "Product Development · Consulting",
-      "title": "AI and Cardano product development",
-      "body": "Pao Studio provides product development and consulting for AI agents, Cardano, and blockchain.\nFor a specific product requirement, email the project background, current problem, and scope. Pao Studio will assess whether the engagement is a suitable fit.",
-      "cta": "Contact Pao Studio"
+      "title": "Software development and consulting",
+      "body": "Pao Studio provides development and consulting for AI, blockchain, and traditional software projects.\nIf you have a project requirement or an idea for collaboration, feel free to get in touch by email.",
+      "emailCta": "Contact by email",
+      "telegramCta": "Join the Telegram community"
     }
   },
   "hero": {
@@ -282,6 +282,7 @@
     "projects": "Projects",
     "skills": "Skills",
     "stakeCta": "Delegate to Pao Pool",
+    "contactCta": "Contact",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "skipToContent": "Skip to content",

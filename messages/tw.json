@@ -16,7 +16,7 @@
       "title2Highlight": "一人公司",
       "mobileTitle1": "一家建立在",
       "mobileTitle2": "Cardano 上的",
-      "sub": "探索由 Cardano 礦池支持的一人公司營運模式，並分享實踐經驗。\n希望 Cardano 未來能成為一人公司的新基礎設施。",
+      "sub": "探索由 Cardano 礦池支持的一人公司營運模式，並分享實踐經驗。\n希望透過我們的努力，能讓 Cardano 成為一人公司的新基礎設施。",
       "ctaLearn": "了解公司如何運作"
     },
     "ledger": {
@@ -95,7 +95,7 @@
       }
     },
     "perks": {
-      "title": "質押成為一種新的訂閱方式",
+      "title": "質押即訂閱",
       "sub": "傳統訂閱模式要求使用者定期付費。Pao Studio 嘗試以 Cardano 原生質押機制，建立一種新的訂閱方式。\n對一般 ADA 持有者來說，參與質押的具體操作是委託。使用者將 ADA 委託給 Pao Pool，無需額外付費、鎖定或託管，照常獲得質押獎勵。礦池營運收入用於維持 Pao Pool 運作，並支持 Pao Studio 提供相應的內容和產品服務。",
       "head": {
         "list": "模式如何運作",
@@ -131,7 +131,7 @@
       }
     },
     "stakeBenefits": {
-      "title": "現在委託給 Pao Pool，可以獲得...",
+      "title": "現在質押，可以獲得...",
       "items": {
         "raffle": {
           "label": "不定期開放",
@@ -155,14 +155,14 @@
       }
     },
     "services": {
-      "workEyebrow": "產品開發",
-      "workTitle": "正在做的產品",
-      "workBody": "Pao Studio 目前主要開發 Cardano 基礎設施和面向使用者的鏈上應用。以下是部分已經上線的項目。",
+      "workTitle": "專案列表",
+      "workBody": "Pao Studio 會嘗試開發不同類型的產品，包括開源的 Cardano 基礎設施、Web3 應用和 AI 應用。",
       "allProjects": "查看全部項目",
       "chip": "產品開發 · 顧問與合作",
-      "title": "AI 與 Cardano 產品開發",
-      "body": "Pao Studio 提供 AI Agent、Cardano 和區塊鏈相關的產品開發與顧問服務。\n如有明確的產品需求，可以透過電子郵件提供專案背景、目前問題和合作範圍。Pao Studio 將依專案情況評估是否適合承接。",
-      "cta": "聯絡 Pao Studio"
+      "title": "軟體開發與技術顧問",
+      "body": "Pao Studio 提供 AI、區塊鏈及傳統軟體專案的開發與顧問服務。\n如有專案需求或合作想法，歡迎來信交流。",
+      "emailCta": "電子郵件聯絡",
+      "telegramCta": "加入 Telegram 社群"
     }
   },
   "hero": {
@@ -282,6 +282,7 @@
     "projects": "項目",
     "skills": "Skills",
     "stakeCta": "委託給 Pao Pool",
+    "contactCta": "合作",
     "openMenu": "打開選單",
     "closeMenu": "關閉選單",
     "skipToContent": "跳到主要內容",

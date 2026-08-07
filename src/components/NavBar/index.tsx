@@ -4,18 +4,19 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import { Link } from '@/i18n/navigation';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
-import { GlobalConfig } from '@/constants';
 import { Button } from '@/components/ui/Button';
 import { PaoLogo } from '@/components/PaoLogo';
 
 export const NavBar = () => {
   const t = useTranslations();
+  const locale = useLocale();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const isHomePage = pathname === '/' || /^\/(en|zh|tw)$/.test(pathname);
+  const contactHref = locale === 'en' ? '/#contact' : `/${locale}/#contact`;
 
   const navItems = [
     { text: t('nav.home'), path: '/', isActive: isHomePage },
@@ -55,15 +56,8 @@ export const NavBar = () => {
 
         <div className="ml-auto flex items-center gap-3">
           <LanguageSwitcher />
-          <Button
-            href={GlobalConfig.DELEGATE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="primary"
-            size="md"
-            className="max-[600px]:hidden"
-          >
-            {t('nav.stakeCta')}
+          <Button href={contactHref} variant="primary" size="md" className="max-[600px]:hidden">
+            {t('nav.contactCta')}
           </Button>
           <button
             onClick={() => setIsMenuOpen((open) => !open)}
@@ -97,14 +91,8 @@ export const NavBar = () => {
             {item.text}
           </Link>
         ))}
-        <a
-          href={GlobalConfig.DELEGATE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={closeMenu}
-          className="block px-2 py-[13px] text-[15px] font-semibold text-ink"
-        >
-          {t('nav.stakeCta')}
+        <a href={contactHref} onClick={closeMenu} className="block px-2 py-[13px] text-[15px] font-semibold text-ink">
+          {t('nav.contactCta')}
         </a>
       </div>
     </nav>

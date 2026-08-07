@@ -104,15 +104,15 @@ export const StakeBenefits = () => {
         <div className="grid grid-cols-[1.2fr_.8fr] grid-rows-2 gap-4 max-[900px]:grid-cols-2 max-[900px]:grid-rows-none max-[650px]:grid-cols-1">
           <Reveal className="row-span-2 overflow-hidden rounded-xl border border-hairline bg-surface-soft p-7 shadow-soft max-[900px]:col-span-2 max-[900px]:row-span-1 max-[650px]:col-span-1 max-[500px]:p-5">
             <div className="flex h-full flex-col">
-              <div className="flex items-start gap-3">
-                <span className="grid h-11 w-11 flex-none place-items-center rounded-md bg-brand-lavender text-primary">
+              <div className="flex items-center gap-3">
+                <span className="grid h-11 w-11 flex-none place-items-center rounded-md bg-brand-lavender text-ink">
                   <CandlestickChart size={20} strokeWidth={1.9} />
                 </span>
-                <div>
-                  <span className="text-[11px] font-bold uppercase tracking-[.1em] text-primary">
+                <div className="min-w-0 flex-1">
+                  <span className="mb-1 block text-[10.5px] font-bold uppercase tracking-[.1em] text-muted">
                     {t('items.strategy.label')}
                   </span>
-                  <h3 className="mt-1 text-[24px] leading-tight">{t('items.strategy.title')}</h3>
+                  <h3 className="text-[18px] leading-tight">{t('items.strategy.title')}</h3>
                 </div>
               </div>
               <p className="mb-6 mt-4 max-w-[590px] text-[14px] leading-[1.7] text-body">{t('items.strategy.body')}</p>

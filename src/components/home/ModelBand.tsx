@@ -51,7 +51,7 @@ export const ModelBand = () => {
 
   return (
     <section
-      className="relative isolate overflow-hidden bg-surface-card py-section max-[860px]:py-[72px]"
+      className="relative isolate overflow-hidden bg-white py-section max-[860px]:py-[72px]"
       aria-labelledby="model-h2"
     >
       <DottedGlowBackground className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-[70%] [mask-image:radial-gradient(75%_62%_at_78%_44%,black,transparent)] max-[700px]:w-full max-[700px]:opacity-60" />
@@ -63,7 +63,7 @@ export const ModelBand = () => {
           <p className="mt-5 max-w-[780px] text-pretty text-[16px] leading-[1.8] text-body">{t('summary')}</p>
         </Reveal>
 
-        <Reveal className="mx-auto max-w-[1100px] rounded-xl bg-white p-6 shadow-card max-[600px]:p-4">
+        <Reveal className="mx-auto max-w-[1100px] rounded-xl border border-[rgba(72,76,110,.08)] bg-[#fdfdff] p-6 shadow-[0_1px_2px_rgba(23,32,38,.04),0_16px_44px_rgba(35,42,70,.08)] max-[600px]:p-4">
           <div className="mb-4 flex items-center gap-3 px-1">
             <span className="text-[11px] font-bold uppercase tracking-[.12em] text-muted">
               {t('structure.exploreLabel')}
@@ -71,31 +71,36 @@ export const ModelBand = () => {
             <span className="h-px flex-1 bg-hairline-soft" aria-hidden="true" />
           </div>
 
-          <div className="grid grid-cols-3 gap-3 max-[800px]:grid-cols-1">
+          <div className="grid grid-cols-3 gap-3 max-[960px]:grid-cols-1">
             {growthSources.map((source) => {
               const Icon = source.icon;
 
               return (
                 <div
                   key={source.key}
-                  className="flex min-h-[190px] flex-col rounded-lg border border-hairline-soft bg-surface-soft p-5 max-[800px]:min-h-0"
+                  className="min-h-[132px] rounded-lg border border-hairline-soft bg-surface-soft p-5 max-[960px]:min-h-0"
                 >
-                  <span
-                    className={clsx('grid h-12 w-12 place-items-center rounded-md text-ink', source.iconClass)}
-                    aria-hidden="true"
-                  >
-                    <Icon size={21} strokeWidth={1.8} />
-                  </span>
-                  <div className="mt-5 min-w-0">
-                    <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-[.1em] text-muted">
-                      {t(`sources.${source.key}.eyebrow`)}
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={clsx(
+                        'grid h-11 w-11 flex-none place-items-center rounded-md text-ink',
+                        source.iconClass
+                      )}
+                      aria-hidden="true"
+                    >
+                      <Icon size={20} strokeWidth={1.8} />
                     </span>
-                    <h3 className="text-[19px] leading-snug">{t(`sources.${source.key}.title`)}</h3>
-                    <p className="mt-2 text-[13.5px] leading-relaxed text-body">{t(`sources.${source.key}.body`)}</p>
+                    <div className="min-w-0 flex-1">
+                      <span className="mb-1 block text-[10.5px] font-bold uppercase tracking-[.1em] text-muted">
+                        {t(`sources.${source.key}.eyebrow`)}
+                      </span>
+                      <h3 className="text-[18px] leading-tight">{t(`sources.${source.key}.title`)}</h3>
+                    </div>
+                    <span className="flex-none rounded-pill bg-white px-3 py-1.5 text-xs font-semibold text-body shadow-soft">
+                      {t(`sources.${source.key}.role`)}
+                    </span>
                   </div>
-                  <span className="mt-auto self-start rounded-pill bg-white px-3 py-1.5 text-xs font-semibold text-body shadow-soft max-[800px]:mt-4">
-                    {t(`sources.${source.key}.role`)}
-                  </span>
+                  <p className="mt-3 text-[13.5px] leading-relaxed text-body">{t(`sources.${source.key}.body`)}</p>
                 </div>
               );
             })}
