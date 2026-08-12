@@ -9,7 +9,6 @@ language: zh
 tags:
   - "Bubble Studio"
 category: essay
-featured: true
 ---
 
 在此，我们希望阐述泡泡工作室(Bubble Studio)的身份、使命以及我们赖以行动的基本判断。这篇文章将解答两个核心问题：**我们是谁？我们计划做什么？**

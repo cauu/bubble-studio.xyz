@@ -12,6 +12,7 @@ tags:
   - "Cardano"
   - "Creator Economy"
 category: ai
+featured: true
 ---
 過去幾十年，軟體之所以能建立穩定的收費模式，核心在於它的稀缺性。從想法到產品，中間隔著漫長的研發與測試週期。使用者付費，本質上是在為一種難以複製的產品買單。
 
