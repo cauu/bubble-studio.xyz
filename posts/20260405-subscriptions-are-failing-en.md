@@ -12,6 +12,7 @@ tags:
   - "Cardano"
   - "Creator Economy"
 category: ai
+featured: true
 ---
 For decades, software could sustain stable business models because it was scarce. The distance between an idea and a usable product was long, expensive, and difficult to cross. When users paid for software, they were effectively paying for something hard to replicate.
 
