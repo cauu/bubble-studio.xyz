@@ -17,7 +17,19 @@
       "mobileTitle1": "A one-person company",
       "mobileTitle2": "built on ",
       "sub": "Exploring a one-person company model supported by a Cardano stake pool and sharing practical experience.\nThrough our work, we hope to make Cardano new infrastructure for one-person companies.",
-      "ctaLearn": "How the company operates"
+      "subscribe": {
+        "cta": "View subscription details",
+        "title": "Subscribe to PAO",
+        "intro": "Stake any amount of ADA with Pao Pool to subscribe to:",
+        "strategyTitle": "Trading strategy updates",
+        "strategyBody": "Content from a professional trader's private channel.",
+        "eventsTitle": "Event notifications",
+        "eventsBody": "Updates about Pao Studio events.",
+        "notePrefix": "The subscription uses ",
+        "noteSuffix": ", developed and open-sourced by Pao Studio.",
+        "subscribeNow": "Subscribe now",
+        "close": "Close"
+      }
     },
     "ledger": {
       "title": "Pao Pool",
