@@ -15,8 +15,8 @@ export const NavBar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const isHomePage = pathname === '/' || /^\/(en|zh|tw)$/.test(pathname);
-  const contactHref = locale === 'en' ? '/#contact' : `/${locale}/#contact`;
+  const isHomePage = pathname === '/' || /^\/(en|zh|tw)\/?$/.test(pathname);
+  const contactHref = isHomePage ? '#contact' : locale === 'en' ? '/#contact' : `/${locale}/#contact`;
 
   const navItems = [
     { text: t('nav.home'), path: '/', isActive: isHomePage },

@@ -5,6 +5,10 @@ export const GlobalConfig = {
 
   DELEGATE_URL: 'https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
 
+  SUBSCRIBE_URL: 'https://auth.paopao.studio/bind',
+
+  OURO_PASS_URL: 'https://ouro-pass.paopao.studio/',
+
   CARDANOSCAN_POOL_URL: 'https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm',
 
   CONTACT_EMAIL: 'martincauu@gmail.com',

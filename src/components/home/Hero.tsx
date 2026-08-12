@@ -4,6 +4,7 @@ import { GlobalConfig } from '@/constants';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { PoolLedgerCard, PoolStats } from './PoolLedgerCard';
+import { SubscribePaoDialog } from './SubscribePaoDialog';
 
 export const Hero = ({ stats }: { stats: PoolStats }) => {
   const t = useTranslations('home.hero');
@@ -74,9 +75,7 @@ export const Hero = ({ stats }: { stats: PoolStats }) => {
             >
               {tNav('stakeCta')}
             </Button>
-            <Button href="#why" variant="ghost" size="lg" className="max-[600px]:w-full">
-              {t('ctaLearn')}
-            </Button>
+            <SubscribePaoDialog />
           </div>
         </Reveal>
 

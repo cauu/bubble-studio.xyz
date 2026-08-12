@@ -17,7 +17,19 @@
       "mobileTitle1": "一家建立在",
       "mobileTitle2": "Cardano 上的",
       "sub": "探索由 Cardano 矿池支持的一人公司运营模式，并分享实践经验。\n希望通过我们的努力，能让 Cardano 成为一人公司的新基建。",
-      "ctaLearn": "了解公司如何运转"
+      "subscribe": {
+        "cta": "查看订阅内容",
+        "title": "订阅 PAO",
+        "intro": "质押任意数量的 ADA，即可订阅以下服务：",
+        "strategyTitle": "交易策略分享",
+        "strategyBody": "内容来自专业交易员的私人频道。",
+        "eventsTitle": "活动通知",
+        "eventsBody": "接收 Pao Studio 的活动通知。",
+        "notePrefix": "订阅服务使用 Pao Studio 开发并开源的 ",
+        "noteSuffix": "。",
+        "subscribeNow": "立即订阅",
+        "close": "关闭"
+      }
     },
     "ledger": {
       "title": "Pao Pool",
