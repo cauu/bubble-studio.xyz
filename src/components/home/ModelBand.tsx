@@ -63,7 +63,7 @@ export const ModelBand = () => {
           <p className="mt-5 max-w-[780px] text-pretty text-[16px] leading-[1.8] text-body">{t('summary')}</p>
         </Reveal>
 
-        <Reveal className="mx-auto max-w-[1100px] rounded-xl border border-[rgba(72,76,110,.08)] bg-[#fdfdff] p-6 shadow-[0_1px_2px_rgba(23,32,38,.04),0_16px_44px_rgba(35,42,70,.08)] max-[600px]:p-4">
+        <Reveal className="mx-auto max-w-[1100px] rounded-xl border border-[rgba(72,76,110,.08)] bg-[#fdfdff] p-6 shadow-[0_1px_2px_rgba(23,32,38,.04),0_16px_44px_rgba(35,42,70,.08)] max-[600px]:p-3">
           <div className="mb-4 flex items-center gap-3 px-1">
             <span className="text-[11px] font-bold uppercase tracking-[.12em] text-muted">
               {t('structure.exploreLabel')}
@@ -78,12 +78,12 @@ export const ModelBand = () => {
               return (
                 <div
                   key={source.key}
-                  className="min-h-[132px] rounded-lg border border-hairline-soft bg-surface-soft p-5 max-[960px]:min-h-0"
+                  className="min-h-[132px] rounded-lg border border-hairline-soft bg-surface-soft p-5 max-[960px]:min-h-0 max-[600px]:p-4"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 max-[600px]:gap-2.5">
                     <span
                       className={clsx(
-                        'grid h-11 w-11 flex-none place-items-center rounded-md text-ink',
+                        'grid h-11 w-11 flex-none place-items-center rounded-md text-ink max-[600px]:h-10 max-[600px]:w-10',
                         source.iconClass
                       )}
                       aria-hidden="true"
@@ -91,16 +91,20 @@ export const ModelBand = () => {
                       <Icon size={20} strokeWidth={1.8} />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <span className="mb-1 block text-[10.5px] font-bold uppercase tracking-[.1em] text-muted">
+                      <span className="mb-1 block text-[10.5px] font-bold uppercase tracking-[.1em] text-muted max-[600px]:hidden">
                         {t(`sources.${source.key}.eyebrow`)}
                       </span>
-                      <h3 className="text-[18px] leading-tight">{t(`sources.${source.key}.title`)}</h3>
+                      <h3 className="text-[18px] leading-tight max-[600px]:text-[17px]">
+                        {t(`sources.${source.key}.title`)}
+                      </h3>
                     </div>
-                    <span className="flex-none rounded-pill bg-white px-3 py-1.5 text-xs font-semibold text-body shadow-soft">
+                    <span className="flex-none rounded-pill bg-white px-3 py-1.5 text-xs font-semibold text-body shadow-soft max-[600px]:px-2.5 max-[600px]:py-1">
                       {t(`sources.${source.key}.role`)}
                     </span>
                   </div>
-                  <p className="mt-3 text-[13.5px] leading-relaxed text-body">{t(`sources.${source.key}.body`)}</p>
+                  <p className="mt-3 text-[13.5px] leading-relaxed text-body max-[600px]:hidden">
+                    {t(`sources.${source.key}.body`)}
+                  </p>
                 </div>
               );
             })}
