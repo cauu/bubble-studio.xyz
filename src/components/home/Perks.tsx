@@ -34,18 +34,18 @@ export const Perks = () => {
 
         <div className="grid grid-cols-[1.45fr_1fr] gap-6 items-start max-[900px]:grid-cols-1">
           <Reveal className="bg-white rounded-lg overflow-hidden shadow-card">
-            <div className="px-6 pt-4 pb-1.5 text-xs font-bold tracking-[.1em] uppercase text-muted flex justify-between">
+            <div className="flex justify-between px-6 pb-1.5 pt-4 text-xs font-bold uppercase tracking-[.1em] text-muted max-[600px]:px-[18px] max-[600px]:pb-2">
               <span>{t('head.list')}</span>
-              <span>{t('head.status')}</span>
+              <span className="max-[600px]:hidden">{t('head.status')}</span>
             </div>
             {itemKeys.map((item, i) => (
               <div
                 key={item.key}
-                className="relative flex items-start gap-4 px-6 py-[22px] transition-colors duration-200 hover:bg-hairline-soft max-[600px]:flex-wrap after:content-[''] after:absolute after:left-6 after:right-6 after:bottom-0 after:h-px after:bg-[rgba(23,32,38,.05)] last:after:hidden"
+                className="relative flex items-start gap-4 px-6 py-[22px] transition-colors duration-200 hover:bg-hairline-soft max-[600px]:px-[18px] max-[600px]:py-[18px] after:absolute after:bottom-0 after:left-6 after:right-6 after:h-px after:bg-[rgba(23,32,38,.05)] after:content-[''] last:after:hidden max-[600px]:after:left-[18px] max-[600px]:after:right-[18px]"
               >
                 <span
                   className={clsx(
-                    'w-[42px] h-[42px] rounded-md flex-none grid place-items-center text-[13.5px] font-bold text-ink mt-0.5 tnum',
+                    'mt-0.5 grid h-[42px] w-[42px] flex-none place-items-center rounded-md text-[13.5px] font-bold text-ink tnum max-[600px]:hidden',
                     item.num
                   )}
                   aria-hidden="true"
@@ -53,10 +53,15 @@ export const Perks = () => {
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-[17px] leading-[1.35] mb-1">{t(`items.${item.key}.title`)}</h3>
-                  <p className="text-[13.5px] text-muted">{t(`items.${item.key}.body`)}</p>
+                  <div className="flex items-start gap-3 max-[600px]:justify-between">
+                    <h3 className="mb-1 text-[17px] leading-[1.35]">{t(`items.${item.key}.title`)}</h3>
+                    <Chip className="mt-0.5 hidden flex-none max-[600px]:inline-flex">
+                      {t(`items.${item.key}.chip`)}
+                    </Chip>
+                  </div>
+                  <p className="text-[13.5px] leading-relaxed text-muted">{t(`items.${item.key}.body`)}</p>
                 </div>
-                <Chip className="flex-none mt-0.5 max-[600px]:ml-[58px]">{t(`items.${item.key}.chip`)}</Chip>
+                <Chip className="mt-0.5 flex-none max-[600px]:hidden">{t(`items.${item.key}.chip`)}</Chip>
               </div>
             ))}
           </Reveal>
