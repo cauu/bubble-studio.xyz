@@ -190,10 +190,10 @@ export default async function StakingPage({ params: { locale } }: Props) {
   return (
     <div className="relative overflow-x-hidden pb-24 max-[860px]:pb-[72px]">
       <JsonLd id="staking-structured-data" data={structuredData} />
-      <section className="relative isolate overflow-hidden pb-24 pt-24 max-[860px]:pb-[72px] max-[860px]:pt-16">
+      <section className="relative isolate overflow-hidden pb-20 pt-20 max-[860px]:pb-16 max-[860px]:pt-14">
         <div className="hero-aura animate-aura-drift" aria-hidden="true" />
         <div className="hero-grain" aria-hidden="true" />
-        <div className="wrap relative z-[1] grid grid-cols-[1.18fr_.82fr] items-center gap-12 max-[900px]:grid-cols-1">
+        <div className="wrap relative z-[1] grid grid-cols-[1.15fr_.85fr] items-center gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-10">
           <div>
             <span className="mb-5 block text-xs font-bold uppercase tracking-[.12em] text-brand-incana">
               {t('hero.eyebrow')}
@@ -226,71 +226,75 @@ export default async function StakingPage({ params: { locale } }: Props) {
         </div>
       </section>
 
-      <section
-        id="how-it-works"
-        className="bg-white py-section max-[860px]:py-[72px]"
-        aria-labelledby="mechanism-title"
-      >
+      <section id="how-it-works" className="bg-white py-20 max-[860px]:py-16" aria-labelledby="mechanism-title">
         <div className="wrap">
           <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">
             {t('mechanism.eyebrow')}
           </span>
-          <h2 id="mechanism-title" className="mt-4 max-w-[18em] text-[clamp(32px,4vw,48px)] leading-[1.15]">
+          <h2 id="mechanism-title" className="mt-4 max-w-[18em] text-[clamp(30px,4vw,44px)] leading-[1.15]">
             {t('mechanism.title')}
           </h2>
           <p className="mt-5 max-w-[48rem] text-[16px] leading-[1.8] text-body">{t('mechanism.intro')}</p>
-          <div className="mt-10 grid grid-cols-3 gap-5 max-[820px]:grid-cols-1">
+          <div className="mt-10 grid grid-cols-3 gap-8 max-[820px]:grid-cols-1 max-[820px]:gap-0">
             {mechanismItems.map(({ key, icon: Icon, color }) => (
-              <article key={key} className="rounded-xl border border-hairline bg-canvas p-6 shadow-soft">
-                <span className={`grid h-11 w-11 place-items-center rounded-md text-ink ${color}`} aria-hidden="true">
-                  <Icon size={21} />
+              <article
+                key={key}
+                className="border-t border-hairline pt-6 max-[820px]:grid max-[820px]:grid-cols-[44px_1fr] max-[820px]:gap-x-4 max-[820px]:py-6"
+              >
+                <span
+                  className={`grid h-10 w-10 place-items-center rounded-md text-ink ${color} max-[820px]:row-span-2`}
+                  aria-hidden="true"
+                >
+                  <Icon size={19} />
                 </span>
-                <h3 className="mt-5 text-xl">{t(`mechanism.items.${key}.title`)}</h3>
-                <p className="mt-3 text-[14.5px] leading-[1.75] text-body">{t(`mechanism.items.${key}.body`)}</p>
+                <h3 className="mt-5 text-lg leading-[1.4] max-[820px]:mt-0">{t(`mechanism.items.${key}.title`)}</h3>
+                <p className="mt-2 text-[14.5px] leading-[1.75] text-body">{t(`mechanism.items.${key}.body`)}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section
-        id="rewards"
-        className="bg-primary py-section text-on-dark max-[860px]:py-[72px]"
-        aria-labelledby="rewards-title"
-      >
+      <section id="rewards" className="py-20 max-[860px]:py-16" aria-labelledby="rewards-title">
         <div className="wrap">
-          <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-lemon">{t('rewards.eyebrow')}</span>
-          <h2 id="rewards-title" className="mt-4 max-w-[18em] text-[clamp(32px,4vw,48px)] leading-[1.15]">
-            {t('rewards.title')}
-          </h2>
-          <p className="mt-5 max-w-[50rem] text-[16px] leading-[1.8] text-white/80">{t('rewards.intro')}</p>
-          <ol className="mt-10 grid grid-cols-3 gap-4 max-[760px]:grid-cols-1">
-            {rewardSteps.map(({ key, icon: Icon }, index) => (
-              <li key={key} className="rounded-xl border border-white/15 bg-white/[.07] p-6">
-                <div className="flex items-center justify-between">
-                  <Icon size={22} className="text-brand-lemon" aria-hidden="true" />
-                  <span className="text-sm font-bold text-white/55 tnum">0{index + 1}</span>
-                </div>
-                <h3 className="mt-5 text-xl">{t(`rewards.steps.${key}.title`)}</h3>
-                <p className="mt-3 text-[14px] leading-[1.75] text-white/75">{t(`rewards.steps.${key}.body`)}</p>
-              </li>
-            ))}
-          </ol>
-          <p className="mt-6 rounded-lg bg-white/[.09] px-5 py-4 text-[14px] leading-[1.7] text-white/85">
-            {t('rewards.disclaimer')}
-          </p>
+          <div className="overflow-hidden rounded-xl bg-brand-incana px-10 py-10 text-on-dark max-[760px]:px-6 max-[760px]:py-8">
+            <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-lemon">
+              {t('rewards.eyebrow')}
+            </span>
+            <h2 id="rewards-title" className="mt-4 max-w-[18em] text-[clamp(30px,4vw,44px)] leading-[1.15] text-white">
+              {t('rewards.title')}
+            </h2>
+            <p className="mt-5 max-w-[50rem] text-[16px] leading-[1.8] text-white/80">{t('rewards.intro')}</p>
+            <ol className="mt-9 grid grid-cols-3 divide-x divide-white/20 border-y border-white/20 max-[760px]:grid-cols-1 max-[760px]:divide-x-0 max-[760px]:divide-y">
+              {rewardSteps.map(({ key, icon: Icon }, index) => (
+                <li key={key} className="px-6 py-7 first:pl-0 last:pr-0 max-[760px]:px-0 max-[760px]:py-6">
+                  <div className="flex items-center justify-between">
+                    <Icon size={20} className="text-brand-lemon" aria-hidden="true" />
+                    <span className="text-xs font-bold text-white/50 tnum">0{index + 1}</span>
+                  </div>
+                  <h3 className="mt-4 text-lg leading-[1.4] text-white">{t(`rewards.steps.${key}.title`)}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.75] text-white/75">{t(`rewards.steps.${key}.body`)}</p>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-6 border-l-2 border-brand-lemon pl-4 text-[14px] leading-[1.7] text-white/85">
+              {t('rewards.disclaimer')}
+            </p>
+          </div>
         </div>
       </section>
 
-      <section id="pao-pool" className="py-section max-[860px]:py-[72px]" aria-labelledby="pool-title">
-        <div className="wrap grid grid-cols-[1fr_.9fr] items-start gap-12 max-[900px]:grid-cols-1">
+      <section id="pao-pool" className="bg-white py-20 max-[860px]:py-16" aria-labelledby="pool-title">
+        <div className="wrap grid grid-cols-[.88fr_1.12fr] items-start gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-9">
           <div>
             <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">{t('pool.eyebrow')}</span>
-            <h2 id="pool-title" className="mt-4 text-[clamp(32px,4vw,48px)] leading-[1.15]">
+            <h2 id="pool-title" className="mt-4 text-[clamp(30px,4vw,44px)] leading-[1.15]">
               {t('pool.title')}
             </h2>
             <p className="mt-5 text-[16px] leading-[1.8] text-body">{t('pool.intro')}</p>
-            <div className="mt-7 rounded-lg border border-hairline bg-white p-5 shadow-soft">
+          </div>
+          <div className="rounded-xl bg-surface-soft p-8 max-[600px]:p-5">
+            <div className="border-b border-hairline pb-6">
               <span className="text-xs font-bold uppercase tracking-[.1em] text-muted">{t('pool.poolIdLabel')}</span>
               <code className="mt-3 block break-all text-[13px] leading-[1.7] text-ink">{GlobalConfig.POOL_ID}</code>
             </div>
@@ -309,10 +313,7 @@ export default async function StakingPage({ params: { locale } }: Props) {
                 {t('pool.verifyCta')}
               </Button>
             </div>
-          </div>
-          <div>
-            <PoolLedgerCard stats={stats} />
-            <p className="mt-4 text-[13px] leading-[1.7] text-muted">
+            <p className="mt-6 text-[13px] leading-[1.7] text-muted">
               {stats.isLive ? t('pool.liveNote') : t('pool.fallbackNote')}
             </p>
             <p className="mt-2 text-[13px] leading-[1.7] text-muted">{t('pool.estimateNote')}</p>
@@ -320,56 +321,57 @@ export default async function StakingPage({ params: { locale } }: Props) {
         </div>
       </section>
 
-      <section
-        id="delegate"
-        className="scroll-mt-24 bg-white py-section max-[860px]:py-[72px]"
-        aria-labelledby="delegate-title"
-      >
+      <section id="delegate" className="scroll-mt-24 py-20 max-[860px]:py-16" aria-labelledby="delegate-title">
         <div className="wrap">
           <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">
             {t('delegate.eyebrow')}
           </span>
-          <h2 id="delegate-title" className="mt-4 text-[clamp(32px,4vw,48px)] leading-[1.15]">
+          <h2 id="delegate-title" className="mt-4 max-w-[20em] text-[clamp(30px,4vw,44px)] leading-[1.15]">
             {t('delegate.title')}
           </h2>
           <p className="mt-5 max-w-[50rem] text-[16px] leading-[1.8] text-body">{t('delegate.intro')}</p>
-          <ol className="mt-10 grid grid-cols-5 gap-3 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
+          <ol className="mt-10 max-w-[900px] border-y border-hairline">
             {delegationSteps.map(({ key, icon: Icon }, index) => (
               <li
                 key={key}
-                className="rounded-xl border border-hairline bg-canvas p-5 shadow-soft last:max-[1000px]:col-span-2 last:max-[600px]:col-span-1"
+                className="grid grid-cols-[72px_1fr] gap-5 border-b border-hairline-soft py-6 last:border-b-0 max-[600px]:grid-cols-[52px_1fr] max-[600px]:gap-3"
               >
-                <div className="flex items-center justify-between">
-                  <Icon size={20} className="text-primary" aria-hidden="true" />
-                  <span className="text-xs font-bold text-muted tnum">0{index + 1}</span>
+                <div className="flex items-start justify-between gap-2 pt-0.5 max-[600px]:justify-start">
+                  <Icon size={19} className="text-brand-incana" aria-hidden="true" />
+                  <span className="text-xs font-bold text-muted tnum max-[600px]:hidden">0{index + 1}</span>
                 </div>
-                <h3 className="mt-5 text-[17px] leading-[1.35]">{t(`delegate.steps.${key}.title`)}</h3>
-                <p className="mt-2 text-[13.5px] leading-[1.7] text-body">{t(`delegate.steps.${key}.body`)}</p>
+                <div>
+                  <h3 className="text-[17px] leading-[1.4]">
+                    <span className="mr-2 hidden text-xs text-muted tnum max-[600px]:inline">0{index + 1}</span>
+                    {t(`delegate.steps.${key}.title`)}
+                  </h3>
+                  <p className="mt-2 text-[14.5px] leading-[1.75] text-body">{t(`delegate.steps.${key}.body`)}</p>
+                </div>
               </li>
             ))}
           </ol>
         </div>
       </section>
 
-      <section id="choose-a-pool" className="py-section max-[860px]:py-[72px]" aria-labelledby="choose-title">
+      <section id="choose-a-pool" className="bg-white py-20 max-[860px]:py-16" aria-labelledby="choose-title">
         <div className="wrap">
           <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">{t('choose.eyebrow')}</span>
-          <h2 id="choose-title" className="mt-4 text-[clamp(32px,4vw,48px)] leading-[1.15]">
+          <h2 id="choose-title" className="mt-4 text-[clamp(30px,4vw,44px)] leading-[1.15]">
             {t('choose.title')}
           </h2>
           <p className="mt-5 max-w-[48rem] text-[16px] leading-[1.8] text-body">{t('choose.intro')}</p>
-          <div className="mt-9 grid grid-cols-2 gap-4 max-[700px]:grid-cols-1">
+          <div className="mt-9 grid grid-cols-2 gap-x-10 max-[700px]:grid-cols-1">
             {poolChecks.map(({ key, icon: Icon }) => (
-              <article key={key} className="flex gap-4 rounded-xl border border-hairline bg-white p-5 shadow-soft">
+              <article key={key} className="grid grid-cols-[36px_1fr] gap-4 border-t border-hairline py-6">
                 <span
-                  className="grid h-10 w-10 flex-none place-items-center rounded-md bg-brand-sky text-primary"
+                  className="grid h-9 w-9 flex-none place-items-center rounded-md bg-brand-sky text-primary"
                   aria-hidden="true"
                 >
-                  <Icon size={19} />
+                  <Icon size={17} />
                 </span>
                 <div>
-                  <h3 className="text-lg">{t(`choose.items.${key}.title`)}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.7] text-body">{t(`choose.items.${key}.body`)}</p>
+                  <h3 className="text-[17px] leading-[1.4]">{t(`choose.items.${key}.title`)}</h3>
+                  <p className="mt-2 text-[14.5px] leading-[1.75] text-body">{t(`choose.items.${key}.body`)}</p>
                 </div>
               </article>
             ))}
@@ -377,43 +379,53 @@ export default async function StakingPage({ params: { locale } }: Props) {
         </div>
       </section>
 
-      <section id="membership" className="bg-brand-lemon py-16 max-[700px]:py-12" aria-labelledby="membership-title">
-        <div className="wrap grid grid-cols-[auto_1fr] items-start gap-6 max-[650px]:grid-cols-1">
-          <Chip color="blank">{t('membership.label')}</Chip>
-          <div>
-            <h2 id="membership-title" className="text-[clamp(28px,3.5vw,42px)] leading-[1.15]">
-              {t('membership.title')}
-            </h2>
-            <p className="mt-4 max-w-[52rem] text-[15.5px] leading-[1.8] text-body-strong">{t('membership.body')}</p>
+      <section id="membership" className="py-20 max-[860px]:py-16" aria-labelledby="membership-title">
+        <div className="wrap">
+          <div className="grid grid-cols-[auto_1fr] items-start gap-7 rounded-xl bg-brand-lemon px-10 py-9 max-[650px]:grid-cols-1 max-[650px]:gap-5 max-[650px]:px-6 max-[650px]:py-7">
+            <Chip color="blank" className="justify-self-start">
+              {t('membership.label')}
+            </Chip>
+            <div>
+              <h2 id="membership-title" className="text-[clamp(28px,3.5vw,40px)] leading-[1.15]">
+                {t('membership.title')}
+              </h2>
+              <p className="mt-4 max-w-[52rem] text-[15.5px] leading-[1.8] text-body-strong">{t('membership.body')}</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="faq" className="bg-white py-section max-[860px]:py-[72px]" aria-labelledby="faq-title">
-        <div className="wrap grid grid-cols-[.62fr_1fr] gap-12 max-[850px]:grid-cols-1">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">{t('faq.eyebrow')}</span>
-            <h2 id="faq-title" className="mt-4 text-[clamp(32px,4vw,48px)] leading-[1.15]">
-              {t('faq.title')}
-            </h2>
-          </div>
-          <div className="divide-y divide-hairline border-y border-hairline">
+      <section id="faq" className="bg-white py-20 max-[860px]:py-16" aria-labelledby="faq-title">
+        <div className="wrap">
+          <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">{t('faq.eyebrow')}</span>
+          <h2 id="faq-title" className="mt-4 max-w-[16em] text-[clamp(30px,4vw,44px)] leading-[1.15]">
+            {t('faq.title')}
+          </h2>
+          <div className="mt-10 max-w-[900px] divide-y divide-hairline border-y border-hairline">
             {faqKeys.map((key, index) => (
               <details key={key} open={index === 0} className="group py-5">
-                <summary className="cursor-pointer list-none pr-8 text-[17px] font-semibold leading-[1.45] text-ink marker:hidden">
-                  {t(`faq.items.${key}.question`)}
+                <summary className="flex cursor-pointer list-none items-start justify-between gap-5 text-[17px] font-semibold leading-[1.45] text-ink marker:hidden [&::-webkit-details-marker]:hidden">
+                  <span>{t(`faq.items.${key}.question`)}</span>
+                  <span
+                    className="mt-0.5 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-surface-soft text-base font-medium leading-none text-body transition-transform group-open:rotate-45"
+                    aria-hidden="true"
+                  >
+                    +
+                  </span>
                 </summary>
-                <p className="mt-3 pr-8 text-[14.5px] leading-[1.75] text-body">{t(`faq.items.${key}.answer`)}</p>
+                <p className="mt-3 max-w-[48rem] pr-11 text-[14.5px] leading-[1.75] text-body">
+                  {t(`faq.items.${key}.answer`)}
+                </p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="sources" className="py-section max-[860px]:py-[72px]" aria-labelledby="sources-title">
+      <section id="sources" className="py-20 max-[860px]:py-16" aria-labelledby="sources-title">
         <div className="wrap">
           <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">{t('sources.eyebrow')}</span>
-          <h2 id="sources-title" className="mt-4 text-[clamp(32px,4vw,48px)] leading-[1.15]">
+          <h2 id="sources-title" className="mt-4 text-[clamp(30px,4vw,44px)] leading-[1.15]">
             {t('sources.title')}
           </h2>
           <p className="mt-5 max-w-[50rem] text-[15.5px] leading-[1.8] text-body">{t('sources.intro')}</p>
@@ -421,14 +433,14 @@ export default async function StakingPage({ params: { locale } }: Props) {
           <div className="mt-10 grid grid-cols-2 gap-8 max-[800px]:grid-cols-1">
             <div>
               <h3 className="text-xl">{t('sources.officialTitle')}</h3>
-              <ul className="mt-4 space-y-3">
+              <ul className="mt-4 border-t border-hairline">
                 {officialSources.map(({ key, href }) => (
                   <li key={key}>
                     <a
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-start justify-between gap-4 rounded-lg border border-hairline bg-white px-4 py-3 text-[14px] font-semibold text-ink shadow-soft transition-transform hover:-translate-y-px"
+                      className="group flex items-start justify-between gap-4 border-b border-hairline py-4 text-[14px] font-semibold text-ink transition-colors hover:text-brand-incana"
                     >
                       <span>{t(`sources.official.${key}`)}</span>
                       <ExternalLink size={15} className="mt-0.5 flex-none text-muted" aria-hidden="true" />
@@ -440,14 +452,14 @@ export default async function StakingPage({ params: { locale } }: Props) {
 
             <div>
               <h3 className="text-xl">{t('sources.relatedTitle')}</h3>
-              <ul className="mt-4 space-y-3">
+              <ul className="mt-4 border-t border-hairline">
                 {relatedPosts.map(({ key, slug }) => (
                   <li key={key}>
                     <Link
                       href={`/blogs/${getLocalizedPostSlug(slug, locale)}`}
-                      className="block rounded-lg border border-hairline bg-white px-4 py-3 shadow-soft transition-transform hover:-translate-y-px"
+                      className="group block border-b border-hairline py-4"
                     >
-                      <span className="block text-[14px] font-semibold text-ink">
+                      <span className="block text-[14px] font-semibold text-ink transition-colors group-hover:text-brand-incana">
                         {t(`sources.related.${key}.title`)}
                       </span>
                       <span className="mt-1 block text-[13px] leading-[1.6] text-muted">
@@ -460,7 +472,7 @@ export default async function StakingPage({ params: { locale } }: Props) {
             </div>
           </div>
 
-          <p className="mt-8 rounded-lg border border-hairline bg-surface-soft px-5 py-4 text-[13.5px] leading-[1.75] text-body">
+          <p className="mt-8 max-w-[52rem] border-l-2 border-brand-incana pl-4 text-[13.5px] leading-[1.75] text-body">
             {t('sources.disclaimer')}
           </p>
         </div>

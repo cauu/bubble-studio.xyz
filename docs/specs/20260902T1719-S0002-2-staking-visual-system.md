@@ -55,7 +55,7 @@
 ## 2. Execution Plan
 
 - [x] c2.2-01 固化截图问题、设计 token、容器预算与语义保留合同。Acceptance：TC-01、TC-05。
-- [ ] c2.2-02 重构 staking 页面布局、配色、列表、强调容器和响应式表现。Acceptance：TC-01 至 TC-04。
+- [x] c2.2-02 重构 staking 页面布局、配色、列表、强调容器和响应式表现。Acceptance：TC-01 至 TC-04。
 - [ ] c2.2-03 完成三语桌面/移动视觉验收、自动回归、构建与证据记录。Acceptance：TC-01 至 TC-06。
 
 ## 3. Test And Acceptance Criteria
@@ -72,11 +72,13 @@
 - 2026-09-02 17:19 +08:00 | 用户提供四张页面截图并要求修复卡片、样式和配色与设计规范不一致的问题。
 - 2026-09-02 17:19 +08:00 | 对照 `docs/principle/design.md`、`docs/redesign-v2/final/DESIGN-bubble-light.md`、Tailwind token 和现有首页组件，创建并激活 S0002.2。
 - 2026-09-02 17:19 +08:00 | c2.2-01 冻结色彩角色、容器预算、编辑式列表、三档响应式和 S0002 语义保留合同。
+- 2026-09-02 17:31 +08:00 | c2.2-02 将机制、委托、选择清单、FAQ 与来源收敛为分隔式编辑布局；奖励、矿池身份与会员改为三个受控的内嵌强调容器，移除全宽黑/黄段落、五列窄卡和单项阴影卡。
 
 ## 5. Validation Evidence (append-only)
 
 - TC-01/02 | stack: visual+source | command: inspect four supplied screenshots and staking component structure | result: fail-before | note: 全宽黑/黄 band、十二个以上阴影卡、五列中文步骤与 FAQ 空白比例共同造成视觉系统漂移
 - TC-04 | stack: design-contract | command: compare Tailwind tokens and Bubble-light specification | result: pass-contract | note: 修正只允许使用现有 canvas、surface、Incana、lemon、hairline、rounded 与 typography tokens
+- TC-01/02/04 | stack: source | command: inspect `src/app/[locale]/staking/page.tsx` and run visual-contract assertions | result: pass | note: full-width primary/lemon section=0, shadow-soft=0, grid-cols-5=0; Incana/lemon only appear on inset rounded containers
 
 ## 6. Change Log (append-only)
 
