@@ -20,6 +20,7 @@ import { getPoolStats } from '@/lib/pool-stats';
 import {
   getAbsoluteUrl,
   getAlternateOpenGraphLocales,
+  getHtmlLang,
   getLanguageAlternates,
   getLocalizedPostSlug,
   getLocalizedUrl,
@@ -28,6 +29,7 @@ import {
 import { PoolLedgerCard } from '@/components/home/PoolLedgerCard';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
+import { JsonLd } from '@/components/JsonLd';
 
 type Props = {
   params: {
@@ -130,9 +132,64 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
 
 export default async function StakingPage({ params: { locale } }: Props) {
   const [t, stats] = await Promise.all([getTranslations({ locale, namespace: 'stakingHub' }), getPoolStats()]);
+  const canonicalUrl = getLocalizedUrl(locale, 'staking');
+  const pageLanguage = getHtmlLang(locale);
+  const faqEntities = faqKeys.map((key) => ({
+    '@type': 'Question',
+    name: t(`faq.items.${key}.question`),
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: t(`faq.items.${key}.answer`)
+    }
+  }));
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${canonicalUrl}#webpage`,
+        url: canonicalUrl,
+        name: t('metadata.title'),
+        description: t('metadata.description'),
+        inLanguage: pageLanguage,
+        isPartOf: { '@id': `${getLocalizedUrl('en')}#website` },
+        publisher: { '@id': `${getLocalizedUrl('en')}#organization` },
+        about: {
+          '@type': 'Thing',
+          name: 'Cardano staking'
+        }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${canonicalUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: t('breadcrumb.home'),
+            item: getLocalizedUrl(locale)
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: t('breadcrumb.staking'),
+            item: canonicalUrl
+          }
+        ]
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${canonicalUrl}#faq`,
+        url: `${canonicalUrl}#faq`,
+        inLanguage: pageLanguage,
+        mainEntity: faqEntities
+      }
+    ]
+  };
 
   return (
     <div className="relative overflow-x-hidden pb-24 max-[860px]:pb-[72px]">
+      <JsonLd id="staking-structured-data" data={structuredData} />
       <section className="relative isolate overflow-hidden pb-24 pt-24 max-[860px]:pb-[72px] max-[860px]:pt-16">
         <div className="hero-aura animate-aura-drift" aria-hidden="true" />
         <div className="hero-grain" aria-hidden="true" />

@@ -401,6 +401,10 @@
     }
   },
   "stakingHub": {
+    "breadcrumb": {
+      "home": "Home",
+      "staking": "Cardano staking"
+    },
     "metadata": {
       "title": "Cardano Staking & Pao Pool Delegation Guide",
       "description": "Learn how Cardano staking works, what delegation does to your ADA, how rewards work, and how to verify and delegate to Pao Pool.",

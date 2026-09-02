@@ -401,6 +401,10 @@
     }
   },
   "stakingHub": {
+    "breadcrumb": {
+      "home": "首页",
+      "staking": "Cardano 质押"
+    },
     "metadata": {
       "title": "Cardano 质押与 Pao Pool 委托指南",
       "description": "了解 Cardano 质押如何运作、委托是否转移或锁定 ADA、奖励边界，以及如何核验并委托给 Pao Pool。",
