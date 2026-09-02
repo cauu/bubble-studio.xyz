@@ -3,7 +3,7 @@
 ## Spec Control
 
 - Spec ID：S0003
-- Status：ACTIVE
+- Status：COMPLETE
 - Created：2026-09-02 20:23 +08:00
 - Depends on：S0002 COMPLETE；S0002.2 COMPLETE
 - Active registry：`docs/specs/README.md`
@@ -62,7 +62,7 @@
 - [x] s3-02 实现 typed frontmatter、统一 description 与 BlogPosting `dateModified`，不改变文章视觉结构。Acceptance：TC-01 至 TC-04。
 - [x] s3-03 为九个试点文件补齐三语摘要、修订日期和人工正文链接。Acceptance：TC-02 至 TC-05。
 - [x] s3-04 建立并验证三语试点主题链接图，不恢复醒目 staking 入口。Acceptance：TC-04 至 TC-06。
-- [ ] s3-05 完成构建、三语浏览器检查、结构化数据、旧文章兼容和 S0001/S0002 回归证据。Acceptance：TC-01 至 TC-07。
+- [x] s3-05 完成构建、三语浏览器检查、结构化数据、旧文章兼容和 S0001/S0002 回归证据。Acceptance：TC-01 至 TC-07。
 
 ## 3. Test And Acceptance Criteria
 
@@ -83,6 +83,7 @@
 - 2026-09-02 20:36 +08:00 | s3-02 为文章数据增加 typed `summary`/`updated` 可选字段和统一 description helper；BlogPosting 只在字段存在时输出 `dateModified`，没有新增可见 JSX 区块或样式 class。
 - 2026-09-02 20:43 +08:00 | s3-03 为九个试点文件写入三语编辑摘要和真实修订日期；通过普通正文链接把每篇连接到对应语言的 staking 页和另一篇相关文章，没有新增模板组件或样式。
 - 2026-09-02 20:49 +08:00 | s3-04 增加 S0003 专项验收，逐页验证九篇文章的 summary、dateModified、同语言 contextual links、九个链接目标和一篇旧文章 fallback；同时断言文章 JSX 没有新增可见 summary、updated、sources 或 related 模块。
+- 2026-09-02 20:55 +08:00 | s3-05 完成三语 375/1440 浏览器抽样、生产构建、S0001/S0002/S0003 自动验收和报告追加；S0003 变更为 COMPLETE。
 
 ## 5. Validation Evidence (append-only)
 
@@ -93,9 +94,12 @@
 - TC-01/03/04 | stack: type+source | command: `pnpm exec tsc --noEmit`; inspect article page JSX diff | result: pass | note: optional fields typed; legacy description fallback retained; visible article structure and class names unchanged
 - TC-02/05 | stack: content | command: count pilot frontmatter and Markdown internal links | result: pass-source | note: summary=9, updated=9, internal body links grew from 6 to 15; each pilot has two same-locale contextual links
 - TC-02 | stack: writing | command: run `human-writing/scripts/check_prose.py` against newly added zh/tw prose | result: pass | note: 210 Han characters; all covered prohibited-pattern counts=0
-- TC-02/03/04/05 | stack: integration | command: `node scripts/verify-content-network.mjs http://127.0.0.1:3100` | result: pass | note: pilot pages=9, same-locale links per page=2, unique link targets 200=9, legacy fallback pass, visible template additions=0
+- TC-02/03/04/05 | stack: integration | command: `node scripts/verify-content-network.mjs http://127.0.0.1:3100` | result: pass | note: pilot pages=9, summaries ≤160 characters, same-locale links per page=2, unique link targets 200=9, legacy fallback pass, visible template additions=0
+- TC-04 | stack: browser | command: inspect en/zh/tw subscription article at 375×900 and 1440×900 | result: pass | note: 6/6 combinations have scrollWidth=clientWidth, H1=1, article widths 339/712, additional UI=0, same-locale links correct
+- TC-06/07 | stack: regression | command: `pnpm build`; `pnpm exec tsc --noEmit`; `node scripts/verify-seo.mjs`; `node scripts/verify-staking-hub.mjs`; Prettier; `git diff --check` | result: pass | note: build pages=30, sitemap URLs=63, staking low-prominence and no-cloaking contracts preserved
 
 ## 6. Change Log (append-only)
 
 - 2026-09-02 20:23 +08:00 | Initial immutable spec. S0002.2 remains COMPLETE; S0003 is the only ACTIVE spec.
 - 2026-09-02 20:31 +08:00 | Scope narrowed by user before implementation: no visible Blog template or style changes; sources/related UI removed from the execution contract.
+- 2026-09-02 20:55 +08:00 | Completed within the narrowed contract. No deployment and no search or AI-platform performance claim.

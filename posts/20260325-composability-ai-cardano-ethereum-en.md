@@ -12,7 +12,7 @@ tags:
   - "Ethereum"
   - "Blockchain"
 category: cardano
-summary: "This essay compares Ethereum's runtime composability with Cardano's eUTXO model from the perspective of AI agents. It argues that predictable validation, explicit resource constraints, and recoverable workflows may matter more as agents become on-chain users."
+summary: "A comparison of Ethereum composability and Cardano's eUTXO model, focused on predictable validation, explicit constraints, and recoverable AI-agent workflows."
 updated: "2026-09-02"
 ---
 For the past few years, when the blockchain world talked about “composability,” it usually meant **Ethereum-style synchronous calls**: contracts behaving like public APIs, calling one another directly and composing complex behavior inside a single transaction. This Lego-like model fueled the rise of DeFi, and it also made execution-oriented agents such as those enabled by EIP-4337 increasingly powerful.

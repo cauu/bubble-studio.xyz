@@ -16,11 +16,11 @@
 | 2    | S0002   | COMPLETE | 建立 Cardano staking 与 Pao Pool 主题中心页       | S0001 完成                   |
 | 2.1  | S0002.1 | COMPLETE | 将 staking 页修正为机器优先、低曝光入口           | S0002 完成                   |
 | 2.2  | S0002.2 | COMPLETE | 修正 staking 页视觉系统与设计规范一致性           | S0002.1 完成                 |
-| 3    | S0003   | ACTIVE   | 改进文章 metadata、结构化数据与内部链接           | S0002 完成                   |
+| 3    | S0003   | COMPLETE | 改进文章 metadata、结构化数据与内部链接           | S0002 完成                   |
 | 4    | S0004   | QUEUED   | 强化品牌、作者、项目实体及外部一致性              | S0003 完成                   |
 | 5    | S0005   | QUEUED   | 建立 Search Console 与 GEO 观察测量闭环           | S0004 完成、用户授权外部账号 |
 
-当前唯一执行标准是 [S0003 Content Template And Topic Network](./20260902T2023-S0003-content-template-topic-network.md)。S0001、S0002、S0002.1 与 S0002.2 均为 COMPLETE；S0004-S0005 仍为 QUEUED，禁止并行执行。
+当前没有 ACTIVE spec。S0001、S0002、S0002.1、S0002.2 与 S0003 均为 COMPLETE；S0004-S0005 仍为 QUEUED，禁止并行执行。
 
 ## 排队 Spec 轮廓
 
@@ -84,3 +84,4 @@
 - 2026-09-02 17:31 +08:00 | S0002.2 完成视觉重构、三语响应式验收与 S0001/S0002 回归并变更为 COMPLETE；当前无 ACTIVE spec。
 - 2026-09-02 20:23 +08:00 | 用户确认继续；创建 S0003 并设为唯一 ACTIVE，范围限定为文章内容合同、三语 Cardano 试点和受控主题链接。
 - 2026-09-02 20:31 +08:00 | 用户要求 S0003 收窄；移除所有 Blog 可见模板和样式变更，只保留 metadata、结构化数据与正文普通内部链接。
+- 2026-09-02 20:55 +08:00 | S0003 完成九篇三语试点的人工摘要、真实修订信号、同语言 contextual links 和无视觉变化验收；当前无 ACTIVE spec。

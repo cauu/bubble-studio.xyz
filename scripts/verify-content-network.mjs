@@ -91,6 +91,7 @@ for (const family of families) {
     const relatedPath = `${localeConfig.prefix}/blogs/${family.related}-${locale}`;
 
     assert(typeof data.summary === 'string' && data.summary.trim(), `${localizedSlug}: summary missing`);
+    assert(data.summary.length <= 160, `${localizedSlug}: summary exceeds 160 characters`);
     assert(data.updated === updated, `${localizedSlug}: updated mismatch`);
     assert(getAttribute(htmlTag, 'lang') === localeConfig.lang, `${localizedSlug}: HTML lang mismatch`);
     assert(getAttribute(canonicalTag || '', 'href') === canonical, `${localizedSlug}: canonical mismatch`);

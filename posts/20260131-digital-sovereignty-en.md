@@ -11,7 +11,7 @@ tags:
   - "Indie"
   - "AI"
 category: essay
-summary: "This personal essay explains why the author treats a Cardano stake pool as part of an independent livelihood in the digital world. It connects AI-driven job uncertainty with the practical appeal of non-custodial delegation and network participation."
+summary: "A personal essay on using a Cardano stake pool to build an independent livelihood amid AI-driven job uncertainty and changing digital work."
 updated: "2026-09-02"
 ---
 

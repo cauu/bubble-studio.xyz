@@ -13,7 +13,7 @@ tags:
   - "Creator Economy"
 category: ai
 featured: true
-summary: "This essay argues that AI is shortening software lifecycles and making monthly subscriptions a worse fit for experimental products. It examines Cardano delegation as a lower-friction way for users to support creators while retaining control of their ADA."
+summary: "AI shortens software lifecycles and makes monthly subscriptions a worse fit for experimental products. This essay explores Cardano delegation as an alternative."
 updated: "2026-09-02"
 ---
 For decades, software could sustain stable business models because it was scarce. The distance between an idea and a usable product was long, expensive, and difficult to cross. When users paid for software, they were effectively paying for something hard to replicate.
