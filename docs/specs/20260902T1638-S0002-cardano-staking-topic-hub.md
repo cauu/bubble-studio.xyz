@@ -139,7 +139,7 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 
 事项只有在实现、对应验收通过并追加证据后才能标记为 `[x]`。
 
-- [ ] s2-01 固化主题、受众、查询意图、事实与来源矩阵。Acceptance：TC-01、TC-03、TC-10。
+- [x] s2-01 固化主题、受众、查询意图、事实与来源矩阵。Acceptance：TC-01、TC-03、TC-10。
 - [ ] s2-02 固化页面信息架构、三语内容合同、URL、CTA 与非目标。Acceptance：TC-02、TC-03。
 - [ ] s2-03 实现三语 Cardano staking 主题中心页与 metadata。Acceptance：TC-01 至 TC-04。
 - [ ] s2-04 增加 WebPage、BreadcrumbList 与 FAQPage JSON-LD。Acceptance：TC-05。
@@ -164,12 +164,16 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - 2026-09-02 16:38 +08:00 | S0001 已 COMPLETE；用户授权继续下一份 spec。
 - 2026-09-02 16:38 +08:00 | 根据站内业务中心度、已有三语内容与 Cardano 一手资料，将 S0002 主题确定为 Cardano staking 与 Pao Pool 委托指南。
 - 2026-09-02 16:38 +08:00 | 创建并激活 S0002；S0003-S0005 保持 QUEUED。
+- 2026-09-02 | s2-01 完成主题证据、七类用户意图、十条事实来源和禁止主张矩阵，证据文件为 `docs/specs/evidence-S0002-cardano-staking.md`。
 
 ## 7. Validation Evidence (append-only)
 
 - TC-03 | stack: source | command: repository content inspection | result: pass | note: 首页、多语言 messages 与三组文章共同覆盖 Cardano 委托、Pao Pool、会员关系和流动性主题
 - TC-03 | stack: web | command: review Cardano first-party staking/delegation documentation | result: pass | note: 官方资料支持委托不转移资金、ADA 可使用、公共矿池参与和奖励不保证等事实边界
 - TC-10 | stack: manual | command: topic decision review | result: pass | note: 未使用或虚构 Search Console、搜索量、排名、流量或 AI 平台表现数据
+- TC-01 | stack: source | command: route inventory and message catalog inspection | result: pass | note: 当前没有 `/staking` 路由，但已有足够三语内容与稳定 shared SEO 基础支持独立页面
+- TC-03 | stack: source+web | command: `docs/specs/evidence-S0002-cardano-staking.md` evidence matrix review | result: pass | note: Cardano 协议事实、Pao Pool 品牌事实、source gaps 与禁止主张均有明确边界
+- TC-10 | stack: manual | command: query intent map review | result: pass | note: 查询表达只用于内容覆盖，不表示搜索量、排名机会或实时平台表现
 
 ## 8. Change Log (append-only)
 
