@@ -1,15 +1,13 @@
 import Image from 'next/image';
 import { ArrowUpRight, Github } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
 
 export type ProjectCardProps = {
   type: string;
   title: string;
   description: string;
   projectHref: string;
-  external?: boolean;
   githubHref?: string;
-  screenshot?: string;
+  screenshot: string;
   visitLabel: string;
 };
 
@@ -18,28 +16,19 @@ export const ProjectCard = ({
   title,
   description,
   projectHref,
-  external = true,
   githubHref,
   screenshot,
   visitLabel
 }: ProjectCardProps) => (
   <article className="group relative h-full overflow-hidden rounded-lg bg-white shadow-card transition-all duration-300 ease-brand hover:-translate-y-1 hover:shadow-card-hover focus-within:-translate-y-1 focus-within:shadow-card-hover">
     <div className="relative aspect-video overflow-hidden bg-surface-card">
-      {screenshot ? (
-        <Image
-          src={screenshot}
-          alt=""
-          fill
-          sizes="(max-width: 600px) 100vw, 50vw"
-          className="object-cover transition-transform duration-500 ease-brand group-hover:scale-[1.025]"
-        />
-      ) : (
-        <div className="grid h-full place-items-center bg-[radial-gradient(circle_at_72%_25%,rgba(255,255,255,.7),transparent_27%),linear-gradient(135deg,#dff4f5,#e7e8f4_54%,#fff1aa)]">
-          <span className="text-[clamp(44px,8vw,76px)] font-black tracking-[-.06em] text-primary/90" aria-hidden="true">
-            PAO
-          </span>
-        </div>
-      )}
+      <Image
+        src={screenshot}
+        alt=""
+        fill
+        sizes="(max-width: 600px) 100vw, 50vw"
+        className="object-cover transition-transform duration-500 ease-brand group-hover:scale-[1.025]"
+      />
       <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-ink shadow-sm backdrop-blur">
         {type}
       </span>
@@ -72,20 +61,12 @@ export const ProjectCard = ({
       </div>
     </div>
 
-    {external ? (
-      <a
-        href={projectHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute inset-0 rounded-lg focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-brand-sea"
-        aria-label={`${visitLabel}: ${title}`}
-      />
-    ) : (
-      <Link
-        href={projectHref}
-        className="absolute inset-0 rounded-lg focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-brand-sea"
-        aria-label={`${visitLabel}: ${title}`}
-      />
-    )}
+    <a
+      href={projectHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="absolute inset-0 rounded-lg focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-brand-sea"
+      aria-label={`${visitLabel}: ${title}`}
+    />
   </article>
 );

@@ -109,7 +109,6 @@
     "perks": {
       "title": "质押即订阅",
       "sub": "传统订阅模式要求用户定期付费。Pao Studio 尝试基于 Cardano 原生质押机制，建立一种新的订阅方式。\n用户将 ADA 委托给 Pao Pool，无需额外付费、锁仓或托管，照常获得质押奖励。矿池运营收入用于维持 Pao Pool 运行，并支持 Pao Studio 提供相应的内容和产品服务。",
-      "learnStaking": "了解 Cardano 质押如何运作",
       "head": {
         "list": "模式如何运作",
         "status": "对应关系"
@@ -293,7 +292,6 @@
   },
   "nav": {
     "home": "首页",
-    "staking": "质押",
     "blog": "博客",
     "projects": "项目",
     "skills": "Skills",
@@ -385,10 +383,6 @@
       }
     },
     "items": {
-      "paoPool": {
-        "description": "Pao Studio 运营的 Cardano 矿池，以及会员关系背后的非托管委托机制。",
-        "visitLabel": "阅读质押指南"
-      },
       "ouroPass": {
         "description": "基于 Cardano 的去中心化身份与订阅基础设施。"
       },

@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { GrainientBackground } from '@/components/ui/GrainientBackground';
 import { Reveal } from '@/components/ui/Reveal';
-import { Link } from '@/i18n/navigation';
 
 const itemKeys = [
   { key: 'i1', num: 'bg-brand-sky' },
@@ -86,12 +85,6 @@ export const Perks = () => {
             >
               {tNav('stakeCta')}
             </Button>
-            <Link
-              href="/staking"
-              className="mt-4 text-center text-[13.5px] font-semibold text-white/85 underline underline-offset-4 transition-colors hover:text-white"
-            >
-              {t('learnStaking')}
-            </Link>
             <span className="text-[12.5px] text-white/75 mt-3 text-center">{t('tier.fine')}</span>
           </Reveal>
         </div>

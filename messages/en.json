@@ -109,7 +109,6 @@
     "perks": {
       "title": "Stake to subscribe",
       "sub": "Traditional subscriptions require users to pay recurring fees. Pao Studio is testing a new subscription model based on Cardano native staking.\nFor most ADA holders, participating in staking means delegating to a stake pool. Users delegate ADA to Pao Pool with no additional payment, lock-up, or custody, while continuing to receive staking rewards as usual. Pool operating revenue keeps Pao Pool running and supports the content and product services provided by Pao Studio.",
-      "learnStaking": "Learn how Cardano staking works",
       "head": {
         "list": "How the model works",
         "status": "Relationship"
@@ -293,7 +292,6 @@
   },
   "nav": {
     "home": "Home",
-    "staking": "Staking",
     "blog": "Blog",
     "projects": "Projects",
     "skills": "Skills",
@@ -385,10 +383,6 @@
       }
     },
     "items": {
-      "paoPool": {
-        "description": "Our Cardano stake pool and the non-custodial delegation relationship behind Pao Studio membership.",
-        "visitLabel": "Read the staking guide"
-      },
       "ouroPass": {
         "description": "Decentralized identity and subscription infrastructure built on Cardano."
       },

@@ -109,7 +109,6 @@
     "perks": {
       "title": "質押即訂閱",
       "sub": "傳統訂閱模式要求使用者定期付費。Pao Studio 嘗試以 Cardano 原生質押機制，建立一種新的訂閱方式。\n對一般 ADA 持有者來說，參與質押的具體操作是委託。使用者將 ADA 委託給 Pao Pool，無需額外付費、鎖定或託管，照常獲得質押獎勵。礦池營運收入用於維持 Pao Pool 運作，並支持 Pao Studio 提供相應的內容和產品服務。",
-      "learnStaking": "了解 Cardano 質押如何運作",
       "head": {
         "list": "模式如何運作",
         "status": "對應關係"
@@ -293,7 +292,6 @@
   },
   "nav": {
     "home": "首頁",
-    "staking": "質押",
     "blog": "博客",
     "projects": "項目",
     "skills": "Skills",
@@ -385,10 +383,6 @@
       }
     },
     "items": {
-      "paoPool": {
-        "description": "Pao Studio 營運的 Cardano 權益池，以及會員關係背後的非託管委託機制。",
-        "visitLabel": "閱讀質押指南"
-      },
       "ouroPass": {
         "description": "基於 Cardano 的去中心化身份與訂閱基礎設施。"
       },

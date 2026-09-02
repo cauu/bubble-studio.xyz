@@ -58,14 +58,6 @@ export default function ProjectsPage() {
   const infrastructure: ProjectCardProps[] = [
     {
       type: t('categories.infrastructure.title'),
-      title: 'Pao Pool',
-      description: t('items.paoPool.description'),
-      projectHref: '/staking',
-      external: false,
-      visitLabel: t('items.paoPool.visitLabel')
-    },
-    {
-      type: t('categories.infrastructure.title'),
       title: 'Ouro Pass',
       description: t('items.ouroPass.description'),
       projectHref: 'https://ouro-pass.paopao.studio/',
