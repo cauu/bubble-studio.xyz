@@ -15,11 +15,12 @@
 | 1    | S0001   | COMPLETE | 修复技术 SEO/GEO 基础、结构化数据与服务端可提取性 | 无                           |
 | 2    | S0002   | COMPLETE | 建立 Cardano staking 与 Pao Pool 主题中心页       | S0001 完成                   |
 | 2.1  | S0002.1 | COMPLETE | 将 staking 页修正为机器优先、低曝光入口           | S0002 完成                   |
+| 2.2  | S0002.2 | ACTIVE   | 修正 staking 页视觉系统与设计规范一致性           | S0002.1 完成                 |
 | 3    | S0003   | QUEUED   | 改造内容模板、内部链接与证据呈现                  | S0002 完成                   |
 | 4    | S0004   | QUEUED   | 强化品牌、作者、项目实体及外部一致性              | S0003 完成                   |
 | 5    | S0005   | QUEUED   | 建立 Search Console 与 GEO 观察测量闭环           | S0004 完成、用户授权外部账号 |
 
-当前没有 ACTIVE spec。[S0002.1 Machine-first Staking Entry Correction](./20260902T1709-S0002-1-machine-first-staking-entry.md) 与 [S0002 Cardano Staking Topic Hub](./20260902T1638-S0002-cardano-staking-topic-hub.md) 均已完成。S0003-S0005 仍为 QUEUED，尚未构成执行标准。
+当前唯一执行标准是 [S0002.2 Staking Visual System Correction](./20260902T1719-S0002-2-staking-visual-system.md)。S0002 与 S0002.1 保持 COMPLETE；S0003-S0005 仍为 QUEUED，禁止并行执行。
 
 ## 排队 Spec 轮廓
 
@@ -79,3 +80,4 @@
 - 2026-09-02 16:59 +08:00 | S0002 全部事项与验收完成并变更为 COMPLETE；当前无 ACTIVE spec，S0003-S0005 保持 QUEUED。
 - 2026-09-02 17:09 +08:00 | 用户确认机器优先、低曝光调整；创建 S0002.1 并设为唯一 ACTIVE，S0003-S0005 状态不变。
 - 2026-09-02 17:14 +08:00 | S0002.1 的低曝光入口、`llms.txt`、非 cloaking 与回归验收完成并变更为 COMPLETE；当前无 ACTIVE spec。
+- 2026-09-02 17:19 +08:00 | 用户要求修复 staking 页视觉规范偏差；创建 S0002.2 并设为唯一 ACTIVE，S0003-S0005 状态不变。
