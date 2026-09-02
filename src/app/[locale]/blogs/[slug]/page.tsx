@@ -5,12 +5,15 @@ import { Metadata } from 'next';
 import { getPostData } from '@/lib/posts';
 import { CATEGORY_CHIP } from '@/lib/categories';
 import { Chip } from '@/components/ui/Chip';
+import { JsonLd } from '@/components/JsonLd';
 import {
   getAbsoluteUrl,
   getAlternateOpenGraphLocales,
+  getHtmlLang,
   getOpenGraphLocale,
   getPostLanguageAlternates,
-  getPostUrl
+  getPostUrl,
+  getSiteOrigin
 } from '@/lib/seo';
 
 import Comments from '@/components/Comments';
@@ -85,6 +88,36 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
 
   try {
     const post = await getPostData(slug, locale);
+    const canonicalUrl = getPostUrl(locale, slug);
+    const description = post.contentHtml
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 160);
+    const image = getAbsoluteUrl(post.image || '/og-default.png');
+    const siteOrigin = getSiteOrigin();
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      '@id': `${canonicalUrl}#article`,
+      headline: post.title,
+      description,
+      image: [image],
+      datePublished: post.date,
+      author: {
+        '@type': 'Person',
+        name: post.author
+      },
+      publisher: {
+        '@id': `${siteOrigin}/#organization`
+      },
+      isPartOf: {
+        '@id': `${siteOrigin}/#website`
+      },
+      mainEntityOfPage: canonicalUrl,
+      inLanguage: getHtmlLang(locale),
+      keywords: post.tags.join(', ')
+    };
 
     // 检查博客文章的语言是否匹配当前locale
     if (post.language !== locale) {
@@ -93,6 +126,7 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
 
     return (
       <div className="max-w-[760px] mx-auto px-6 max-[600px]:px-[18px] pt-16 pb-24 max-[860px]:pt-11 max-[860px]:pb-[72px]">
+        <JsonLd id="article-structured-data" data={structuredData} />
         <article>
           <header className="mb-8">
             <h1 className="text-[clamp(28px,3.6vw,40px)] leading-[1.2] mb-4">{post.title}</h1>

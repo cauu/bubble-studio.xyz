@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import { routing } from '@/i18n/routing';
 import { Layout } from '@/components/Layout';
 import { IntlProvider } from '@/components/IntlProvider';
+import { JsonLd } from '@/components/JsonLd';
 import {
   getAbsoluteUrl,
   getAlternateOpenGraphLocales,
@@ -92,6 +93,41 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
 export default async function LocaleLayout({ children, params: { locale } }: Props) {
   // 获取当前语言的翻译消息
   const messages = await getMessages();
+  const t = await getTranslations({ locale, namespace: 'seo' });
+  const siteOrigin = getSiteOrigin();
+  const organizationId = `${siteOrigin}/#organization`;
+  const websiteId = `${siteOrigin}/#website`;
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': organizationId,
+        name: t('siteName'),
+        alternateName: 'Bubble Studio',
+        url: siteOrigin,
+        logo: {
+          '@type': 'ImageObject',
+          url: GlobalConfig.assetsUrl.bubbleLogo
+        },
+        description: t('defaultDescription'),
+        email: GlobalConfig.CONTACT_EMAIL,
+        sameAs: [GlobalConfig.social.github, GlobalConfig.social.twitter, GlobalConfig.CARDANOSCAN_POOL_URL]
+      },
+      {
+        '@type': 'WebSite',
+        '@id': websiteId,
+        url: siteOrigin,
+        name: t('siteName'),
+        alternateName: 'Bubble Studio',
+        description: t('defaultDescription'),
+        inLanguage: ['en', 'zh-Hans', 'zh-Hant'],
+        publisher: {
+          '@id': organizationId
+        }
+      }
+    ]
+  };
 
   return (
     <html lang={getHtmlLang(locale)} className={inter.variable}>
@@ -122,6 +158,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
         />
       </head>
       <body className="font-sans">
+        <JsonLd id="site-structured-data" data={structuredData} />
         <NextIntlClientProvider messages={messages} locale={locale}>
           <IntlProvider messages={messages}>
             <Layout>{children}</Layout>
