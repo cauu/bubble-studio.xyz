@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
 
 import { getPostData } from '@/lib/posts';
 import { CATEGORY_CHIP } from '@/lib/categories';
 import { Chip } from '@/components/ui/Chip';
+import { routing } from '@/i18n/routing';
 
 import Comments from '@/components/Comments';
 
@@ -11,13 +13,19 @@ type Props = {
   params: { locale: string; slug: string };
 };
 
-export async function generateMetadata({ params: { locale, slug } }: Props) {
+const localizedPostSlug = (slug: string, locale: string) => `${slug.replace(/-(en|zh|tw)$/, '')}-${locale}`;
+
+const postUrl = (baseUrl: string, locale: string, slug: string) => {
+  const localePrefix = locale === routing.defaultLocale ? '' : `/${locale}`;
+  return `${baseUrl}${localePrefix}/blogs/${localizedPostSlug(slug, locale)}`;
+};
+
+export async function generateMetadata({ params: { locale, slug } }: Props): Promise<Metadata> {
   try {
     const post = await getPostData(slug, locale);
 
-    // 构建完整URL
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz';
-    const postUrl = `${baseUrl}/${locale}/blogs/${slug}`;
+    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz').replace(/\/$/, '');
+    const canonicalUrl = postUrl(baseUrl, locale, slug);
     const description = post.contentHtml.substring(0, 160).replace(/<[^>]*>/g, '');
 
     return {
@@ -28,7 +36,7 @@ export async function generateMetadata({ params: { locale, slug } }: Props) {
       openGraph: {
         title: post.title,
         description,
-        url: postUrl,
+        url: canonicalUrl,
         type: 'article',
         images: [
           {
@@ -50,6 +58,12 @@ export async function generateMetadata({ params: { locale, slug } }: Props) {
         description,
         images: [post.image || `${baseUrl}/og-default.png`],
         creator: '@cauu_128'
+      },
+      alternates: {
+        canonical: canonicalUrl,
+        languages: Object.fromEntries(
+          routing.locales.map((targetLocale) => [targetLocale, postUrl(baseUrl, targetLocale, slug)])
+        )
       }
     };
   } catch (error) {
