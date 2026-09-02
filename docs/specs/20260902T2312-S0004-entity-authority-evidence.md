@@ -3,7 +3,7 @@
 ## Spec Control
 
 - Spec ID：S0004
-- Status：ACTIVE
+- Status：COMPLETE
 - Created：2026-09-02 23:12 +08:00
 - Depends on：S0003 COMPLETE
 - Active registry：`docs/specs/README.md`
@@ -64,7 +64,7 @@
 - [x] s4-02 建立 Organization、Person、WebSite 与 Pao Pool Service 的可复用实体图。Acceptance：TC-02、TC-03。
 - [x] s4-03 实现三语 About 事实页、metadata、结构化数据与 sitemap 收录。Acceptance：TC-01、TC-04。
 - [x] s4-04 把 Martin 的文章署名连接到 Person ID 与本语言 About，保留 MartinBot 边界，并更新机器清单。Acceptance：TC-03、TC-05、TC-06。
-- [ ] s4-05 完成构建、三语响应式浏览器检查、结构化数据、链接和 S0001-S0003 回归。Acceptance：TC-01 至 TC-07。
+- [x] s4-05 完成构建、三语响应式浏览器检查、结构化数据、链接和 S0001-S0003 回归。Acceptance：TC-01 至 TC-07。
 
 ## 3. Test And Acceptance Criteria
 
@@ -84,6 +84,8 @@
 - 2026-09-02 23:19 +08:00 | s4-02 增加统一实体 helper；GitHub/X 归入 Martin，CardanoScan/Cexplorer 归入 Pao Pool Service，Organization、Person、WebSite 与 Service 通过稳定 ID 建立关系。
 - 2026-09-02 23:29 +08:00 | s4-03 用现有设计 token 实现三语 About 事实页、AboutPage/BreadcrumbList、canonical/hreflang，并把三条 About URL 加入 sitemap。
 - 2026-09-02 23:36 +08:00 | s4-04 让 Martin 署名连接同语言 About 锚点并引用稳定 Person ID；MartinBot 保持未合并状态，`llms.txt` 增加三语 About 与实体入口。
+- 2026-09-02 23:23 +08:00 | 时间校正：s4-02、s4-03、s4-04 的实际 commit 时间依次为 23:14、23:18、23:19；前述 23:19、23:29、23:36 是执行中预填的记录时间，不代表 commit 时间。
+- 2026-09-02 23:23 +08:00 | s4-05 完成生产构建、四组自动验收、三语 375/1440 浏览器检查与作者链接跳转检查；S0004 变更为 COMPLETE。
 
 ## 5. Validation Evidence (append-only)
 
@@ -94,7 +96,11 @@
 - TC-07 | stack: skill-runtime | command: `python3 .agents/skills/geohub-geo-diagnose/scripts/run_diagnose.py ... --execution-mode deterministic` | result: blocked-tooling | note: missing `geo_seo_hub`; no Artifact Bus claimed
 - TC-02/03 | stack: type+source | command: `pnpm exec tsc --noEmit`; inspect site entity graph | result: pass | note: four stable IDs share one helper; identity and service sameAs links are separated by entity
 - TC-01/04 | stack: type+content | command: `pnpm exec tsc --noEmit`; validate locale JSON; run `human-writing/scripts/check_prose.py` on zh/tw About prose | result: pass | note: three locale contracts type-check; prohibited prose patterns=0
+- TC-01/02/03/05/06 | stack: integration | command: `node scripts/verify-entity-authority.mjs http://127.0.0.1:3100` | result: pass | note: three About pages 200; four entity IDs and relations pass; Martin links pass; MartinBot remains separate; sitemap/llms discovery pass; protected md.json unchanged
+- TC-04/05 | stack: browser | command: inspect en/zh/tw About at 375×900 and 1440×900; click zh Martin article author | result: pass | note: 6/6 layouts have one H1 and scrollWidth=clientWidth; cards are 339px mobile and 550px desktop; no console errors; author resolves to `/zh/about#martin`
+- TC-07 | stack: build+regression | command: `pnpm build`; `pnpm exec tsc --noEmit`; run S0001/S0002/S0003/S0004 verifiers; Prettier; `git diff --check` | result: pass | note: build pages=30; sitemap URLs=66; static=21; articles=45; all prior contracts preserved
 
 ## 6. Change Log (append-only)
 
 - 2026-09-02 23:12 +08:00 | Initial immutable spec. S0003 remains COMPLETE; S0004 is the only ACTIVE spec.
+- 2026-09-02 23:23 +08:00 | Completed within the identity-only contract. External profiles and protected pool metadata remain unchanged; no deployment or ranking claim.

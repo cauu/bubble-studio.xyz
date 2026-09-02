@@ -17,10 +17,10 @@
 | 2.1  | S0002.1 | COMPLETE | 将 staking 页修正为机器优先、低曝光入口           | S0002 完成                   |
 | 2.2  | S0002.2 | COMPLETE | 修正 staking 页视觉系统与设计规范一致性           | S0002.1 完成                 |
 | 3    | S0003   | COMPLETE | 改进文章 metadata、结构化数据与内部链接           | S0002 完成                   |
-| 4    | S0004   | ACTIVE   | 强化品牌、作者与 Pao Pool 的实体及证据一致性      | S0003 完成                   |
+| 4    | S0004   | COMPLETE | 强化品牌、作者与 Pao Pool 的实体及证据一致性      | S0003 完成                   |
 | 5    | S0005   | QUEUED   | 建立 Search Console 与 GEO 观察测量闭环           | S0004 完成、用户授权外部账号 |
 
-S0004 是当前唯一 ACTIVE spec。S0001、S0002、S0002.1、S0002.2 与 S0003 均为 COMPLETE；S0005 仍为 QUEUED，禁止并行执行。
+当前没有 ACTIVE spec。S0001、S0002、S0002.1、S0002.2、S0003 与 S0004 均为 COMPLETE；S0005 仍为 QUEUED。
 
 ## 排队 Spec 轮廓
 
@@ -86,3 +86,4 @@ S0004 是当前唯一 ACTIVE spec。S0001、S0002、S0002.1、S0002.2 与 S0003 
 - 2026-09-02 20:31 +08:00 | 用户要求 S0003 收窄；移除所有 Blog 可见模板和样式变更，只保留 metadata、结构化数据与正文普通内部链接。
 - 2026-09-02 20:55 +08:00 | S0003 完成九篇三语试点的人工摘要、真实修订信号、同语言 contextual links 和无视觉变化验收；当前无 ACTIVE spec。
 - 2026-09-02 23:12 +08:00 | 用户确认继续；创建 S0004 并设为唯一 ACTIVE，范围限定为 Pao Studio、Martin / 0xMartin 与 Pao Pool 的事实页、稳定实体关系和低曝光作者入口。
+- 2026-09-02 23:23 +08:00 | S0004 完成三语 About 事实页、稳定 Organization/Person/Service 关系、文章作者连接、机器清单与回归验收；当前无 ACTIVE spec。
