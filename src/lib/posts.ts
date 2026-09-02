@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import { Category, deriveCategory } from './categories';
+import type { AppLocale } from './seo';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -19,6 +20,12 @@ export interface PostData {
   category: Category;
   featured?: boolean;
   [key: string]: any;
+}
+
+export interface PostSitemapEntry {
+  slug: string;
+  date: string;
+  language: AppLocale;
 }
 
 export async function getSortedPostsData(locale: 'zh' | 'en' | 'tw'): Promise<PostData[]> {
@@ -78,6 +85,31 @@ export async function getAllPostSlugs() {
       }
     };
   });
+}
+
+export async function getPostSitemapEntries(): Promise<PostSitemapEntry[]> {
+  const fileNames = await fs.promises.readdir(postsDirectory);
+  const markdownFileNames = fileNames.filter((fileName) => fileName.endsWith('.md')).sort();
+
+  const entries = await Promise.all(
+    markdownFileNames.map(async (fileName) => {
+      const fullPath = path.join(postsDirectory, fileName);
+      const fileContents = await fs.promises.readFile(fullPath, 'utf8');
+      const { data } = matter(fileContents);
+
+      if (!['en', 'zh', 'tw'].includes(data.language) || typeof data.date !== 'string') {
+        throw new Error(`Invalid sitemap metadata in ${fileName}`);
+      }
+
+      return {
+        slug: fileName.replace(/\.md$/, ''),
+        date: data.date,
+        language: data.language as AppLocale
+      };
+    })
+  );
+
+  return entries;
 }
 
 export async function getPostData(slug: string, locale: string = 'en') {

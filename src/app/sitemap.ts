@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getAllPostSlugs } from '@/lib/posts';
+import { getPostSitemapEntries } from '@/lib/posts';
 import { routing } from '@/i18n/routing';
 import { getLocalizedUrl } from '@/lib/seo';
 
@@ -13,7 +13,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       return {
         url,
-        lastModified: new Date(),
         changeFrequency: route === '' ? ('daily' as const) : ('monthly' as const),
         priority: route === '' ? 1.0 : 0.8
       };
@@ -22,33 +21,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // 生成博客文章路由
   try {
-    const allPostSlugs = await getAllPostSlugs();
-    const blogRouteEntries = allPostSlugs.flatMap(({ params }) => {
-      const slug = params.slug;
-      // 从 slug 中提取语言（假设格式为 xxx-xxx-xxx-locale）
-      const parts = slug.split('-');
-      // const possibleLocale = parts[parts.length - 1];
-      // const locale = routing.locales.includes(possibleLocale as any) ? possibleLocale : 'en';
-      const baseSlug = parts.slice(0, -1).join('-');
+    const posts = await getPostSitemapEntries();
+    const blogRouteEntries = posts.map((post) => ({
+      url: getLocalizedUrl(post.language, `blogs/${post.slug}`),
+      lastModified: `${post.date}T00:00:00.000Z`,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7
+    }));
 
-      return routing.locales.map((loc) => {
-        // 为每个语言版本生成对应的博客文章 URL
-        // 如果原文章是该语言，则生成该语言的 URL；否则生成所有语言的 URL
-        const url = getLocalizedUrl(loc, `blogs/${baseSlug}`);
-
-        return {
-          url,
-          lastModified: new Date(),
-          changeFrequency: 'weekly' as const,
-          priority: 0.7
-        };
-      });
-    });
-
-    // 去重（可能有重复的 URL）
-    const uniqueBlogRoutes = Array.from(new Map(blogRouteEntries.map((entry) => [entry.url, entry])).values());
-
-    return [...staticRouteEntries, ...uniqueBlogRoutes];
+    return [...staticRouteEntries, ...blogRouteEntries];
   } catch (error) {
     console.error('Error generating blog routes for sitemap:', error);
     return staticRouteEntries;
