@@ -1,13 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { GlobalConfig } from '@/constants';
-
-export type PoolStats = {
-  ticker: string;
-  stake: string;
-  apy: string;
-  delegators: string;
-  isLive: boolean;
-};
+import type { PoolStats } from '@/lib/pool-stats';
 
 export const PoolLedgerCard = ({ stats }: { stats: PoolStats }) => {
   const t = useTranslations('home.ledger');

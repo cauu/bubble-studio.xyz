@@ -42,7 +42,7 @@
         "apy": "質押年化",
         "delegators": "委託人"
       },
-      "foot": "非託管 · 不鎖定 · 零額外費用"
+      "foot": "非託管 · 不鎖定 · 獎勵會變化"
     },
     "why": {
       "title": "為什麼選擇這種方式",
@@ -398,6 +398,184 @@
       "voda": {
         "description": "用於追蹤 Cardano 社區與治理動態的應用。"
       }
+    }
+  },
+  "stakingHub": {
+    "breadcrumb": {
+      "home": "首頁",
+      "staking": "Cardano 質押"
+    },
+    "metadata": {
+      "title": "Cardano 質押與 Pao Pool 委託指南",
+      "description": "了解 Cardano 質押如何運作、委託是否轉移或鎖定 ADA、獎勵邊界，以及如何核驗並委託給 Pao Pool。",
+      "imageAlt": "Pao Studio 的 Cardano 質押與 Pao Pool 指南"
+    },
+    "hero": {
+      "eyebrow": "CARDANO 質押 · PAO POOL",
+      "title": "從 Pao Pool 開始理解 Cardano 質押",
+      "answer": "Cardano 質押允許你把 ADA 對應的質押權委託給權益池，而無需轉出或鎖定 ADA。資產仍由你的錢包控制。獎勵取決於協議週期和權益池表現，並不保證。",
+      "learnCta": "查看委託步驟",
+      "delegateCta": "在 Cexplorer 查看 PAO",
+      "safety": "非託管 · 不鎖定 · 獎勵不保證"
+    },
+    "mechanism": {
+      "eyebrow": "運作機制",
+      "title": "Cardano 委託實際改變了什麼",
+      "intro": "委託把錢包地址對應的質押權與一個權益池關聯起來，不會把 ADA 所有權轉給權益池營運者。",
+      "items": {
+        "ownership": {
+          "title": "ADA 仍在你的錢包中",
+          "body": "委託透過 stake credential 記錄。支付資金仍由你控制並可以使用。進行委託時，不要直接向權益池營運者轉帳 ADA。"
+        },
+        "participation": {
+          "title": "質押權參與網路共識",
+          "body": "協議會把你的委託量計入權益池。權益池可能被選中生產區塊，幫助 Cardano 處理交易並維護帳本。"
+        },
+        "operator": {
+          "title": "營運者負責運行節點",
+          "body": "權益池營運者維護線上基礎設施、監控節點，並在被選中時生產區塊。委託者無需親自運行這些設施也能參與。"
+        }
+      }
+    },
+    "rewards": {
+      "eyebrow": "獎勵與時間",
+      "title": "獎勵遵循協議，不是一項承諾",
+      "intro": "新委託需要跨多個 epoch 經歷質押快照、區塊生產和獎勵計算，不會在確認委託後立即開始發放。",
+      "steps": {
+        "snapshot": {
+          "title": "質押權進入快照",
+          "body": "Cardano 在 epoch 邊界記錄 stake。新委託需要先出現在協議用於後續區塊選擇的快照中。"
+        },
+        "production": {
+          "title": "權益池可能生產區塊",
+          "body": "獲得區塊機會與委託量有關，實際結果也取決於協議選擇，以及權益池被選中時是否正常履職。"
+        },
+        "distribution": {
+          "title": "計算並分配獎勵",
+          "body": "權益池獲得獎勵後，協議會按權益池固定成本和 margin 等規則，自動計算並分配委託者份額。"
+        }
+      },
+      "disclaimer": "獎勵並不保證。權益池可能出現沒有獎勵的 epoch，歷史結果或估算 APY 也不能預測未來回報。"
+    },
+    "pool": {
+      "eyebrow": "PAO POOL",
+      "title": "委託前先核驗權益池身份",
+      "intro": "Pao Pool 是 Pao Studio 營運的 Cardano 權益池。權益池營運收入幫助我們維護基礎設施，並支持內容與產品開發。在錢包或瀏覽器中查詢時，請核對下面的完整 pool ID。",
+      "poolIdLabel": "Cardano pool ID",
+      "delegateCta": "在 Cexplorer 打開 PAO",
+      "verifyCta": "在 CardanoScan 核驗",
+      "liveNote": "本次頁面請求透過 Koios 取得了質押量和委託人數。請在 Cardano 瀏覽器中獨立核對目前數值。",
+      "fallbackNote": "本次頁面請求無法連接 Koios，因此卡片顯示的是明確標記的 fallback 數值。請前往 CardanoScan 查看目前權益池資料。",
+      "estimateNote": "頁面顯示的 APY 是估算值，不是保證收益或即時表現聲明。"
+    },
+    "delegate": {
+      "eyebrow": "委託指南",
+      "title": "如何把 ADA 委託給 Pao Pool",
+      "intro": "不同錢包的具體介面可能不同。請始終在自己的相容 Cardano 錢包中操作，並在確認前核驗權益池身份。",
+      "steps": {
+        "open": {
+          "title": "打開權益池頁面",
+          "body": "打開 Cexplorer 的 PAO 頁面，或進入相容 Cardano 錢包中的 stake pool 目錄。"
+        },
+        "verify": {
+          "title": "核對 ticker 與 pool ID",
+          "body": "搜尋 PAO，並把完整 pool ID 與本頁顯示的 ID 對照。只看 ticker 不足以確認身份。"
+        },
+        "wallet": {
+          "title": "在錢包中選擇委託",
+          "body": "使用錢包提供的 delegation 操作。你不需要向 Pao Studio 或 Pao Pool 轉帳 ADA。"
+        },
+        "confirm": {
+          "title": "檢查並確認",
+          "body": "簽署委託交易前，檢查錢包顯示的權益池、網路費，以及首次註冊 stake credential 時可能出現的可退還 deposit。"
+        },
+        "check": {
+          "title": "核驗委託結果",
+          "body": "在錢包或瀏覽器中檢查目前委託狀態。獎勵按協議週期開始，並不保證金額。"
+        }
+      }
+    },
+    "choose": {
+      "eyebrow": "選擇之前",
+      "title": "評估 Cardano 權益池時要看什麼",
+      "intro": "沒有一個指標能夠證明某個權益池一定是最佳選擇。除了協議參數，還應檢查營運者的歷史、目的與溝通。",
+      "items": {
+        "fees": {
+          "title": "固定成本與 margin",
+          "body": "這些參數會影響權益池獎勵如何在營運成本、營運者和委託者之間分配。"
+        },
+        "saturation": {
+          "title": "Saturation",
+          "body": "權益池超過協議 saturation 點後，每單位 ADA 的獎勵可能下降，以此鼓勵質押權分散。"
+        },
+        "performance": {
+          "title": "區塊生產記錄",
+          "body": "檢查權益池長期是否完成了被分配的區塊，同時記住較短週期的結果可能受隨機性影響。"
+        },
+        "operator": {
+          "title": "營運透明度",
+          "body": "檢查穩定身份、公開溝通、基礎設施連續性、最新 metadata，以及營運權益池的明確目的。"
+        }
+      }
+    },
+    "membership": {
+      "label": "PAO 實驗",
+      "title": "委託也可以表達長期支持",
+      "body": "Pao Studio 嘗試利用鏈上委託關係識別支持者，並提供部分內容或產品權益。這是 Pao Studio 增加的服務層，與 Cardano 協議獎勵相互獨立，並可能隨產品迭代而調整。"
+    },
+    "faq": {
+      "eyebrow": "直接回答",
+      "title": "Cardano 質押常見問題",
+      "items": {
+        "custody": {
+          "question": "委託給 Pao Pool 會轉出或鎖定我的 ADA 嗎？",
+          "answer": "不會。Cardano 委託分配的是質押權，ADA 仍由你的錢包控制並可以使用。"
+        },
+        "guarantee": {
+          "question": "Cardano 質押獎勵有保證嗎？",
+          "answer": "沒有。獎勵取決於協議規則、權益池獲得的委託量和權益池表現，權益池可能出現沒有獎勵的 epoch。"
+        },
+        "timing": {
+          "question": "新委託什麼時候開始獲得獎勵？",
+          "answer": "Cardano 會跨多個 epoch 使用 stake snapshot，因此獎勵不會立即開始。請在錢包或瀏覽器中查看目前委託與獎勵時間線。"
+        },
+        "redelegate": {
+          "question": "之後可以更換權益池嗎？",
+          "answer": "可以。你可以透過相容錢包重新委託。重新委託只改變質押權指向的權益池，不會把 ADA 轉給權益池。"
+        },
+        "support": {
+          "question": "委託給 Pao Pool 會支持什麼？",
+          "answer": "權益池營運收入幫助 Pao Studio 維護基礎設施並開發內容和產品。會員權益是 Pao Studio 額外提供的服務，不是 Cardano 協議獎勵。"
+        }
+      }
+    },
+    "sources": {
+      "eyebrow": "核驗資訊",
+      "title": "官方來源與進一步閱讀",
+      "intro": "本頁的協議說明以 Cardano 文件為依據。權益池狀態應始終透過你的錢包或目前可用的區塊鏈瀏覽器核對。",
+      "officialTitle": "Cardano 官方資料",
+      "relatedTitle": "Pao Studio 相關文章",
+      "official": {
+        "delegate": "Cardano Docs · 如何委託",
+        "staking": "Cardano Developer Portal · Staking",
+        "operation": "Cardano · 權益池營運",
+        "pools": "Cardano Docs · Stake pools"
+      },
+      "related": {
+        "subscription": {
+          "title": "軟體訂閱正在失效",
+          "description": "我們為什麼嘗試用質押建立摩擦更低的支持與會員關係。"
+        },
+        "sovereignty": {
+          "title": "獨立創造者的數位主權",
+          "description": "權益池如何支持長期獨立與基礎設施所有權。"
+        },
+        "infrastructure": {
+          "title": "AI 時代的 Web3 之盾",
+          "description": "理解 Cardano 基礎設施、非託管委託與小型營運者的更廣視角。"
+        }
+      },
+      "disclaimer": "本頁用於解釋協議機制和 Pao Studio 自己營運的權益池，不構成財務、投資、稅務或安全建議。ADA 價格與質押獎勵可能變化，你仍需自行負責錢包安全與委託決定。"
     }
   }
 }

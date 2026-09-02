@@ -133,3 +133,85 @@
 | content extraction health | pass           | 五个 HTML 抽样与两个发现入口均可直接读取                   |
 
 未计算聚合分数，也未观察 Google/Bing 实时排名、流量、索引变化或任何 AI 平台的召回与引用份额。`geo-diagnose` 仍以手工降级模式执行，因为 Cola 安装包中的入口脚本缺少 `geo_seo_hub` 运行时。下一阶段应等 S0002 明确激活后，再选择一个对用户可见的主题中心页进行试点。
+
+## S0002 完成后复核
+
+本节是 2026-09-02 16:59 +08:00 对 S0002 本地生产构建的追加复核。改动尚未部署，因此只证明当前 commit 序列的技术与内容合同已通过，不表示搜索引擎已经抓取、收录或提高排名。
+
+复核严格限制为五个 HTML URL，另检查 sitemap：
+
+- 英文主题页 `/staking`，SHA-256 `d82c6c90dd51d69ebf9b64660fa290b138e393136d60f993f7cdf0d8419c513a`
+- 简体中文主题页 `/zh/staking`，SHA-256 `548fe446872cfc65be473249f406d54bb66a043c413f045bde876545cb4f5c9d`
+- 繁体中文主题页 `/tw/staking`，SHA-256 `ee52849e020817fc554448b3b936431a586b9bf2bdc26cc4f1b1dc6ec5e4528c`
+- 首页 `/`，SHA-256 `da6d61e127d6933c637dcc7ede30af5ef4d6c324ca0f7fb85580355cc91ba4af`
+- 项目页 `/projects`，SHA-256 `bce331faebd8dd1c82db2efe5dbfb32e74375fd471ce54c091719a3580151458`
+- `sitemap.xml`，SHA-256 `5d25aec55aaf8c4785238af7d36039d490bdbee24a34af9a1a93cf0af5ec3d09`
+
+### 复核结果
+
+- 三个主题页均返回 200，具有 self-canonical、三语 hreflang、标准 HTML lang 与 Open Graph locale，且没有冲突的 HTTP hreflang。
+- 原始 HTML 均包含唯一 H1、直接答案、八个主要章节、五步委托、五组可见 FAQ、官方来源、Pao Pool 完整 pool ID、浏览器入口和奖励不保证说明。
+- WebPage、BreadcrumbList 与 FAQPage JSON-LD 均可解析。FAQPage 的五组问题和答案逐项存在于可见页面中，没有增加隐藏主张。
+- 首页导航、首页正文与项目页提供 `/staking` 上下文入口；两组三语文章共六个文件回链到对应语言主题页，主题页反向连接三组相关文章。
+- sitemap 共 63 个 URL，三个 staking URL 与 canonical 一致，且不声明虚假 `lastModified`。
+- 375 × 812 与 1440 × 900 的浏览器验收中，页面宽度均无横向溢出；移动菜单、桌面导航、CTA、标题与矿池数据卡布局正常。
+- `pnpm build` 生成 30 个静态页面；TypeScript、基础 SEO 验证器、S0002 验证器与 diff whitespace 检查通过。
+
+### Audit Catalog 复核状态
+
+| 审计项                    | S0002 后状态   | 证据边界                                                       |
+| ------------------------- | -------------- | -------------------------------------------------------------- |
+| entity clarity            | pass           | Cardano staking、Pao Pool 与 Pao Studio 的关系在可见正文中明确 |
+| evidence density          | pass           | 机制与选择说明连接四个 Cardano 一手来源和两个链上浏览器        |
+| citation readiness        | pass           | 三语 canonical、语言链接、直接答案、FAQ 与页面实体可稳定引用   |
+| authority signals         | partial        | 协议来源和矿池身份可核验；作者与更强组织证明留给 S0004         |
+| freshness signals         | pass           | 动态数据区分 live 与 fallback，sitemap 不伪造静态更新时间      |
+| structured data validity  | pass           | WebPage、BreadcrumbList、FAQPage 与可见内容通过自动断言        |
+| answerability             | pass           | 三语原始 HTML 均提供完整问题解释、步骤、边界与来源             |
+| comparison completeness   | not-applicable | 页面提供选择清单，但不声称进行最佳矿池排名或全面比较           |
+| source transparency       | pass           | 协议事实、矿池身份、动态数据来源和 fallback 状态均在页面公开   |
+| content extraction health | pass           | 三语页面无需客户端 JavaScript 即可提取主要内容与结构化数据     |
+
+本次仍是 `geo-diagnose` 手工降级复核，因为 Cola 安装包缺少执行器依赖的 `geo_seo_hub` 运行时。没有连接 Search Console、Bing 或实时 AI 平台，也没有观察或声称排名、流量、索引变化、AI 召回率或引用份额提升。
+
+## S0002.1 机器优先入口修正复核
+
+本节是 2026-09-02 17:14 +08:00 对本地生产构建的追加复核。用户确认将 staking 主题页从全站醒目入口降级为机器优先、低曝光的公开语义页面。页面没有按 User-Agent 分流，也没有隐藏内容或 `noindex`。
+
+复核仍限制为五个 HTML URL，另检查两个非 HTML 发现入口：
+
+- 英文主题页 `/staking`，SHA-256 `123fe5dedd181dd41b5380420b667361ad63a801697d7ea349b2dc828370f399`
+- 简体中文主题页 `/zh/staking`，SHA-256 `966613938c7de141cf323e45c488ce96cc751791bead2db86cf0b29939c369e5`
+- 繁体中文主题页 `/tw/staking`，SHA-256 `4c697b90fa3c6ed4c74d8601bf2eca4e6cce3e4cf0913e241ffc18a88603999b`
+- 首页 `/`，SHA-256 `bead894c4c860fb4229ec2f2b529dffd56fc62b5afe71f3fa65d888abb9fd8e2`
+- 项目页 `/projects`，SHA-256 `9c5dcd6235f8c1d65a4cf0509e04b4a00bb6ac053881865ee7f3ff63f7ce2971`
+- `llms.txt`，SHA-256 `0709823e2bc7e126ffe52d17e88bc12d1ab5aa42c04ba09c6a6ab24d82b844df`
+- `sitemap.xml`，SHA-256 `5d25aec55aaf8c4785238af7d36039d490bdbee24a34af9a1a93cf0af5ec3d09`
+
+### 复核结果
+
+- 顶部导航、Footer、首页额外 staking 引导和 Projects 页 Pao Pool 卡片已撤下；三语页面仍能通过直接 URL、sitemap 和六篇相关文章的自然链接发现。
+- `/llms.txt` 首轮因国际化 middleware 改写返回 404。matcher 排除修复后，本地生产响应为 200 `text/plain`，包含 Pao Studio、Pao Pool、完整 pool ID、三语 canonical、四个协议来源和 sitemap。
+- 普通请求与 Googlebot User-Agent 请求得到逐字节一致的英文 staking HTML，确认当前实现没有 crawler 专用核心内容。
+- 三语页面继续返回 200，保留 canonical、hreflang、唯一 H1、八个区块、五组可见 FAQ、WebPage、BreadcrumbList 与 FAQPage。
+- 验收脚本同时修正了两类误判：FAQ 可见性比较会先排除 script/style/template，首页与项目页会断言醒目入口不存在，而不是被全局导航中的旧链接误导。
+- `pnpm build`、TypeScript、S0001 回归脚本与 S0002.1 专项脚本通过。sitemap 仍为 63 个 URL，其中三个 staking URL 没有虚假更新时间。
+
+`llms.txt` 在本项目中只是实验性机器发现入口，不代表搜索引擎或 AI 平台承诺读取。`geo-diagnose` 正式执行器再次以 deterministic 模式调用，仍因缺少 `geo_seo_hub` Python 模块失败，因此没有生成或伪造 Artifact Bus 运行目录。本节是明确标记的手工降级复核，不包含真实排名、流量、索引、AI 召回或引用份额结论。
+
+## S0002.2 视觉系统修正复核
+
+本节记录 2026-09-02 对 staking 页面视觉修正的本地生产构建验收。它只证明页面表现与已有技术合同没有回归，不表示搜索排名、索引状态或 AI 引用发生变化。
+
+### 视觉与交互结果
+
+- 页面继续使用 warm-neutral canvas；奖励与会员色块都收进内容宽度内，不再形成全宽黑色或黄色内容带。
+- 机制、五步委托、矿池选择、FAQ 与来源改为分隔式编辑布局；staking 页面源码不再包含 `shadow-soft` 或五列步骤网格。
+- 375 × 812、768 × 900、1440 × 900 三档分别检查英文、简体中文和繁体中文页面，九个组合均满足 `scrollWidth === clientWidth`。
+- 三语页面都保留八个内容区块与五组 FAQ；移动端会员标签保持内容宽度，FAQ summary 可获得焦点并正常展开。
+
+### 回归结果
+
+- `pnpm build` 成功生成 30 个页面，TypeScript 与 diff whitespace 检查通过。现存 `<img>` lint 与 Browserslist 提示不属于本次变更；Koios DNS 不可达时仍使用既有 fallback。
+- S0002 验收继续通过三语 canonical、hreflang、HTML lang、WebPage、BreadcrumbList、FAQPage、pool ID、四个官方来源、六篇文章回链、`llms.txt`、sitemap 与非 cloaking 检查。
+- S0001 验收继续通过五个代表性 HTML 页面、BlogPosting、Governance 服务端摘要、robots 与包含 63 个 URL 的 sitemap。

@@ -9,14 +9,6 @@ export const Footer = () => {
 
         <div className="flex items-center gap-5 max-[600px]:gap-3">
           <a
-            href={GlobalConfig.CARDANOSCAN_POOL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-medium text-body transition-colors hover:text-ink max-[480px]:hidden"
-          >
-            Cardano · PAO
-          </a>
-          <a
             href={GlobalConfig.social.twitter}
             target="_blank"
             rel="noopener noreferrer"

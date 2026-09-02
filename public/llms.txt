@@ -1,0 +1,31 @@
+# Pao Studio
+
+> Pao Studio is an independent product and content studio. It operates Pao Pool on Cardano and experiments with non-custodial delegation as an optional supporter and membership relationship.
+
+This file is a machine-readable discovery index. The linked public HTML pages remain the canonical source of page content. Cardano staking rewards vary and are not guaranteed.
+
+## Core entities
+
+- [Pao Studio](https://www.bubble-studio.xyz/): The organization and website publishing these resources.
+- Pao Pool: The Cardano stake pool operated by Pao Studio.
+- Pao Pool ID: `pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm`
+- [Pao Pool on CardanoScan](https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm): Current independently verifiable pool data.
+- [Pao Pool on Cexplorer](https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm): Pool identity and delegation explorer.
+
+## Canonical Cardano staking topic pages
+
+- [English](https://www.bubble-studio.xyz/staking): Cardano staking and Pao Pool delegation guide.
+- [Simplified Chinese](https://www.bubble-studio.xyz/zh/staking): Cardano 质押与 Pao Pool 委托指南。
+- [Traditional Chinese](https://www.bubble-studio.xyz/tw/staking): Cardano 質押與 Pao Pool 委託指南。
+
+## Primary protocol sources
+
+- [Cardano Docs: How to delegate](https://docs.cardano.org/about-cardano/new-to-cardano/how-to-delegate)
+- [Cardano Developer Portal: Withdraw staking rewards](https://developers.cardano.org/docs/get-started/infrastructure/cardano-cli/basic-operations/withdraw-rewards/)
+- [Cardano: Stake pool operation](https://cardano.org/stake-pool-operation/)
+- [Cardano Docs: Stake pools](https://docs.cardano.org/about-cardano/learn/stake-pools)
+
+## Site discovery
+
+- [XML sitemap](https://www.bubble-studio.xyz/sitemap.xml)
+- [Robots policy](https://www.bubble-studio.xyz/robots.txt)

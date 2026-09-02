@@ -50,6 +50,8 @@ featured: true
 
 這就是我們在 Cardano 上正在實驗的 **Stake as a Service（質押即服務）**。
 
+關於協議機制、獎勵邊界和錢包安全委託清單，可以查看我們的 [Cardano 質押與 Pao Pool 指南](/tw/staking)。
+
 這套機制利用了 Cardano 的 staking 結構。使用者不直接花錢買服務，而是把 ADA 委託到創作者的 stake pool。系統識別到這層 staking 關係後，就可以為使用者解鎖 access：例如私域社群、測試版工具、推送內容或其他服務。使用者和運營者則一起參與 Cardano staking 所帶來的收益結構。
 
 相較於傳統會員訂閱，這種模式在這個場景下有三個特別自然的優勢：

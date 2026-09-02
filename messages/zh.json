@@ -42,7 +42,7 @@
         "apy": "质押年化",
         "delegators": "委托人"
       },
-      "foot": "非托管 · 不锁仓 · 零额外费用"
+      "foot": "非托管 · 不锁仓 · 奖励会变化"
     },
     "why": {
       "title": "为什么选择这种方式",
@@ -398,6 +398,184 @@
       "voda": {
         "description": "用于追踪 Cardano 社区与治理动态的应用。"
       }
+    }
+  },
+  "stakingHub": {
+    "breadcrumb": {
+      "home": "首页",
+      "staking": "Cardano 质押"
+    },
+    "metadata": {
+      "title": "Cardano 质押与 Pao Pool 委托指南",
+      "description": "了解 Cardano 质押如何运作、委托是否转移或锁定 ADA、奖励边界，以及如何核验并委托给 Pao Pool。",
+      "imageAlt": "Pao Studio 的 Cardano 质押与 Pao Pool 指南"
+    },
+    "hero": {
+      "eyebrow": "CARDANO 质押 · PAO POOL",
+      "title": "从 Pao Pool 开始理解 Cardano 质押",
+      "answer": "Cardano 质押允许你把 ADA 对应的质押权委托给矿池，而无需转出或锁定 ADA。资产仍由你的钱包控制。奖励取决于协议周期和矿池表现，并不保证。",
+      "learnCta": "查看委托步骤",
+      "delegateCta": "在 Cexplorer 查看 PAO",
+      "safety": "非托管 · 不锁仓 · 奖励不保证"
+    },
+    "mechanism": {
+      "eyebrow": "运作机制",
+      "title": "Cardano 委托实际改变了什么",
+      "intro": "委托把钱包地址对应的质押权与一个矿池关联起来，不会把 ADA 所有权转给矿池运营者。",
+      "items": {
+        "ownership": {
+          "title": "ADA 仍在你的钱包中",
+          "body": "委托通过 stake credential 记录。支付资金仍由你控制并可以使用。进行委托时，不要直接向矿池运营者转账 ADA。"
+        },
+        "participation": {
+          "title": "质押权参与网络共识",
+          "body": "协议会把你的委托量计入矿池。矿池可能被选中生产区块，帮助 Cardano 处理交易并维护账本。"
+        },
+        "operator": {
+          "title": "运营者负责运行节点",
+          "body": "矿池运营者维护在线基础设施、监控节点，并在被选中时生产区块。委托者无需亲自运行这些设施也能参与。"
+        }
+      }
+    },
+    "rewards": {
+      "eyebrow": "奖励与时间",
+      "title": "奖励遵循协议，不是一项承诺",
+      "intro": "新委托需要跨多个 epoch 经历质押快照、区块生产和奖励计算，不会在确认委托后立即开始发放。",
+      "steps": {
+        "snapshot": {
+          "title": "质押权进入快照",
+          "body": "Cardano 在 epoch 边界记录 stake。新委托需要先出现在协议用于后续区块选择的快照中。"
+        },
+        "production": {
+          "title": "矿池可能生产区块",
+          "body": "获得区块机会与委托量有关，实际结果也取决于协议选择，以及矿池被选中时是否正常履职。"
+        },
+        "distribution": {
+          "title": "计算并分配奖励",
+          "body": "矿池获得奖励后，协议会按矿池固定成本和 margin 等规则，自动计算并分配委托者份额。"
+        }
+      },
+      "disclaimer": "奖励并不保证。矿池可能出现没有奖励的 epoch，历史结果或估算 APY 也不能预测未来回报。"
+    },
+    "pool": {
+      "eyebrow": "PAO POOL",
+      "title": "委托前先核验矿池身份",
+      "intro": "Pao Pool 是 Pao Studio 运营的 Cardano 矿池。矿池运营收入帮助我们维护基础设施，并支持内容与产品开发。在钱包或浏览器中查询时，请核对下面的完整 pool ID。",
+      "poolIdLabel": "Cardano pool ID",
+      "delegateCta": "在 Cexplorer 打开 PAO",
+      "verifyCta": "在 CardanoScan 核验",
+      "liveNote": "本次页面请求通过 Koios 获得了质押量和委托人数。请在 Cardano 浏览器中独立核对当前数值。",
+      "fallbackNote": "本次页面请求无法连接 Koios，因此卡片显示的是明确标记的 fallback 数值。请前往 CardanoScan 查看当前矿池数据。",
+      "estimateNote": "页面显示的 APY 是估算值，不是保证收益或实时表现声明。"
+    },
+    "delegate": {
+      "eyebrow": "委托指南",
+      "title": "如何把 ADA 委托给 Pao Pool",
+      "intro": "不同钱包的具体界面可能不同。请始终在自己的兼容 Cardano 钱包中操作，并在确认前核验矿池身份。",
+      "steps": {
+        "open": {
+          "title": "打开矿池页面",
+          "body": "打开 Cexplorer 的 PAO 页面，或进入兼容 Cardano 钱包中的 stake pool 目录。"
+        },
+        "verify": {
+          "title": "核对 ticker 与 pool ID",
+          "body": "搜索 PAO，并把完整 pool ID 与本页显示的 ID 对照。只看 ticker 不足以确认身份。"
+        },
+        "wallet": {
+          "title": "在钱包中选择委托",
+          "body": "使用钱包提供的 delegation 操作。你不需要向 Pao Studio 或 Pao Pool 转账 ADA。"
+        },
+        "confirm": {
+          "title": "检查并确认",
+          "body": "签署委托交易前，检查钱包显示的矿池、网络费，以及首次注册 stake credential 时可能出现的可退还 deposit。"
+        },
+        "check": {
+          "title": "核验委托结果",
+          "body": "在钱包或浏览器中检查当前委托状态。奖励按协议周期开始，并不保证金额。"
+        }
+      }
+    },
+    "choose": {
+      "eyebrow": "选择之前",
+      "title": "评估 Cardano 矿池时要看什么",
+      "intro": "没有一个指标能够证明某个矿池一定是最佳选择。除了协议参数，还应检查运营者的历史、目的与沟通。",
+      "items": {
+        "fees": {
+          "title": "固定成本与 margin",
+          "body": "这些参数会影响矿池奖励如何在运营成本、运营者和委托者之间分配。"
+        },
+        "saturation": {
+          "title": "Saturation",
+          "body": "矿池超过协议 saturation 点后，每单位 ADA 的奖励可能下降，以此鼓励质押权分散。"
+        },
+        "performance": {
+          "title": "区块生产记录",
+          "body": "检查矿池长期是否完成了被分配的区块，同时记住较短周期的结果可能受随机性影响。"
+        },
+        "operator": {
+          "title": "运营透明度",
+          "body": "检查稳定身份、公开沟通、基础设施连续性、最新 metadata，以及运营矿池的明确目的。"
+        }
+      }
+    },
+    "membership": {
+      "label": "PAO 实验",
+      "title": "委托也可以表达长期支持",
+      "body": "Pao Studio 尝试利用链上委托关系识别支持者，并提供部分内容或产品权益。这是 Pao Studio 增加的服务层，与 Cardano 协议奖励相互独立，并可能随产品迭代而调整。"
+    },
+    "faq": {
+      "eyebrow": "直接回答",
+      "title": "Cardano 质押常见问题",
+      "items": {
+        "custody": {
+          "question": "委托给 Pao Pool 会转出或锁定我的 ADA 吗？",
+          "answer": "不会。Cardano 委托分配的是质押权，ADA 仍由你的钱包控制并可以使用。"
+        },
+        "guarantee": {
+          "question": "Cardano 质押奖励有保证吗？",
+          "answer": "没有。奖励取决于协议规则、矿池获得的委托量和矿池表现，矿池可能出现没有奖励的 epoch。"
+        },
+        "timing": {
+          "question": "新委托什么时候开始获得奖励？",
+          "answer": "Cardano 会跨多个 epoch 使用 stake snapshot，因此奖励不会立即开始。请在钱包或浏览器中查看当前委托与奖励时间线。"
+        },
+        "redelegate": {
+          "question": "之后可以更换矿池吗？",
+          "answer": "可以。你可以通过兼容钱包重新委托。重新委托只改变质押权指向的矿池，不会把 ADA 转给矿池。"
+        },
+        "support": {
+          "question": "委托给 Pao Pool 会支持什么？",
+          "answer": "矿池运营收入帮助 Pao Studio 维护基础设施并开发内容和产品。会员权益是 Pao Studio 额外提供的服务，不是 Cardano 协议奖励。"
+        }
+      }
+    },
+    "sources": {
+      "eyebrow": "核验信息",
+      "title": "官方来源与进一步阅读",
+      "intro": "本页的协议说明以 Cardano 文档为依据。矿池状态应始终通过你的钱包或当前可用的区块链浏览器核对。",
+      "officialTitle": "Cardano 官方资料",
+      "relatedTitle": "Pao Studio 相关文章",
+      "official": {
+        "delegate": "Cardano Docs · 如何委托",
+        "staking": "Cardano Developer Portal · Staking",
+        "operation": "Cardano · 矿池运营",
+        "pools": "Cardano Docs · Stake pools"
+      },
+      "related": {
+        "subscription": {
+          "title": "软件订阅正在失效",
+          "description": "我们为什么尝试用质押建立摩擦更低的支持与会员关系。"
+        },
+        "sovereignty": {
+          "title": "独立创造者的数字主权",
+          "description": "矿池如何支持长期独立与基础设施所有权。"
+        },
+        "infrastructure": {
+          "title": "AI 时代的 Web3 之盾",
+          "description": "理解 Cardano 基础设施、非托管委托与小型运营者的更广视角。"
+        }
+      },
+      "disclaimer": "本页用于解释协议机制和 Pao Studio 自己运营的矿池，不构成财务、投资、税务或安全建议。ADA 价格与质押奖励可能变化，你仍需自行负责钱包安全与委托决定。"
     }
   }
 }

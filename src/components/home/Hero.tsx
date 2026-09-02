@@ -3,8 +3,9 @@ import clsx from 'clsx';
 import { GlobalConfig } from '@/constants';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
-import { PoolLedgerCard, PoolStats } from './PoolLedgerCard';
+import { PoolLedgerCard } from './PoolLedgerCard';
 import { SubscribePaoDialog } from './SubscribePaoDialog';
+import type { PoolStats } from '@/lib/pool-stats';
 
 export const Hero = ({ stats }: { stats: PoolStats }) => {
   const t = useTranslations('home.hero');

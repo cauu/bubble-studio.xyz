@@ -4,7 +4,7 @@ import { routing } from '@/i18n/routing';
 import { getLocalizedUrl } from '@/lib/seo';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes = ['', 'projects', 'skills', 'governance', 'blogs'];
+  const staticRoutes = ['', 'staking', 'projects', 'skills', 'governance', 'blogs'];
 
   // 生成静态路由（所有语言版本）
   const staticRouteEntries = routing.locales.flatMap((locale) =>

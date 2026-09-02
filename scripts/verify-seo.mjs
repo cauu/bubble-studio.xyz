@@ -187,7 +187,7 @@ for (const fileName of postFiles) {
 const staticEntries = sitemapEntries.filter(({ loc }) => !loc?.includes('/blogs/') || loc.endsWith('/blogs'));
 const articleEntries = sitemapEntries.filter(({ loc }) => loc?.includes('/blogs/') && !loc.endsWith('/blogs'));
 
-assert(sitemapEntries.length === 15 + expectedPosts.size, 'sitemap: unexpected total URL count');
+assert(sitemapEntries.length === 18 + expectedPosts.size, 'sitemap: unexpected total URL count');
 assert(
   sitemapEntries.every(({ loc }) => loc?.startsWith(canonicalOrigin)),
   'sitemap: non-canonical origin found'
@@ -196,7 +196,7 @@ assert(
   sitemapEntries.every(({ loc }) => !loc?.startsWith(`${canonicalOrigin}/en/`)),
   'sitemap: /en prefix found'
 );
-assert(staticEntries.length === 15, 'sitemap: static URL count mismatch');
+assert(staticEntries.length === 18, 'sitemap: static URL count mismatch');
 assert(
   staticEntries.every(({ lastModified }) => !lastModified),
   'sitemap: static page has fabricated lastModified'
