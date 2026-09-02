@@ -141,7 +141,7 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 
 - [x] s2-01 固化主题、受众、查询意图、事实与来源矩阵。Acceptance：TC-01、TC-03、TC-10。
 - [x] s2-02 固化页面信息架构、三语内容合同、URL、CTA 与非目标。Acceptance：TC-02、TC-03。
-- [ ] s2-03 实现三语 Cardano staking 主题中心页与 metadata。Acceptance：TC-01 至 TC-04。
+- [x] s2-03 实现三语 Cardano staking 主题中心页与 metadata。Acceptance：TC-01 至 TC-04。
 - [ ] s2-04 增加 WebPage、BreadcrumbList 与 FAQPage JSON-LD。Acceptance：TC-05。
 - [ ] s2-05 建立首页、项目页、相关文章双向链接并更新 sitemap。Acceptance：TC-06、TC-07。
 - [ ] s2-06 完成本地生产构建、五页以内 HTML 抽样、移动端与链接验证，追加报告和最终证据。Acceptance：TC-01 至 TC-10。
@@ -166,6 +166,7 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - 2026-09-02 16:38 +08:00 | 创建并激活 S0002；S0003-S0005 保持 QUEUED。
 - 2026-09-02 | s2-01 完成主题证据、七类用户意图、十条事实来源和禁止主张矩阵，证据文件为 `docs/specs/evidence-S0002-cardano-staking.md`。
 - 2026-09-02 | s2-02 完成 route、metadata、页面章节、委托步骤、三语 FAQ、来源、结构化数据、站内链接与可访问性合同，内容文件为 `docs/specs/content-S0002-cardano-staking.md`。
+- 2026-09-02 | s2-03 实现 `/staking`、`/zh/staking`、`/tw/staking` 的服务端页面与 metadata；抽取共享 pool stats 读取逻辑，并将 fallback、APY 估算与奖励不保证状态显示在页面中。
 
 ## 7. Validation Evidence (append-only)
 
@@ -177,6 +178,10 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - TC-10 | stack: manual | command: query intent map review | result: pass | note: 查询表达只用于内容覆盖，不表示搜索量、排名机会或实时平台表现
 - TC-02 | stack: document | command: content contract section inventory | result: pass | note: 唯一 H1、直接答案、七个主要章节、五步委托、五组 FAQ、来源与相关文章均已冻结
 - TC-03 | stack: document | command: factual language and prohibited-claim review | result: pass | note: 三语合同明确非托管、资金可用、奖励不保证、协议 deposit/费用与 Pao Studio 额外会员关系边界
+- TC-01 | stack: node/http | command: local production GET for three staking routes | result: pass | note: 三条路由均返回 200；canonical 分别为 `/staking`、`/zh/staking`、`/tw/staking`，HTML lang 与 OG locale 映射正确
+- TC-02 | stack: node/http | command: raw HTML semantic inspection | result: pass | note: 每个语言版本均服务端输出一个 H1、直接答案、机制、奖励、Pao Pool、五步委托、选择清单、会员边界、五组 FAQ、来源与相关文章
+- TC-03 | stack: source+node/http | command: visible copy review against frozen content contract | result: pass | note: 协议机制、奖励不保证、费用与 deposit、Pao Studio 会员层和非财务建议均可见
+- TC-04 | stack: node/http | command: pool identity and fallback inspection under Koios ENOTFOUND | result: pass | note: 页面显示完整 pool ID、两个外部核验入口，并明确说明 fallback 数据与 APY 估算状态
 
 ## 8. Change Log (append-only)
 

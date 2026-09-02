@@ -42,7 +42,7 @@
         "apy": "Est. APY",
         "delegators": "Delegators"
       },
-      "foot": "Non-custodial · No lock-up · Zero extra fees"
+      "foot": "Non-custodial · No lock-up · Rewards vary"
     },
     "why": {
       "title": "Why this model",
@@ -398,6 +398,180 @@
       "voda": {
         "description": "An app for following Cardano community and governance updates."
       }
+    }
+  },
+  "stakingHub": {
+    "metadata": {
+      "title": "Cardano Staking & Pao Pool Delegation Guide",
+      "description": "Learn how Cardano staking works, what delegation does to your ADA, how rewards work, and how to verify and delegate to Pao Pool.",
+      "imageAlt": "Cardano staking and Pao Pool guide by Pao Studio"
+    },
+    "hero": {
+      "eyebrow": "CARDANO STAKING · PAO POOL",
+      "title": "Cardano staking, explained through Pao Pool",
+      "answer": "Cardano staking lets you delegate the staking rights of your ADA to a pool without sending the ADA away or locking it. You keep control of your funds. Rewards depend on protocol timing and pool performance and are not guaranteed.",
+      "learnCta": "See the delegation steps",
+      "delegateCta": "View PAO on Cexplorer",
+      "safety": "Non-custodial · No lock-up · Rewards are not guaranteed"
+    },
+    "mechanism": {
+      "eyebrow": "THE MECHANISM",
+      "title": "What Cardano delegation actually does",
+      "intro": "Delegation connects the staking rights attached to your wallet with a stake pool. It does not transfer ownership of your ADA to the pool operator.",
+      "items": {
+        "ownership": {
+          "title": "Your ADA stays in your wallet",
+          "body": "Delegation is recorded through a stake credential. Your payment funds stay under your control and remain spendable. Never send ADA directly to a pool operator in order to delegate."
+        },
+        "participation": {
+          "title": "Your stake supports consensus",
+          "body": "The protocol counts your delegated stake toward a pool. That pool can be selected to produce blocks, helping Cardano process transactions and maintain the ledger."
+        },
+        "operator": {
+          "title": "The operator runs the node",
+          "body": "A stake pool operator maintains online infrastructure, monitors the node, and produces blocks when selected. Delegators can participate without running that infrastructure themselves."
+        }
+      }
+    },
+    "rewards": {
+      "eyebrow": "REWARDS & TIMING",
+      "title": "Rewards follow the protocol, not a promise",
+      "intro": "A new delegation moves through stake snapshots, block production, and reward calculation across several epochs. It does not begin paying immediately.",
+      "steps": {
+        "snapshot": {
+          "title": "Your stake enters a snapshot",
+          "body": "Cardano records stake at epoch boundaries. A recent delegation must first appear in the protocol snapshots used for future block selection."
+        },
+        "production": {
+          "title": "The pool may produce blocks",
+          "body": "Block opportunities depend partly on stake. Actual results also depend on protocol selection and whether the pool performs when selected."
+        },
+        "distribution": {
+          "title": "Rewards are calculated and distributed",
+          "body": "When the pool earns rewards, the protocol distributes the delegator share after pool cost and margin rules are applied."
+        }
+      },
+      "disclaimer": "Rewards are not guaranteed. A pool can have epochs without rewards, and past results or an estimated APY do not predict future returns."
+    },
+    "pool": {
+      "eyebrow": "PAO POOL",
+      "title": "Verify the pool before you delegate",
+      "intro": "Pao Pool is the Cardano stake pool operated by Pao Studio. Its operating revenue helps maintain infrastructure and supports our content and product work. Use the complete pool ID below when checking any wallet or explorer.",
+      "poolIdLabel": "Cardano pool ID",
+      "delegateCta": "Open PAO on Cexplorer",
+      "verifyCta": "Verify on CardanoScan",
+      "liveNote": "Stake and delegator values were returned by Koios for this page request. Confirm current values independently on a Cardano explorer.",
+      "fallbackNote": "Koios was unavailable for this page request, so the card shows clearly identified fallback values. Use CardanoScan for current pool data.",
+      "estimateNote": "The displayed APY is an estimate, not a guaranteed return or a live performance claim."
+    },
+    "delegate": {
+      "eyebrow": "DELEGATION GUIDE",
+      "title": "How to delegate ADA to Pao Pool",
+      "intro": "The exact screens differ by wallet. Keep control inside your own compatible Cardano wallet and verify the pool identity before confirming anything.",
+      "steps": {
+        "open": {
+          "title": "Open the pool page",
+          "body": "Use the PAO page on Cexplorer or open the stake-pool directory in a compatible Cardano wallet."
+        },
+        "verify": {
+          "title": "Check ticker and pool ID",
+          "body": "Search for PAO and compare the full pool ID with the ID shown on this page. A ticker alone is not enough to verify identity."
+        },
+        "wallet": {
+          "title": "Choose delegate in your wallet",
+          "body": "Select the wallet's delegation action. You do not need to send ADA to Pao Studio or Pao Pool."
+        },
+        "confirm": {
+          "title": "Review and confirm",
+          "body": "Review the pool, network fee, and any refundable stake-credential deposit shown by your wallet before signing the delegation transaction."
+        },
+        "check": {
+          "title": "Verify the result",
+          "body": "Check the active delegation in your wallet or on an explorer. Rewards follow the protocol timeline and are not guaranteed."
+        }
+      }
+    },
+    "choose": {
+      "eyebrow": "BEFORE YOU CHOOSE",
+      "title": "What to inspect in any Cardano stake pool",
+      "intro": "No single metric makes a pool the best choice. Review the protocol parameters alongside the operator's track record, purpose, and communication.",
+      "items": {
+        "fees": {
+          "title": "Fixed cost and margin",
+          "body": "These parameters affect how earned pool rewards are divided between operation costs, the operator, and delegators."
+        },
+        "saturation": {
+          "title": "Saturation",
+          "body": "Rewards per delegated ADA can decline after a pool passes the protocol's saturation point, which encourages stake distribution."
+        },
+        "performance": {
+          "title": "Block-production history",
+          "body": "Review whether the pool has produced assigned blocks over time, while remembering that short periods can vary by chance."
+        },
+        "operator": {
+          "title": "Operator transparency",
+          "body": "Look for a stable identity, public communication, infrastructure continuity, current metadata, and a clear reason for operating the pool."
+        }
+      }
+    },
+    "membership": {
+      "label": "PAO EXPERIMENT",
+      "title": "Delegation can also express long-term support",
+      "body": "Pao Studio uses the on-chain delegation relationship as a way to recognize supporters and offer selected content or product benefits. This is an additional Pao Studio service layer. It is separate from Cardano protocol rewards and may change as our products evolve."
+    },
+    "faq": {
+      "eyebrow": "DIRECT ANSWERS",
+      "title": "Cardano staking FAQ",
+      "items": {
+        "custody": {
+          "question": "Does delegating to Pao Pool move or lock my ADA?",
+          "answer": "No. Cardano delegation assigns staking rights to a pool. Your ADA stays under your wallet's control and remains spendable."
+        },
+        "guarantee": {
+          "question": "Are Cardano staking rewards guaranteed?",
+          "answer": "No. Rewards depend on protocol rules, the amount delegated to the pool, and pool performance. A pool can have epochs without rewards."
+        },
+        "timing": {
+          "question": "When will a new delegation start earning rewards?",
+          "answer": "Cardano uses stake snapshots across several epochs, so rewards do not start immediately. Check your wallet or an explorer for the current delegation and reward timeline."
+        },
+        "redelegate": {
+          "question": "Can I change pools later?",
+          "answer": "Yes. You can redelegate from a compatible wallet. Redelegation changes which pool receives your staking rights; it does not send your ADA to that pool."
+        },
+        "support": {
+          "question": "What does delegating to Pao Pool support?",
+          "answer": "Pool operating revenue helps Pao Studio run infrastructure and develop its content and products. Any member benefits are an additional Pao Studio offering, not a Cardano protocol reward."
+        }
+      }
+    },
+    "sources": {
+      "eyebrow": "VERIFY THE DETAILS",
+      "title": "Official sources and further reading",
+      "intro": "Protocol explanations on this page are grounded in Cardano documentation. Pool status should always be checked against your wallet or a current blockchain explorer.",
+      "officialTitle": "Cardano sources",
+      "relatedTitle": "Pao Studio context",
+      "official": {
+        "delegate": "Cardano Docs · How to delegate",
+        "staking": "Cardano Developer Portal · Staking",
+        "operation": "Cardano · Stake pool operation",
+        "pools": "Cardano Docs · Stake pools"
+      },
+      "related": {
+        "subscription": {
+          "title": "Software subscriptions are failing",
+          "description": "Why we are experimenting with staking as a lower-friction support and membership relationship."
+        },
+        "sovereignty": {
+          "title": "Digital sovereignty for independent creators",
+          "description": "How a stake pool can support long-term independence and infrastructure ownership."
+        },
+        "infrastructure": {
+          "title": "The Web3 shield for the AI era",
+          "description": "A broader view of Cardano infrastructure, non-custodial delegation, and small operators."
+        }
+      },
+      "disclaimer": "This page explains protocol mechanics and Pao Studio's own pool. It is not financial, investment, tax, or security advice. ADA prices and staking rewards can change, and you remain responsible for wallet security and delegation decisions."
     }
   }
 }
