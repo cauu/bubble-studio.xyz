@@ -13,6 +13,8 @@ tags:
   - "Creator Economy"
 category: ai
 featured: true
+summary: "這篇文章討論 AI 如何縮短軟體生命週期，並讓按月訂閱越來越難適應高頻試錯的產品。文章也解釋了 Cardano 委託為何可能成為一種摩擦更低的支持方式，讓使用者在保有 ADA 控制權的同時支持創作者。"
+updated: "2026-09-02"
 ---
 過去幾十年，軟體之所以能建立穩定的收費模式，核心在於它的稀缺性。從想法到產品，中間隔著漫長的研發與測試週期。使用者付費，本質上是在為一種難以複製的產品買單。
 
@@ -51,6 +53,8 @@ featured: true
 這就是我們在 Cardano 上正在實驗的 **Stake as a Service（質押即服務）**。
 
 關於協議機制、獎勵邊界和錢包安全委託清單，可以查看我們的 [Cardano 質押與 Pao Pool 指南](/tw/staking)。
+
+我們希望建立這種支持關係的更完整原因，寫在 [數字世界的第一塊領土](/tw/blogs/20260131-digital-sovereignty-tw) 裡。
 
 這套機制利用了 Cardano 的 staking 結構。使用者不直接花錢買服務，而是把 ADA 委託到創作者的 stake pool。系統識別到這層 staking 關係後，就可以為使用者解鎖 access：例如私域社群、測試版工具、推送內容或其他服務。使用者和運營者則一起參與 Cardano staking 所帶來的收益結構。
 

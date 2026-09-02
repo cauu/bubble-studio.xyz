@@ -11,6 +11,8 @@ tags:
   - "Indie"
   - "AI"
 category: essay
+summary: "這篇個人文章解釋了作者為何把 Cardano 礦池視為數字世界中獨立生存的一部分，並把 AI 帶來的工作不確定性與非託管委託、參與網絡的現實價值聯繫起來。"
+updated: "2026-09-02"
 ---
 
 *為什麼我選擇 Plan B*
@@ -99,6 +101,8 @@ category: essay
 這就是我說的「商業底盤」：一個獨立開發者可以用它來創造持續的現金流，同時它還自帶會員系統和全球支付能力。
 
 關於委託機制、獎勵的不確定性和 PAO 身份核驗，請閱讀 [Cardano 質押與 Pao Pool 指南](/tw/staking)。
+
+建立在這種關係上的支持模式，可以繼續閱讀 [軟體訂閱正在失效](/tw/blogs/20260405-subscriptions-are-failing-tw)。
 
 ---
 

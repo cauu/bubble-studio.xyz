@@ -60,7 +60,7 @@
 
 - [x] s3-01 固化 45 篇文章基线、内容字段、试点范围、证据边界和回退合同。Acceptance：TC-01、TC-06。
 - [x] s3-02 实现 typed frontmatter、统一 description 与 BlogPosting `dateModified`，不改变文章视觉结构。Acceptance：TC-01 至 TC-04。
-- [ ] s3-03 为九个试点文件补齐三语摘要、修订日期和人工正文链接。Acceptance：TC-02 至 TC-05。
+- [x] s3-03 为九个试点文件补齐三语摘要、修订日期和人工正文链接。Acceptance：TC-02 至 TC-05。
 - [ ] s3-04 建立并验证三语试点主题链接图，不恢复醒目 staking 入口。Acceptance：TC-04 至 TC-06。
 - [ ] s3-05 完成构建、三语浏览器检查、结构化数据、旧文章兼容和 S0001/S0002 回归证据。Acceptance：TC-01 至 TC-07。
 
@@ -81,6 +81,7 @@
 - 2026-09-02 20:23 +08:00 | s3-01 以源码降级诊断冻结 45 篇文章、四类字段均为 0、六条站内正文链接、三语三文章家族试点和不伪造来源边界。
 - 2026-09-02 20:31 +08:00 | 用户要求收窄 S0003；冻结为 metadata、BlogPosting 与普通正文内部链接变更，明确禁止任何 Blog 可见模板或样式调整。
 - 2026-09-02 20:36 +08:00 | s3-02 为文章数据增加 typed `summary`/`updated` 可选字段和统一 description helper；BlogPosting 只在字段存在时输出 `dateModified`，没有新增可见 JSX 区块或样式 class。
+- 2026-09-02 20:43 +08:00 | s3-03 为九个试点文件写入三语编辑摘要和真实修订日期；通过普通正文链接把每篇连接到对应语言的 staking 页和另一篇相关文章，没有新增模板组件或样式。
 
 ## 5. Validation Evidence (append-only)
 
@@ -89,6 +90,8 @@
 - TC-04 | stack: primary-source research | command: verify Cardano Docs delegation/EUTXO and ERC-4337 canonical pages | result: pass-input | note: pilot source URLs resolve to official first-party documentation
 - TC-07 | stack: skill-runtime | command: `python3 .agents/skills/geohub-geo-diagnose/scripts/run_diagnose.py ... --execution-mode deterministic` | result: blocked-tooling | note: missing `geo_seo_hub`; no Artifact Bus claimed
 - TC-01/03/04 | stack: type+source | command: `pnpm exec tsc --noEmit`; inspect article page JSX diff | result: pass | note: optional fields typed; legacy description fallback retained; visible article structure and class names unchanged
+- TC-02/05 | stack: content | command: count pilot frontmatter and Markdown internal links | result: pass-source | note: summary=9, updated=9, internal body links grew from 6 to 15; each pilot has two same-locale contextual links
+- TC-02 | stack: writing | command: run `human-writing/scripts/check_prose.py` against newly added zh/tw prose | result: pass | note: 210 Han characters; all covered prohibited-pattern counts=0
 
 ## 6. Change Log (append-only)
 

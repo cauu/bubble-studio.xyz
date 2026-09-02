@@ -12,6 +12,8 @@ tags:
   - "Ethereum"
   - "区块链"
 category: cardano
+summary: "这篇文章从 AI Agent 的角度比较 Ethereum 的运行时组合性与 Cardano 的 eUTXO 模型，并讨论可预测验证、显式资源约束和可恢复工作流为何可能更适合机器参与的链上系统。"
+updated: "2026-09-02"
 ---
 过去几年，区块链世界谈论“组合性”时，默认指的都是 **Ethereum 式的同步调用**：合约像公开 API，彼此直接 Call，在同一笔交易里拼出复杂的行为。这种“乐高”模式催生了 DeFi 的繁荣，也让 EIP-4337 这种执行型 Agent 变得越来越强。
 
@@ -62,3 +64,5 @@ AI-native 的区块链，不应该问“我能不能自由地 Call 一切”，�
 我更倾向于认为：**未来 AI-native 链的底层，会吸收 Cardano 式的确定性资源模型；而在账户层和中间件上，会保留 Ethereum 积累的灵活性。**
 
 比起“谁取代谁”，更值得思考的是：机器社会的基础设施，究竟该是一个随意的执行环境，还是一个严谨的约束系统？从 Aiken 这种将 property-based testing 作为一等公民的尝试来看，答案正变得越来越清晰。
+
+这套基础设施与人的关系，可以继续阅读 [数字世界的第一块领土](/zh/blogs/20260131-digital-sovereignty-zh)。需要核对委托机制和 Pao Pool 身份时，可以查看 [Cardano 质押指南](/zh/staking)。
