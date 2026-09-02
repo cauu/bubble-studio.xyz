@@ -140,7 +140,7 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 事项只有在实现、对应验收通过并追加证据后才能标记为 `[x]`。
 
 - [x] s2-01 固化主题、受众、查询意图、事实与来源矩阵。Acceptance：TC-01、TC-03、TC-10。
-- [ ] s2-02 固化页面信息架构、三语内容合同、URL、CTA 与非目标。Acceptance：TC-02、TC-03。
+- [x] s2-02 固化页面信息架构、三语内容合同、URL、CTA 与非目标。Acceptance：TC-02、TC-03。
 - [ ] s2-03 实现三语 Cardano staking 主题中心页与 metadata。Acceptance：TC-01 至 TC-04。
 - [ ] s2-04 增加 WebPage、BreadcrumbList 与 FAQPage JSON-LD。Acceptance：TC-05。
 - [ ] s2-05 建立首页、项目页、相关文章双向链接并更新 sitemap。Acceptance：TC-06、TC-07。
@@ -165,6 +165,7 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - 2026-09-02 16:38 +08:00 | 根据站内业务中心度、已有三语内容与 Cardano 一手资料，将 S0002 主题确定为 Cardano staking 与 Pao Pool 委托指南。
 - 2026-09-02 16:38 +08:00 | 创建并激活 S0002；S0003-S0005 保持 QUEUED。
 - 2026-09-02 | s2-01 完成主题证据、七类用户意图、十条事实来源和禁止主张矩阵，证据文件为 `docs/specs/evidence-S0002-cardano-staking.md`。
+- 2026-09-02 | s2-02 完成 route、metadata、页面章节、委托步骤、三语 FAQ、来源、结构化数据、站内链接与可访问性合同，内容文件为 `docs/specs/content-S0002-cardano-staking.md`。
 
 ## 7. Validation Evidence (append-only)
 
@@ -174,6 +175,8 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - TC-01 | stack: source | command: route inventory and message catalog inspection | result: pass | note: 当前没有 `/staking` 路由，但已有足够三语内容与稳定 shared SEO 基础支持独立页面
 - TC-03 | stack: source+web | command: `docs/specs/evidence-S0002-cardano-staking.md` evidence matrix review | result: pass | note: Cardano 协议事实、Pao Pool 品牌事实、source gaps 与禁止主张均有明确边界
 - TC-10 | stack: manual | command: query intent map review | result: pass | note: 查询表达只用于内容覆盖，不表示搜索量、排名机会或实时平台表现
+- TC-02 | stack: document | command: content contract section inventory | result: pass | note: 唯一 H1、直接答案、七个主要章节、五步委托、五组 FAQ、来源与相关文章均已冻结
+- TC-03 | stack: document | command: factual language and prohibited-claim review | result: pass | note: 三语合同明确非托管、资金可用、奖励不保证、协议 deposit/费用与 Pao Studio 额外会员关系边界
 
 ## 8. Change Log (append-only)
 
