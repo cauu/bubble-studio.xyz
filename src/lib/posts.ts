@@ -11,16 +11,28 @@ const postsDirectory = path.join(process.cwd(), 'posts');
 // 定义博文元数据类型
 export interface PostData {
   slug: string;
+  id: string | number;
   title: string;
   date: string;
   author: string;
   time: string;
   image: string;
   tags: string[];
+  language: AppLocale;
   category: Category;
   featured?: boolean;
-  [key: string]: any;
+  summary?: string;
+  updated?: string;
+  abstract?: string;
 }
+
+export interface ArticlePostData extends PostData {
+  contentHtml: string;
+}
+
+type PostFrontmatter = Omit<PostData, 'slug' | 'category' | 'abstract'> & {
+  category?: Category;
+};
 
 export interface PostSitemapEntry {
   slug: string;
@@ -28,7 +40,7 @@ export interface PostSitemapEntry {
   language: AppLocale;
 }
 
-export async function getSortedPostsData(locale: 'zh' | 'en' | 'tw'): Promise<PostData[]> {
+export async function getSortedPostsData(locale: AppLocale): Promise<PostData[]> {
   // 获取 /posts 目录下的所有文件名
   const fileNames = await fs.promises.readdir(postsDirectory);
   const allPostsData = await Promise.all(
@@ -43,17 +55,7 @@ export async function getSortedPostsData(locale: 'zh' | 'en' | 'tw'): Promise<Po
       // 使用 gray-matter 解析 frontmatter
       const matterResult = matter(fileContents);
 
-      const data = matterResult.data as {
-        title: string;
-        date: string;
-        author: string;
-        time: string;
-        image: string;
-        tags: string[];
-        language: string;
-        category?: Category;
-        featured?: boolean;
-      };
+      const data = matterResult.data as PostFrontmatter;
 
       // 组合数据
       return {
@@ -112,7 +114,7 @@ export async function getPostSitemapEntries(): Promise<PostSitemapEntry[]> {
   return entries;
 }
 
-export async function getPostData(slug: string, locale: string = 'en') {
+export async function getPostData(slug: string, locale: string = 'en'): Promise<ArticlePostData> {
   const slugWithLocale = slug.split('-').slice(0, -1).concat(locale).join('-');
   const fullPath = path.join(postsDirectory, `${slugWithLocale}.md`);
 
@@ -125,16 +127,7 @@ export async function getPostData(slug: string, locale: string = 'en') {
   const processedContent = await remark().use(html).process(matterResult.content);
   const contentHtml = processedContent.toString();
 
-  const data = matterResult.data as {
-    id: string;
-    title: string;
-    date: string;
-    author: string;
-    image: string;
-    tags: string[];
-    language: string;
-    category?: Category;
-  };
+  const data = matterResult.data as PostFrontmatter;
 
   // 组合数据
   return {
@@ -144,3 +137,14 @@ export async function getPostData(slug: string, locale: string = 'en') {
     category: data.category ?? deriveCategory(data.tags, data.title)
   };
 }
+
+export const getPostDescription = (post: ArticlePostData): string => {
+  const editorialSummary = post.summary?.replace(/\s+/g, ' ').trim();
+  if (editorialSummary) return editorialSummary;
+
+  return post.contentHtml
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 160);
+};
