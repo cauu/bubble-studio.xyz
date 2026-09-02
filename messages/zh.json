@@ -244,6 +244,8 @@
     "stakeNow": "立即质押到"
   },
   "governance": {
+    "page_title": "Cardano 治理",
+    "page_intro": "查看经过整理的 Cardano 治理行动，对照支持与反对观点，并了解 Pao Studio 如何参与去中心化决策。",
     "actions": "治理行动",
     "hot_topics": "热门话题",
     "no_data": "暂无数据",

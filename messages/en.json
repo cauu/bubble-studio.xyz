@@ -244,6 +244,8 @@
     "stakeNow": "Stake Now to"
   },
   "governance": {
+    "page_title": "Cardano Governance",
+    "page_intro": "Review selected Cardano governance actions, compare supporting and opposing views, and see how Pao Studio approaches decentralized decision-making.",
     "actions": "Governance Actions",
     "hot_topics": "Hot Topics",
     "no_data": "No Data",

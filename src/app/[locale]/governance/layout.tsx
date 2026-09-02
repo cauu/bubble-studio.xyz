@@ -1,6 +1,13 @@
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 import { ReactNode } from 'react';
+import {
+  getAbsoluteUrl,
+  getAlternateOpenGraphLocales,
+  getLanguageAlternates,
+  getLocalizedUrl,
+  getOpenGraphLocale
+} from '@/lib/seo';
 
 type Props = {
   children: ReactNode;
@@ -9,8 +16,7 @@ type Props = {
 
 export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale });
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz';
-  const url = `${baseUrl}/${locale === 'en' ? '' : locale + '/'}governance`;
+  const url = getLocalizedUrl(locale, 'governance');
 
   return {
     title: t('seo.governance.title'),
@@ -21,29 +27,26 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
       url,
       siteName: t('seo.siteName'),
       type: 'website',
-      locale: locale,
+      locale: getOpenGraphLocale(locale),
       images: [
         {
-          url: `${baseUrl}/og-default.png`,
+          url: getAbsoluteUrl('/og-default.png'),
           width: 1200,
           height: 630,
           alt: t('seo.siteName')
         }
-      ]
+      ],
+      alternateLocale: getAlternateOpenGraphLocales(locale)
     },
     twitter: {
       card: 'summary_large_image',
       title: t('seo.governance.title'),
       description: t('seo.governance.description'),
-      images: [`${baseUrl}/og-default.png`]
+      images: [getAbsoluteUrl('/og-default.png')]
     },
     alternates: {
       canonical: url,
-      languages: {
-        en: `${baseUrl}/governance`,
-        zh: `${baseUrl}/zh/governance`,
-        tw: `${baseUrl}/tw/governance`
-      }
+      languages: getLanguageAlternates('governance')
     }
   };
 }

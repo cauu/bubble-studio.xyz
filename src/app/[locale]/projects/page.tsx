@@ -3,6 +3,13 @@ import { useTranslations } from 'next-intl';
 import { Metadata } from 'next';
 import { Reveal } from '@/components/ui/Reveal';
 import { ProjectCard, ProjectCardProps } from '@/components/projects/ProjectCard';
+import {
+  getAbsoluteUrl,
+  getAlternateOpenGraphLocales,
+  getLanguageAlternates,
+  getLocalizedUrl,
+  getOpenGraphLocale
+} from '@/lib/seo';
 
 type Props = {
   params: { locale: string };
@@ -10,8 +17,7 @@ type Props = {
 
 export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale });
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz';
-  const url = `${baseUrl}/${locale === 'en' ? '' : locale + '/'}projects`;
+  const url = getLocalizedUrl(locale, 'projects');
 
   return {
     title: t('seo.projects.title'),
@@ -22,15 +28,26 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
       url,
       siteName: t('seo.siteName'),
       type: 'website',
-      locale
+      locale: getOpenGraphLocale(locale),
+      images: [
+        {
+          url: getAbsoluteUrl('/og-default.png'),
+          width: 1200,
+          height: 630,
+          alt: t('seo.siteName')
+        }
+      ],
+      alternateLocale: getAlternateOpenGraphLocales(locale)
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('seo.projects.title'),
+      description: t('seo.projects.description'),
+      images: [getAbsoluteUrl('/og-default.png')]
     },
     alternates: {
       canonical: url,
-      languages: {
-        en: `${baseUrl}/projects`,
-        zh: `${baseUrl}/zh/projects`,
-        tw: `${baseUrl}/tw/projects`
-      }
+      languages: getLanguageAlternates('projects')
     }
   };
 }

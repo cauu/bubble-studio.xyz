@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
+import { getSiteOrigin } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz';
+  const siteOrigin = getSiteOrigin();
 
   return {
     rules: {
@@ -9,6 +10,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/_next/']
     },
-    sitemap: `${baseUrl}/sitemap.xml`
+    sitemap: `${siteOrigin}/sitemap.xml`,
+    host: siteOrigin
   };
 }
