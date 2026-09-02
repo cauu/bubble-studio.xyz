@@ -7,5 +7,8 @@ export const routing = defineRouting({
   // 默认语言
   defaultLocale: 'en',
 
-  localePrefix: 'as-needed'
+  localePrefix: 'as-needed',
+
+  // Page metadata emits BCP 47 alternates (zh-Hans/zh-Hant) with canonical production URLs.
+  alternateLinks: false
 });
