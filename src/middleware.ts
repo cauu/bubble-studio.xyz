@@ -4,6 +4,6 @@ import { routing } from './i18n/routing';
 export default createMiddleware(routing);
 
 export const config = {
-  // 匹配所有路径除了 api, _next/static, _next/image, favicon.ico
-  matcher: ['/((?!api|_next/static|_next/image|fonts|images|favicon.ico|md.json).*)']
+  // Keep framework, API, static assets and root metadata routes outside locale routing.
+  matcher: ['/((?!api|_next|fonts|images|favicon.ico|md.json|robots.txt|sitemap.xml).*)']
 };
