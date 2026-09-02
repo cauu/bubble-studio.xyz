@@ -6,6 +6,8 @@ import { getPostData, getPostDescription } from '@/lib/posts';
 import { CATEGORY_CHIP } from '@/lib/categories';
 import { Chip } from '@/components/ui/Chip';
 import { JsonLd } from '@/components/JsonLd';
+import { Link } from '@/i18n/navigation';
+import { getEntityIds } from '@/lib/entities';
 import {
   getAbsoluteUrl,
   getAlternateOpenGraphLocales,
@@ -88,6 +90,8 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
     const description = getPostDescription(post);
     const image = getAbsoluteUrl(post.image || '/og-default.png');
     const siteOrigin = getSiteOrigin();
+    const entityIds = getEntityIds();
+    const isMartin = post.author === 'Martin';
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
@@ -97,10 +101,14 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
       image: [image],
       datePublished: post.date,
       ...(post.updated ? { dateModified: post.updated } : {}),
-      author: {
-        '@type': 'Person',
-        name: post.author
-      },
+      author: isMartin
+        ? {
+            '@id': entityIds.martin
+          }
+        : {
+            '@type': 'Person',
+            name: post.author
+          },
       publisher: {
         '@id': `${siteOrigin}/#organization`
       },
@@ -129,7 +137,16 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
               <span className="text-muted-soft" aria-hidden="true">
                 ·
               </span>
-              <span className="text-[13.5px] font-semibold text-muted">{post.author}</span>
+              {isMartin ? (
+                <Link
+                  href="/about#martin"
+                  className="text-[13.5px] font-semibold text-muted underline decoration-hairline underline-offset-[3px] transition-colors hover:text-brand-incana"
+                >
+                  {post.author}
+                </Link>
+              ) : (
+                <span className="text-[13.5px] font-semibold text-muted">{post.author}</span>
+              )}
             </div>
           </header>
 

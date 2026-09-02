@@ -6,8 +6,9 @@ This file is a machine-readable discovery index. The linked public HTML pages re
 
 ## Core entities
 
-- [Pao Studio](https://www.bubble-studio.xyz/): The organization and website publishing these resources.
-- Pao Pool: The Cardano stake pool operated by Pao Studio.
+- [Pao Studio](https://www.bubble-studio.xyz/about): The organization publishing these resources. Earlier public pages and the domain also use the alternate name Bubble Studio.
+- [Martin / 0xMartin](https://www.bubble-studio.xyz/about#martin): The author of most Pao Studio articles and the public identity connected to the linked GitHub and X profiles.
+- [Pao Pool](https://www.bubble-studio.xyz/staking#pao-pool): The Cardano stake pool operated by Pao Studio.
 - Pao Pool ID: `pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm`
 - [Pao Pool on CardanoScan](https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm): Current independently verifiable pool data.
 - [Pao Pool on Cexplorer](https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm): Pool identity and delegation explorer.
@@ -27,5 +28,8 @@ This file is a machine-readable discovery index. The linked public HTML pages re
 
 ## Site discovery
 
+- [About Pao Studio](https://www.bubble-studio.xyz/about)
+- [关于 Pao Studio](https://www.bubble-studio.xyz/zh/about)
+- [關於 Pao Studio](https://www.bubble-studio.xyz/tw/about)
 - [XML sitemap](https://www.bubble-studio.xyz/sitemap.xml)
 - [Robots policy](https://www.bubble-studio.xyz/robots.txt)
