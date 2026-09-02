@@ -3,7 +3,7 @@
 ## Spec Control
 
 - Spec ID：S0002
-- Status：ACTIVE
+- Status：COMPLETE
 - Created：2026-09-02 16:38 +08:00
 - Supersedes：none
 - Depends on：S0001 COMPLETE
@@ -144,7 +144,7 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - [x] s2-03 实现三语 Cardano staking 主题中心页与 metadata。Acceptance：TC-01 至 TC-04。
 - [x] s2-04 增加 WebPage、BreadcrumbList 与 FAQPage JSON-LD。Acceptance：TC-05。
 - [x] s2-05 建立首页、项目页、相关文章双向链接并更新 sitemap。Acceptance：TC-06、TC-07。
-- [ ] s2-06 完成本地生产构建、五页以内 HTML 抽样、移动端与链接验证，追加报告和最终证据。Acceptance：TC-01 至 TC-10。
+- [x] s2-06 完成本地生产构建、五页以内 HTML 抽样、移动端与链接验证，追加报告和最终证据。Acceptance：TC-01 至 TC-10。
 
 ## 5. Test And Acceptance Criteria
 
@@ -169,6 +169,7 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - 2026-09-02 | s2-03 实现 `/staking`、`/zh/staking`、`/tw/staking` 的服务端页面与 metadata；抽取共享 pool stats 读取逻辑，并将 fallback、APY 估算与奖励不保证状态显示在页面中。
 - 2026-09-02 | s2-04 增加与可见页面一致的 WebPage、BreadcrumbList 与五组 FAQPage JSON-LD，并连接 S0001 的 WebSite 与 Organization 实体 ID。
 - 2026-09-02 | s2-05 将 Staking 加入桌面与移动导航、Footer、首页说明和项目页；两组三语文章增加上下文回链；sitemap 增加三个 staking URL。
+- 2026-09-02 16:59 +08:00 | s2-06 完成生产构建、五个 HTML 来源抽样、三语 metadata 与 JSON-LD 自动断言、375 px 与 1440 px 浏览器验收、站内链接和 sitemap 复核；S0002 状态变更为 COMPLETE。
 
 ## 7. Validation Evidence (append-only)
 
@@ -187,7 +188,12 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - TC-05 | stack: node/http | command: extract JSON-LD from local production HTML and run JSON.parse assertions | result: pass | note: WebPage、BreadcrumbList、FAQPage 均可解析；五组问题与答案逐项存在于可见 HTML
 - TC-06 | stack: node/http+source | command: inspect home and projects production HTML plus six Markdown backlinks | result: pass | note: 导航、Footer、首页、Pao Pool 项目卡与两组三语文章均链接主题页；主题页反向链接三组相关文章
 - TC-07 | stack: node/http | command: parse local production sitemap | result: pass | note: sitemap 共 63 个 URL，包含 `/staking`、`/zh/staking`、`/tw/staking`，三条静态 URL 均不声明 lastModified
+- TC-01/02/04/05/06/07 | stack: node/http+source | command: `node scripts/verify-staking-hub.mjs http://127.0.0.1:3100` | result: pass | note: 三语页面、canonical、hreflang、HTML lang、OG locale、八个章节、五组可见 FAQ 与 FAQPage 一致性、pool ID、来源、首页/项目页入口、六篇文章回链和三个 sitemap URL 全部通过
+- TC-08 | stack: in-app browser | command: production page at 375x812 and 1440x900 | result: pass | note: 两种视口的 document scrollWidth 等于 clientWidth；唯一 H1、五组 FAQ、桌面导航、移动菜单、CTA 与首屏布局正常
+- TC-09 | stack: node+next | command: `pnpm exec tsc --noEmit`; `pnpm build`; `node scripts/verify-seo.mjs http://127.0.0.1:3100`; `git diff --check` | result: pass | note: 30 个静态页面构建完成；基础验证器已更新为 18 个静态 URL、63 个 sitemap URL
+- TC-10 | stack: manual degraded geo-diagnose | command: five-HTML snapshot review and report append | result: pass | note: 只使用三语 staking、首页与项目页五个 HTML 来源；未测量或声称实时搜索排名、流量、索引变化、AI 召回或引用份额
 
 ## 8. Change Log (append-only)
 
 - 2026-09-02 16:38 +08:00 | Initial immutable spec activated after S0001 completion. The queued topic-hub outline is narrowed to one user-visible Cardano staking and Pao Pool page; later specs remain out of scope.
+- 2026-09-02 16:59 +08:00 | Completion transition. All six items and TC-01 through TC-10 have durable evidence; S0002 is closed without activating S0003.

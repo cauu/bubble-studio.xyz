@@ -13,12 +13,12 @@
 | 顺序 | Spec ID | 状态     | 目标                                              | 依赖                         |
 | ---- | ------- | -------- | ------------------------------------------------- | ---------------------------- |
 | 1    | S0001   | COMPLETE | 修复技术 SEO/GEO 基础、结构化数据与服务端可提取性 | 无                           |
-| 2    | S0002   | ACTIVE   | 建立 Cardano staking 与 Pao Pool 主题中心页       | S0001 完成                   |
+| 2    | S0002   | COMPLETE | 建立 Cardano staking 与 Pao Pool 主题中心页       | S0001 完成                   |
 | 3    | S0003   | QUEUED   | 改造内容模板、内部链接与证据呈现                  | S0002 完成                   |
 | 4    | S0004   | QUEUED   | 强化品牌、作者、项目实体及外部一致性              | S0003 完成                   |
 | 5    | S0005   | QUEUED   | 建立 Search Console 与 GEO 观察测量闭环           | S0004 完成、用户授权外部账号 |
 
-当前唯一执行标准是 [S0002 Cardano Staking Topic Hub](./20260902T1638-S0002-cardano-staking-topic-hub.md)。S0003-S0005 仍为 QUEUED，禁止并行执行。
+当前没有 ACTIVE spec。[S0002 Cardano Staking Topic Hub](./20260902T1638-S0002-cardano-staking-topic-hub.md) 已完成。S0003-S0005 仍为 QUEUED，尚未构成执行标准。
 
 ## 排队 Spec 轮廓
 
@@ -75,3 +75,4 @@
 - 2026-09-02 16:02 +08:00 | 创建注册表；S0001 设为唯一 ACTIVE；S0002-S0005 仅排队，禁止并行执行。
 - 2026-09-02 16:16 +08:00 | S0001 验收完成并变更为 COMPLETE；当前无 ACTIVE spec，S0002-S0005 状态不变。
 - 2026-09-02 16:38 +08:00 | 用户授权继续下一份 spec；创建 S0002 并设为唯一 ACTIVE，主题确定为 Cardano staking 与 Pao Pool；S0003-S0005 状态不变。
+- 2026-09-02 16:59 +08:00 | S0002 全部事项与验收完成并变更为 COMPLETE；当前无 ACTIVE spec，S0003-S0005 保持 QUEUED。

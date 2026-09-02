@@ -133,3 +133,43 @@
 | content extraction health | pass           | 五个 HTML 抽样与两个发现入口均可直接读取                   |
 
 未计算聚合分数，也未观察 Google/Bing 实时排名、流量、索引变化或任何 AI 平台的召回与引用份额。`geo-diagnose` 仍以手工降级模式执行，因为 Cola 安装包中的入口脚本缺少 `geo_seo_hub` 运行时。下一阶段应等 S0002 明确激活后，再选择一个对用户可见的主题中心页进行试点。
+
+## S0002 完成后复核
+
+本节是 2026-09-02 16:59 +08:00 对 S0002 本地生产构建的追加复核。改动尚未部署，因此只证明当前 commit 序列的技术与内容合同已通过，不表示搜索引擎已经抓取、收录或提高排名。
+
+复核严格限制为五个 HTML URL，另检查 sitemap：
+
+- 英文主题页 `/staking`，SHA-256 `d82c6c90dd51d69ebf9b64660fa290b138e393136d60f993f7cdf0d8419c513a`
+- 简体中文主题页 `/zh/staking`，SHA-256 `548fe446872cfc65be473249f406d54bb66a043c413f045bde876545cb4f5c9d`
+- 繁体中文主题页 `/tw/staking`，SHA-256 `ee52849e020817fc554448b3b936431a586b9bf2bdc26cc4f1b1dc6ec5e4528c`
+- 首页 `/`，SHA-256 `da6d61e127d6933c637dcc7ede30af5ef4d6c324ca0f7fb85580355cc91ba4af`
+- 项目页 `/projects`，SHA-256 `bce331faebd8dd1c82db2efe5dbfb32e74375fd471ce54c091719a3580151458`
+- `sitemap.xml`，SHA-256 `5d25aec55aaf8c4785238af7d36039d490bdbee24a34af9a1a93cf0af5ec3d09`
+
+### 复核结果
+
+- 三个主题页均返回 200，具有 self-canonical、三语 hreflang、标准 HTML lang 与 Open Graph locale，且没有冲突的 HTTP hreflang。
+- 原始 HTML 均包含唯一 H1、直接答案、八个主要章节、五步委托、五组可见 FAQ、官方来源、Pao Pool 完整 pool ID、浏览器入口和奖励不保证说明。
+- WebPage、BreadcrumbList 与 FAQPage JSON-LD 均可解析。FAQPage 的五组问题和答案逐项存在于可见页面中，没有增加隐藏主张。
+- 首页导航、首页正文与项目页提供 `/staking` 上下文入口；两组三语文章共六个文件回链到对应语言主题页，主题页反向连接三组相关文章。
+- sitemap 共 63 个 URL，三个 staking URL 与 canonical 一致，且不声明虚假 `lastModified`。
+- 375 × 812 与 1440 × 900 的浏览器验收中，页面宽度均无横向溢出；移动菜单、桌面导航、CTA、标题与矿池数据卡布局正常。
+- `pnpm build` 生成 30 个静态页面；TypeScript、基础 SEO 验证器、S0002 验证器与 diff whitespace 检查通过。
+
+### Audit Catalog 复核状态
+
+| 审计项                    | S0002 后状态   | 证据边界                                                       |
+| ------------------------- | -------------- | -------------------------------------------------------------- |
+| entity clarity            | pass           | Cardano staking、Pao Pool 与 Pao Studio 的关系在可见正文中明确 |
+| evidence density          | pass           | 机制与选择说明连接四个 Cardano 一手来源和两个链上浏览器        |
+| citation readiness        | pass           | 三语 canonical、语言链接、直接答案、FAQ 与页面实体可稳定引用   |
+| authority signals         | partial        | 协议来源和矿池身份可核验；作者与更强组织证明留给 S0004         |
+| freshness signals         | pass           | 动态数据区分 live 与 fallback，sitemap 不伪造静态更新时间      |
+| structured data validity  | pass           | WebPage、BreadcrumbList、FAQPage 与可见内容通过自动断言        |
+| answerability             | pass           | 三语原始 HTML 均提供完整问题解释、步骤、边界与来源             |
+| comparison completeness   | not-applicable | 页面提供选择清单，但不声称进行最佳矿池排名或全面比较           |
+| source transparency       | pass           | 协议事实、矿池身份、动态数据来源和 fallback 状态均在页面公开   |
+| content extraction health | pass           | 三语页面无需客户端 JavaScript 即可提取主要内容与结构化数据     |
+
+本次仍是 `geo-diagnose` 手工降级复核，因为 Cola 安装包缺少执行器依赖的 `geo_seo_hub` 运行时。没有连接 Search Console、Bing 或实时 AI 平台，也没有观察或声称排名、流量、索引变化、AI 召回率或引用份额提升。
