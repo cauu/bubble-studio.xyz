@@ -173,3 +173,28 @@
 | content extraction health | pass           | 三语页面无需客户端 JavaScript 即可提取主要内容与结构化数据     |
 
 本次仍是 `geo-diagnose` 手工降级复核，因为 Cola 安装包缺少执行器依赖的 `geo_seo_hub` 运行时。没有连接 Search Console、Bing 或实时 AI 平台，也没有观察或声称排名、流量、索引变化、AI 召回率或引用份额提升。
+
+## S0002.1 机器优先入口修正复核
+
+本节是 2026-09-02 17:14 +08:00 对本地生产构建的追加复核。用户确认将 staking 主题页从全站醒目入口降级为机器优先、低曝光的公开语义页面。页面没有按 User-Agent 分流，也没有隐藏内容或 `noindex`。
+
+复核仍限制为五个 HTML URL，另检查两个非 HTML 发现入口：
+
+- 英文主题页 `/staking`，SHA-256 `123fe5dedd181dd41b5380420b667361ad63a801697d7ea349b2dc828370f399`
+- 简体中文主题页 `/zh/staking`，SHA-256 `966613938c7de141cf323e45c488ce96cc751791bead2db86cf0b29939c369e5`
+- 繁体中文主题页 `/tw/staking`，SHA-256 `4c697b90fa3c6ed4c74d8601bf2eca4e6cce3e4cf0913e241ffc18a88603999b`
+- 首页 `/`，SHA-256 `bead894c4c860fb4229ec2f2b529dffd56fc62b5afe71f3fa65d888abb9fd8e2`
+- 项目页 `/projects`，SHA-256 `9c5dcd6235f8c1d65a4cf0509e04b4a00bb6ac053881865ee7f3ff63f7ce2971`
+- `llms.txt`，SHA-256 `0709823e2bc7e126ffe52d17e88bc12d1ab5aa42c04ba09c6a6ab24d82b844df`
+- `sitemap.xml`，SHA-256 `5d25aec55aaf8c4785238af7d36039d490bdbee24a34af9a1a93cf0af5ec3d09`
+
+### 复核结果
+
+- 顶部导航、Footer、首页额外 staking 引导和 Projects 页 Pao Pool 卡片已撤下；三语页面仍能通过直接 URL、sitemap 和六篇相关文章的自然链接发现。
+- `/llms.txt` 首轮因国际化 middleware 改写返回 404。matcher 排除修复后，本地生产响应为 200 `text/plain`，包含 Pao Studio、Pao Pool、完整 pool ID、三语 canonical、四个协议来源和 sitemap。
+- 普通请求与 Googlebot User-Agent 请求得到逐字节一致的英文 staking HTML，确认当前实现没有 crawler 专用核心内容。
+- 三语页面继续返回 200，保留 canonical、hreflang、唯一 H1、八个区块、五组可见 FAQ、WebPage、BreadcrumbList 与 FAQPage。
+- 验收脚本同时修正了两类误判：FAQ 可见性比较会先排除 script/style/template，首页与项目页会断言醒目入口不存在，而不是被全局导航中的旧链接误导。
+- `pnpm build`、TypeScript、S0001 回归脚本与 S0002.1 专项脚本通过。sitemap 仍为 63 个 URL，其中三个 staking URL 没有虚假更新时间。
+
+`llms.txt` 在本项目中只是实验性机器发现入口，不代表搜索引擎或 AI 平台承诺读取。`geo-diagnose` 正式执行器再次以 deterministic 模式调用，仍因缺少 `geo_seo_hub` Python 模块失败，因此没有生成或伪造 Artifact Bus 运行目录。本节是明确标记的手工降级复核，不包含真实排名、流量、索引、AI 召回或引用份额结论。

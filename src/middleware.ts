@@ -5,5 +5,5 @@ export default createMiddleware(routing);
 
 export const config = {
   // Keep framework, API, static assets and root metadata routes outside locale routing.
-  matcher: ['/((?!api|_next|fonts|images|favicon.ico|md.json|robots.txt|sitemap.xml).*)']
+  matcher: ['/((?!api|_next|fonts|images|favicon.ico|md.json|robots.txt|sitemap.xml|llms.txt).*)']
 };

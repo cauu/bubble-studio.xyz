@@ -1,4 +1,5 @@
 import { promises as fs } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 
 const requestOrigin = process.argv[2] || 'http://127.0.0.1:3000';
@@ -19,6 +20,7 @@ const pageCases = [
     canonical: `${canonicalOrigin}/staking`,
     lang: 'en',
     openGraphLocale: 'en_US',
+    navLabel: 'Staking',
     boundary: 'Rewards are not guaranteed'
   },
   {
@@ -27,6 +29,7 @@ const pageCases = [
     canonical: `${canonicalOrigin}/zh/staking`,
     lang: 'zh-Hans',
     openGraphLocale: 'zh_CN',
+    navLabel: '质押',
     boundary: '奖励并不保证'
   },
   {
@@ -35,13 +38,14 @@ const pageCases = [
     canonical: `${canonicalOrigin}/tw/staking`,
     lang: 'zh-Hant',
     openGraphLocale: 'zh_TW',
+    navLabel: '質押',
     boundary: '獎勵並不保證'
   }
 ];
 
 const contextCases = [
-  { name: 'home', path: '/', needle: 'href="/staking"' },
-  { name: 'projects', path: '/projects', needle: 'href="/staking"' }
+  { name: 'home', path: '/' },
+  { name: 'projects', path: '/projects' }
 ];
 
 const articleBacklinks = [
@@ -81,14 +85,28 @@ const decodeText = (value) =>
     .replace(/\s+/g, ' ')
     .trim();
 
+const getVisibleText = (html) =>
+  decodeText(
+    html
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<template\b[^>]*>[\s\S]*?<\/template>/gi, ' ')
+  );
+
+const getElementHtml = (html, tagName) =>
+  html.match(new RegExp(`<${tagName}\\b[^>]*>[\\s\\S]*?<\\/${tagName}>`, 'i'))?.[0] || '';
+
 const getPage = async ({ name, path: pathname }) => {
   const response = await fetch(`${requestOrigin}${pathname}`);
   assert(response.ok, `${name}: expected 200, received ${response.status}`);
   return { headers: response.headers, html: await response.text() };
 };
 
+const pages = new Map();
+
 for (const pageCase of pageCases) {
   const page = await getPage(pageCase);
+  pages.set(pageCase.name, page);
   const htmlTag = getTags(page.html, 'html')[0] || '';
   const links = getTags(page.html, 'link');
   const metas = getTags(page.html, 'meta');
@@ -109,7 +127,9 @@ for (const pageCase of pageCases) {
   const webPage = graphNodes.find((node) => node['@type'] === 'WebPage');
   const breadcrumb = graphNodes.find((node) => node['@type'] === 'BreadcrumbList');
   const faq = graphNodes.find((node) => node['@type'] === 'FAQPage');
-  const visibleText = decodeText(page.html);
+  const visibleText = getVisibleText(page.html);
+  const navText = getVisibleText(getElementHtml(page.html, 'nav'));
+  const footerText = getVisibleText(getElementHtml(page.html, 'footer'));
 
   assert(getAttribute(htmlTag, 'lang') === pageCase.lang, `${pageCase.name}: HTML lang mismatch`);
   assert(getAttribute(canonical || '', 'href') === pageCase.canonical, `${pageCase.name}: canonical mismatch`);
@@ -122,6 +142,12 @@ for (const pageCase of pageCases) {
     !/rel="alternate"[^>]*hreflang/i.test(page.headers.get('link') || ''),
     `${pageCase.name}: HTTP hreflang conflict`
   );
+  assert(
+    !metas.some((tag) => getAttribute(tag, 'name') === 'robots' && /noindex/i.test(getAttribute(tag, 'content') || '')),
+    `${pageCase.name}: unexpected noindex`
+  );
+  assert(!navText.includes(pageCase.navLabel), `${pageCase.name}: prominent navigation entry remains`);
+  assert(!footerText.includes('Cardano · PAO'), `${pageCase.name}: prominent footer entry remains`);
   assert((page.html.match(/<h1(?:\s|>)/gi) || []).length === 1, `${pageCase.name}: expected one H1`);
   assert(
     sectionIds.every((id) => page.html.includes(`id="${id}"`)),
@@ -149,9 +175,10 @@ for (const pageCase of pageCases) {
 
 for (const contextCase of contextCases) {
   const page = await getPage(contextCase);
-  assert(page.html.includes(contextCase.needle), `${contextCase.name}: staking link missing`);
-  if (contextCase.name === 'projects') assert(page.html.includes('Pao Pool'), 'projects: Pao Pool card missing');
-  console.log(`PASS ${contextCase.name} contextual-link=/staking`);
+  assert(!page.html.includes('href="/staking"'), `${contextCase.name}: prominent staking link remains`);
+  if (contextCase.name === 'projects')
+    assert(!getVisibleText(page.html).includes('Pao Pool'), 'projects: Pao Pool card remains');
+  console.log(`PASS ${contextCase.name} prominent-staking-entry=absent`);
 }
 
 for (const [relativePath, backlink] of articleBacklinks) {
@@ -159,6 +186,34 @@ for (const [relativePath, backlink] of articleBacklinks) {
   assert(source.includes(`](${backlink})`), `${relativePath}: localized staking backlink missing`);
 }
 console.log(`PASS article backlinks files=${articleBacklinks.length}`);
+
+const llmsResponse = await fetch(`${requestOrigin}/llms.txt`);
+assert(llmsResponse.ok, `llms.txt: expected 200, received ${llmsResponse.status}`);
+assert(llmsResponse.headers.get('content-type')?.startsWith('text/plain'), 'llms.txt: content type mismatch');
+const llms = await llmsResponse.text();
+const llmsRequiredValues = [
+  'Pao Studio',
+  'Pao Pool',
+  poolId,
+  ...pageCases.map((pageCase) => pageCase.canonical),
+  ...officialSources,
+  `${canonicalOrigin}/sitemap.xml`
+];
+assert(
+  llmsRequiredValues.every((value) => llms.includes(value)),
+  'llms.txt: required discovery value missing'
+);
+console.log('PASS llms.txt 200/text entities=yes locales=3 sources=4');
+
+const googlebotResponse = await fetch(`${requestOrigin}/staking`, {
+  headers: { 'user-agent': 'Googlebot/2.1 (+http://www.google.com/bot.html)' }
+});
+assert(googlebotResponse.ok, `Googlebot staking: expected 200, received ${googlebotResponse.status}`);
+const googlebotHtml = await googlebotResponse.text();
+const humanHtml = pages.get('staking-en').html;
+assert(googlebotHtml === humanHtml, 'staking: Googlebot and normal-user HTML differ');
+const stakingHash = createHash('sha256').update(humanHtml).digest('hex').slice(0, 12);
+console.log(`PASS no-cloaking staking html-sha256=${stakingHash}`);
 
 const sitemapResponse = await fetch(`${requestOrigin}/sitemap.xml`);
 assert(sitemapResponse.ok, `sitemap: expected 200, received ${sitemapResponse.status}`);
