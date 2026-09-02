@@ -261,6 +261,35 @@
     "title_our_opinion": "Our Opinion",
     "related_tweets": "Related Discussions"
   },
+  "about": {
+    "eyebrow": "PUBLIC IDENTITY",
+    "title": "Pao Studio",
+    "intro": "Pao Studio is a one-person product studio working with AI and Cardano. Earlier public pages and this domain also use the name Bubble Studio.",
+    "home": "Home",
+    "factsLabel": "Author and stake pool facts",
+    "studio": {
+      "eyebrow": "STUDIO",
+      "title": "One studio, two public names",
+      "body": "Pao Studio is the current public name used across this website. Bubble Studio remains an alternate name connected to earlier pages and the bubble-studio.xyz domain.",
+      "alias": "Also known as",
+      "contact": "Contact",
+      "email": "Email Pao Studio"
+    },
+    "author": {
+      "eyebrow": "AUTHOR AND BUILDER",
+      "body": "Martin writes Pao Studio articles and works on its products. The linked GitHub profile uses the public name 0xMartin.",
+      "github": "GitHub profile",
+      "x": "X profile"
+    },
+    "pool": {
+      "eyebrow": "CARDANO STAKE POOL",
+      "body": "Pao Pool is the Cardano stake pool used in Pao Studio's one-person company experiment. Pool operating revenue supports infrastructure and product work.",
+      "id": "Pool ID",
+      "cardanoscan": "CardanoScan",
+      "cexplorer": "Cexplorer",
+      "details": "Pao Pool details"
+    }
+  },
   "seo": {
     "siteName": "Pao Studio",
     "defaultTitle": "Pao Studio · A One-Person Company for the AI Era",
@@ -268,6 +297,10 @@
     "home": {
       "title": "Pao Studio · A One-Person Company for the AI Era",
       "description": "An experiment in building a durable, trusted, and sustainable company with AI agents and Cardano."
+    },
+    "about": {
+      "title": "About Pao Studio, Martin and Pao Pool",
+      "description": "Verified public identity details for Pao Studio, Martin or 0xMartin, and the Pao Pool Cardano stake pool."
     },
     "staking": {
       "title": "Staking - Pao Studio",

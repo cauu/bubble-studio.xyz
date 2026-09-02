@@ -62,7 +62,7 @@
 
 - [ ] s4-01 固化证据基线、稳定实体 ID、可见范围和未知项。Acceptance：TC-01、TC-06。
 - [x] s4-02 建立 Organization、Person、WebSite 与 Pao Pool Service 的可复用实体图。Acceptance：TC-02、TC-03。
-- [ ] s4-03 实现三语 About 事实页、metadata、结构化数据与 sitemap 收录。Acceptance：TC-01、TC-04。
+- [x] s4-03 实现三语 About 事实页、metadata、结构化数据与 sitemap 收录。Acceptance：TC-01、TC-04。
 - [ ] s4-04 把 Martin 的文章署名连接到 Person ID 与本语言 About，保留 MartinBot 边界，并更新机器清单。Acceptance：TC-03、TC-05、TC-06。
 - [ ] s4-05 完成构建、三语响应式浏览器检查、结构化数据、链接和 S0001-S0003 回归。Acceptance：TC-01 至 TC-07。
 
@@ -82,6 +82,7 @@
 - 2026-09-02 23:12 +08:00 | 按 `geo-diagnose` Skill 准备品牌、About、文章、GitHub 与 CardanoScan brief 并启动 deterministic 执行；入口脚本因 `ModuleNotFoundError: geo_seo_hub` 退出，未产生运行目录。
 - 2026-09-02 23:12 +08:00 | s4-01 以公开页面、仓库源码和配置完成降级诊断，冻结四个稳定实体 ID、低曝光可见范围、MartinBot 例外及 `public/md.json` 禁改边界。
 - 2026-09-02 23:19 +08:00 | s4-02 增加统一实体 helper；GitHub/X 归入 Martin，CardanoScan/Cexplorer 归入 Pao Pool Service，Organization、Person、WebSite 与 Service 通过稳定 ID 建立关系。
+- 2026-09-02 23:29 +08:00 | s4-03 用现有设计 token 实现三语 About 事实页、AboutPage/BreadcrumbList、canonical/hreflang，并把三条 About URL 加入 sitemap。
 
 ## 5. Validation Evidence (append-only)
 
@@ -91,6 +92,7 @@
 - TC-06 | stack: repository | command: inspect `public/md.json` and configured pool ID | result: protected-input | note: legacy description recorded; file excluded until on-chain metadata hash is verified
 - TC-07 | stack: skill-runtime | command: `python3 .agents/skills/geohub-geo-diagnose/scripts/run_diagnose.py ... --execution-mode deterministic` | result: blocked-tooling | note: missing `geo_seo_hub`; no Artifact Bus claimed
 - TC-02/03 | stack: type+source | command: `pnpm exec tsc --noEmit`; inspect site entity graph | result: pass | note: four stable IDs share one helper; identity and service sameAs links are separated by entity
+- TC-01/04 | stack: type+content | command: `pnpm exec tsc --noEmit`; validate locale JSON; run `human-writing/scripts/check_prose.py` on zh/tw About prose | result: pass | note: three locale contracts type-check; prohibited prose patterns=0
 
 ## 6. Change Log (append-only)
 
