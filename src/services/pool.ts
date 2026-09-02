@@ -18,6 +18,24 @@ const koiosApi: AxiosInstance = axios.create({
   }
 });
 
+const logKoiosError = (message: string, error: unknown) => {
+  console.error(message);
+
+  if (!axios.isAxiosError(error)) {
+    console.error(error instanceof Error ? error.message : 'Unknown error');
+    return;
+  }
+
+  if (error.response) {
+    console.error(`Status: ${error.response.status}`);
+    console.error(`Data: ${JSON.stringify(error.response.data)}`);
+    return;
+  }
+
+  console.error(`Code: ${error.code || 'UNKNOWN'}`);
+  console.error(`Message: ${error.message}`);
+};
+
 /**
  * @description 根据权益池 Bech32 ID 列表获取详细信息
  * @param {string[]} poolIds - 一个包含权益池 Bech32 ID 的数组
@@ -41,14 +59,7 @@ export const getPoolInfo = async (poolIds: string[]): Promise<PoolInfoResponse |
       console.error('Koios API request timed out (5s)');
       return null;
     }
-    console.error('Failed to fetch pool info from Koios API:');
-    // 增强错误处理，检查是否是 axios 错误以获取更多信息
-    if (axios.isAxiosError(error) && error.response) {
-      console.error(`Status: ${error.response.status}`);
-      console.error(`Data: ${JSON.stringify(error.response.data)}`);
-    } else {
-      console.error(error);
-    }
+    logKoiosError('Failed to fetch pool info from Koios API:', error);
     // 返回 null 而不是抛出错误
     return null;
   }
@@ -75,13 +86,7 @@ export const getPoolStakeSnapshot = async (poolBech32: string): Promise<PoolStak
       console.error(`Koios API request timed out (5s) for pool ${poolBech32}`);
       return null;
     }
-    console.error(`Failed to fetch stake snapshot for pool ${poolBech32}:`);
-    if (axios.isAxiosError(error) && error.response) {
-      console.error(`Status: ${error.response.status}`);
-      console.error(`Data: ${JSON.stringify(error.response.data)}`);
-    } else {
-      console.error(error);
-    }
+    logKoiosError(`Failed to fetch stake snapshot for pool ${poolBech32}:`, error);
     return null;
   }
 };
@@ -105,13 +110,7 @@ export const getPoolDelegators = async (poolBech32: string): Promise<PoolDelegat
       console.error(`Koios API request timed out (5s) for pool delegators ${poolBech32}`);
       return null;
     }
-    console.error(`Failed to fetch delegators for pool ${poolBech32}:`);
-    if (axios.isAxiosError(error) && error.response) {
-      console.error(`Status: ${error.response.status}`);
-      console.error(`Data: ${JSON.stringify(error.response.data)}`);
-    } else {
-      console.error(error);
-    }
+    logKoiosError(`Failed to fetch delegators for pool ${poolBech32}:`, error);
     return null;
   }
 };
