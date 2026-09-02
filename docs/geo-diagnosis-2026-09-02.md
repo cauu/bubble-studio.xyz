@@ -198,3 +198,20 @@
 - `pnpm build`、TypeScript、S0001 回归脚本与 S0002.1 专项脚本通过。sitemap 仍为 63 个 URL，其中三个 staking URL 没有虚假更新时间。
 
 `llms.txt` 在本项目中只是实验性机器发现入口，不代表搜索引擎或 AI 平台承诺读取。`geo-diagnose` 正式执行器再次以 deterministic 模式调用，仍因缺少 `geo_seo_hub` Python 模块失败，因此没有生成或伪造 Artifact Bus 运行目录。本节是明确标记的手工降级复核，不包含真实排名、流量、索引、AI 召回或引用份额结论。
+
+## S0002.2 视觉系统修正复核
+
+本节记录 2026-09-02 对 staking 页面视觉修正的本地生产构建验收。它只证明页面表现与已有技术合同没有回归，不表示搜索排名、索引状态或 AI 引用发生变化。
+
+### 视觉与交互结果
+
+- 页面继续使用 warm-neutral canvas；奖励与会员色块都收进内容宽度内，不再形成全宽黑色或黄色内容带。
+- 机制、五步委托、矿池选择、FAQ 与来源改为分隔式编辑布局；staking 页面源码不再包含 `shadow-soft` 或五列步骤网格。
+- 375 × 812、768 × 900、1440 × 900 三档分别检查英文、简体中文和繁体中文页面，九个组合均满足 `scrollWidth === clientWidth`。
+- 三语页面都保留八个内容区块与五组 FAQ；移动端会员标签保持内容宽度，FAQ summary 可获得焦点并正常展开。
+
+### 回归结果
+
+- `pnpm build` 成功生成 30 个页面，TypeScript 与 diff whitespace 检查通过。现存 `<img>` lint 与 Browserslist 提示不属于本次变更；Koios DNS 不可达时仍使用既有 fallback。
+- S0002 验收继续通过三语 canonical、hreflang、HTML lang、WebPage、BreadcrumbList、FAQPage、pool ID、四个官方来源、六篇文章回链、`llms.txt`、sitemap 与非 cloaking 检查。
+- S0001 验收继续通过五个代表性 HTML 页面、BlogPosting、Governance 服务端摘要、robots 与包含 63 个 URL 的 sitemap。

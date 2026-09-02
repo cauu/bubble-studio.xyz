@@ -102,6 +102,22 @@ const getPage = async ({ name, path: pathname }) => {
   return { headers: response.headers, html: await response.text() };
 };
 
+const stakingSource = await fs.readFile(path.join(process.cwd(), 'src/app/[locale]/staking/page.tsx'), 'utf8');
+const stakingSections = [...stakingSource.matchAll(/<section\b[^>]*className="([^"]*)"/g)].map((match) => match[1]);
+
+assert(
+  stakingSections.every((className) => !className.includes('bg-primary') && !className.includes('bg-brand-lemon')),
+  'visual contract: full-width primary or lemon section remains'
+);
+assert(stakingSource.includes('rounded-xl bg-brand-incana'), 'visual contract: inset Incana reward container missing');
+assert(
+  stakingSource.includes('rounded-xl bg-brand-lemon'),
+  'visual contract: inset lemon membership container missing'
+);
+assert(!stakingSource.includes('shadow-soft'), 'visual contract: independent shadow cards remain');
+assert(!stakingSource.includes('grid-cols-5'), 'visual contract: five-column delegation layout remains');
+console.log('PASS visual contract inset-accents=yes shadow-cards=0 five-column-layout=absent');
+
 const pages = new Map();
 
 for (const pageCase of pageCases) {
