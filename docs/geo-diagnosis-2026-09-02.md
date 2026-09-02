@@ -215,3 +215,19 @@
 - `pnpm build` 成功生成 30 个页面，TypeScript 与 diff whitespace 检查通过。现存 `<img>` lint 与 Browserslist 提示不属于本次变更；Koios DNS 不可达时仍使用既有 fallback。
 - S0002 验收继续通过三语 canonical、hreflang、HTML lang、WebPage、BreadcrumbList、FAQPage、pool ID、四个官方来源、六篇文章回链、`llms.txt`、sitemap 与非 cloaking 检查。
 - S0001 验收继续通过五个代表性 HTML 页面、BlogPosting、Governance 服务端摘要、robots 与包含 63 个 URL 的 sitemap。
+
+## S0003 收窄内容信号复核
+
+本节记录 2026-09-02 对九篇三语 Cardano 相关文章的本地生产构建验收。用户要求本轮不改 Blog 页面样式，因此实现严格限制为 frontmatter、metadata、BlogPosting 和正文普通内部链接。
+
+### 实施与验收结果
+
+- 文章数据合同新增可选 `summary` 与 `updated`。九篇试点文章的 metadata description 和 BlogPosting description 使用同一份本语言人工摘要，`datePublished` 保持原值，`dateModified` 记录实际修订日 `2026-09-02`。
+- 其余 36 篇文章继续使用原有 description fallback，并且不会产生虚假的 `dateModified`。
+- 九篇试点文章各有两条同语言 contextual links，正文站内链接总数从 6 增至 15；九个唯一链接目标均返回 200。
+- 没有新增摘要、日期、来源或相关文章 UI。英文、简体中文和繁体中文抽样在 375 与 1440 下都保持一个 H1、原有文章宽度和零横向溢出。
+- `pnpm build` 生成 30 个页面；TypeScript、S0001、S0002、S0003、Prettier 和 diff whitespace 检查通过。
+
+### 证据边界
+
+这次改动提高了九篇试点文章的 metadata 一致性、真实修订信号和站内主题关系。它没有补充外部一手来源，也没有改进其余 36 篇文章，因此 evidence density 与全站 freshness 只能记录为局部改善。`geo-diagnose` deterministic 执行器仍因缺少 `geo_seo_hub` 模块而无法生成 Artifact Bus；本节不包含排名、索引、流量、AI 召回或引用份额结论。

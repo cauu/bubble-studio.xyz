@@ -11,6 +11,8 @@ tags:
   - "Indie"
   - "AI"
 category: essay
+summary: "A personal essay on using a Cardano stake pool to build an independent livelihood amid AI-driven job uncertainty and changing digital work."
+updated: "2026-09-02"
 ---
 
 *Why I Chose Plan B*
@@ -99,6 +101,8 @@ More importantly, its staking mechanism: when users delegate ADA to your pool, t
 This is what I call the "business chassis": an indie developer can use it to create continuous cash flow, while it comes with built-in membership systems and global payment capabilities.
 
 For a sourced explanation of delegation, reward uncertainty, and how to verify PAO, read the [Cardano staking and Pao Pool guide](/staking).
+
+The support model built on this relationship is explored in [Software Subscriptions Are Failing](/blogs/20260405-subscriptions-are-failing-en).
 
 ---
 

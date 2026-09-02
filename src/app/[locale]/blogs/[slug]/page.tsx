@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 
-import { getPostData } from '@/lib/posts';
+import { getPostData, getPostDescription } from '@/lib/posts';
 import { CATEGORY_CHIP } from '@/lib/categories';
 import { Chip } from '@/components/ui/Chip';
 import { JsonLd } from '@/components/JsonLd';
@@ -28,11 +28,7 @@ export async function generateMetadata({ params: { locale, slug } }: Props): Pro
     const t = await getTranslations({ locale });
 
     const canonicalUrl = getPostUrl(locale, slug);
-    const description = post.contentHtml
-      .replace(/<[^>]*>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, 160);
+    const description = getPostDescription(post);
     const image = getAbsoluteUrl(post.image || '/og-default.png');
 
     return {
@@ -89,11 +85,7 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
   try {
     const post = await getPostData(slug, locale);
     const canonicalUrl = getPostUrl(locale, slug);
-    const description = post.contentHtml
-      .replace(/<[^>]*>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, 160);
+    const description = getPostDescription(post);
     const image = getAbsoluteUrl(post.image || '/og-default.png');
     const siteOrigin = getSiteOrigin();
     const structuredData = {
@@ -104,6 +96,7 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
       description,
       image: [image],
       datePublished: post.date,
+      ...(post.updated ? { dateModified: post.updated } : {}),
       author: {
         '@type': 'Person',
         name: post.author
@@ -149,7 +142,7 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
         </article>
 
         <div className="mt-12 pt-8 border-t border-hairline">
-          <Comments term={post.id} language={locale as any} />
+          <Comments term={String(post.id)} language={locale as any} />
         </div>
       </div>
     );
