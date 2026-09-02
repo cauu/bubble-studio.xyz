@@ -1,17 +1,15 @@
 import { MetadataRoute } from 'next';
 import { getAllPostSlugs } from '@/lib/posts';
 import { routing } from '@/i18n/routing';
+import { getLocalizedUrl } from '@/lib/seo';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz';
   const staticRoutes = ['', 'projects', 'skills', 'governance', 'blogs'];
 
   // 生成静态路由（所有语言版本）
   const staticRouteEntries = routing.locales.flatMap((locale) =>
     staticRoutes.map((route) => {
-      const path = route === '' ? '' : `/${route}`;
-      const localePrefix = locale === 'en' ? '' : `/${locale}`;
-      const url = `${baseUrl}${localePrefix}${path}`;
+      const url = getLocalizedUrl(locale, route);
 
       return {
         url,
@@ -36,8 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return routing.locales.map((loc) => {
         // 为每个语言版本生成对应的博客文章 URL
         // 如果原文章是该语言，则生成该语言的 URL；否则生成所有语言的 URL
-        const localePrefix = loc === 'en' ? '' : `/${loc}`;
-        const url = `${baseUrl}${localePrefix}/blogs/${baseSlug}`;
+        const url = getLocalizedUrl(loc, `blogs/${baseSlug}`);
 
         return {
           url,

@@ -5,7 +5,13 @@ import { Metadata } from 'next';
 import { getPostData } from '@/lib/posts';
 import { CATEGORY_CHIP } from '@/lib/categories';
 import { Chip } from '@/components/ui/Chip';
-import { routing } from '@/i18n/routing';
+import {
+  getAbsoluteUrl,
+  getAlternateOpenGraphLocales,
+  getOpenGraphLocale,
+  getPostLanguageAlternates,
+  getPostUrl
+} from '@/lib/seo';
 
 import Comments from '@/components/Comments';
 
@@ -13,20 +19,18 @@ type Props = {
   params: { locale: string; slug: string };
 };
 
-const localizedPostSlug = (slug: string, locale: string) => `${slug.replace(/-(en|zh|tw)$/, '')}-${locale}`;
-
-const postUrl = (baseUrl: string, locale: string, slug: string) => {
-  const localePrefix = locale === routing.defaultLocale ? '' : `/${locale}`;
-  return `${baseUrl}${localePrefix}/blogs/${localizedPostSlug(slug, locale)}`;
-};
-
 export async function generateMetadata({ params: { locale, slug } }: Props): Promise<Metadata> {
   try {
     const post = await getPostData(slug, locale);
+    const t = await getTranslations({ locale });
 
-    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://bubble-studio.xyz').replace(/\/$/, '');
-    const canonicalUrl = postUrl(baseUrl, locale, slug);
-    const description = post.contentHtml.substring(0, 160).replace(/<[^>]*>/g, '');
+    const canonicalUrl = getPostUrl(locale, slug);
+    const description = post.contentHtml
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 160);
+    const image = getAbsoluteUrl(post.image || '/og-default.png');
 
     return {
       title: post.title,
@@ -37,18 +41,21 @@ export async function generateMetadata({ params: { locale, slug } }: Props): Pro
         title: post.title,
         description,
         url: canonicalUrl,
+        siteName: t('seo.siteName'),
         type: 'article',
         images: [
           {
-            url: post.image || `${baseUrl}/og-default.png`,
+            url: image,
             width: 1200,
             height: 630,
             alt: post.title
           }
         ],
         publishedTime: post.date,
-        authors: ['Pao Studio'],
-        tags: post.tags
+        authors: [post.author],
+        tags: post.tags,
+        locale: getOpenGraphLocale(locale),
+        alternateLocale: getAlternateOpenGraphLocales(locale)
       },
 
       // Twitter Card 标签
@@ -56,14 +63,12 @@ export async function generateMetadata({ params: { locale, slug } }: Props): Pro
         card: 'summary_large_image',
         title: post.title,
         description,
-        images: [post.image || `${baseUrl}/og-default.png`],
+        images: [image],
         creator: '@cauu_128'
       },
       alternates: {
         canonical: canonicalUrl,
-        languages: Object.fromEntries(
-          routing.locales.map((targetLocale) => [targetLocale, postUrl(baseUrl, targetLocale, slug)])
-        )
+        languages: getPostLanguageAlternates(slug)
       }
     };
   } catch (error) {
