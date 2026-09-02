@@ -3,7 +3,7 @@
 ## Spec Control
 
 - Spec ID：S0001
-- Status：ACTIVE
+- Status：COMPLETE
 - Created：2026-09-02 16:02 +08:00
 - Supersedes：none
 - Active registry：`docs/specs/README.md`
@@ -108,12 +108,13 @@ S0001 只解决技术基础。它不创建主题中心页，不批量改写内�
 - [x] s1-01 修复 metadata routes 被 locale middleware 捕获的问题。Acceptance：TC-01。
 - [x] s1-02 修复博客文章 canonical、OG URL 和语言 alternate。Acceptance：TC-03、TC-04。
 - [x] s1-03 对 Koios 无响应错误日志进行脱敏。Acceptance：TC-09。
-- [ ] s1-04 新增共享 SEO URL 与 locale 工具，统一 canonical origin。Acceptance：TC-02、TC-03、TC-05。
-- [ ] s1-05 迁移根布局、首页、博客、项目、Skills、Governance、robots 与 sitemap，并迁移 viewport API。Acceptance：TC-02、TC-03、TC-05、TC-06。
-- [ ] s1-06 增加 Organization、WebSite 与 BlogPosting JSON-LD。Acceptance：TC-07。
-- [ ] s1-07 将 Governance 稳定语义外壳改为服务端输出。Acceptance：TC-08。
-- [ ] s1-08 使用真实文章日期和真实语言文件生成 sitemap。Acceptance：TC-02、TC-06。
-- [ ] s1-09 完成构建、生产 HTML 抽样、诊断报告更新和最终证据登记。Acceptance：TC-01 至 TC-10。
+- [x] s1-04 新增共享 SEO URL 与 locale 工具，统一 canonical origin。Acceptance：TC-02、TC-03、TC-05。
+- [x] s1-05 迁移根布局、首页、博客、项目、Skills、Governance、robots 与 sitemap，并迁移 viewport API。Acceptance：TC-02、TC-03、TC-05、TC-06。
+- [x] s1-06 增加 Organization、WebSite 与 BlogPosting JSON-LD。Acceptance：TC-07。
+- [x] s1-07 将 Governance 稳定语义外壳改为服务端输出。Acceptance：TC-08。
+- [x] s1-08 使用真实文章日期和真实语言文件生成 sitemap。Acceptance：TC-02、TC-06。
+- [x] s1-09 完成构建、生产 HTML 抽样、诊断报告更新和最终证据登记。Acceptance：TC-01 至 TC-10。
+- [x] s1-10 关闭 next-intl 自动生成的旧 locale HTTP alternate，消除与标准 BCP 47 HTML alternate 的冲突。Acceptance：TC-05。
 
 ## 4. Test And Acceptance Criteria
 
@@ -136,6 +137,14 @@ S0001 只解决技术基础。它不创建主题中心页，不批量改写内�
 - 2026-09-02 | s1-03 实现完成，Koios 无响应错误只保留错误码和消息。
 - 2026-09-02 | 用户要求先按 Immutable Spec 拆分范围；暂停 s1-04 及后续实现。
 - 2026-09-02 16:02 +08:00 | 创建 S0001，并设为唯一 active spec。
+- 2026-09-02 | s1-04 完成统一 SEO URL、canonical origin、语言与 Open Graph locale 工具，commit `50048b8`。
+- 2026-09-02 | s1-05 完成核心页面、robots、sitemap 与 viewport API 迁移，commit `5ec0399`。
+- 2026-09-02 | s1-06 完成 Organization、WebSite 与 BlogPosting JSON-LD，commit `3ffa753`。
+- 2026-09-02 | s1-07 完成 Governance 服务端语义外壳与首屏治理内容，commit `36ce62c`。
+- 2026-09-02 | s1-08 完成真实文章 URL 与 front matter 日期 sitemap，commit `003df0c`。
+- 2026-09-02 | 最终 HTML 验收发现 next-intl 仍输出 `zh`、`tw` HTTP alternate，与 HTML 中的 `zh-Hans`、`zh-Hant` 冲突。
+- 2026-09-02 | s1-10 关闭框架自动 HTTP alternate，保留页面 metadata 生成的标准语言链接，commit `e1d1de4`。
+- 2026-09-02 16:16 +08:00 | s1-09 完成本地生产构建、五页 HTML 抽样、metadata routes、sitemap、JSON-LD、日志脱敏与报告复核；S0001 状态变更为 COMPLETE。
 
 ## 6. Validation Evidence (append-only)
 
@@ -146,7 +155,19 @@ S0001 只解决技术基础。它不创建主题中心页，不批量改写内�
 - TC-10 | stack: node | command: `pnpm exec tsc --noEmit` | result: pass | note: 当前实现通过类型检查
 - TC-10 | stack: node | command: `pnpm build` | result: partial | note: 构建成功；viewport 与 themeColor 告警待 s1-05 消除
 - TC-10 | stack: other | command: `git diff --check` and Prettier check | result: pass | note: 当前改动无空白错误并符合格式
+- TC-01 | stack: node/http | command: `node scripts/verify-seo.mjs http://127.0.0.1:3100` | result: pass | note: robots 为 200 text/plain；sitemap 为 200 application/xml
+- TC-02 | stack: node/http | command: 五页本地生产 HTML 与 metadata route 抽样 | result: pass | note: canonical、robots 与 60 条 sitemap URL 全部使用 `https://www.bubble-studio.xyz`
+- TC-03 | stack: node/http+source | command: 五页生产 HTML 抽样及博客列表 metadata 源码检查 | result: pass | note: 首页、项目、Skills、Governance、文章均为 self-canonical；博客列表由同一共享 helper 生成 `/blogs` canonical
+- TC-04 | stack: node/http | command: 英文文章 HTML alternate 校验 | result: pass | note: en、zh-Hans、zh-Hant、x-default 分别指向真实 `-en`、`-zh`、`-tw` 路由，英文无 `/en`
+- TC-05 | stack: node/http+source | command: HTML lang、hreflang、Open Graph locale 与 response Link header 检查 | result: pass | note: 抽样值与共享映射一致；已消除 next-intl 旧 `zh`、`tw` HTTP alternate
+- TC-06 | stack: node/http+filesystem | command: sitemap 与 45 个 Markdown front matter 逐项比对 | result: pass | note: 共 60 URL，其中 15 个静态页无 lastModified，45 篇文章 URL 与日期均匹配真实文件
+- TC-07 | stack: node | command: 抽样页面 JSON-LD JSON.parse 及字段断言 | result: pass | note: Organization、WebSite、BlogPosting 均可解析；文章日期、作者、语言与 canonical 一致
+- TC-08 | stack: node/http | command: 未执行客户端 JavaScript 的 Governance 响应 HTML 检查 | result: pass | note: 唯一 H1、页面导语和 Amaru 治理行动摘要均存在
+- TC-09 | stack: node | command: `pnpm build` under Koios ENOTFOUND | result: pass | note: 仅输出错误码与消息，未出现 Authorization、Bearer token 或 Axios request config
+- TC-10 | stack: node | command: `pnpm exec tsc --noEmit`, `pnpm build`, scoped Prettier check, `git diff --check`, `node --check scripts/verify-seo.mjs` | result: pass | note: S0001 触及文件全部通过；全仓 `prettier --check .` 仍被既有 prototype HTML 语法错误阻塞，未修改无关历史文件；构建仅保留两处既有 no-img-element 警告
+- GEO boundary | stack: manual | command: geo-diagnose 手工降级复核 | result: limited | note: 仅验证五个 HTML URL 和两个发现入口；未观察实时排名、流量、AI 召回或引用份额；Cola 包的官方执行器仍因缺少 `geo_seo_hub` 运行时不可用
 
 ## 7. Change Log (append-only)
 
 - 2026-09-02 16:02 +08:00 | Initial immutable spec created from the approved phased SEO/GEO direction. Scope limited to technical foundation; topic hubs, content expansion, external authority work and measurement remain queued as S0002-S0005.
+- 2026-09-02 16:16 +08:00 | Validation-discovered s1-10 added without changing product scope: framework-generated locale response headers conflicted with the spec's BCP 47 requirement, so they were disabled in favor of explicit page metadata alternates.

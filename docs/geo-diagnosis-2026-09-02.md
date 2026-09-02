@@ -93,3 +93,43 @@
 ## 建议修复顺序
 
 先修复 middleware 排除规则与博客文章 canonical/hreflang/OG URL，再对错误日志做脱敏和令牌轮换。随后补齐 Organization、BlogPosting 等结构化数据，并让治理页输出稳定的服务端摘要。最后统一域名与语言代码，校正 sitemap 新鲜度字段。
+
+## S0001 完成后复核
+
+本节是 2026-09-02 16:16 +08:00 对本地生产构建的追加复核，未覆盖或删除前面的生产基线。改动尚未部署，因此这里的通过状态只代表当前 commit 序列与本地生产响应。
+
+复核严格限制为五个代表性 HTML URL，另检查两个站点发现入口：
+
+- 首页 `/`，SHA-256 `e2d0dbfc090c...`
+- 简体中文项目页 `/zh/projects`，SHA-256 `f58fde396683...`
+- Skills 页 `/skills`，SHA-256 `d25f678af98e...`
+- Governance 页 `/governance`，SHA-256 `8499ebb5f60e...`
+- 英文文章 `/blogs/20260405-subscriptions-are-failing-en`，SHA-256 `515d1794224c...`
+- `robots.txt`，SHA-256 `3b1ca0320368...`
+- `sitemap.xml`，SHA-256 `793c167f8a55...`
+
+### 复核结果
+
+- 五个 HTML 抽样均返回 200，canonical 使用最终 `www` origin，并指向页面自身。
+- HTML language、hreflang 与 Open Graph locale 使用 `en`、`zh-Hans`、`zh-Hant` 和 `en_US`、`zh_CN`、`zh_TW` 映射。复核中发现并移除了 next-intl 自动产生的旧 `zh`、`tw` HTTP alternate，避免重复冲突信号。
+- 五个页面的 Organization 与 WebSite JSON-LD 均能通过 `JSON.parse`。文章额外包含 BlogPosting，发布日期 `2026-04-05`、作者 `Martin`、语言 `en` 和 mainEntityOfPage 均与页面事实一致。
+- Governance 原始响应 HTML 含一个 H1、解释性导语和 Amaru 治理行动摘要，核心语义不依赖客户端 JavaScript。
+- robots 返回 200 `text/plain`，sitemap 返回 200 `application/xml`。sitemap 共 60 个 URL，其中 15 个静态 URL 不声明虚假更新时间，45 个文章 URL 与仓库中的真实语言文件和 front matter 日期逐项匹配。
+- `pnpm build` 与 TypeScript 通过；构建不再出现 viewport/themeColor 告警。Koios DNS 失败只输出错误码和消息，没有请求配置或 Authorization。
+
+### Audit Catalog 复核状态
+
+| 审计项                    | S0001 后状态   | 证据边界                                                   |
+| ------------------------- | -------------- | ---------------------------------------------------------- |
+| entity clarity            | pass           | 组织名称、站点、Logo、联系方式与受控外部资料形成稳定实体图 |
+| evidence density          | fail           | 核心品牌、产品与行业主张仍缺少页面内一手来源               |
+| citation readiness        | pass           | 抽样页 canonical、语言链接与 JSON-LD 可解析且一致          |
+| authority signals         | partial        | 已连接组织资料，作者专页与更强外部证明留给后续 spec        |
+| freshness signals         | pass           | 文章 sitemap 日期来自 front matter，静态页不伪造更新时间   |
+| structured data validity  | pass           | 五页 Organization/WebSite 与一篇 BlogPosting 通过解析断言  |
+| answerability             | pass           | 五页可提取，Governance 首屏已有标题、导语与治理摘要        |
+| comparison completeness   | not-applicable | 本次抽样不包含对比或榜单页面                               |
+| source transparency       | fail           | 内容证据谱系尚未建立                                       |
+| content extraction health | pass           | 五个 HTML 抽样与两个发现入口均可直接读取                   |
+
+未计算聚合分数，也未观察 Google/Bing 实时排名、流量、索引变化或任何 AI 平台的召回与引用份额。`geo-diagnose` 仍以手工降级模式执行，因为 Cola 安装包中的入口脚本缺少 `geo_seo_hub` 运行时。下一阶段应等 S0002 明确激活后，再选择一个对用户可见的主题中心页进行试点。
