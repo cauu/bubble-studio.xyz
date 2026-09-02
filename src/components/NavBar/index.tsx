@@ -20,6 +20,7 @@ export const NavBar = () => {
 
   const navItems = [
     { text: t('nav.home'), path: '/', isActive: isHomePage },
+    { text: t('nav.staking'), path: '/staking', isActive: pathname.includes('/staking') },
     { text: t('nav.blog'), path: '/blogs', isActive: pathname.includes('/blogs') },
     { text: t('nav.projects'), path: '/projects', isActive: pathname.includes('/projects') },
     { text: t('nav.skills'), path: '/skills', isActive: pathname.includes('/skills') }

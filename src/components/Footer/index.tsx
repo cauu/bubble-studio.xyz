@@ -1,5 +1,6 @@
 import { Github } from 'lucide-react';
 import { GlobalConfig } from '@/constants';
+import { Link } from '@/i18n/navigation';
 
 export const Footer = () => {
   return (
@@ -8,14 +9,12 @@ export const Footer = () => {
         <span className="text-sm text-muted tnum max-[600px]:text-xs">© 2024–2026 Pao Studio</span>
 
         <div className="flex items-center gap-5 max-[600px]:gap-3">
-          <a
-            href={GlobalConfig.CARDANOSCAN_POOL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/staking"
             className="text-sm font-medium text-body transition-colors hover:text-ink max-[480px]:hidden"
           >
             Cardano · PAO
-          </a>
+          </Link>
           <a
             href={GlobalConfig.social.twitter}
             target="_blank"

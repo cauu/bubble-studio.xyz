@@ -143,7 +143,7 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - [x] s2-02 固化页面信息架构、三语内容合同、URL、CTA 与非目标。Acceptance：TC-02、TC-03。
 - [x] s2-03 实现三语 Cardano staking 主题中心页与 metadata。Acceptance：TC-01 至 TC-04。
 - [x] s2-04 增加 WebPage、BreadcrumbList 与 FAQPage JSON-LD。Acceptance：TC-05。
-- [ ] s2-05 建立首页、项目页、相关文章双向链接并更新 sitemap。Acceptance：TC-06、TC-07。
+- [x] s2-05 建立首页、项目页、相关文章双向链接并更新 sitemap。Acceptance：TC-06、TC-07。
 - [ ] s2-06 完成本地生产构建、五页以内 HTML 抽样、移动端与链接验证，追加报告和最终证据。Acceptance：TC-01 至 TC-10。
 
 ## 5. Test And Acceptance Criteria
@@ -168,6 +168,7 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - 2026-09-02 | s2-02 完成 route、metadata、页面章节、委托步骤、三语 FAQ、来源、结构化数据、站内链接与可访问性合同，内容文件为 `docs/specs/content-S0002-cardano-staking.md`。
 - 2026-09-02 | s2-03 实现 `/staking`、`/zh/staking`、`/tw/staking` 的服务端页面与 metadata；抽取共享 pool stats 读取逻辑，并将 fallback、APY 估算与奖励不保证状态显示在页面中。
 - 2026-09-02 | s2-04 增加与可见页面一致的 WebPage、BreadcrumbList 与五组 FAQPage JSON-LD，并连接 S0001 的 WebSite 与 Organization 实体 ID。
+- 2026-09-02 | s2-05 将 Staking 加入桌面与移动导航、Footer、首页说明和项目页；两组三语文章增加上下文回链；sitemap 增加三个 staking URL。
 
 ## 7. Validation Evidence (append-only)
 
@@ -184,6 +185,8 @@ Cardano 官方资料说明，ADA 持有人可以把 stake 委托给公共 stake 
 - TC-03 | stack: source+node/http | command: visible copy review against frozen content contract | result: pass | note: 协议机制、奖励不保证、费用与 deposit、Pao Studio 会员层和非财务建议均可见
 - TC-04 | stack: node/http | command: pool identity and fallback inspection under Koios ENOTFOUND | result: pass | note: 页面显示完整 pool ID、两个外部核验入口，并明确说明 fallback 数据与 APY 估算状态
 - TC-05 | stack: node/http | command: extract JSON-LD from local production HTML and run JSON.parse assertions | result: pass | note: WebPage、BreadcrumbList、FAQPage 均可解析；五组问题与答案逐项存在于可见 HTML
+- TC-06 | stack: node/http+source | command: inspect home and projects production HTML plus six Markdown backlinks | result: pass | note: 导航、Footer、首页、Pao Pool 项目卡与两组三语文章均链接主题页；主题页反向链接三组相关文章
+- TC-07 | stack: node/http | command: parse local production sitemap | result: pass | note: sitemap 共 63 个 URL，包含 `/staking`、`/zh/staking`、`/tw/staking`，三条静态 URL 均不声明 lastModified
 
 ## 8. Change Log (append-only)
 
