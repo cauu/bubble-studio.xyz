@@ -15,6 +15,7 @@ import {
   getOpenGraphLocale,
   getSiteOrigin
 } from '@/lib/seo';
+import { getSiteEntityGraph } from '@/lib/entities';
 
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -94,39 +95,13 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   // 获取当前语言的翻译消息
   const messages = await getMessages();
   const t = await getTranslations({ locale, namespace: 'seo' });
-  const siteOrigin = getSiteOrigin();
-  const organizationId = `${siteOrigin}/#organization`;
-  const websiteId = `${siteOrigin}/#website`;
   const structuredData = {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Organization',
-        '@id': organizationId,
-        name: t('siteName'),
-        alternateName: 'Bubble Studio',
-        url: siteOrigin,
-        logo: {
-          '@type': 'ImageObject',
-          url: GlobalConfig.assetsUrl.bubbleLogo
-        },
-        description: t('defaultDescription'),
-        email: GlobalConfig.CONTACT_EMAIL,
-        sameAs: [GlobalConfig.social.github, GlobalConfig.social.twitter, GlobalConfig.CARDANOSCAN_POOL_URL]
-      },
-      {
-        '@type': 'WebSite',
-        '@id': websiteId,
-        url: siteOrigin,
-        name: t('siteName'),
-        alternateName: 'Bubble Studio',
-        description: t('defaultDescription'),
-        inLanguage: ['en', 'zh-Hans', 'zh-Hant'],
-        publisher: {
-          '@id': organizationId
-        }
-      }
-    ]
+    '@graph': getSiteEntityGraph({
+      locale,
+      organizationName: t('siteName'),
+      organizationDescription: t('defaultDescription')
+    })
   };
 
   return (

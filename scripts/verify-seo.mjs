@@ -144,10 +144,10 @@ for (const pageCase of pageCases) {
 const articleJsonLd = getJsonLd(pages.get('article').html).find((item) => item['@type'] === 'BlogPosting');
 assert(articleJsonLd, 'article: BlogPosting missing');
 assert(articleJsonLd.datePublished === '2026-04-05', 'article: datePublished mismatch');
-assert(articleJsonLd.author?.name === 'Martin', 'article: author mismatch');
+assert(articleJsonLd.author?.['@id'] === `${canonicalOrigin}/about#martin`, 'article: author Person ID mismatch');
 assert(articleJsonLd.inLanguage === 'en', 'article: inLanguage mismatch');
 assert(articleJsonLd.mainEntityOfPage === pageCases[4].canonical, 'article: mainEntityOfPage mismatch');
-console.log('PASS BlogPosting date=2026-04-05 author=Martin language=en');
+console.log('PASS BlogPosting date=2026-04-05 author-id=/about#martin language=en');
 
 const governanceHtml = pages.get('governance').html;
 assert((governanceHtml.match(/<h1(?:\s|>)/gi) || []).length === 1, 'governance: expected exactly one H1');
@@ -187,7 +187,7 @@ for (const fileName of postFiles) {
 const staticEntries = sitemapEntries.filter(({ loc }) => !loc?.includes('/blogs/') || loc.endsWith('/blogs'));
 const articleEntries = sitemapEntries.filter(({ loc }) => loc?.includes('/blogs/') && !loc.endsWith('/blogs'));
 
-assert(sitemapEntries.length === 18 + expectedPosts.size, 'sitemap: unexpected total URL count');
+assert(sitemapEntries.length === 21 + expectedPosts.size, 'sitemap: unexpected total URL count');
 assert(
   sitemapEntries.every(({ loc }) => loc?.startsWith(canonicalOrigin)),
   'sitemap: non-canonical origin found'
@@ -196,7 +196,7 @@ assert(
   sitemapEntries.every(({ loc }) => !loc?.startsWith(`${canonicalOrigin}/en/`)),
   'sitemap: /en prefix found'
 );
-assert(staticEntries.length === 18, 'sitemap: static URL count mismatch');
+assert(staticEntries.length === 21, 'sitemap: static URL count mismatch');
 assert(
   staticEntries.every(({ lastModified }) => !lastModified),
   'sitemap: static page has fabricated lastModified'

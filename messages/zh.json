@@ -261,6 +261,35 @@
     "title_our_opinion": "我们的观点",
     "related_tweets": "相关讨论"
   },
+  "about": {
+    "eyebrow": "公开身份",
+    "title": "Pao Studio",
+    "intro": "Pao Studio 是一家围绕 AI 与 Cardano 开展产品实践的一人工作室。早期公开页面和当前域名也使用 Bubble Studio 这个名称。",
+    "home": "首页",
+    "factsLabel": "作者与矿池事实",
+    "studio": {
+      "eyebrow": "工作室",
+      "title": "一个工作室，两个公开名称",
+      "body": "Pao Studio 是这个网站当前使用的公开名称。Bubble Studio 作为别名保留，用来连接早期页面与 bubble-studio.xyz 域名。",
+      "alias": "曾用名称",
+      "contact": "联系",
+      "email": "邮件联系 Pao Studio"
+    },
+    "author": {
+      "eyebrow": "作者与开发者",
+      "body": "Martin 撰写 Pao Studio 的文章，也参与产品开发。网站连接的 GitHub 资料使用公开名称 0xMartin。",
+      "github": "GitHub 资料",
+      "x": "X 资料"
+    },
+    "pool": {
+      "eyebrow": "Cardano 矿池",
+      "body": "Pao Pool 是 Pao Studio 一人公司实验使用的 Cardano 矿池。矿池运营收入用于支持基础设施和产品开发。",
+      "id": "矿池 ID",
+      "cardanoscan": "CardanoScan",
+      "cexplorer": "Cexplorer",
+      "details": "查看 Pao Pool 详情"
+    }
+  },
   "seo": {
     "siteName": "Pao Studio",
     "defaultTitle": "Pao Studio · AI 时代的一人公司实验",
@@ -268,6 +297,10 @@
     "home": {
       "title": "Pao Studio · AI 时代的一人公司实验",
       "description": "探索一个人如何借助 AI Agent 与 Cardano，经营一家长期、可信、可持续的公司。"
+    },
+    "about": {
+      "title": "关于 Pao Studio、Martin 与 Pao Pool",
+      "description": "查看 Pao Studio、Martin 或 0xMartin，以及 Cardano 矿池 Pao Pool 的可核验公开身份信息。"
     },
     "staking": {
       "title": "质押 - Pao Studio",
