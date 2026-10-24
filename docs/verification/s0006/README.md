@@ -44,6 +44,8 @@ The Staking verifier now checks D5 layout instead of the superseded light-palett
 
 Build retains Next's advisory warnings for ordinary `<img>` elements. No new animation or application runtime dependency was added.
 
+The first production deployment stopped before build because the Vercel project still selected discontinued Node 20. `package.json` now pins Node 22, matching the runtime used for the local build and acceptance checks and overriding the stale project setting.
+
 ## Local performance sample
 
 A separate production build of pre-redesign commit `8eb0cc8` was run on port 3101. The final build ran on port 3100, in the same Chromium installation with normal motion. `performance.json` contains the observations.
