@@ -1,5 +1,3 @@
-import { GlobalConfig } from '@/constants';
-
 /** Intrinsic SVG size: 607×85 */
 const ASPECT = 607 / 85;
 
@@ -17,7 +15,7 @@ export function PaoLogo({ height = 28, alt, className = 'h-7 w-auto', priority =
 
   return (
     <img
-      src={GlobalConfig.assetsUrl.bubbleLogo}
+      src="/images/pao-logo-dark.svg"
       alt={alt}
       width={width}
       height={height}

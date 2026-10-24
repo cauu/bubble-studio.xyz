@@ -1,7 +1,7 @@
 import { getMessages, getTranslations } from 'next-intl/server';
 import { ReactNode } from 'react';
 import { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import { routing } from '@/i18n/routing';
 import { Layout } from '@/components/Layout';
 import { IntlProvider } from '@/components/IntlProvider';
@@ -20,14 +20,29 @@ import { getSiteEntityGraph } from '@/lib/entities';
 import { NextIntlClientProvider } from 'next-intl';
 
 import '@/globals.css';
+import '@/styles/neon.css';
+import '@/styles/pages.css';
 import { GlobalConfig } from '@/constants';
 
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-inter',
   display: 'swap'
 });
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['500', '700', '800'],
+  variable: '--font-mono',
+  display: 'swap'
+});
+
+/**
+ * Runs before first paint: `.js` enables reveal states; `.intro-on` arms the home intro once per session
+ * (skipped for reduced motion). A timer drops `.intro-on` if the intro never mounts, so the page cannot stay hidden.
+ */
+const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');try{if(['/','/zh','/zh/','/tw','/tw/'].indexOf(location.pathname)!==-1&&!matchMedia('(prefers-reduced-motion: reduce)').matches){var seen=false;try{seen=sessionStorage.getItem('pao-intro')==='1'}catch(e){}if(!seen||new URLSearchParams(location.search).has('intro')){d.classList.add('intro-on');setTimeout(function(){if(!document.querySelector('.intro'))d.classList.remove('intro-on')},4000)}}}catch(e){}})();`;
 
 type Props = {
   children: ReactNode;
@@ -42,7 +57,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#13585d'
+  themeColor: '#0a0910'
 };
 
 export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
@@ -105,10 +120,10 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   };
 
   return (
-    <html lang={getHtmlLang(locale)} className={inter.variable}>
+    <html lang={getHtmlLang(locale)} className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
-        {/* Hidden reveal state only applies when JS runs (no-JS safety gate) */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        {/* Hidden reveal / intro states only apply when JS runs (no-JS safety gate) */}
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         {/* 字体优化：预加载关键字体文件 */}
         <link
           rel="preload"

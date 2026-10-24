@@ -1,6 +1,6 @@
 'use client';
 
-import { ElementType, ReactNode, useEffect, useRef } from 'react';
+import { CSSProperties, ElementType, ReactNode, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 
 type Props = {
@@ -8,6 +8,7 @@ type Props = {
   /** Stagger delay in ms before the reveal transition starts */
   delay?: number;
   className?: string;
+  style?: CSSProperties;
   children: ReactNode;
 };
 
@@ -15,7 +16,7 @@ type Props = {
  * Scroll-reveal wrapper. The hidden state only applies when JS is available
  * (`.js` on <html>, see layout.tsx), so content stays visible without JS.
  */
-export const Reveal = ({ as: Tag = 'div', delay = 0, className, children }: Props) => {
+export const Reveal = ({ as: Tag = 'div', delay = 0, className, style, children }: Props) => {
   const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export const Reveal = ({ as: Tag = 'div', delay = 0, className, children }: Prop
   }, [delay]);
 
   return (
-    <Tag ref={ref} className={clsx('reveal', className)}>
+    <Tag ref={ref} style={style} className={clsx('reveal', className)}>
       {children}
     </Tag>
   );

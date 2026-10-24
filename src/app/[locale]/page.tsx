@@ -1,11 +1,11 @@
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
-import { Hero } from '@/components/home/Hero';
-import { ModelBand } from '@/components/home/ModelBand';
-import { Perks } from '@/components/home/Perks';
-import { StakeBenefits } from '@/components/home/StakeBenefits';
-import { ServicesBand, ServicesContact } from '@/components/home/ServicesBand';
-import { getPoolStats } from '@/lib/pool-stats';
+import { HeroStage } from '@/components/home/HeroStage';
+import { Ticker } from '@/components/home/Ticker';
+import { HomeEnd, HomeMembers, HomePao, HomePosts, HomeWorks } from '@/components/home/HomeSections';
+import { getPoolMembers, getPoolStats } from '@/lib/pool-stats';
+import { getSortedPostsData } from '@/lib/posts';
+import type { AppLocale } from '@/lib/seo';
 import {
   getAbsoluteUrl,
   getAlternateOpenGraphLocales,
@@ -57,17 +57,20 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
   };
 }
 
-export default async function HomePage() {
-  const stats = await getPoolStats();
+// Works and writing first, then what we do and who stakes with us (S0006 D5)
+export default async function HomePage({ params: { locale } }: Props) {
+  const [stats, posts] = await Promise.all([getPoolStats(), getSortedPostsData(locale as AppLocale)]);
+  const members = await getPoolMembers(stats.owners);
 
   return (
     <>
-      <Hero stats={stats} />
-      <Perks />
-      <StakeBenefits />
-      <ServicesBand />
-      <ModelBand />
-      <ServicesContact />
+      <HeroStage stakeAda={stats.stakeAda} delegatorCount={stats.delegatorCount} />
+      <Ticker />
+      <HomeWorks />
+      <HomePosts posts={posts.slice(0, 4)} />
+      <HomePao />
+      <HomeMembers stats={stats} members={members} />
+      <HomeEnd />
     </>
   );
 }

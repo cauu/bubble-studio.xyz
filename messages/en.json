@@ -335,14 +335,16 @@
     "skipToContent": "Skip to content",
     "langLabel": "Language",
     "mainNav": "Main navigation",
-    "logoAlt": "logo"
+    "logoAlt": "logo",
+    "stakeShort": "Stake PAO"
   },
   "footer": {
-    "blurb": "A “one-person company” experiment rooted in Cardano. Building playful products, writing content with depth.",
+    "blurb": "Building AI products and open-source tools on Cardano. Stake with PAO Pool to earn staking rewards and unlock value-added services.",
     "explore": "Explore",
     "community": "Community",
     "staking": "Staking",
-    "governance": "Governance"
+    "governance": "Governance",
+    "social": "Social"
   },
   "blog": {
     "title": "Blog",
@@ -498,7 +500,7 @@
       "delegateCta": "Open PAO on Cexplorer",
       "verifyCta": "Verify on CardanoScan",
       "liveNote": "Stake and delegator values were returned by Koios for this page request. Confirm current values independently on a Cardano explorer.",
-      "fallbackNote": "Koios was unavailable for this page request, so the card shows clearly identified fallback values. Use CardanoScan for current pool data.",
+      "fallbackNote": "Koios data is temporarily unavailable. Live metrics show —; check CardanoScan for the current pool data.",
       "estimateNote": "The displayed APY is an estimate, not a guaranteed return or a live performance claim."
     },
     "delegate": {
@@ -610,5 +612,116 @@
       },
       "disclaimer": "This page explains protocol mechanics and Pao Studio's own pool. It is not financial, investment, tax, or security advice. ADA prices and staking rewards can change, and you remain responsible for wallet security and delegation decisions."
     }
+  },
+  "landing": {
+    "boot": "pool PAO · cardano mainnet",
+    "titleA": "Stake with",
+    "titleB": "PAO",
+    "titleC": "Pool",
+    "subStrong": "Your stake is your membership",
+    "sub": "Earn staking rewards ",
+    "subTail": "and enjoy PAO Pool’s value-added services.",
+    "ctaStake": "Delegate to Pao Pool →",
+    "ctaWorks": "See our work",
+    "stat": {
+      "stake": "LIVE STAKE",
+      "delegators": "DELEGATORS",
+      "epoch": "EPOCH",
+      "left": "left",
+      "verify": "Verify on-chain ↗",
+      "statusLabel": "Pao Pool live status"
+    },
+    "goal": {
+      "label": "Stake milestones",
+      "next": "NEXT TARGET",
+      "left": "To go",
+      "here": "YOU ARE HERE"
+    },
+    "ticker": [
+      "P = POOL",
+      "A = AI",
+      "O = OPEN",
+      "NON-CUSTODIAL",
+      "NO-LOCK",
+      "DELEGATE = MEMBER",
+      "SUBSCRIPTION=$0",
+      "BUILT ON CARDANO ₳"
+    ],
+    "works": {
+      "en": "WORKS",
+      "title": "Works",
+      "all": "All works →",
+      "coilLead": "Your desktop trading agent.",
+      "coilNew": "NEW",
+      "coilCta": "Download Coil ↓"
+    },
+    "posts": {
+      "en": "WRITING",
+      "title": "Writing",
+      "all": "All posts →",
+      "latest": "LATEST"
+    },
+    "pao": {
+      "en": "P · A · O",
+      "title": "What we do",
+      "p": {
+        "word": "P // POOL",
+        "title": "Run a Cardano stake pool",
+        "body": "Pool income pays for nodes, servers, AI services and product development. Delegating ADA makes you a member."
+      },
+      "a": {
+        "word": "A // AI",
+        "title": "Build AI products",
+        "body": "Coil is a trading agent on your desktop; VODA’s AI editor picks the Cardano updates worth reading each day."
+      },
+      "o": {
+        "word": "O // OPEN",
+        "title": "Open source and writing",
+        "body": "Ouro Pass, utxray and ouro-ops are open source on GitHub, and we keep sharing how we operate."
+      }
+    },
+    "members": {
+      "en": "ON-CHAIN MEMBERS",
+      "title": "Members",
+      "since": "since epoch",
+      "operator": "operator pledge",
+      "yourAddress": "Your stake address",
+      "next": "You could be next",
+      "delegate": "Delegate to PAO →",
+      "fees": "margin {margin}% · fixed ₳{fixed}",
+      "unavailable": "On-chain delegation data is unavailable right now. Check CardanoScan for the latest."
+    },
+    "end": {
+      "title1": "LET'S",
+      "title2": "BUILD.",
+      "delegate": "Delegate to Pao Pool →",
+      "email": "Email us ↗",
+      "telegram": "Telegram group"
+    },
+    "intro": {
+      "skip": "SKIP ↵",
+      "left": "PAO//STUDIO — SYS.BOOT",
+      "right": "CARDANO MAINNET",
+      "replay": "Replay intro"
+    }
+  },
+  "pages": {
+    "worksTitle": "Works",
+    "worksSub": "AI products, open-source infrastructure and on-chain apps.",
+    "skillsTitle": "Engineering Skills",
+    "skillsSub": "For coding agents. Open source and independently installable.",
+    "read": "Read article",
+    "toc": "On this page",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "previous": "Previous article",
+    "next": "Next article",
+    "readingTime": "{minutes} min read",
+    "snapshot": "Data snapshot · 2025-05-15",
+    "expired": "Ended",
+    "backBlog": "All articles",
+    "copyError": "Could not copy. Please select and copy the text.",
+    "latest": "Latest",
+    "author": "Author"
   }
 }
