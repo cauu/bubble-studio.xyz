@@ -62,7 +62,7 @@
 事项只有在实现、对应验收通过并追加证据后才能标记为 `[x]`。
 
 - [x] s6-01 截取当前版本基线，基于首页真实内容实现多种风格的 HTML 原型图。Acceptance：TC-01。
-- [ ] s6-02 用户选定方向，冻结视觉问题清单、动效合同数值与组件清单。Acceptance：TC-01、TC-02。
+- [x] s6-02 用户选定方向，冻结视觉问题清单、动效合同数值与组件清单。Acceptance：TC-01、TC-02。
 - [ ] s6-03 实现首页与全站共享动效基础（Hero、滚动揭示、交互微动效、NavBar、Footer）。Acceptance：TC-02 至 TC-05。
 - [ ] s6-04 推广到 Blog 列表与文章页。Acceptance：TC-02 至 TC-06。
 - [ ] s6-05 推广到 Projects、Products、Skills。Acceptance：TC-02 至 TC-05。
@@ -109,6 +109,7 @@
 - 2026-10-24 23:30 +08:00 | 用户指出部分页面为 SEO/GEO 占位，不应出现在导航。核对确认：`/staking` 按 S0002.1 为机器优先低曝光页（不进顶部导航、Footer、首页、Projects），`/about` 按 S0004 不进顶部导航、Footer、首页、Projects，`/governance` 现有导航与 Footer 均无入口。D5 原型页脚移除 CARDANO 栏（质押指南、治理、Pao Pool）与「关于 Pao Studio」，仅保留作品 / 博客 / Skills 与 X / GitHub；文章页底部委托卡改为直链 Cexplorer；About 页「查看 Pao Pool 详情」属正文上下文链接，保留。脚本核对 8 个 D5 页面的导航与页脚均不含 staking / about / governance 入口。s6-03 起实现须遵守同一入口约束。
 - 2026-10-24 23:40 +08:00 | 页脚简介随首页口径调整：由「扎根 Cardano 的『一人公司』实验……」改为「在 Cardano 上构建 AI 产品与开源工具。Stake with PAO Pool，获取质押奖励，同时享受增值服务。」（待审初稿；实现时需同步三语 `footer.blurb`）。
 - 2026-10-24 23:55 +08:00 | 首页与文章页改用与其余页面相同的富页脚（含新简介与 epoch 时钟）。用户指出文章详情页缺少设计：按 D5 语言重做 `d5-article.html`（由页面脚本生成）：顶部 Logo 渐变阅读进度条；页头为路径、分类色块、大标题、元信息（日期、作者链接到 About#martin——属 S0004 允许的作者入口、阅读时长、标签）与 21:9 封面；正文深色排版，左侧粘性编号目录随章节高亮，H2 带编号与霓虹短线并按 Logo 色轮换，代码块为终端样式；文末为作者卡、上一篇 / 下一篇、Stake with PAO Pool 委托条（直链 Cexplorer）。1440 截图检查，375 px scrollWidth=375。
+- 2026-10-25 00:20 +08:00 | 用户确认按 D5 原型更新官网实现。s6-02 冻结合同：新增 `docs/redesign-v2/final/DESIGN-neon-d5.md` 作为实现依据（Bubble-light 文档保留为历史）；按下方 Change Log 改写视觉、动效、语义与验收合同；组件清单为：霓虹样式层、NavBar、富页脚、粒子层、开场、Hero（色块、状态栏、阶段进度、跑马灯）、Reveal / 视差、章节闸门、页头、作品 / 文章 / P·A·O / 成员 / 收尾区块、博客列表、文章页、作品页、Skills、About、Staking、Governance 与提案详情。
 
 ## 5. Validation Evidence (append-only)
 
@@ -128,8 +129,10 @@
 - TC-01/03 | stack: browser | command: agent-browser 1440×900 打开 D5（`?intro`）检查开场结束与整页截图，375×812 滚动到底统计 reveal 并比较 `scrollWidth` | result: pass | note: 开场结束后 intro 节点移除；桌面 24/24 reveal 触发、scrollWidth=1440；375 px 24/24 reveal、scrollWidth=375
 - TC-01 | stack: browser | command: agent-browser 1440×900 整页截图 7 个页面，并在 375×812 检查 8 个 D5 页面 `scrollWidth` 与越界元素 | result: pass | note: 修复 Skills 安装命令与质押页 Pool ID 在窄屏撑宽网格（改为 minmax(0, 1fr) 与 min-width: 0）后，8 个页面 375 px 均 scrollWidth=375；文章页代码块在块内横向滚动
 - TC-06 | stack: source | command: 扫描 8 个 D5 原型页 `nav.nav` 与 `footer` 中的 staking / about / governance 链接 | result: pass | note: 0 处；原型切换条仅用于原型浏览，不进入实现
+- TC-01/02 | stack: manual | command: 对照 D5 原型与 `DESIGN-neon-d5.md` 复核视觉、动效、入口与语义合同 | result: pass | note: 合同覆盖 token、字体、版式、动效数值、reduced-motion / 无 JS 降级与低曝光入口；S0002.2 视觉断言的取代范围已记录
 
 ## 6. Change Log (append-only)
 
 - 2026-10-24 08:49 +08:00 | Initial spec. 注册表轮廓中的六个事项细化为七个：拆出 s6-02 方向选定与动效合同冻结，原型先行。
 - 2026-10-24 10:30 +08:00 | 范围补充：用户允许原型突破当前排版、内容与 Bubble-light 八色/浅色画布合同，以 Logo 霓虹色（#FC5FF6/#C60A76、#2FFFF3/#078CBE、#FFF590/#D9B201、#31EE6B/#079F1B、#C141F2/#590AC6）探索；允许删除首页「收入构成」。若选定 D 或 E，s6-02 须以 Change Log 形式改写 1.5 视觉合同，并评估是否同步更新 `DESIGN-bubble-light.md`。
+- 2026-10-25 00:20 +08:00 | s6-02 合同改写（用户授权选定 D5）。1.5 视觉合同由 `DESIGN-neon-d5.md` 取代：深色画布 `#0a0910`、Logo 霓虹色、JetBrains Mono 仅用于标签与数据、深色页脚、1180 px 阅读栏、章节闸门。1.6 动效合同数值见该文档第 2 节。1.7 语义合同调整：首页可见 H1 改为「Stake with PAO Pool」（三语一致），首页 metadata 标题与描述不变；授权新增首页文案（Hero 副标题、P·A·O、区块标题、成员与收尾）、页脚简介、页头短说明与文章页辅助标签（目录、复制链接、上一篇 / 下一篇、委托条），三语同步；各页唯一 H1、section ID、canonical、hreflang、JSON-LD、sitemap 与 S0003 / S0004 合同保持。入口约束：`/staking`、`/about`、`/governance` 不进入导航、页脚、首页与 Projects。S0002.2 的 staking 视觉系统（Incana / lemon 嵌入容器、禁用阴影卡片与五列布局等源码断言）被本合同取代，s6-06 更新 `scripts/verify-staking-hub.mjs` 中对应断言，staking 事实、section ID、FAQ、来源与低曝光断言保持不变。TC-02 改为：实现只使用 `DESIGN-neon-d5.md` token、Inter / AlibabaPuHuiTi 与 JetBrains Mono，页脚为深色且不含低曝光页入口。
