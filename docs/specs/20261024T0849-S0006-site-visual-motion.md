@@ -3,7 +3,7 @@
 ## Spec Control
 
 - Spec ID：S0006
-- Status：ACTIVE
+- Status：COMPLETE
 - Created：2026-10-24 08:49 +08:00
 - Depends on：用户授权激活（S0005 保持 QUEUED，不受影响）
 - Active registry：`docs/specs/README.md`
@@ -63,11 +63,11 @@
 
 - [x] s6-01 截取当前版本基线，基于首页真实内容实现多种风格的 HTML 原型图。Acceptance：TC-01。
 - [x] s6-02 用户选定方向，冻结视觉问题清单、动效合同数值与组件清单。Acceptance：TC-01、TC-02。
-- [ ] s6-03 实现首页与全站共享动效基础（Hero、滚动揭示、交互微动效、NavBar、Footer）。Acceptance：TC-02 至 TC-05。
-- [ ] s6-04 推广到 Blog 列表与文章页。Acceptance：TC-02 至 TC-06。
-- [ ] s6-05 推广到 Projects、Products、Skills。Acceptance：TC-02 至 TC-05。
-- [ ] s6-06 推广到 Governance、About、Staking，保持既有语义合同。Acceptance：TC-02 至 TC-06。
-- [ ] s6-07 完成三语桌面/移动视觉验收、reduced-motion、性能抽样与 S0001–S0004 回归。Acceptance：TC-01 至 TC-07。
+- [x] s6-03 实现首页与全站共享动效基础（Hero、滚动揭示、交互微动效、NavBar、Footer）。Acceptance：TC-02 至 TC-05。
+- [x] s6-04 推广到 Blog 列表与文章页。Acceptance：TC-02 至 TC-06。
+- [x] s6-05 推广到 Projects、Products、Skills。Acceptance：TC-02 至 TC-05。
+- [x] s6-06 推广到 Governance、About、Staking，保持既有语义合同。Acceptance：TC-02 至 TC-06。
+- [x] s6-07 完成三语桌面/移动视觉验收、reduced-motion、性能抽样与 S0001–S0004 回归。Acceptance：TC-01 至 TC-07。
 
 ## 3. Test And Acceptance Criteria
 
@@ -136,3 +136,14 @@
 - 2026-10-24 08:49 +08:00 | Initial spec. 注册表轮廓中的六个事项细化为七个：拆出 s6-02 方向选定与动效合同冻结，原型先行。
 - 2026-10-24 10:30 +08:00 | 范围补充：用户允许原型突破当前排版、内容与 Bubble-light 八色/浅色画布合同，以 Logo 霓虹色（#FC5FF6/#C60A76、#2FFFF3/#078CBE、#FFF590/#D9B201、#31EE6B/#079F1B、#C141F2/#590AC6）探索；允许删除首页「收入构成」。若选定 D 或 E，s6-02 须以 Change Log 形式改写 1.5 视觉合同，并评估是否同步更新 `DESIGN-bubble-light.md`。
 - 2026-10-25 00:20 +08:00 | s6-02 合同改写（用户授权选定 D5）。1.5 视觉合同由 `DESIGN-neon-d5.md` 取代：深色画布 `#0a0910`、Logo 霓虹色、JetBrains Mono 仅用于标签与数据、深色页脚、1180 px 阅读栏、章节闸门。1.6 动效合同数值见该文档第 2 节。1.7 语义合同调整：首页可见 H1 改为「Stake with PAO Pool」（三语一致），首页 metadata 标题与描述不变；授权新增首页文案（Hero 副标题、P·A·O、区块标题、成员与收尾）、页脚简介、页头短说明与文章页辅助标签（目录、复制链接、上一篇 / 下一篇、委托条），三语同步；各页唯一 H1、section ID、canonical、hreflang、JSON-LD、sitemap 与 S0003 / S0004 合同保持。入口约束：`/staking`、`/about`、`/governance` 不进入导航、页脚、首页与 Projects。S0002.2 的 staking 视觉系统（Incana / lemon 嵌入容器、禁用阴影卡片与五列布局等源码断言）被本合同取代，s6-06 更新 `scripts/verify-staking-hub.mjs` 中对应断言，staking 事实、section ID、FAQ、来源与低曝光断言保持不变。TC-02 改为：实现只使用 `DESIGN-neon-d5.md` token、Inter / AlibabaPuHuiTi 与 JetBrains Mono，页脚为深色且不含低曝光页入口。
+
+
+## 7. Implementation acceptance (2026-10-24 continuation)
+
+- 用户要求接续未完成的 D5 实现，完成严格视觉走查后再推送部署。发布操作在本次验收通过后执行。
+- s6-03：首页、NavBar、Footer、语言切换、粒子、开场、Reveal / 视差完成；修复开场重播、跳过按钮、快速滚动漏显示和手机导航。
+- s6-04：博客筛选、精选及年份索引；文章封面、目录、进度、代码块、作者与前后篇导航完成。保留正文、metadata、结构化数据与作者实体连接。
+- s6-05：作品页 Coil / VODA 与分类卡片、Skills 安装命令与复制完成；Products 保留重定向。
+- s6-06：About、Staking、Governance 与提案详情完成；低曝光入口、FAQ、事实与 section ID 保留；治理保留真实的历史快照标识。矿池查询共享缓存；查询失败时显示缺省状态，不显示旧示例数值。
+- s6-07：三语 × 三尺寸 × 九种页面共 81 项视觉检查通过；54 项 axe WCAG A/AA 检查无报告问题；正常动效、交互与无 JS 验收通过；本地生产基线对比首页与博客 CLS 均为 0。tsc、build、Prettier、diff check 与 S0001–S0004 四组验收脚本通过。
+- 详细证据、截图总览、复现命令与测量边界见 `docs/verification/s0006/README.md`。S0006 的实现与本地验收完成，状态设为 COMPLETE；用户授权的发布作为验收后操作继续执行。

@@ -19,9 +19,9 @@
 | 3    | S0003   | COMPLETE | 改进文章 metadata、结构化数据与内部链接           | S0002 完成                   |
 | 4    | S0004   | COMPLETE | 强化品牌、作者与 Pao Pool 的实体及证据一致性      | S0003 完成                   |
 | 5    | S0005   | QUEUED   | 建立 Search Console 与 GEO 观察测量闭环           | S0004 完成、用户授权外部账号 |
-| 6    | S0006   | ACTIVE   | 按 Bubble 视觉规范提升全站界面动感与设计感        | 用户授权激活                 |
+| 6    | S0006   | COMPLETE | 按 Bubble 视觉规范提升全站界面动感与设计感        | 用户授权激活                 |
 
-当前 ACTIVE spec 为 S0006（`20261024T0849-S0006-site-visual-motion.md`）。S0001、S0002、S0002.1、S0002.2、S0003 与 S0004 均为 COMPLETE；S0005 仍为 QUEUED。
+当前无 ACTIVE spec。S0001、S0002、S0002.1、S0002.2、S0003、S0004 与 S0006 均为 COMPLETE；S0005 仍为 QUEUED。
 
 ## 排队 Spec 轮廓
 
@@ -112,3 +112,5 @@
 - 2026-09-02 23:23 +08:00 | S0004 完成三语 About 事实页、稳定 Organization/Person/Service 关系、文章作者连接、机器清单与回归验收；当前无 ACTIVE spec。
 - 2026-10-24 08:49 +08:00 | 用户新建前端界面优化任务；登记 S0006 为 QUEUED，范围为全站页面的 Bubble 视觉与动效优化；当前无 ACTIVE spec，S0005 状态不变。
 - 2026-10-24 08:49 +08:00 | 用户授权激活 S0006 并设为唯一 ACTIVE；先基于当前版本实现多风格 HTML 原型；S0005 保持 QUEUED。
+
+- 2026-10-24 | S0006 D5 全站实现及三语、三尺寸视觉 / 动效 / SEO 回归验收完成，设为 COMPLETE；证据见 `docs/verification/s0006/README.md`。用户授权验收后推送部署。
