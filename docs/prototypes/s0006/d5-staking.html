@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D5 · 质押指南 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<link rel="stylesheet" href="d5-pages.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+.ph .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.sc { padding: 26px; background: var(--void-2); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+.sc .ic { width: 44px; height: 44px; margin-bottom: 10px; }
+.sc .ic.g-p { width: 36px; height: 36px; margin-bottom: 24px; }
+.sc h3, .ck h3, .dsteps h3, .tline h3 { font-size: 19px; font-weight: 800; line-height: 1.4; }
+.sc p, .ck p, .dsteps p, .tline p { color: var(--fg-dim); font-size: 14.5px; line-height: 1.8; }
+.tline { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--line); counter-reset: t; }
+.tline li { position: relative; padding: 28px 24px 0 0; }
+.tline li::before { content: ""; position: absolute; left: 0; top: -8px; width: 14px; height: 14px; background: var(--c); box-shadow: 0 0 14px var(--c); }
+.tline .ep { display: block; font-family: var(--mono); font-size: 11.5px; font-weight: 800; letter-spacing: .14em; color: var(--c); margin-bottom: 10px; }
+.warn { margin-top: 28px; padding: 14px 18px; border-left: 3px solid var(--yel); background: rgba(255,245,144,.05); color: var(--fg-dim); font-size: 14px; line-height: 1.75; }
+.poolg { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.poolg .term { min-width: 0; }
+.poolg .pid { white-space: nowrap; font-size: 12px; }
+.poolg .cta { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 18px 20px; }
+.notes p { color: var(--fg-dim); font-size: 14px; line-height: 1.75; margin-bottom: 12px; }
+.member { margin-top: 18px; padding: 22px; border: 1px solid rgba(255,245,144,.4); background: rgba(255,245,144,.04); }
+.member h3 { font-size: 20px; margin: 8px 0; }
+.member p { margin: 0; }
+.dsteps { list-style: none; counter-reset: s; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.dsteps li { counter-increment: s; padding: 22px 18px; border: 1px solid var(--line); background: var(--void-2); }
+.dsteps li::before { content: counter(s, decimal-leading-zero); display: block; font-family: var(--mono); font-size: 40px; font-weight: 800; line-height: .8; color: transparent; -webkit-text-stroke: 1.2px var(--grn); margin-bottom: 18px; }
+.dsteps h3 { font-size: 16.5px; } .dsteps p { font-size: 13.5px; margin-top: 6px; }
+.g4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.ck { padding: 24px 22px 8px 0; } .ck + .ck { padding-left: 22px; border-left: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq details:first-child { border-top: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 4px; font-size: 18px; font-weight: 800; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary i { flex: none; width: 14px; height: 14px; position: relative; }
+.faq summary i::before, .faq summary i::after { content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 2px; background: var(--mag); transition: transform .3s; }
+.faq summary i::after { transform: rotate(90deg); }
+.faq details[open] summary i::after { transform: rotate(0); }
+.faq details[open] summary { color: var(--mag); }
+.faq details p { padding: 0 4px 22px; color: var(--fg-dim); font-size: 15px; line-height: 1.85; max-width: 46em; }
+.srcs { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.srcs h3 { font-family: var(--mono); font-size: 12px; letter-spacing: .2em; color: var(--fg-dim); margin-bottom: 14px; }
+.srcs ul { list-style: none; border-top: 1px solid var(--line); }
+.srcs li a { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); color: var(--fg); font-size: 15px; transition: color .2s; }
+.srcs li a:hover { color: var(--cy); }
+.srcs .rel b { display: block; font-size: 16px; } .srcs .rel span { display: block; color: var(--fg-dim); font-size: 13.5px; margin-top: 4px; }
+@media (max-width: 1000px) { .dsteps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) {
+  .g3, .tline, .poolg, .srcs { grid-template-columns: minmax(0, 1fr); }
+  .tline { border-top: 0; border-left: 2px solid var(--line); } .tline li { padding: 0 0 28px 24px; } .tline li::before { left: -8px; top: 2px; }
+  .g4 { grid-template-columns: 1fr 1fr; } .ck:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .dsteps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="d5-hybrid.html"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="d5-hybrid.html">/home</a><a href="d5-works.html">/works</a><a href="d5-blog.html">/blog</a><a href="d5-skills.html">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托 PAO</a></div>
+  </div>
+</nav>
+
+<main>
+<header class="ph" style="--c:var(--cy)">
+    <div class="art" aria-hidden="true"><span class="g-p" data-py=".06"></span><span class="g-a" data-py="-.04"></span><span class="g-o" data-py=".08"></span></div>
+    <div class="crumb rise">&gt; <a href="d5-hybrid.html">~</a>/staking</div>
+    <span class="eyebrow rise" style="--d:.05s">CARDANO 质押 · PAO POOL</span>
+    <h1 class="rise" style="--d:.1s">从 <span class="hl">Pao Pool</span> 开始理解 Cardano 质押</h1>
+    <p class="sub rise" style="--d:.18s">Cardano 质押允许你把 ADA 对应的质押权委托给矿池，而无需转出或锁定 ADA。资产仍由你的钱包控制。奖励取决于协议周期和矿池表现，并不保证。</p>
+    <div class="ctas rise" style="--d:.24s"><a class="cbtn" href="#delegate">查看委托步骤 ↓</a><a class="cbtn alt" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">在 Cexplorer 查看 PAO ↗</a></div>
+    <div class="meta-row rise" style="--d:.3s"><span style="color:var(--grn)">✓ 非托管</span><span style="color:var(--grn)">✓ 不锁仓</span><span style="color:var(--grn)">✓ 奖励不保证</span></div>
+  </header>
+  <div class="gate rise" style="--c:var(--mag)"><span class="num">01</span><div><span class="en">运作机制</span><h2>Cardano 委托实际改变了什么</h2></div><p class="aside">委托把钱包地址对应的质押权与一个矿池关联起来，不会把 ADA 所有权转给矿池运营者。</p></div><div class="lane g3"><article class="sc corners rise" style="--c:var(--mag);--d:0.00s"><span class="ic g-p" aria-hidden="true"></span><h3>ADA 仍在你的钱包中</h3><p>委托通过 stake credential 记录。支付资金仍由你控制并可以使用。进行委托时，不要直接向矿池运营者转账 ADA。</p></article><article class="sc corners rise" style="--c:var(--cy);--d:0.08s"><span class="ic g-a" aria-hidden="true"></span><h3>质押权参与网络共识</h3><p>协议会把你的委托量计入矿池。矿池可能被选中生产区块，帮助 Cardano 处理交易并维护账本。</p></article><article class="sc corners rise" style="--c:var(--yel);--d:0.16s"><span class="ic g-o" aria-hidden="true"></span><h3>运营者负责运行节点</h3><p>矿池运营者维护在线基础设施、监控节点，并在被选中时生产区块。委托者无需亲自运行这些设施也能参与。</p></article></div>
+  <div class="gate rise" style="--c:var(--cy)"><span class="num">02</span><div><span class="en">奖励与时间</span><h2>奖励遵循协议，不是一项承诺</h2></div><p class="aside">新委托需要跨多个 epoch 经历质押快照、区块生产和奖励计算，不会在确认委托后立即开始发放。</p></div>
+  <div class="lane"><ol class="tline"><li class="rise" style="--c:var(--mag);--d:0.00s"><span class="ep">EPOCH N+0</span><h3>质押权进入快照</h3><p>Cardano 在 epoch 边界记录 stake。新委托需要先出现在协议用于后续区块选择的快照中。</p></li><li class="rise" style="--c:var(--cy);--d:0.10s"><span class="ep">EPOCH N+1</span><h3>矿池可能生产区块</h3><p>获得区块机会与委托量有关，实际结果也取决于协议选择，以及矿池被选中时是否正常履职。</p></li><li class="rise" style="--c:var(--yel);--d:0.20s"><span class="ep">EPOCH N+2</span><h3>计算并分配奖励</h3><p>矿池获得奖励后，协议会按矿池固定成本和 margin 等规则，自动计算并分配委托者份额。</p></li></ol><p class="warn rise">奖励并不保证。矿池可能出现没有奖励的 epoch，历史结果或估算 APY 也不能预测未来回报。</p></div>
+  <div class="gate rise" style="--c:var(--yel)"><span class="num">03</span><div><span class="en">PAO POOL</span><h2>委托前先核验矿池身份</h2></div><p class="aside">Pao Pool 是 Pao Studio 运营的 Cardano 矿池。矿池运营收入帮助我们维护基础设施，并支持内容与产品开发。在钱包或浏览器中查询时，请核对下面的完整 pool ID。</p></div>
+  <div class="lane poolg">
+    <div class="term rise"><header><i style="background:var(--mag)"></i><i style="background:var(--cy)"></i><i style="background:var(--yel)"></i><span style="margin-left:8px">pao@cardano:~$ pool --verify</span></header>
+      <div class="body">
+        <div class="row"><span class="k">ticker</span><span class="v">PAO</span></div>
+        <div class="row"><span class="k">pool_id</span><span class="v pid" style="color:var(--fg)">pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm</span><button class="copy" type="button" data-copy="pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">COPY</button></div>
+        <div class="row"><span class="k">live_stake</span><span class="v tnum">₳ 1,540</span></div>
+        <div class="row"><span class="k">delegators</span><span class="v tnum">4</span></div>
+        <div class="row"><span class="k">margin</span><span class="v tnum">3%</span></div>
+        <div class="row"><span class="k">fixed_cost</span><span class="v tnum">₳ 170</span></div>
+        <div class="row"><span class="k">pledge</span><span class="v tnum">₳ 500</span></div>
+      </div>
+      <div class="cta"><a class="cbtn" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">在 Cexplorer 打开 PAO ↗</a><a class="cbtn alt" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">在 CardanoScan 核验 ↗</a></div></div>
+    <div class="notes rise" style="--d:.1s"><p>本次页面请求通过 Koios 获得了质押量和委托人数。请在 Cardano 浏览器中独立核对当前数值。</p><p>页面显示的 APY 是估算值，不是保证收益或实时表现声明。</p>
+      <div class="member corners" style="--c:var(--yel)"><span class="meta"><b>PAO 实验</b></span><h3>委托也可以表达长期支持</h3><p>Pao Studio 尝试利用链上委托关系识别支持者，并提供部分内容或产品权益。这是 Pao Studio 增加的服务层，与 Cardano 协议奖励相互独立，并可能随产品迭代而调整。</p></div></div>
+  </div><div id="delegate"></div>
+  <div class="gate rise" style="--c:var(--grn)"><span class="num">04</span><div><span class="en">委托指南</span><h2>如何把 ADA 委托给 Pao Pool</h2></div><p class="aside">不同钱包的具体界面可能不同。请始终在自己的兼容 Cardano 钱包中操作，并在确认前核验矿池身份。</p></div><div class="lane"><ol class="dsteps"><li class="rise" style="--d:0.00s"><h3>打开矿池页面</h3><p>打开 Cexplorer 的 PAO 页面，或进入兼容 Cardano 钱包中的 stake pool 目录。</p></li><li class="rise" style="--d:0.06s"><h3>核对 ticker 与 pool ID</h3><p>搜索 PAO，并把完整 pool ID 与本页显示的 ID 对照。只看 ticker 不足以确认身份。</p></li><li class="rise" style="--d:0.12s"><h3>在钱包中选择委托</h3><p>使用钱包提供的 delegation 操作。你不需要向 Pao Studio 或 Pao Pool 转账 ADA。</p></li><li class="rise" style="--d:0.18s"><h3>检查并确认</h3><p>签署委托交易前，检查钱包显示的矿池、网络费，以及首次注册 stake credential 时可能出现的可退还 deposit。</p></li><li class="rise" style="--d:0.24s"><h3>核验委托结果</h3><p>在钱包或浏览器中检查当前委托状态。奖励按协议周期开始，并不保证金额。</p></li></ol></div>
+  <div class="gate rise" style="--c:var(--pur)"><span class="num">05</span><div><span class="en">选择之前</span><h2>评估 Cardano 矿池时要看什么</h2></div><p class="aside">没有一个指标能够证明某个矿池一定是最佳选择。除了协议参数，还应检查运营者的历史、目的与沟通。</p></div><div class="lane g4"><div class="ck rise" style="--d:0.00s"><h3>固定成本与 margin</h3><p>这些参数会影响矿池奖励如何在运营成本、运营者和委托者之间分配。</p></div><div class="ck rise" style="--d:0.06s"><h3>Saturation</h3><p>矿池超过协议 saturation 点后，每单位 ADA 的奖励可能下降，以此鼓励质押权分散。</p></div><div class="ck rise" style="--d:0.12s"><h3>区块生产记录</h3><p>检查矿池长期是否完成了被分配的区块，同时记住较短周期的结果可能受随机性影响。</p></div><div class="ck rise" style="--d:0.18s"><h3>运营透明度</h3><p>检查稳定身份、公开沟通、基础设施连续性、最新 metadata，以及运营矿池的明确目的。</p></div></div>
+  <div class="gate rise" style="--c:var(--mag)"><span class="num">06</span><div><span class="en">直接回答</span><h2>Cardano 质押常见问题</h2></div></div><div class="lane faq"><details class="rise"><summary>委托给 Pao Pool 会转出或锁定我的 ADA 吗？<i aria-hidden="true"></i></summary><p>不会。Cardano 委托分配的是质押权，ADA 仍由你的钱包控制并可以使用。</p></details><details class="rise"><summary>Cardano 质押奖励有保证吗？<i aria-hidden="true"></i></summary><p>没有。奖励取决于协议规则、矿池获得的委托量和矿池表现，矿池可能出现没有奖励的 epoch。</p></details><details class="rise"><summary>新委托什么时候开始获得奖励？<i aria-hidden="true"></i></summary><p>Cardano 会跨多个 epoch 使用 stake snapshot，因此奖励不会立即开始。请在钱包或浏览器中查看当前委托与奖励时间线。</p></details><details class="rise"><summary>之后可以更换矿池吗？<i aria-hidden="true"></i></summary><p>可以。你可以通过兼容钱包重新委托。重新委托只改变质押权指向的矿池，不会把 ADA 转给矿池。</p></details><details class="rise"><summary>委托给 Pao Pool 会支持什么？<i aria-hidden="true"></i></summary><p>矿池运营收入帮助 Pao Studio 维护基础设施并开发内容和产品。会员权益是 Pao Studio 额外提供的服务，不是 Cardano 协议奖励。</p></details></div>
+  <div class="gate rise" style="--c:var(--cy)"><span class="num">07</span><div><span class="en">核验信息</span><h2>官方来源与进一步阅读</h2></div><p class="aside">本页的协议说明以 Cardano 文档为依据。矿池状态应始终通过你的钱包或当前可用的区块链浏览器核对。</p></div>
+  <div class="lane srcs"><div class="rise"><h3>Cardano 官方资料</h3><ul><li><a href="https://docs.cardano.org/about-cardano/new-to-cardano/how-to-delegate">Cardano Docs · 如何委托 ↗</a></li><li><a href="https://developers.cardano.org/docs/get-started/infrastructure/cardano-cli/basic-operations/withdraw-rewards/">Cardano Developer Portal · Staking ↗</a></li><li><a href="https://cardano.org/stake-pool-operation/">Cardano · 矿池运营 ↗</a></li><li><a href="https://docs.cardano.org/about-cardano/learn/stake-pools">Cardano Docs · Stake pools ↗</a></li></ul></div><div class="rise" style="--d:.08s"><h3>Pao Studio 相关文章</h3><ul class="rel"><li><a href="#"><b>软件订阅正在失效</b><span>我们为什么尝试用质押建立摩擦更低的支持与会员关系。</span></a></li><li><a href="#"><b>独立创造者的数字主权</b><span>矿池如何支持长期独立与基础设施所有权。</span></a></li><li><a href="#"><b>AI 时代的 Web3 之盾</b><span>理解 Cardano 基础设施、非托管委托与小型运营者的更广视角。</span></a></li></ul></div></div>
+  <div class="lane"><p class="warn rise">本页用于解释协议机制和 Pao Studio 自己运营的矿池，不构成财务、投资、税务或安全建议。ADA 价格与质押奖励可能变化，你仍需自行负责钱包安全与委托决定。</p></div>
+  <div class="sec-end"></div>
+</main>
+
+<footer class="sitefoot">
+  <div class="top">
+    <div class="brand"><img src="pao_logo_dark.svg" alt="Pao Studio" width="185" height="26"><p>在 Cardano 上构建 AI 产品与开源工具。<br>Stake with PAO Pool，获取质押奖励，同时享受增值服务。</p></div>
+    <div><h4>EXPLORE</h4><ul><li><a href="d5-works.html">作品</a></li><li><a href="d5-blog.html">博客</a></li><li><a href="d5-skills.html">Skills</a></li></ul></div>
+    <div><h4>SOCIAL</h4><ul><li><a href="https://x.com/cauu_128">X ↗</a></li><li><a href="https://github.com/cauu">GitHub ↗</a></li></ul></div>
+  </div>
+  <div class="bot"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>EPOCH <b data-ep>—</b> · <span data-ep-left>—</span></span></div>
+</footer>
+
+<nav class="proto-badge" aria-label="原型切换"><a href="index.html">总览</a><a href="d5-hybrid.html">首页</a><a href="d5-works.html">作品</a><a href="d5-blog.html">博客</a><a href="d5-article.html">文章</a><a href="d5-skills.html">Skills</a><a href="d5-governance.html">治理</a><a href="d5-about.html">关于</a><a href="d5-staking.html" aria-current="page">质押</a></nav>
+
+<script src="dx-fx.js"></script>
+<script src="d5-pages.js"></script>
+
+</body>
+</html>

@@ -19,8 +19,9 @@
 | 3    | S0003   | COMPLETE | 改进文章 metadata、结构化数据与内部链接           | S0002 完成                   |
 | 4    | S0004   | COMPLETE | 强化品牌、作者与 Pao Pool 的实体及证据一致性      | S0003 完成                   |
 | 5    | S0005   | QUEUED   | 建立 Search Console 与 GEO 观察测量闭环           | S0004 完成、用户授权外部账号 |
+| 6    | S0006   | ACTIVE   | 按 Bubble 视觉规范提升全站界面动感与设计感        | 用户授权激活                 |
 
-当前没有 ACTIVE spec。S0001、S0002、S0002.1、S0002.2、S0003 与 S0004 均为 COMPLETE；S0005 仍为 QUEUED。
+当前 ACTIVE spec 为 S0006（`20261024T0849-S0006-site-visual-motion.md`）。S0001、S0002、S0002.1、S0002.2、S0003 与 S0004 均为 COMPLETE；S0005 仍为 QUEUED。
 
 ## 排队 Spec 轮廓
 
@@ -72,6 +73,28 @@
 - s5-04 定义 28 天比较窗口、实验停止条件和回退标准。
 - s5-05 形成首轮复盘并决定下一份 optimization spec。
 
+### S0006 全站界面视觉与动效优化
+
+目标是在 Bubble-light 视觉规范（`docs/redesign-v2/final/DESIGN-bubble-light.md`）内提升全站界面的动感与设计感，让首次访问者在首屏被吸引，同时不破坏既有 SEO/GEO 合同。
+
+页面范围：首页、Blog 列表与文章页、Projects、Products、Skills、Governance、About、Staking。
+
+激活前需确认的约束：
+
+- 设计规范把动效时长列为 Known Gap，激活时须先补充动效合同（时长、缓动、触发方式、`prefers-reduced-motion` 降级）。
+- S0003 曾约定不改 Blog 可见模板；本 spec 激活即视为用户解除该限制，但文章 metadata、结构化数据与正文链接保持不变。
+- 保留 S0002.1 的 staking 低曝光入口策略、S0002.2 的 staking 语义合同与 S0004 的实体页面 ID。
+- 不新增第 9 种品牌色或第二字体；动效优先使用 CSS，新增动画依赖需单独说明体积影响。
+
+预期事项：
+
+- s6-01 截图盘点各页现状，固化视觉问题清单、动效合同与语义保留合同。
+- s6-02 优化首页 Hero 与首屏，建立可复用的入场、滚动揭示与交互微动效。
+- s6-03 将视觉与动效系统推广到 Blog 列表与文章页。
+- s6-04 推广到 Projects、Products、Skills。
+- s6-05 推广到 Governance、About、Staking，保持既有语义合同。
+- s6-06 完成三语桌面/移动视觉验收、reduced-motion、Core Web Vitals 抽样与 S0001–S0004 回归。
+
 ## 状态变更日志
 
 - 2026-09-02 16:02 +08:00 | 创建注册表；S0001 设为唯一 ACTIVE；S0002-S0005 仅排队，禁止并行执行。
@@ -87,3 +110,5 @@
 - 2026-09-02 20:55 +08:00 | S0003 完成九篇三语试点的人工摘要、真实修订信号、同语言 contextual links 和无视觉变化验收；当前无 ACTIVE spec。
 - 2026-09-02 23:12 +08:00 | 用户确认继续；创建 S0004 并设为唯一 ACTIVE，范围限定为 Pao Studio、Martin / 0xMartin 与 Pao Pool 的事实页、稳定实体关系和低曝光作者入口。
 - 2026-09-02 23:23 +08:00 | S0004 完成三语 About 事实页、稳定 Organization/Person/Service 关系、文章作者连接、机器清单与回归验收；当前无 ACTIVE spec。
+- 2026-10-24 08:49 +08:00 | 用户新建前端界面优化任务；登记 S0006 为 QUEUED，范围为全站页面的 Bubble 视觉与动效优化；当前无 ACTIVE spec，S0005 状态不变。
+- 2026-10-24 08:49 +08:00 | 用户授权激活 S0006 并设为唯一 ACTIVE；先基于当前版本实现多风格 HTML 原型；S0005 保持 QUEUED。

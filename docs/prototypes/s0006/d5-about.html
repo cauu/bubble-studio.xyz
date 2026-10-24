@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D5 · 关于 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<link rel="stylesheet" href="d5-pages.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+.arow { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 56px; align-items: center; padding-top: 24px; }
+.arow .shape { justify-self: center; }
+.arow .g-p { width: 150px; height: 150px; margin-bottom: 63px; }
+.arow .g-a { width: 200px; height: 174px; }
+.arow .g-o { width: 180px; height: 180px; }
+.arow .lead { font-size: clamp(17px, 1.5vw, 20px); line-height: 1.85; margin-bottom: 22px; max-width: 34em; }
+.arow .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+@media (max-width: 900px) { .arow { grid-template-columns: 1fr; gap: 28px; } .arow .shape { justify-self: start; transform: scale(.6); transform-origin: left center; margin: -40px 0; } }
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="d5-hybrid.html"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="d5-hybrid.html">/home</a><a href="d5-works.html">/works</a><a href="d5-blog.html">/blog</a><a href="d5-skills.html">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托 PAO</a></div>
+  </div>
+</nav>
+
+<main>
+<header class="ph" style="--c:var(--cy)">
+    <div class="art" aria-hidden="true"><span class="g-p" data-py=".06"></span><span class="g-a" data-py="-.04"></span><span class="g-o" data-py=".08"></span></div>
+    <div class="crumb rise">&gt; <a href="d5-hybrid.html">~</a>/about</div>
+    <span class="eyebrow rise" style="--d:.05s">公开身份</span>
+    <h1 class="rise" style="--d:.1s">Pao <span class="hl">Studio</span></h1>
+    <p class="sub rise" style="--d:.18s">Pao Studio 是一家围绕 AI 与 Cardano 开展产品实践的一人工作室。早期公开页面和当前域名也使用 Bubble Studio 这个名称。</p>
+    
+  </header>
+  <div class="gate rise" style="--c:var(--mag)"><span class="num">01</span><div><span class="en">STUDIO</span><h2>一个工作室，两个公开名称</h2></div></div>
+  <div class="lane arow">
+    <div class="shape g-p" data-py="-.05" aria-hidden="true"></div>
+    <div class="rise"><p class="lead">Pao Studio 是这个网站当前使用的公开名称。Bubble Studio 作为别名保留，用来连接早期页面与 bubble-studio.xyz 域名。</p>
+      <div class="term"><header><span>whoami --studio</span></header><div class="body">
+        <div class="row"><span class="k">name</span><span class="v">Pao Studio</span></div>
+        <div class="row"><span class="k">曾用名称</span><span class="v" style="color:var(--fg)">Bubble Studio</span></div>
+        <div class="row"><span class="k">domain</span><span class="v" style="color:var(--fg)">bubble-studio.xyz</span></div>
+        <div class="row"><span class="k">联系</span><a class="v" href="mailto:martincauu@gmail.com" style="color:var(--yel);text-decoration:underline">邮件联系 Pao Studio ↗</a></div>
+      </div></div></div>
+  </div>
+  <div class="gate rise" style="--c:var(--cy)"><span class="num">02</span><div><span class="en">AUTHOR · DEVELOPER</span><h2>Martin</h2></div></div>
+  <div class="lane arow">
+    <div class="shape g-a" data-py=".04" aria-hidden="true"></div>
+    <div class="rise"><p class="lead">Martin 撰写 Pao Studio 的文章，也参与产品开发。网站连接的 GitHub 资料使用公开名称 0xMartin。</p>
+      <div class="links"><a class="cbtn alt" href="https://github.com/cauu">GitHub 资料 · 0xMartin ↗</a><a class="cbtn alt" href="https://x.com/cauu_128">X 资料 ↗</a></div></div>
+  </div>
+  <div class="gate rise" style="--c:var(--yel)"><span class="num">03</span><div><span class="en">CARDANO STAKE POOL</span><h2>Pao Pool</h2></div></div>
+  <div class="lane arow">
+    <div class="shape g-o" data-py="-.05" aria-hidden="true"></div>
+    <div class="rise"><p class="lead">Pao Pool 是 Pao Studio 一人公司实验使用的 Cardano 矿池。矿池运营收入用于支持基础设施和产品开发。</p>
+      <div class="term"><header><span>pool --id</span></header><div class="body">
+        <div class="row"><span class="k">ticker</span><span class="v">PAO</span></div>
+        <div class="row"><span class="k">矿池 ID</span><span class="v" style="color:var(--fg)">pool1jh5p…0ksm</span><button class="copy" type="button" data-copy="pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">COPY</button></div>
+      </div></div>
+      <div class="links"><a class="cbtn" href="d5-staking.html">查看 Pao Pool 详情 →</a><a class="cbtn alt" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan ↗</a><a class="cbtn alt" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">Cexplorer ↗</a></div></div>
+  </div>
+  <div class="sec-end"></div>
+</main>
+
+<footer class="sitefoot">
+  <div class="top">
+    <div class="brand"><img src="pao_logo_dark.svg" alt="Pao Studio" width="185" height="26"><p>在 Cardano 上构建 AI 产品与开源工具。<br>Stake with PAO Pool，获取质押奖励，同时享受增值服务。</p></div>
+    <div><h4>EXPLORE</h4><ul><li><a href="d5-works.html">作品</a></li><li><a href="d5-blog.html">博客</a></li><li><a href="d5-skills.html">Skills</a></li></ul></div>
+    <div><h4>SOCIAL</h4><ul><li><a href="https://x.com/cauu_128">X ↗</a></li><li><a href="https://github.com/cauu">GitHub ↗</a></li></ul></div>
+  </div>
+  <div class="bot"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>EPOCH <b data-ep>—</b> · <span data-ep-left>—</span></span></div>
+</footer>
+
+<nav class="proto-badge" aria-label="原型切换"><a href="index.html">总览</a><a href="d5-hybrid.html">首页</a><a href="d5-works.html">作品</a><a href="d5-blog.html">博客</a><a href="d5-article.html">文章</a><a href="d5-skills.html">Skills</a><a href="d5-governance.html">治理</a><a href="d5-about.html" aria-current="page">关于</a><a href="d5-staking.html">质押</a></nav>
+
+<script src="dx-fx.js"></script>
+<script src="d5-pages.js"></script>
+
+</body>
+</html>

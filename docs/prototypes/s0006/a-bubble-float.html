@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A · 泡泡浮游 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ===== Direction A: Bubble Float =====
+   世界观驱动：泡泡是品牌的物理介质。漂浮、上升、弹性弹出、指针视差。 */
+
+/* Reveal: float up with a soft spring */
+.js [data-reveal] { transform: translateY(28px) scale(.98); transition: opacity .7s var(--ease), transform .9s var(--spring); }
+.js [data-reveal].in { transform: none; }
+
+/* Bubble primitive */
+.bubble {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0 9%, rgba(255,255,255,.35) 16%, transparent 34%),
+    radial-gradient(circle at 70% 78%, rgba(255,255,255,.4), transparent 42%),
+    radial-gradient(circle at 50% 50%, var(--c) 0%, color-mix(in srgb, var(--c) 55%, transparent) 62%, color-mix(in srgb, var(--c) 18%, transparent) 100%);
+  box-shadow: inset -6px -10px 24px color-mix(in srgb, var(--c) 40%, transparent), inset 4px 6px 14px rgba(255,255,255,.6);
+  animation: drift var(--d, 14s) ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes drift {
+  0% { transform: translate3d(0,0,0) scale(1); }
+  50% { transform: translate3d(var(--dx, 14px), var(--dy, -26px), 0) scale(1.04, .97); }
+  100% { transform: translate3d(calc(var(--dx, 14px) * -.6), calc(var(--dy, -26px) * .5), 0) scale(.98, 1.03); }
+}
+.layer { position: absolute; inset: 0; transition: transform .6s var(--ease); }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; overflow: hidden; padding: 112px 0 120px; isolation: isolate; }
+.hero::before { content: ""; position: absolute; inset: -20% -10% auto; height: 120%; z-index: -2;
+  background: radial-gradient(640px 480px at 72% 30%, rgba(85,202,232,.26), transparent 70%),
+              radial-gradient(520px 420px at 18% 20%, rgba(189,145,201,.18), transparent 70%),
+              radial-gradient(520px 360px at 50% 100%, rgba(238,201,99,.16), transparent 70%); }
+.hero-grid { display: grid; grid-template-columns: 1.3fr .9fr; gap: 56px; align-items: center; position: relative; z-index: 1; }
+.eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: 22px; }
+.eyebrow i { width: 10px; height: 10px; border-radius: 50%; background: var(--sky); box-shadow: 0 0 0 4px rgba(85,202,232,.22); animation: breathe 2.4s ease-in-out infinite; }
+@keyframes breathe { 50% { box-shadow: 0 0 0 9px rgba(85,202,232,0); } }
+.hero h1 { font-size: clamp(40px, 5.6vw, 72px); line-height: 1.12; margin-bottom: 22px; font-weight: 800; }
+.hero h1 .line { display: block; overflow: hidden; padding-bottom: .06em; }
+.hero h1 .line > span { display: inline-block; transform: translateY(110%); animation: rise 1s var(--spring) forwards; animation-delay: var(--t); }
+@keyframes rise { to { transform: none; } }
+.hl { position: relative; color: var(--teal); white-space: nowrap; }
+.hl::after { content: ""; position: absolute; left: -4%; right: -4%; bottom: .04em; height: .34em; z-index: -1; border-radius: 999px;
+  background: var(--lemon); transform: scaleX(0); transform-origin: left; animation: inflate .8s var(--spring) 1.05s forwards; }
+@keyframes inflate { to { transform: scaleX(1); } }
+.hero p.sub { font-size: 17.5px; color: var(--body-strong); max-width: 31em; margin-bottom: 30px; opacity: 0; animation: fade .8s var(--ease) .75s forwards; }
+.cta-row { display: flex; gap: 12px; flex-wrap: wrap; opacity: 0; animation: fade .8s var(--ease) .9s forwards; }
+@keyframes fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* Ledger card: glass, gently bobbing */
+.ledger-wrap { animation: bob 6s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-10px); } }
+.ledger { background: rgba(255,255,255,.62); backdrop-filter: blur(24px) saturate(1.6); -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid rgba(255,255,255,.7); border-radius: 22px; overflow: hidden;
+  box-shadow: 0 1px 2px rgba(23,32,38,.05), 0 24px 56px rgba(23,32,38,.13), inset 0 1px 0 rgba(255,255,255,.8);
+  opacity: 0; animation: pop .9s var(--spring) .45s forwards; }
+@keyframes pop { from { opacity: 0; transform: scale(.86) translateY(30px); } to { opacity: 1; transform: none; } }
+.ledger-head { display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid rgba(23,32,38,.06); background: rgba(231,232,244,.55); }
+.ledger-head b { color: var(--ink); }
+.live { width: 9px; height: 9px; border-radius: 50%; background: var(--orange); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.5); opacity: .55; } }
+.ledger-head a { margin-left: auto; font-size: 12.5px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.ledger-row { display: flex; justify-content: space-between; padding: 15px 20px; font-size: 14.5px; }
+.ledger-row:nth-child(even) { background: rgba(235,235,244,.5); }
+.ledger-row b { color: var(--ink); font-size: 16px; }
+.ledger-foot { display: flex; gap: 10px; align-items: center; padding: 15px 20px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 600; }
+.ledger-foot span { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.18); font-size: 11px; }
+
+/* ---------- Sections ---------- */
+section.band { position: relative; padding: 112px 0; overflow: hidden; isolation: isolate; }
+.band.soft { background: var(--card); }
+.band.white { background: #fff; }
+h2.title { font-size: clamp(30px, 4.2vw, 50px); line-height: 1.15; font-weight: 800; margin-bottom: 16px; }
+.lead { font-size: 16.5px; line-height: 1.75; max-width: 46em; white-space: pre-line; }
+.head { margin-bottom: 52px; }
+
+/* Rising bubbles inside a band */
+.riser { position: absolute; bottom: -80px; border-radius: 50%; pointer-events: none; z-index: -1;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.9) 0 10%, transparent 30%), color-mix(in srgb, var(--c) 45%, transparent);
+  animation: up var(--d) linear infinite; animation-delay: var(--t); }
+@keyframes up { 0% { transform: translateY(0) translateX(0); opacity: 0; } 10% { opacity: .9; } 50% { transform: translateY(-50vh) translateX(18px); } 90% { opacity: .8; } 100% { transform: translateY(-110vh) translateX(-10px); opacity: 0; } }
+
+/* Perks */
+.perks-grid { display: grid; grid-template-columns: 1.45fr 1fr; gap: 24px; align-items: start; }
+.perk-list { background: #fff; border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-card); }
+.perk-list header { display: flex; justify-content: space-between; padding: 18px 26px 6px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.perk { display: flex; gap: 18px; align-items: flex-start; padding: 22px 26px; position: relative; transition: background .25s; }
+.perk + .perk { border-top: 1px solid rgba(23,32,38,.05); }
+.perk:hover { background: #fbfbfe; }
+.perk .num { flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 14px; color: var(--ink); position: relative;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.9) 0 12%, transparent 34%), var(--c);
+  box-shadow: inset -4px -6px 12px rgba(0,0,0,.08); transform: scale(0); transition: transform .7s var(--spring); transition-delay: var(--t); }
+.perk-list.in .num { transform: scale(1); }
+.perk:hover .num { animation: wobble .7s var(--spring); }
+@keyframes wobble { 30% { transform: scale(1.14, .88); } 60% { transform: scale(.94, 1.06); } 100% { transform: scale(1); } }
+.perk h3 { font-size: 17px; margin-bottom: 4px; }
+.perk p { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+.perk .chip { margin-left: auto; flex: none; }
+.tier { position: sticky; top: 96px; background: var(--teal); color: #fff; border-radius: var(--r-xl); padding: 40px 36px; overflow: hidden; isolation: isolate;
+  box-shadow: 0 18px 44px rgba(19,88,93,.26), inset 0 1px 0 rgba(255,255,255,.14); }
+.tier .cap { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--lemon); }
+.tier .price { font-size: 72px; font-weight: 800; line-height: 1; letter-spacing: -2px; margin: 10px 0 8px; display: block; }
+.tier .price small { font-size: 18px; letter-spacing: 0; color: rgba(255,255,255,.85); }
+.tier p { font-size: 14.5px; color: rgba(255,255,255,.9); margin-bottom: 24px; }
+.tier .btn { width: 100%; background: #fff; color: var(--ink); }
+.tier .fine { display: block; text-align: center; margin-top: 12px; font-size: 12.5px; color: rgba(255,255,255,.75); }
+.tier .riser { z-index: -1; }
+
+/* Benefits bento */
+.bento { display: grid; grid-template-columns: 1.2fr .8fr; grid-template-rows: auto auto; gap: 16px; }
+.tile { background: #fff; border: 1px solid var(--hairline-soft); border-radius: var(--r-xl); padding: 24px; box-shadow: var(--shadow-soft);
+  transition: transform .45s var(--spring), box-shadow .35s var(--ease); }
+.tile:hover { transform: translateY(-6px) rotate(-.4deg); box-shadow: 0 6px 14px rgba(23,32,38,.05), 0 26px 56px rgba(23,32,38,.12); }
+.tile.big { grid-row: span 2; background: var(--soft); padding: 28px; display: flex; flex-direction: column; }
+.tile .lbl { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.tile h3 { font-size: 19px; margin: 4px 0 8px; }
+.tile p { font-size: 13.5px; line-height: 1.65; }
+.tile.big img { margin-top: auto; border-radius: var(--r-lg); background: #0b1114; }
+.tile.split { display: grid; grid-template-columns: minmax(0,1fr) 150px; gap: 16px; align-items: center; }
+.raffle { position: relative; height: 112px; border-radius: var(--r-lg); background: linear-gradient(145deg,#dff3ff,#f1eaff 60%,#fff5c7); overflow: hidden; }
+.coin { position: absolute; width: 46px; height: 46px; border-radius: 50%; border: 4px solid rgba(255,255,255,.85); box-shadow: var(--shadow-soft); background: #fff center/70% no-repeat; animation: hop 2.4s var(--ease) infinite; }
+.coin:nth-child(2) { animation-delay: .3s; background-size: cover; }
+.coin:nth-child(3) { animation-delay: .6s; background: var(--lemon); display: grid; place-items: center; font-weight: 900; color: var(--ink); }
+@keyframes hop { 0%,60%,100% { transform: translateY(0) rotate(var(--r)); } 30% { transform: translateY(-14px) rotate(calc(var(--r) * -1)); } }
+.agent { height: 112px; border-radius: var(--r-lg); background: linear-gradient(145deg,#e9fbf2,#dff4f5); padding: 12px; }
+.agent .win { height: 100%; background: #fff; border-radius: var(--r-md); padding: 10px; box-shadow: var(--shadow-soft); font-size: 9.5px; font-weight: 700; }
+.agent .msg { height: 14px; border-radius: 999px; background: var(--soft); width: 62%; margin: 8px 0 6px auto; }
+.typing { display: inline-flex; gap: 4px; padding: 7px 10px; border-radius: 999px; background: var(--sky); }
+.typing i { width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: dot 1.2s ease-in-out infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 30% { transform: translateY(-4px); } 60% { transform: none; } }
+.os { grid-column: 1 / -1; display: flex; align-items: center; gap: 20px; background: linear-gradient(105deg,#f6f3ff,#eef9ff); }
+.code { width: 280px; flex: none; border-radius: var(--r-lg); background: #172328; font: 10.5px/1.7 ui-monospace, Menlo, monospace; color: var(--mint); padding: 14px 16px; }
+.code .caret { display: inline-block; width: 6px; height: 12px; background: var(--lemon); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Projects */
+.proj-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-bottom: 44px; }
+.arrow-link { display: inline-flex; gap: 8px; align-items: center; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.arrow-link span { transition: transform .3s var(--spring); }
+.arrow-link:hover span { transform: translateX(5px); }
+.projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.proj { background: #fff; border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-soft); transition: transform .5s var(--spring), box-shadow .35s; }
+.proj:hover { transform: translateY(-8px); box-shadow: 0 8px 18px rgba(23,32,38,.06), 0 30px 60px rgba(23,32,38,.13); }
+.proj .shot { aspect-ratio: 16/10; overflow: hidden; background: var(--soft); position: relative; }
+.proj .shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+.proj:hover .shot img { transform: scale(1.06); }
+.proj .shot .chip { position: absolute; left: 12px; top: 12px; background: rgba(255,255,255,.92); }
+.proj .body { padding: 20px 22px 22px; }
+.proj h3 { font-size: 19px; margin-bottom: 6px; }
+.proj p { font-size: 13.5px; line-height: 1.6; min-height: 3.2em; }
+.proj .links { display: flex; justify-content: space-between; margin-top: 18px; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+
+/* Model flow */
+.flow { max-width: 1100px; margin: 0 auto; background: #fdfdff; border: 1px solid rgba(72,76,110,.08); border-radius: var(--r-xl); padding: 24px; box-shadow: 0 16px 44px rgba(35,42,70,.08); }
+.flow .lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 4px 16px; display: block; }
+.sources { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.src { background: var(--soft); border-radius: var(--r-lg); padding: 20px; display: flex; gap: 12px; align-items: center; transition: transform .4s var(--spring); }
+.src:hover { transform: translateY(-4px); }
+.src .ic { width: 44px; height: 44px; border-radius: 50%; flex: none; background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.9) 0 12%, transparent 34%), var(--c); }
+.src h3 { font-size: 17px; }
+.src small { font-size: 12px; color: var(--muted); display: block; }
+.pipe { position: relative; height: 64px; display: grid; place-items: center; }
+.pipe::before { content: ""; width: 2px; height: 100%; background: linear-gradient(var(--hairline), var(--hairline)) center/2px 100% no-repeat; }
+.pipe i { position: absolute; left: calc(50% - 5px); width: 10px; height: 10px; border-radius: 50%; background: var(--sky); animation: flowdown 1.8s linear infinite; }
+.pipe i:nth-child(2) { animation-delay: .6s; background: var(--lavender); } .pipe i:nth-child(3) { animation-delay: 1.2s; background: var(--grass); }
+.pipe.up i { animation-name: flowup; background: var(--lemon); }
+@keyframes flowdown { from { top: -6px; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } to { top: 58px; opacity: 0; } }
+@keyframes flowup { from { top: 58px; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } to { top: -6px; opacity: 0; } }
+.cash { display: grid; grid-template-columns: .8fr 1.2fr; gap: 36px; background: var(--teal); color: #fff; border-radius: var(--r-xl); padding: 28px; position: relative; overflow: hidden; isolation: isolate; }
+.cash .cap { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--lemon); }
+.cash h3 { color: #fff; font-size: 26px; margin: 6px 0 10px; }
+.cash p { color: rgba(255,255,255,.8); font-size: 14px; }
+.uses { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.uses div { background: rgba(255,255,255,.1); border-radius: var(--r-md); padding: 16px; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: background .25s; }
+.uses div:hover { background: rgba(255,255,255,.18); }
+.uses div::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--lemon); flex: none; }
+.found { background: var(--soft); border-radius: var(--r-xl); padding: 24px 28px; display: flex; gap: 20px; align-items: center; }
+.found .ic { width: 56px; height: 56px; }
+.found h3 { font-size: 25px; }
+.found .pill { margin-left: auto; background: #fff; border-radius: 999px; padding: 8px 14px; font-size: 12px; font-weight: 600; box-shadow: var(--shadow-soft); white-space: nowrap; }
+
+/* Contact */
+.contact { position: relative; overflow: hidden; isolation: isolate; display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap;
+  background: var(--card); border-radius: var(--r-xl); padding: 52px 56px; }
+.contact h2 { font-size: clamp(26px, 3.2vw, 38px); margin: 14px 0 10px; }
+.contact p { white-space: pre-line; }
+.contact .btns { display: grid; gap: 12px; width: 300px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero { padding: 72px 0 88px; }
+  .hero-grid, .perks-grid { grid-template-columns: 1fr; gap: 44px; }
+  .ledger-wrap { max-width: 520px; width: 100%; margin: 0 auto; }
+  .tier { position: static; }
+  .bento { grid-template-columns: 1fr; }
+  .tile.big { grid-row: auto; }
+  .projects { grid-template-columns: 1fr 1fr; }
+  .sources { grid-template-columns: 1fr; }
+  .cash { grid-template-columns: 1fr; gap: 24px; }
+}
+@media (max-width: 640px) {
+  section.band { padding: 76px 0; }
+  .projects { grid-template-columns: 1fr; }
+  .proj-head { flex-direction: column; align-items: flex-start; }
+  .perk { padding: 18px; } .perk .chip { display: none; }
+  .tile.split { grid-template-columns: 1fr; }
+  .os { flex-direction: column; align-items: stretch; } .code { width: 100%; }
+  .uses { grid-template-columns: 1fr; }
+  .found { flex-wrap: wrap; } .found .pill { margin-left: 0; }
+  .contact { padding: 36px 24px; } .contact .btns { width: 100%; }
+  .cta-row { flex-direction: column; } .cta-row .btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="#"><img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/pao_logo.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="#" aria-current="page">首页</a><a href="#">博客</a><a href="#">项目</a><a href="#">Skills</a></div>
+    <div class="nav-right"><span class="nav-lang">简体中文</span><a class="btn btn-primary btn-sm" href="#contact">合作</a></div>
+  </div>
+</nav>
+
+<main>
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-h1" id="hero">
+    <div class="layer" data-depth="18" aria-hidden="true">
+      <span class="bubble" style="--c:var(--sky);width:180px;height:180px;right:4%;top:6%;--d:13s;--dx:-18px;--dy:-30px"></span>
+      <span class="bubble" style="--c:var(--lavender);width:96px;height:96px;left:44%;top:10%;--d:11s;--dx:16px;--dy:-22px"></span>
+      <span class="bubble" style="--c:var(--lemon);width:64px;height:64px;left:6%;bottom:12%;--d:9s"></span>
+    </div>
+    <div class="layer" data-depth="36" aria-hidden="true">
+      <span class="bubble" style="--c:var(--mint);width:120px;height:120px;right:36%;bottom:4%;--d:15s;--dx:22px;--dy:-18px"></span>
+      <span class="bubble" style="--c:var(--grass);width:42px;height:42px;left:38%;bottom:22%;--d:8s"></span>
+      <span class="bubble" style="--c:var(--orange);width:28px;height:28px;right:12%;bottom:18%;--d:7s;--dx:-10px"></span>
+      <span class="bubble" style="--c:var(--sea);width:22px;height:22px;left:2%;top:18%;--d:10s"></span>
+    </div>
+
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow"><i></i>Pao Studio</span>
+        <h1 id="hero-h1">
+          <span class="line"><span style="--t:.1s">一家建立在</span></span>
+          <span class="line"><span style="--t:.22s">Cardano 上的<span class="hl">一人公司</span></span></span>
+        </h1>
+        <p class="sub">探索由 Cardano 矿池支持的一人公司运营模式，并分享实践经验。
+希望通过我们的努力，能让 Cardano 成为一人公司的新基建。</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#">委托给 Pao Pool</a>
+          <a class="btn btn-ghost" href="#perks">查看订阅内容</a>
+        </div>
+      </div>
+
+      <div class="ledger-wrap">
+        <div class="ledger" role="table" aria-label="Pao Pool 矿池数据">
+          <div class="ledger-head"><span class="live" aria-hidden="true"></span><b>Pao Pool</b><a href="#">实时 · CardanoScan →</a></div>
+          <div class="ledger-row" role="row"><span>矿池代号</span><b>PAO</b></div>
+          <div class="ledger-row" role="row"><span>矿池质押量</span><b class="tnum" data-count="1.5" data-decimals="1" data-suffix="K ADA">1.5K ADA</b></div>
+          <div class="ledger-row" role="row"><span>质押年化</span><b class="tnum" data-count="2.2" data-decimals="1" data-suffix="%">2.2%</b></div>
+          <div class="ledger-row" role="row"><span>委托人</span><b class="tnum" data-count="4">4</b></div>
+          <div class="ledger-foot"><span aria-hidden="true">✓</span>非托管 · 不锁仓 · 奖励会变化</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Perks -->
+  <section class="band soft" id="perks" aria-labelledby="perks-h2">
+    <span class="riser" style="--c:var(--sky);width:40px;height:40px;left:8%;--d:16s;--t:0s" aria-hidden="true"></span>
+    <span class="riser" style="--c:var(--lavender);width:24px;height:24px;left:30%;--d:12s;--t:-5s" aria-hidden="true"></span>
+    <span class="riser" style="--c:var(--mint);width:56px;height:56px;right:6%;--d:19s;--t:-9s" aria-hidden="true"></span>
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <h2 class="title" id="perks-h2">质押即订阅</h2>
+        <p class="lead">传统订阅模式要求用户定期付费。Pao Studio 尝试基于 Cardano 原生质押机制，建立一种新的订阅方式。
+用户将 ADA 委托给 Pao Pool，无需额外付费、锁仓或托管，照常获得质押奖励。矿池运营收入用于维持 Pao Pool 运行，并支持 Pao Studio 提供相应的内容和产品服务。</p>
+      </div>
+      <div class="perks-grid">
+        <div class="perk-list" data-reveal>
+          <header><span>模式如何运作</span><span>对应关系</span></header>
+          <div class="perk"><span class="num" style="--c:var(--sky);--t:.1s">01</span><div><h3>无需另行支付订阅费</h3><p>ADA 不会转入 Pao Studio 或 Pao Pool，委托期间也不会被锁定。</p></div><span class="chip">非托管</span></div>
+          <div class="perk"><span class="num" style="--c:var(--lavender);--t:.22s">02</span><div><h3>委托关系对应会员身份</h3><p>系统可以根据链上委托状态识别会员，并开放相应的内容、产品功能、早期体验和会员活动。</p></div><span class="chip">委托即会员</span></div>
+          <div class="perk"><span class="num" style="--c:var(--mint);--t:.34s">03</span><div><h3>矿池收入用于公司运营</h3><p>Pao Pool 获得的运营收入用于支付节点、服务器、AI 服务和产品开发成本，为一人公司的持续运营提供一项收入来源。</p></div><span class="chip">运营收入</span></div>
+          <div class="perk"><span class="num" style="--c:var(--grass);--t:.46s">04</span><div><h3>委托者参与产品迭代</h3><p>委托者可以参与早期测试并提交实际需求，相关反馈将作为产品调整的参考。</p></div><span class="chip">产品反馈</span></div>
+        </div>
+        <div class="tier" data-reveal data-delay="120">
+          <span class="riser" style="--c:var(--lemon);width:18px;height:18px;right:14%;--d:9s;--t:-2s" aria-hidden="true"></span>
+          <span class="riser" style="--c:var(--mint);width:30px;height:30px;right:32%;--d:12s;--t:-7s" aria-hidden="true"></span>
+          <span class="cap">订阅费用</span>
+          <span class="price tnum">$0<small> / 订阅费用</small></span>
+          <p>无需另行支付订阅费。将 ADA 委托给 Pao Pool，即可享受我们提供的内容和产品服务。</p>
+          <a class="btn" href="#">委托给 Pao Pool</a>
+          <span class="fine">非托管 · 不锁仓 · 可随时更换矿池</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="band white" aria-labelledby="ben-h2">
+    <div class="wrap">
+      <div class="head" data-reveal><h2 class="title" id="ben-h2">现在质押，可以获得...</h2></div>
+      <div class="bento">
+        <div class="tile big" data-reveal>
+          <span class="lbl">内容服务</span>
+          <h3>Crypto 交易策略推送</h3>
+          <p style="margin-bottom:22px">提供具体的 Crypto 交易策略内容，包括市场判断、交易逻辑、执行条件和风险说明。</p>
+          <img src="../../../public/images/trading-strategy-card.png" alt="BTCUSDT 4 小时交易策略示意图" width="2244" height="701" loading="lazy">
+        </div>
+        <div class="tile split" data-reveal data-delay="80">
+          <div><span class="lbl">不定期开放</span><h3>Token 抽奖</h3><p>面向委托者开展 Token 抽奖，奖品可能包括 ADA、SNEK 等资产。奖品内容和参与条件以每期活动规则为准。</p></div>
+          <div class="raffle" aria-hidden="true">
+            <span class="coin" style="left:12%;top:20%;--r:-12deg;background-image:url('https://cardano.org/img/brand-assets/cardano-starburst-blue.svg')"></span>
+            <span class="coin" style="right:12%;top:14%;--r:12deg;background-image:url('https://assets.coingecko.com/coins/images/30496/standard/Snek-Square-BG_200x200.png')"></span>
+            <span class="coin" style="left:40%;bottom:8%;--r:6deg">?</span>
+          </div>
+        </div>
+        <div class="tile split" data-reveal data-delay="160">
+          <div><span class="lbl">Coming Soon</span><h3>交易 Agent 内测权限</h3><p>交易 Agent 开放内测后，Pao Pool 委托者可以优先使用，并参与早期产品反馈。</p></div>
+          <div class="agent" aria-hidden="true"><div class="win">Trading Agent<div class="msg"></div><span class="typing"><i></i><i></i><i></i></span></div></div>
+        </div>
+        <div class="tile os" data-reveal data-delay="220">
+          <div style="flex:1"><h3>支持 Cardano 开源产品开发</h3><p>将 ADA 委托给 Pao Pool，支持我们为 Cardano 的开源生态贡献产品。</p></div>
+          <div class="code" aria-hidden="true"><span style="color:var(--lavender)">const</span> build = <span style="color:var(--sky)">'Cardano'</span>;<br><span style="color:rgba(255,255,255,.55)">openSource.contribute(build);</span><span class="caret"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="band soft" aria-labelledby="proj-h2">
+    <div class="wrap">
+      <div class="proj-head" data-reveal>
+        <div><h2 class="title" id="proj-h2">项目列表</h2><p class="lead">Pao Studio 会尝试开发不同类型的产品，包括开源的 Cardano 基础设施、Web3 应用和 AI 应用。</p></div>
+        <a class="arrow-link" href="#">查看全部项目 <span>→</span></a>
+      </div>
+      <div class="projects">
+        <a class="proj" href="#" data-reveal><div class="shot"><img src="../../../public/images/projects/ouro-pass.jpg" alt="" loading="lazy"><span class="chip">基础设施</span></div><div class="body"><h3>Ouro Pass</h3><p>基于 Cardano 的去中心化身份与订阅基础设施。</p><div class="links"><span>访问项目 ↗</span><span>GitHub</span></div></div></a>
+        <a class="proj" href="#" data-reveal data-delay="90"><div class="shot"><img src="../../../public/images/projects/utxray.jpg" alt="" loading="lazy"><span class="chip">基础设施</span></div><div class="body"><h3>utxray</h3><p>面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。</p><div class="links"><span>访问项目 ↗</span><span>GitHub</span></div></div></a>
+        <a class="proj" href="#" data-reveal data-delay="180"><div class="shot"><img src="../../../public/images/projects/ouro-ops.jpg" alt="" loading="lazy"><span class="chip">基础设施</span></div><div class="body"><h3>Ouro Ops</h3><p>面向 AI Agent 的 Cardano Stake Pool 运维工具。</p><div class="links"><span>访问项目 ↗</span><span>GitHub</span></div></div></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Model -->
+  <section class="band white" aria-labelledby="model-h2">
+    <div class="wrap">
+      <div class="head" data-reveal style="max-width:1040px;margin-left:auto;margin-right:auto">
+        <h2 class="title" id="model-h2">收入构成</h2>
+        <p class="lead">对一人公司来说，先要解决的是生存问题。Pao Studio 希望将矿池运营收入作为覆盖基础开支的主要来源，同时继续探索交易、产品增值服务、咨询与项目开发等其他收入。</p>
+      </div>
+      <div class="flow" data-reveal>
+        <span class="lbl">持续探索的增长收入</span>
+        <div class="sources">
+          <div class="src"><span class="ic" style="--c:var(--lavender)"></span><div><small>Trading · 波动收入</small><h3>交易收入</h3></div></div>
+          <div class="src"><span class="ic" style="--c:var(--mint)"></span><div><small>Products · 产品收入</small><h3>产品增值服务</h3></div></div>
+          <div class="src"><span class="ic" style="--c:var(--grass)"></span><div><small>Services · 项目收入</small><h3>咨询与项目制开发</h3></div></div>
+        </div>
+        <div class="pipe" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="cash">
+          <div><span class="cap">用于支持</span><h3>Pao Studio 现金流</h3><p>来自矿池及其他业务的收入，用于支持公司的日常运营与后续开发。</p></div>
+          <div class="uses"><div>节点与服务器</div><div>AI 服务</div><div>产品开发</div><div>日常运营</div></div>
+        </div>
+        <div class="pipe up" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="found">
+          <span class="ic bubble" style="--c:var(--sky);position:relative;animation:none" aria-hidden="true"></span>
+          <div><small style="font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--teal)">FOUNDATION · 基础收入</small><h3>矿池运营收入</h3><p style="font-size:13.5px">希望以矿池运营收入优先覆盖公司的基本运营成本。</p></div>
+          <span class="pill">覆盖基本运营成本</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="band white" id="contact" aria-labelledby="ct-h2" style="padding-top:0">
+    <div class="wrap">
+      <div class="contact" data-reveal>
+        <span class="bubble" style="--c:#fff;width:200px;height:200px;top:-70px;right:22%;opacity:.7" aria-hidden="true"></span>
+        <span class="bubble" style="--c:var(--sky);width:70px;height:70px;bottom:-20px;left:38%;opacity:.6;--d:9s" aria-hidden="true"></span>
+        <div style="max-width:36em;position:relative"><span class="chip" style="background:var(--canvas)">产品开发 · 咨询与合作</span><h2 id="ct-h2">软件开发与技术咨询</h2><p>Pao Studio 提供 AI、区块链及传统软件项目的开发与咨询服务。
+如有项目需求或合作想法，欢迎来信交流。</p></div>
+        <div class="btns" style="position:relative"><a class="btn btn-primary" href="#">邮件联系</a><a class="btn btn-ghost" href="#">加入 Telegram 社群</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap"><span class="tnum">© 2024–2026 Pao Studio</span><span>𝕏 · GitHub</span></div></footer>
+
+<nav class="proto-badge" aria-label="原型切换">
+  <a href="index.html">总览</a><a href="a-bubble-float.html" aria-current="page">A 泡泡浮游</a><a href="b-kinetic-editorial.html">B 动态编辑</a><a href="c-color-bento.html">C 彩色便当</a>
+</nav>
+
+<script src="base.js"></script>
+<script>
+// Pointer parallax for hero bubble layers (desktop, motion allowed)
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(pointer: fine)').matches) return;
+  const hero = document.getElementById('hero');
+  const layers = hero.querySelectorAll('.layer');
+  hero.addEventListener('pointermove', (e) => {
+    const r = hero.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    layers.forEach((l) => { const d = +l.dataset.depth; l.style.transform = `translate3d(${-x * d}px, ${-y * d}px, 0)`; });
+  });
+  hero.addEventListener('pointerleave', () => layers.forEach((l) => (l.style.transform = '')));
+})();
+</script>
+</body>
+</html>

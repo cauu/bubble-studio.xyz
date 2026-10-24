@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D5 · 霓虹赛博 + 纵向长卷 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<script>
+  document.documentElement.classList.add('js');
+  // Intro plays once per session (force with ?intro); class is set before first paint to avoid a hero flash
+  (() => {
+    let seen = false;
+    try { seen = sessionStorage.getItem('pao-intro') === '1'; } catch (e) {}
+    const force = /[?&]intro\b/.test(location.search);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && (!seen || force)) document.documentElement.classList.add('intro-on');
+  })();
+</script>
+<style>
+/* ===== D5 = D (intro, hero, status bar) + D4 (chapter gates, reveal / parallax motion, works layout) =====
+   内容收进 1180 px 阅读宽度；以下为 D 的基础样式。
+   ===== Direction D v2: Neon Cyber =====
+   取色自 Pao Studio Logo 的六组霓虹渐变；深色底 + 大面积纯色块、HUD 网格、扫描线、RGB 错位故障。
+   v2：深色版 Logo、动效三级（开场 / 进入视口 / 悬停）、Hero 视差与滚动解体、矿池数据并入 Hero、
+   扫描线去混合模式、开场每会话一次。 */
+:root {
+  --void: #0a0910; --void-2: #13111c; --line: rgba(244,242,255,.12); --fg: #f4f2ff; --fg-dim: rgba(244,242,255,.66);
+  --mag: #fc5ff6; --mag-d: #c60a76; --cy: #2ffff3; --cy-d: #078cbe; --yel: #fff590; --yel-d: #d9b201;
+  --grn: #31ee6b; --grn-d: #079f1b; --pur: #c141f2; --pur-d: #590ac6;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --out: cubic-bezier(.2,.9,.2,1); --inout: cubic-bezier(.76,0,.24,1);
+  /* Content column: same left edge as the hero copy, 1180 px reading width */
+  --pad: max(24px, calc((100vw - 1180px) / 2 + 24px));
+}
+body { background: var(--void); color: var(--fg); }
+h1, h2, h3 { color: var(--fg); }
+::selection { background: var(--mag); color: var(--void); }
+
+/* Static scanline texture: no blend mode, so scrolling does not repaint the whole viewport */
+body::before { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 1px, transparent 1px 3px); }
+.grid-bg { background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 56px 56px; }
+
+/* Wipe reveal via mask, not clip-path: a zero-area clip-path makes IntersectionObserver never see the element */
+.js [data-reveal] { -webkit-mask-image: linear-gradient(90deg, #000 50%, transparent 50%); mask-image: linear-gradient(90deg, #000 50%, transparent 50%);
+  -webkit-mask-size: 200% 100%; mask-size: 200% 100%; -webkit-mask-position: 100% 0; mask-position: 100% 0;
+  transition: -webkit-mask-position .9s cubic-bezier(.7,0,.2,1), mask-position .9s cubic-bezier(.7,0,.2,1); }
+.js [data-reveal].in { -webkit-mask-position: 0 0; mask-position: 0 0; }
+.js [data-reveal].done { -webkit-mask-image: none; mask-image: none; }
+
+.mono { font-family: var(--mono); }
+.tag { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+
+/* Nav (dark override) */
+.nav { background: rgba(10,9,16,.86); border-bottom-color: var(--line); }
+.nav-links a { color: var(--fg-dim); font-family: var(--mono); font-size: 13px; }
+.nav-links a:hover, .nav-links a[aria-current='page'] { background: rgba(244,242,255,.08); color: var(--fg); }
+.nav-lang { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1px var(--line); font-family: var(--mono); }
+
+/* Cut-corner neon buttons */
+.cbtn { --cut: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px;
+  font-family: var(--mono); font-weight: 800; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; color: var(--void); background: var(--cy);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  transition: transform .2s, background .2s, filter .2s; position: relative; }
+.cbtn:hover { transform: translate(-2px, -2px); filter: drop-shadow(4px 4px 0 var(--mag)); }
+.cbtn.alt { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--fg); }
+.cbtn.alt:hover { background: var(--fg); color: var(--void); }
+
+/* Glitch text: fires once on hero entry and on hover (rate-limited in JS), never loops */
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after { content: attr(data-text); position: absolute; inset: 0; pointer-events: none; opacity: 0; mix-blend-mode: screen; }
+.glitch::before { color: var(--mag); clip-path: inset(0 0 55% 0); }
+.glitch::after { color: var(--cy); clip-path: inset(50% 0 0 0); }
+.glitch.fire::before { animation: gl1 .42s steps(1) 1; }
+.glitch.fire::after { animation: gl2 .42s steps(1) 1; }
+@keyframes gl1 { 0% { opacity: 1; transform: translate(-8px,-2px); clip-path: inset(10% 0 70% 0); } 35% { opacity: 1; transform: translate(6px,1px); clip-path: inset(40% 0 30% 0); } 70% { opacity: 1; transform: translate(-3px,0); clip-path: inset(0 0 55% 0); } 100% { opacity: 0; } }
+@keyframes gl2 { 0% { opacity: 1; transform: translate(8px,2px); clip-path: inset(70% 0 5% 0); } 35% { opacity: 1; transform: translate(-6px,0); clip-path: inset(20% 0 60% 0); } 70% { opacity: 1; transform: translate(3px,0); clip-path: inset(50% 0 0 0); } 100% { opacity: 0; } }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; min-height: calc(100vh - 68px); display: grid; grid-template-columns: 1.05fr .95fr; grid-template-rows: 1fr auto; overflow: hidden; }
+.hero-l { position: relative; padding: 64px 48px 56px max(24px, calc((100vw - 1180px) / 2 + 24px)); display: flex; flex-direction: column; justify-content: center; z-index: 2; }
+.boot { font-family: var(--mono); font-size: 12.5px; color: var(--grn); line-height: 1.9; margin-bottom: 22px; min-height: 1.9em; }
+.boot span { display: block; opacity: 0; animation: on .01s forwards; animation-delay: var(--t); }
+@keyframes on { to { opacity: 1; } }
+.hero h1 { font-size: clamp(52px, 6.6vw, 108px); line-height: 1.02; font-weight: 900; letter-spacing: -.01em; margin-bottom: 26px; }
+.hero h1 .row { display: block; white-space: nowrap; }
+.hero h1 .hl { color: var(--void); background: var(--yel); padding: 0 .12em; margin-left: -.06em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.hero p { font-size: 17px; line-height: 1.8; color: var(--fg-dim); max-width: 30em; margin-bottom: 34px; }
+.hero p.sub { font-size: clamp(16px, 1.4vw, 19px); max-width: 27em; text-wrap: pretty; }
+.hero p.sub .nw { white-space: nowrap; }
+.hero p.sub b { display: block; color: var(--fg); font-weight: 800; font-size: 1.2em; margin-bottom: 4px; }
+.hero .perks { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.hero .perks li { font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .04em; padding: 6px 12px; box-shadow: inset 0 0 0 1px var(--line); }
+.hero .perks li::before { content: "✓ "; color: var(--grn); }
+.hero .ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* Logo-geometry color blocks; `translate` carries pointer parallax + scroll break-apart on top of the entry `transform` */
+.hero-r { position: relative; background: var(--void-2); overflow: hidden; }
+.blk { position: absolute; will-change: transform, translate; }
+.blk.p { left: 6%; top: 8%; width: 58%; height: 54%; background: linear-gradient(var(--mag), var(--mag-d)); border-radius: 0 999px 999px 0; animation: inL 1.1s cubic-bezier(.2,.9,.2,1) .15s both; }
+.blk.p::after { content: ""; position: absolute; left: 0; bottom: -42%; width: 34%; height: 42%; background: var(--mag-d); }
+.blk.a { right: 4%; top: 30%; width: 50%; aspect-ratio: 1 / .87; background: linear-gradient(var(--cy), var(--cy-d)); clip-path: polygon(50% 0, 100% 100%, 0 100%); mix-blend-mode: screen; animation: inR 1.1s cubic-bezier(.2,.9,.2,1) .3s both; }
+.blk.o { left: 30%; bottom: 6%; width: 38%; aspect-ratio: 1; border-radius: 50%; background: linear-gradient(var(--yel), var(--yel-d)); mix-blend-mode: screen; animation: inU 1.1s cubic-bezier(.2,.9,.2,1) .45s both; }
+.blk.g { right: 8%; top: 6%; width: 18%; height: 10%; background: var(--grn); animation: inR 1s cubic-bezier(.2,.9,.2,1) .6s both; }
+.blk.v { left: 4%; bottom: 10%; width: 14%; aspect-ratio: 1; background: linear-gradient(var(--pur), var(--pur-d)); animation: inU 1s cubic-bezier(.2,.9,.2,1) .7s both; }
+@keyframes inL { from { transform: translateX(-120%); } }
+@keyframes inR { from { transform: translateX(140%); } }
+@keyframes inU { from { transform: translateY(140%); } }
+.hero-r .grid-bg { position: absolute; inset: 0; opacity: .9; }
+/* Scan sweep runs once when the hero goes live, not forever */
+.hero-r .scan { position: absolute; left: 0; right: 0; height: 120px; top: 0; transform: translateY(-120px); background: linear-gradient(transparent, rgba(47,255,243,.18), transparent); pointer-events: none; }
+.hero.live .hero-r .scan { animation: sweep 1.8s cubic-bezier(.4,0,.2,1) .5s 1 both; }
+@keyframes sweep { to { transform: translateY(calc(var(--hr-h, 900px) + 120px)); } }
+.hero-r .label { position: absolute; font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--void); background: var(--fg); padding: 4px 8px; letter-spacing: .08em; }
+
+/* Pool status bar: live data merged into the hero */
+.statbar { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr) auto; border-block: 1px solid var(--line); background: var(--void); position: relative; z-index: 3; }
+.statbar .cell { padding: 16px 24px 18px; border-right: 1px solid var(--line); position: relative; min-width: 0; }
+.statbar .cell:first-child { padding-left: max(24px, calc((100vw - 1180px) / 2 + 24px)); }
+.statbar .k { display: block; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .14em; color: var(--fg-dim); margin-bottom: 6px; white-space: nowrap; }
+.statbar .k b { color: var(--fg); font-weight: 800; }
+.statbar .v { font-family: var(--mono); font-size: clamp(20px, 2vw, 28px); font-weight: 800; color: var(--cy); white-space: nowrap; }
+.statbar .v small { font-size: .5em; color: var(--fg-dim); margin-left: 4px; }
+.statbar .v.mag { color: var(--mag); } .statbar .v.yel { color: var(--yel); } .statbar .v.grn { color: var(--grn); }
+.statbar .live-dot { display: inline-block; width: 7px; height: 7px; background: var(--grn); margin-right: 8px; vertical-align: 1px; animation: blink 1.6s steps(1) infinite; }
+.statbar .prog { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--grn); transform-origin: left; transform: scaleX(0); }
+.statbar .go { display: flex; align-items: center; gap: 8px; padding: 0 28px; font-family: var(--mono); font-weight: 800; font-size: 13px; letter-spacing: .06em; color: var(--yel); border-right: 0; white-space: nowrap; transition: background .2s, color .2s; }
+.statbar .go:hover { background: var(--yel); color: var(--void); }
+
+/* Stake milestones: four equal segments (1M / 5M / 10M / 20M), each filled within its own range */
+.goal { grid-column: 1 / -1; display: grid; grid-template-columns: auto 1fr auto; gap: 32px; align-items: center; border-top: 1px solid var(--line);
+  padding: 16px max(24px, calc((100vw - 1180px) / 2 + 24px)) 30px; }
+.goal .gk { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .14em; color: var(--fg-dim); white-space: nowrap; line-height: 1.7; }
+.goal .gk b { display: block; color: var(--fg); font-size: 15px; letter-spacing: .04em; }
+.goal .gv { font-family: var(--mono); font-size: 12.5px; color: var(--fg-dim); text-align: right; white-space: nowrap; line-height: 1.7; }
+.goal .gv b { display: block; color: var(--yel); font-size: 15px; }
+.track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.seg { position: relative; height: 10px; background: repeating-linear-gradient(-45deg, rgba(244,242,255,.12) 0 2px, transparent 2px 6px); }
+.seg > i { position: absolute; inset: 0; background: var(--c); transform-origin: left; transform: scaleX(0); transition: transform 1.6s cubic-bezier(.2,.9,.2,1); box-shadow: 0 0 14px -2px var(--c); }
+.seg > span { position: absolute; right: 0; top: 16px; font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--fg-dim); letter-spacing: .08em; }
+.seg.cur > span { color: var(--fg); }
+.seg .here { position: absolute; top: -6px; left: 0; width: 2px; height: 22px; background: var(--fg); box-shadow: 0 0 10px var(--c); transition: left 1.6s cubic-bezier(.2,.9,.2,1); }
+.seg .here::after { content: "YOU ARE HERE"; position: absolute; left: 6px; top: 24px; font-family: var(--mono); font-size: 9.5px; font-weight: 800; letter-spacing: .12em; color: var(--c); white-space: nowrap; }
+
+/* Ambient particles: fixed canvas behind all content */
+.particles { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+main, .footer { position: relative; z-index: 1; }
+
+/* Ticker: slogans only (numbers live in the status bar); speed follows scroll */
+.ticker { background: var(--yel); color: var(--void); overflow: hidden; border-bottom: 2px solid var(--void); }
+.ticker .tr { display: flex; width: max-content; will-change: transform; }
+.ticker span { font-family: var(--mono); font-weight: 800; font-size: 15px; padding: 14px 0; white-space: nowrap; letter-spacing: .04em; }
+.ticker b { display: inline-block; width: 10px; height: 10px; background: var(--void); margin: 0 22px; transform: rotate(45deg); }
+
+
+.caret { display: inline-block; width: 9px; height: 17px; background: var(--grn); vertical-align: -3px; animation: blink 1s steps(1) infinite; }
+
+.footer { background: var(--void); border-top-color: var(--line); }
+.footer .wrap { color: var(--fg-dim); font-family: var(--mono); font-size: 12.5px; }
+.proto-badge { background: rgba(20,18,30,.9); }
+.proto-badge a { color: var(--fg-dim); }
+.proto-badge a[aria-current='page'] { background: var(--cy); color: var(--void); }
+
+/* Logo geometry primitives */
+.g-p { border-radius: 0 999px 999px 0; background: linear-gradient(var(--mag), var(--mag-d)); position: relative; }
+.g-p::after { content: ""; position: absolute; left: 0; top: 100%; width: 34%; height: 42%; background: var(--mag-d); }
+.g-a { background: linear-gradient(var(--cy), var(--cy-d)); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.g-o { border-radius: 50%; background: linear-gradient(var(--yel), var(--yel-d)); }
+
+/* ===== From D4: reveal + parallax ===== */
+.lane { position: relative; padding: 0 var(--pad); }
+[data-py] { will-change: transform; }
+.rise { opacity: 0; translate: 0 40px; transition: opacity .8s var(--out), translate 1s var(--out); transition-delay: var(--d, 0s); }
+.rise.in { opacity: 1; translate: 0 0; }
+.copy { background: none; border: 1px solid var(--line); color: var(--fg-dim); font: inherit; font-size: 11px; padding: 0 8px; margin-left: 6px; cursor: pointer; line-height: 1.8; }
+
+
+/* Chapter gate: horizontal band with a neon edge */
+.gate { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 28px; padding: 100px var(--pad) 36px; overflow: hidden; }
+.gate::before { content: ""; position: absolute; left: var(--pad); right: var(--pad); top: 60px; height: 2px; background: var(--c); box-shadow: 0 0 24px var(--c); transform-origin: left; transform: scaleX(0); transition: transform 1.2s var(--inout); }
+.gate.in::before { transform: scaleX(1); }
+.gate .num { font-family: var(--mono); font-weight: 800; font-size: clamp(56px, 6vw, 96px); line-height: .8; color: transparent; -webkit-text-stroke: 1.5px var(--c); }
+.gate .en { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: .3em; color: var(--c); margin-bottom: 8px; }
+.gate h2 { font-size: clamp(32px, 3.4vw, 52px); font-weight: 900; line-height: 1; letter-spacing: -.01em; }
+
+/* Works */
+.coil { display: block; border: 1px solid var(--line); background: var(--void-2); }
+.coil:hover { border-color: var(--cy); box-shadow: 0 0 0 1px var(--cy), 0 0 60px -18px var(--cy); }
+.coil .scene { position: relative; display: block; aspect-ratio: 1440 / 500; overflow: hidden; background: #dff0ff; }
+.coil .scene img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 92%; image-rendering: pixelated; transition: opacity .5s; }
+.coil .scene .awake { opacity: 0; }
+.coil:hover .scene .awake { opacity: 1; }
+.coil .cap { display: flex; align-items: center; gap: 24px; padding: 18px 22px; }
+.coil .cap h3 { font-family: var(--mono); font-size: clamp(32px, 3vw, 48px); font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.coil .cap .lead { font-size: 17px; font-weight: 800; }
+.coil .cap .specs { font-family: var(--mono); font-size: 12px; color: var(--fg-dim); margin-top: 4px; }
+.coil .cap .cbtn { margin-left: auto; }
+.p-works { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; padding-top: 56px; padding-bottom: 70px; }
+.wk { position: relative; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.wk:nth-child(even) { margin-top: 56px; }
+.wk .th { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--c); border: 1px solid var(--line); }
+.wk .th img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15); mix-blend-mode: multiply; transition: filter .4s, transform .6s var(--out); }
+.wk:hover .th img { filter: none; mix-blend-mode: normal; transform: scale(1.05); }
+.wk .row { display: flex; align-items: baseline; gap: 12px; }
+.wk .no { font-family: var(--mono); font-size: 13px; font-weight: 800; color: var(--c); }
+.wk h3 { font-family: var(--mono); font-size: clamp(18px, 1.6vw, 24px); font-weight: 800; letter-spacing: -.02em; transition: color .2s; }
+.wk:hover h3 { color: var(--c); }
+.wk p { font-size: 13px; color: var(--fg-dim); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.wk .tags { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--c); }
+
+/* Writing */
+.p-posts { display: grid; grid-template-columns: 1.5fr 1fr; grid-template-rows: repeat(3, auto); gap: 18px 28px; }
+.p-posts .pf { grid-row: 1 / span 3; }
+.pf { display: flex; flex-direction: column; gap: 16px; min-height: 0; }
+.pf .img { aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--line); position: relative; }
+.pf .img img { position: absolute; inset: -6% 0; width: 100%; height: 112%; object-fit: cover; transition: scale 1.2s var(--out); }
+.pf:hover .img img { scale: 1.04; }
+.pf .img::after { content: "LATEST"; position: absolute; left: 0; top: 0; background: var(--yel); color: var(--void); font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .12em; padding: 6px 10px; }
+.pf h3 { font-size: clamp(24px, 2.2vw, 36px); line-height: 1.3; font-weight: 900; }
+.meta { font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; color: var(--fg-dim); text-transform: uppercase; }
+.meta b { color: var(--c); }
+.pc { display: flex; flex-direction: column; justify-content: space-between; padding: 26px; border: 1px solid var(--line); transition: border-color .3s, background .3s; }
+.pc { flex-direction: row; align-items: center; gap: 22px; justify-content: flex-start; padding: 20px 22px; }
+.pc:nth-child(3) { margin-left: 32px; }
+.pc .n { flex: none; font-family: var(--mono); font-size: clamp(44px, 4vw, 60px); font-weight: 800; line-height: .8; color: transparent; -webkit-text-stroke: 1.2px var(--c); }
+.pc h3 { font-size: 17px; line-height: 1.45; font-weight: 800; margin-top: 8px; }
+.pc:hover { border-color: var(--c); background: rgba(244,242,255,.03); }
+.pc:hover .n { color: var(--c); }
+
+/* P · A · O: three tall panels side by side */
+.p-pao { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--line); padding: 0; margin: 0 var(--pad); }
+.pp { position: relative; height: 560px; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 3vw 48px; overflow: hidden; }
+.pp + .pp { border-left: 1px solid var(--line); }
+.pp .shape { position: absolute; left: 50%; top: 40%; translate: -50% -50%; z-index: 0; }
+.pp .shape.g-p { width: 40%; height: 30%; top: 33%; }
+.pp .shape.g-a { width: 58%; aspect-ratio: 1 / .87; }
+.pp .shape.g-o { width: 50%; aspect-ratio: 1; }
+.pp > :not(.shape) { position: relative; z-index: 1; }
+.pp .word { font-family: var(--mono); font-size: 13px; letter-spacing: .32em; color: var(--c); }
+.pp h3 { font-size: 30px; font-weight: 900; margin: 10px 0; }
+.pp p { color: var(--fg-dim); font-size: 15px; line-height: 1.75; max-width: 24em; }
+
+/* Members: ID cards */
+.p-members { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; align-items: start; padding-bottom: 20px; }
+.p-members .poolcol { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px 28px; padding: 18px 20px; margin-top: 10px; border: 1px solid var(--line); background: #05040a; }
+.p-members .poolcol b { font-size: 15px; }
+.p-members .poolcol .cbtn { margin: 0 0 0 auto; }
+.idc { height: 280px; display: flex; flex-direction: column; padding: 22px 20px; background: #05040a; border: 1px solid var(--line); font-family: var(--mono); position: relative; overflow: hidden; transition: border-color .3s, scale .4s var(--out); }
+.idc:nth-child(even) { margin-top: 50px; }
+.idc:hover { border-color: var(--c); scale: 1.03; }
+.idc::before { content: "₳"; position: absolute; right: -10px; bottom: -40px; font-family: Inter, sans-serif; font-size: 170px; font-weight: 900; color: var(--c); opacity: .12; line-height: 1; }
+.idc .no { font-size: 12px; font-weight: 800; color: var(--c); letter-spacing: .12em; }
+.idc .addr { font-size: 11.5px; margin-top: 10px; }
+.idc .amt { margin-top: auto; font-size: 22px; font-weight: 800; }
+.idc .ep { font-size: 11px; color: var(--fg-dim); margin-top: 6px; }
+.idc .ep b { color: var(--c); }
+.idc.next { border: 1px dashed var(--yel); background: transparent; --c: var(--yel); }
+.idc.next .amt { font-family: Inter, AlibabaPuHuiTi, sans-serif; font-size: 22px; font-weight: 900; color: var(--yel); }
+.idc.next:hover { background: var(--yel); }
+.idc.next:hover * { color: var(--void); }
+.poolcol { display: flex; flex-direction: column; gap: 12px; font-family: var(--mono); font-size: 13px; color: var(--fg-dim); padding: 22px 0 0 10px; }
+.poolcol b { color: var(--cy); font-size: 26px; letter-spacing: .1em; }
+.poolcol a:not(.cbtn) { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+.poolcol .cbtn { align-self: flex-start; margin-top: 8px; }
+
+/* End */
+.p-end { padding: 160px var(--pad) 120px; }
+.p-end h2 { font-size: clamp(110px, 15vw, 260px); font-weight: 900; line-height: .84; letter-spacing: -.05em; }
+.p-end h2 .o { color: transparent; -webkit-text-stroke: 2px var(--fg); }
+.p-end h2 .m { color: var(--mag); }
+.p-end .acts { display: flex; gap: 12px; margin-top: 40px; flex-wrap: wrap; }
+
+
+@media (max-width: 1000px) {
+  .hero { grid-template-columns: 1fr; grid-template-rows: auto; min-height: 0; }
+  .hero-l { padding: 56px 24px 48px; }
+  /* Closer-to-square block field so P keeps its desktop proportions (and the intro P its stem) */
+  .hero-r { height: min(112vw, 460px); }
+  .statbar { grid-template-columns: 1fr 1fr; }
+  .statbar .cell { border-bottom: 1px solid var(--line); }
+  .statbar .cell:first-child { padding-left: 24px; }
+  .statbar .cell:nth-child(2n) { border-right: 0; }
+  .statbar .go { grid-column: 1 / -1; justify-content: center; padding: 16px; }
+  .statbar .cell:nth-child(3) { grid-column: 1 / -1; border-right: 0; }
+  .goal { grid-template-columns: 1fr auto; gap: 14px 20px; padding: 16px 24px 34px; }
+  .goal .track { grid-column: 1 / -1; grid-row: 2; }
+  .p-works { grid-template-columns: 1fr 1fr; } .wk:nth-child(n) { margin-top: 0; } .wk:nth-child(even) { margin-top: 60px; }
+  .p-members { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .gate { grid-template-columns: auto 1fr; padding-top: 90px; }
+  .gate::before { top: 50px; }
+  .gate .num { font-size: 52px; }
+  .gate h2 { font-size: 30px; }
+  .gate .cbtn { grid-column: 1 / -1; justify-self: start; }
+  [data-py] { transform: none !important; }
+  .coil .scene { aspect-ratio: 4 / 3; } .coil .cap { flex-wrap: wrap; } .coil .cap .cbtn { margin-left: 0; }
+  .p-works, .p-posts { grid-template-columns: 1fr; height: auto; padding-top: 40px; }
+  .p-posts .pf { grid-row: auto; }
+  .wk:nth-child(n), .pc:nth-child(n) { margin: 0; }
+  .p-pao { grid-template-columns: 1fr; }
+  .pp { height: 420px; } .pp + .pp { border-left: 0; border-top: 1px solid var(--line); }
+  .p-members { grid-template-columns: 1fr 1fr; }
+  .idc { height: 170px; } .idc:nth-child(n) { margin-top: 0; }
+  .idc.next { grid-column: 1 / -1; }
+  .p-members .poolcol .cbtn { margin-left: 0; width: 100%; }
+  .p-end h2 { font-size: 26vw; }
+}
+@media (max-width: 600px) {
+  .hero-l { padding: 44px 18px 40px; }
+  .statbar .cell, .statbar .cell:first-child { padding: 14px 18px 16px; }
+  .goal { padding: 16px 18px 34px; }
+  .seg > span { font-size: 9.5px; }
+  .seg .here::after { display: none; }
+  .hero .ctas { flex-direction: column; } .hero .ctas .cbtn { width: 100%; }
+  .nav .cbtn { white-space: nowrap; }
+}
+
+/* ---------- Intro: P → A → O, then shared-element morph into the hero blocks ---------- */
+html.intro-on { overflow: hidden; }
+html.intro-on .nav { transform: translateY(-100%); }
+.nav { transition: transform .8s cubic-bezier(.2,.9,.2,1); }
+html.intro-on .hero-r .blk { visibility: hidden; animation: none; }
+html.intro-on .hero-r .label, html.intro-on .statbar { opacity: 0; }
+.hero-r .label { transition: opacity .5s .4s; }
+.statbar { transition: opacity .6s .5s; }
+html.intro-on .hero-l > * { opacity: 0; transform: translateY(28px); }
+html.intro-on .boot span { animation-play-state: paused; }
+.hero-l > * { transition: opacity .7s var(--ease), transform .9s var(--ease); transition-delay: calc(var(--k, 0) * 90ms); }
+.intro { position: fixed; inset: 0; z-index: 200; background: var(--void); transition: opacity .7s ease .15s; }
+.intro.out { opacity: 0; }
+.intro .grid-bg { position: absolute; inset: 0; opacity: 0; animation: introGrid .8s ease forwards;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 50%, #000, transparent); mask-image: radial-gradient(70% 60% at 50% 50%, #000, transparent); }
+@keyframes introGrid { to { opacity: 1; } }
+.intro .corner { position: absolute; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--fg-dim); opacity: 0; animation: introGrid .5s ease .15s forwards; }
+.intro .count { position: absolute; left: 24px; bottom: 22px; font-family: var(--mono); font-size: 12px; color: var(--cy); letter-spacing: .1em; }
+.intro .bar { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: linear-gradient(90deg, var(--mag), var(--cy), var(--yel)); transform-origin: left; transform: scaleX(0); }
+.intro .skip { position: absolute; right: 20px; bottom: 14px; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .12em; color: var(--fg); background: transparent; border: 1px solid var(--line); padding: 8px 12px; cursor: pointer; }
+.intro .skip:hover { border-color: var(--fg); }
+.intro .studio { position: absolute; left: 0; right: 0; text-align: center; font-family: var(--mono); font-weight: 800; color: var(--fg); letter-spacing: .7em; text-indent: .7em; white-space: nowrap; }
+.intro .studio .cur { display: inline-block; width: .55em; height: 1em; background: var(--grn); vertical-align: -.12em; margin-left: .1em; animation: blink 1s steps(1) infinite; }
+.ghost { position: fixed !important; z-index: 201; margin: 0; animation: none !important; translate: none !important; transform-origin: 0 0; will-change: transform, filter; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .glitch::before, .glitch::after { display: none; }
+  .boot span { opacity: 1; }
+  .hero-r .scan { display: none; }
+  .statbar .live-dot { animation: none; }
+  .seg > i, .seg .here { transition: none; }
+}
+/* Rich footer */
+.sitefoot { position: relative; z-index: 1; border-top: 1px solid var(--line); background: var(--void); padding: 64px var(--pad) 28px; }
+/* Footer links stay limited to the main nav pages + social: /staking, /about and /governance are low-exposure (S0002.1, S0004) */
+.sitefoot .top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+.sitefoot .brand img { height: 26px; width: auto; }
+.sitefoot .brand p { margin-top: 16px; color: var(--fg-dim); font-size: 14px; line-height: 1.8; max-width: 28em; }
+.sitefoot h4 { font-family: var(--mono); font-size: 11.5px; letter-spacing: .2em; color: var(--fg-dim); font-weight: 700; margin-bottom: 14px; }
+.sitefoot ul { list-style: none; display: grid; gap: 10px; }
+.sitefoot li a { color: var(--fg); font-size: 14.5px; transition: color .2s; }
+.sitefoot li a:hover { color: var(--cy); }
+.sitefoot .bot { display: flex; justify-content: space-between; gap: 20px; margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--fg-dim); }
+
+@media (max-width: 900px) { .sitefoot .top { grid-template-columns: 1fr 1fr; } .sitefoot .brand { grid-column: 1 / -1; } .sitefoot .bot { flex-direction: column; } }
+</style>
+</head>
+<body>
+
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="#"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="d5-hybrid.html" aria-current="page">/home</a><a href="d5-works.html">/works</a><a href="d5-blog.html">/blog</a><a href="d5-skills.html">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn" href="#contact" style="min-height:42px;padding:0 18px;font-size:12px">合作</a></div>
+  </div>
+</nav>
+
+<main>
+  <section class="hero" aria-labelledby="hero-h1">
+    <div class="hero-l">
+      <div class="boot" aria-hidden="true">
+        <span style="--t:.1s">&gt; pool PAO · cardano mainnet <b style="color:var(--cy)">[OK]</b></span>
+      </div>
+      <!-- Draft staking-first headline (pending review; changes the page H1) -->
+      <h1 id="hero-h1">
+        <span class="row"><span class="glitch" data-text="Stake with">Stake with</span></span>
+        <span class="row"><span class="hl">PAO</span> Pool</span>
+      </h1>
+      <!-- Member benefits are not finalised yet, so no benefit list here -->
+      <p class="sub"><b>质押身份 = 会员凭证</b>获取质押奖励，<span class="nw">同时享受 PAO Pool 的增值服务。</span></p>
+      <div class="ctas"><a class="cbtn" href="#">委托给 Pao Pool →</a><a class="cbtn alt" href="#works">看看作品</a></div>
+    </div>
+    <div class="hero-r" aria-hidden="true">
+      <div class="grid-bg" style="position:absolute;inset:0"></div>
+      <div class="blk p" data-depth="18" data-drift="-0.35,-0.12"></div>
+      <div class="blk a" data-depth="30" data-drift="0.42,-0.05"></div>
+      <div class="blk o" data-depth="24" data-drift="0.06,0.32"></div>
+      <div class="blk g" data-depth="44" data-drift="0.55,-0.3"></div>
+      <div class="blk v" data-depth="38" data-drift="-0.45,0.2"></div>
+      <div class="scan"></div>
+      <span class="label" style="left:6%;top:4%">P // POOL</span>
+      <span class="label" style="right:4%;top:64%;background:var(--cy)">A // AI</span>
+      <span class="label" style="left:30%;bottom:3%;background:var(--yel)">O // OPEN</span>
+    </div>
+
+    <div class="statbar" role="group" aria-label="Pao Pool 实时状态">
+      <div class="cell"><span class="k"><i class="live-dot" aria-hidden="true"></i>LIVE STAKE</span><span class="v tnum" data-hc="1540" data-sep>1,540</span><small class="v" style="font-size:13px;color:var(--fg-dim)"> ADA</small></div>
+      <div class="cell"><span class="k">DELEGATORS</span><span class="v mag tnum" data-hc="4">4</span></div>
+      <div class="cell"><span class="k">EPOCH <b class="tnum" id="ep">—</b> · 剩余</span><span class="v grn tnum" id="ep-left">--:--:--</span><i class="prog" id="ep-prog" aria-hidden="true"></i></div>
+      <a class="cell go" href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">链上验证 ↗</a>
+      <!-- Live stake in ADA drives the milestone track; production reads Koios live_stake -->
+      <div class="goal" id="goal" data-stake="1539.59" role="group" aria-label="质押阶段目标">
+        <div class="gk">NEXT TARGET<b id="g-name">STAGE 01 · 1M ADA</b></div>
+        <div class="track" aria-hidden="true">
+          <div class="seg" style="--c:var(--mag)"><i></i><span>S1 · 1M</span></div>
+          <div class="seg" style="--c:var(--cy)"><i></i><span>S2 · 5M</span></div>
+          <div class="seg" style="--c:var(--yel)"><i></i><span>S3 · 10M</span></div>
+          <div class="seg" style="--c:var(--grn)"><i></i><span>S4 · 20M</span></div>
+        </div>
+        <div class="gv">还差<b class="tnum" id="g-left">998,460 ADA</b></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div class="tr">
+    <span>P = POOL<b></b>A = AI<b></b>O = OPEN<b></b>NON-CUSTODIAL<b></b>NO-LOCK<b></b>委托即会员<b></b>SUBSCRIPTION=$0<b></b>BUILT ON CARDANO ₳<b></b></span>
+    <span>P = POOL<b></b>A = AI<b></b>O = OPEN<b></b>NON-CUSTODIAL<b></b>NO-LOCK<b></b>委托即会员<b></b>SUBSCRIPTION=$0<b></b>BUILT ON CARDANO ₳<b></b></span>
+  </div></div>
+
+  <!-- 01 Works -->
+  <section id="works" data-ch aria-labelledby="h-works">
+    <div class="gate rise" style="--c:var(--cy)"><span class="num">01</span><div><span class="en">WORKS</span><h2 id="h-works">作品</h2></div><a class="cbtn sm alt" href="d5-works.html">全部作品 →</a></div>
+    <div class="lane">
+      <a class="coil rise" href="https://coil.win/">
+        <span class="scene"><img src="coil-sleep-wide.png" alt="" width="1440" height="730"><img class="awake" src="coil-awake-wide.png" alt="" width="1440" height="730"></span>
+        <span class="cap"><h3>Coil</h3><span><span class="lead" style="display:block">Your desktop trading agent.</span><span class="specs" style="display:block">NEW · v0.3.0 · macOS · Apple Silicon</span></span><span class="cbtn sm">下载 Coil ↓</span></span>
+      </a>
+    </div>
+    <div class="lane p-works">
+      <a class="wk rise" href="https://voda.paopao.studio/" style="--c:var(--yel)" data-py=".05"><span class="th"><img src="../../../public/images/projects/voda.jpg" alt=""></span><span class="row"><span class="no">01</span><h3>voda</h3></span><p>AI 编辑每日精选 Cardano 动态。</p><span class="tags">AI · APP</span></a>
+      <a class="wk rise" href="https://ouro-pass.paopao.studio/" style="--c:var(--cy);--d:.08s" data-py="-.04"><span class="th"><img src="../../../public/images/projects/ouro-pass.jpg" alt=""></span><span class="row"><span class="no">02</span><h3>ouro-pass</h3></span><p>基于 Cardano 的去中心化身份与订阅基础设施。</p><span class="tags">OSS</span></a>
+      <a class="wk rise" href="https://utxray.paopao.studio/" style="--c:var(--mag);--d:.16s" data-py=".07"><span class="th"><img src="../../../public/images/projects/utxray.jpg" alt=""></span><span class="row"><span class="no">03</span><h3>utxray</h3></span><p>面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。</p><span class="tags">OSS</span></a>
+      <a class="wk rise" href="https://ouro-ops.paopao.studio/" style="--c:var(--grn);--d:.24s" data-py="-.05"><span class="th"><img src="../../../public/images/projects/ouro-ops.jpg" alt=""></span><span class="row"><span class="no">04</span><h3>ouro-ops</h3></span><p>面向 AI Agent 的 Cardano Stake Pool 运维工具。</p><span class="tags">OSS</span></a>
+      <a class="wk rise" href="#" style="--c:var(--pur);--d:.32s" data-py=".04"><span class="th"><img src="../../../public/images/projects/cardano-lottery.jpg" alt=""></span><span class="row"><span class="no">05</span><h3>lottery</h3></span><p>基于 Cardano 构建的去中心化彩票应用。</p><span class="tags">APP</span></a>
+    </div>
+  </section>
+
+  <!-- 02 Writing -->
+  <section id="writing" data-ch aria-labelledby="h-writing">
+    <div class="gate rise" style="--c:var(--mag)"><span class="num">02</span><div><span class="en">WRITING</span><h2 id="h-writing">文章</h2></div><a class="cbtn sm alt" href="d5-blog.html">全部文章 →</a></div>
+    <div class="lane p-posts">
+      <a class="pf rise" href="#" style="--c:var(--yel)"><span class="img"><img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260405-subscriptions-are-failing.jpg" alt="" width="1600" height="900" data-py="-.06"></span><span class="meta"><b>ai</b> · 2026-04-05</span><h3>软件订阅正在失效，创作者经济需要新的基础设施</h3></a>
+      <a class="pc rise" href="#" style="--c:var(--cy);--d:.08s"><span class="n">02</span><span><span class="meta"><b>cardano</b> · 2026-03-25</span><h3>区块链的“组合性”演进：为什么 AI 时代需要的是 Cardano 而非 Ethereum？</h3></span></a>
+      <a class="pc rise" href="d5-article.html" style="--c:var(--mag);--d:.16s"><span class="n">03</span><span><span class="meta"><b>engineering</b> · 2026-03-06</span><h3>Immutable Spec：让需求、设计、执行和验收收敛到同一份文档</h3></span></a>
+      <a class="pc rise" href="#" style="--c:var(--grn);--d:.24s"><span class="n">04</span><span><span class="meta"><b>essay</b> · 2026-03-02</span><h3>从认知到行动的健康长寿实践</h3></span></a>
+    </div>
+  </section>
+
+  <!-- 03 P · A · O -->
+  <section id="pao" data-ch aria-labelledby="h-pao">
+    <div class="gate rise" style="--c:var(--yel)"><span class="num">03</span><div><span class="en">P · A · O</span><h2 id="h-pao">主线</h2></div></div>
+    <div class="p-pao">
+      <div class="pp rise" style="--c:var(--mag)"><span class="shape g-p" data-py="-.05" aria-hidden="true"></span><span class="word">P // POOL</span><h3>运营 Cardano 矿池</h3><p>矿池收入用于支付节点、服务器、AI 服务和产品开发。委托 ADA 即成为会员。</p></div>
+      <div class="pp rise" style="--c:var(--cy);--d:.1s"><span class="shape g-a" data-py=".04" aria-hidden="true"></span><span class="word">A // AI</span><h3>构建 AI 产品</h3><p>Coil 是你桌面上的交易 Agent；VODA 由 AI 编辑每天挑选 Cardano 动态。</p></div>
+      <div class="pp rise" style="--c:var(--yel);--d:.2s"><span class="shape g-o" data-py="-.06" aria-hidden="true"></span><span class="word">O // OPEN</span><h3>开源与公开写作</h3><p>Ouro Pass、utxray、ouro-ops 在 GitHub 开源，并持续分享运营实践。</p></div>
+    </div>
+  </section>
+
+  <!-- 04 Members -->
+  <section id="members" data-ch aria-labelledby="h-members">
+    <div class="gate rise" style="--c:var(--grn)"><span class="num">04</span><div><span class="en">ON-CHAIN MEMBERS</span><h2 id="h-members">成员</h2></div></div>
+    <div class="lane p-members">
+      <div class="idc rise" style="--c:var(--mag)"><span class="no">#01</span><span class="addr">stake1u8kl…xe93nu</span><span class="amt tnum">₳ 889.69</span><span class="ep">since epoch 586</span></div>
+      <div class="idc rise" style="--c:var(--cy);--d:.06s"><span class="no">#02</span><span class="addr">stake1uxxv…tsgyv</span><span class="amt tnum">₳ 517.43</span><span class="ep">since epoch 524 · <b>operator pledge</b></span></div>
+      <div class="idc rise" style="--c:var(--yel);--d:.12s"><span class="no">#03</span><span class="addr">stake1uxre…63gmlc</span><span class="amt tnum">₳ 104.83</span><span class="ep">since epoch 650</span></div>
+      <div class="idc rise" style="--c:var(--grn);--d:.18s"><span class="no">#04</span><span class="addr">stake1u96q…zecc8g</span><span class="amt tnum">₳ 27.65</span><span class="ep">since epoch 604</span></div>
+      <a class="idc next rise" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" style="--d:.24s"><span class="no">#05</span><span class="addr">你的 stake address</span><span class="amt">下一位就是你</span><span class="ep">委托给 PAO →</span></a>
+      <div class="poolcol rise" style="--d:.3s"><b>PAO</b><span>pool1jh5p…0ksm<button class="copy" type="button" data-copy="pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">COPY</button></span><span>margin 3% · fixed ₳170</span><a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan ↗</a><a class="cbtn sm" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托给 Pao Pool →</a></div>
+    </div>
+  </section>
+
+  <!-- 05 End -->
+  <section class="p-end" id="end" data-ch aria-labelledby="h-end">
+    <h2 id="h-end"><span class="o">LET'S</span><br><span class="m">BUILD.</span></h2>
+    <div class="acts rise"><a class="cbtn" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托给 Pao Pool →</a><a class="cbtn alt" href="#">邮件联系 ↗</a><a class="cbtn alt" href="#">Telegram 社群</a></div>
+  </section>
+</main>
+
+<footer class="sitefoot">
+  <div class="top">
+    <div class="brand"><img src="pao_logo_dark.svg" alt="Pao Studio" width="185" height="26"><p>在 Cardano 上构建 AI 产品与开源工具。<br>Stake with PAO Pool，获取质押奖励，同时享受增值服务。</p></div>
+    <div><h4>EXPLORE</h4><ul><li><a href="d5-works.html">作品</a></li><li><a href="d5-blog.html">博客</a></li><li><a href="d5-skills.html">Skills</a></li></ul></div>
+    <div><h4>SOCIAL</h4><ul><li><a href="https://x.com/cauu_128">X ↗</a></li><li><a href="https://github.com/cauu">GitHub ↗</a></li></ul></div>
+  </div>
+  <div class="bot"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>EPOCH <b data-ep>—</b> · <span data-ep-left>—</span></span></div>
+</footer>
+
+<nav class="proto-badge" aria-label="原型切换" style="max-width:calc(100vw - 24px);overflow-x:auto"><a href="index.html">总览</a><a href="d5-hybrid.html" aria-current="page">首页</a><a href="d5-works.html">作品</a><a href="d5-blog.html">博客</a><a href="d5-article.html">文章</a><a href="d5-skills.html">Skills</a><a href="d5-governance.html">治理</a><a href="d5-about.html">关于</a><a href="d5-staking.html">质押</a><a href="#" data-replay>↻ 开场</a></nav>
+
+<script src="base.js"></script>
+<script>
+// Hero runtime: live epoch clock, entry count-up, glitch trigger, pointer parallax + scroll break-apart, scroll-driven ticker
+window.PaoHero = (() => {
+  const html = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hero = document.querySelector('.hero');
+  const heroR = hero.querySelector('.hero-r');
+  const blocks = [...heroR.querySelectorAll('.blk')];
+
+  // Cardano epochs: 5 days each, epoch 208 (Shelley) started 2020-07-29 21:44:51 UTC
+  const EPOCH_LEN = 432000, SHELLEY = Date.UTC(2020, 6, 29, 21, 44, 51) / 1000;
+  const ep = document.getElementById('ep'), left = document.getElementById('ep-left'), prog = document.getElementById('ep-prog');
+  const pad = (n) => String(n).padStart(2, '0');
+  const clock = () => {
+    const since = Date.now() / 1000 - SHELLEY;
+    const into = since % EPOCH_LEN, rest = Math.floor(EPOCH_LEN - into);
+    ep.textContent = 208 + Math.floor(since / EPOCH_LEN);
+    left.textContent = `${Math.floor(rest / 86400)}d ${pad(Math.floor(rest / 3600) % 24)}:${pad(Math.floor(rest / 60) % 60)}:${pad(rest % 60)}`;
+    prog.style.transform = `scaleX(${(into / EPOCH_LEN).toFixed(4)})`;
+  };
+  clock();
+  setInterval(clock, 1000);
+
+  // Stake milestones: find the current stage, fill finished stages, place the marker inside the current one
+  const STAGES = [1e6, 5e6, 10e6, 20e6];
+  const goal = document.getElementById('goal');
+  const stake = parseFloat(goal.dataset.stake);
+  const segs = [...goal.querySelectorAll('.seg')];
+  const next = STAGES.findIndex((s) => stake < s);
+  const stage = next === -1 ? STAGES.length - 1 : next;
+  const fmtAda = (n) => Math.round(n).toLocaleString('en-US');
+  const short = (n) => (n >= 1e6 ? `${n / 1e6}M` : `${n / 1e3}K`);
+  document.getElementById('g-name').textContent = `STAGE 0${stage + 1} · ${short(STAGES[stage])} ADA`;
+  document.getElementById('g-left').textContent = `${fmtAda(Math.max(0, STAGES[stage] - stake))} ADA`;
+  const from = stage ? STAGES[stage - 1] : 0;
+  const frac = Math.min(1, Math.max(0, (stake - from) / (STAGES[stage] - from)));
+  segs[stage].classList.add('cur');
+  const here = document.createElement('span');
+  here.className = 'here';
+  segs[stage].appendChild(here);
+  const fillGoal = () => segs.forEach((s, i) => {
+    const f = i < stage ? 1 : i === stage ? frac : 0;
+    s.querySelector('i').style.transform = `scaleX(${f})`;
+    // Keep the marker visible even when the current stage has barely started
+    if (i === stage) here.style.left = `max(0px, calc(${(f * 100).toFixed(3)}% - 1px))`;
+  });
+
+  const countUp = (el) => {
+    const target = parseFloat(el.dataset.hc), dec = +(el.dataset.decimals || 0), suf = el.dataset.suffix || '';
+    const fmt = (v) => ('sep' in el.dataset ? Math.round(v).toLocaleString('en-US') : v.toFixed(dec)) + suf;
+    if (reduce) return;
+    const t0 = performance.now();
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / 1200);
+      el.textContent = fmt(target * (1 - Math.pow(1 - p, 4)));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const glitch = hero.querySelector('.glitch');
+  let lastFire = 0;
+  const fire = () => {
+    // At most one burst per 1.5 s keeps flashes well under 3 per second (WCAG 2.3.1)
+    const now = performance.now();
+    if (reduce || now - lastFire < 1500) return;
+    lastFire = now;
+    glitch.classList.remove('fire');
+    void glitch.offsetWidth;
+    glitch.classList.add('fire');
+  };
+  hero.querySelector('h1').addEventListener('pointerenter', fire);
+
+  // Hero goes live once the intro (if any) has handed over
+  const live = () => {
+    heroR.style.setProperty('--hr-h', heroR.offsetHeight + 'px');
+    hero.classList.remove('live');
+    void hero.offsetWidth;
+    hero.classList.add('live');
+    hero.querySelectorAll('[data-hc]').forEach(countUp);
+    setTimeout(fillGoal, 300);
+    setTimeout(fire, 900);
+  };
+
+  // Pointer parallax (fine pointers) + scroll break-apart, smoothed and applied via the `translate` property
+  let paused = html.classList.contains('intro-on');
+  const fine = matchMedia('(pointer: fine)').matches;
+  let px = 0, py = 0;
+  const cur = blocks.map(() => ({ x: 0, y: 0 }));
+  const conf = blocks.map((b) => ({ d: +b.dataset.depth, v: b.dataset.drift.split(',').map(Number) }));
+  if (fine) heroR.parentElement.addEventListener('pointermove', (e) => {
+    const r = hero.getBoundingClientRect();
+    px = (e.clientX - r.left) / r.width - 0.5;
+    py = (e.clientY - r.top) / r.height - 0.5;
+  });
+  hero.addEventListener('pointerleave', () => { px = 0; py = 0; });
+  let heroVisible = true;
+  new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; }).observe(hero);
+  const loop = () => {
+    if (!paused && heroVisible) {
+      const s = Math.min(scrollY, hero.offsetHeight);
+      blocks.forEach((b, i) => {
+        const tx = -px * conf[i].d + conf[i].v[0] * s;
+        const ty = -py * conf[i].d + conf[i].v[1] * s;
+        cur[i].x += (tx - cur[i].x) * 0.12;
+        cur[i].y += (ty - cur[i].y) * 0.12;
+        b.style.translate = `${cur[i].x.toFixed(1)}px ${cur[i].y.toFixed(1)}px`;
+      });
+    }
+    requestAnimationFrame(loop);
+  };
+  if (!reduce) requestAnimationFrame(loop);
+
+  // Ticker: slow idle drift, accelerated by scroll velocity; paused off-screen
+  const tr = document.querySelector('.ticker .tr');
+  if (!reduce) {
+    let off = 0, lastY = scrollY, lastT = performance.now(), boost = 0, tickerVisible = true;
+    new IntersectionObserver(([e]) => { tickerVisible = e.isIntersecting; }).observe(tr.parentElement);
+    const run = (now) => {
+      const dt = Math.min(64, now - lastT);
+      lastT = now;
+      boost = boost * 0.9 + Math.abs(scrollY - lastY) * 0.9;
+      lastY = scrollY;
+      if (tickerVisible) {
+        off = (off + dt * 0.03 + boost * 0.12) % (tr.scrollWidth / 2);
+        tr.style.transform = `translateX(${-off.toFixed(1)}px)`;
+      }
+      requestAnimationFrame(run);
+    };
+    requestAnimationFrame(run);
+  }
+
+  return {
+    pause() { paused = true; blocks.forEach((b, i) => { b.style.translate = ''; cur[i].x = cur[i].y = 0; }); },
+    resume() { paused = false; live(); },
+    start() { if (!html.classList.contains('intro-on')) live(); }
+  };
+})();
+</script>
+<script>
+// Intro: assemble P · A · O from the logo geometry, then FLIP each piece into its hero block
+(() => {
+  const html = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.hero-l > *').forEach((el, i) => el.style.setProperty('--k', i));
+
+  const play = () => {
+    if (reduce) return;
+    try { sessionStorage.setItem('pao-intro', '1'); } catch (e) {}
+    PaoHero.pause();
+    html.classList.add('intro-on');
+    history.scrollRestoration = 'manual';
+    scrollTo({ top: 0, behavior: 'instant' });
+
+    const intro = document.createElement('div');
+    intro.className = 'intro';
+    intro.setAttribute('aria-hidden', 'true');
+    intro.innerHTML = `<div class="grid-bg"></div>
+      <span class="corner" style="left:24px;top:22px">PAO//STUDIO — SYS.BOOT</span>
+      <span class="corner" style="right:24px;top:22px">CARDANO MAINNET</span>
+      <span class="count">000</span><span class="bar"></span>
+      <div class="studio"></div>`;
+    const skip = document.createElement('button');
+    skip.className = 'skip';
+    skip.type = 'button';
+    skip.textContent = 'SKIP ↵';
+    intro.appendChild(skip);
+    document.body.appendChild(intro);
+
+    const keys = ['p', 'a', 'o'];
+    const targets = keys.map((k) => document.querySelector(`.hero-r .blk.${k}`));
+    const rects = targets.map((t) => t.getBoundingClientRect());
+
+    // Word layout: equal visual height H, P's stem (::after, +42%) counts toward its height
+    const H = Math.min(innerHeight * 0.3, innerWidth * (innerWidth < 600 ? 0.27 : 0.2));
+    const visualH = (k, r) => (k === 'p' ? r.height * 1.42 : r.height);
+    const scales = keys.map((k, i) => H / visualH(k, rects[i]));
+    const widths = rects.map((r, i) => r.width * scales[i]);
+    // P and A nearly touch; A and O overlap so the screen blend mixes colors like the logo
+    const gaps = [H * 0.03, -H * 0.2];
+    const total = widths.reduce((a, b) => a + b, 0) + gaps[0] + gaps[1];
+    const top = innerHeight / 2 - H * 0.62;
+    let x = (innerWidth - total) / 2;
+    const word = keys.map((k, i) => {
+      const r = rects[i];
+      const tx = x - r.left;
+      // Triangle and circle sit on P's baseline
+      const ty = (k === 'p' ? top : top + H - r.height * scales[i]) - r.top;
+      x += widths[i] + (gaps[i] || 0);
+      return { tx, ty, s: scales[i] };
+    });
+    const T = (w, dx = 0, dy = 0, s = w.s) => `translate(${w.tx + dx}px, ${w.ty + dy}px) scale(${s})`;
+
+    const studio = intro.querySelector('.studio');
+    studio.style.top = `${top + H + H * 0.22}px`;
+    studio.style.fontSize = `${Math.max(12, H * 0.13)}px`;
+
+    const ghosts = targets.map((t, i) => {
+      const g = t.cloneNode(true);
+      const r = rects[i];
+      g.classList.add('ghost');
+      Object.assign(g.style, { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px', right: 'auto', bottom: 'auto', transform: T(word[i]), opacity: 0 });
+      document.body.appendChild(g);
+      return g;
+    });
+
+    const anims = [];
+    const A = (el, kf, opt) => { const a = el.animate(kf, { fill: 'forwards', ...opt }); anims.push(a); return a; };
+    const flicker = (el, delay) => A(el, [
+      { filter: 'drop-shadow(-10px 0 0 #2ffff3) drop-shadow(10px 0 0 #fc5ff6)', offset: 0 },
+      { filter: 'drop-shadow(6px 0 0 #2ffff3) drop-shadow(-6px 0 0 #fc5ff6)', offset: 0.4 },
+      { filter: 'drop-shadow(0 0 0 transparent) drop-shadow(0 0 0 transparent)' }
+    ], { duration: 220, delay, easing: 'steps(3)' });
+
+    const [gp, ga, go] = ghosts;
+    const [wp, wa, wo] = word;
+    // P slides in from the left
+    A(gp, [{ transform: T(wp, -innerWidth * 0.7), opacity: 1 }, { transform: T(wp), opacity: 1 }], { duration: 620, delay: 250, easing: 'cubic-bezier(.16,1,.3,1)' });
+    flicker(gp, 820);
+    // A drops from above with a small overshoot
+    A(ga, [
+      { transform: T(wa, 0, -innerHeight), opacity: 1 },
+      { transform: T(wa, 0, H * 0.06), opacity: 1, offset: 0.72 },
+      { transform: T(wa), opacity: 1 }
+    ], { duration: 560, delay: 600, easing: 'cubic-bezier(.5,0,.75,0)' });
+    flicker(ga, 1140);
+    // O springs out of its own center
+    const cx = (rects[2].width * wo.s) / 2, cy = (rects[2].height * wo.s) / 2;
+    A(go, [{ transform: T(wo, cx, cy, 0), opacity: 1 }, { transform: T(wo), opacity: 1 }], { duration: 640, delay: 950, easing: 'cubic-bezier(.34,1.56,.64,1)' });
+    flicker(go, 1480);
+
+    // Counter + progress bar
+    const count = intro.querySelector('.count');
+    const bar = intro.querySelector('.bar');
+    A(bar, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 1900, easing: 'cubic-bezier(.4,0,.2,1)' });
+    const t0 = performance.now();
+    let raf;
+    const tick = (now) => { const p = Math.min(1, (now - t0) / 1900); count.textContent = String(Math.round(p * 100)).padStart(3, '0'); if (p < 1) raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+
+    // STUDIO types out
+    const timers = [];
+    'STUDIO'.split('').forEach((c, i) => timers.push(setTimeout(() => { studio.innerHTML = 'STUDIO'.slice(0, i + 1) + '<span class="cur"></span>'; }, 1450 + i * 55)));
+
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      cancelAnimationFrame(raf);
+      timers.forEach(clearTimeout);
+      ghosts.forEach((g) => g.remove());
+      intro.remove();
+      html.classList.remove('intro-on');
+      removeEventListener('keydown', onSkip);
+      removeEventListener('wheel', onSkip);
+      removeEventListener('touchstart', onSkip);
+      PaoHero.resume();
+    };
+
+    let morphing = false;
+    const morph = (fast) => {
+      if (morphing) return;
+      morphing = true;
+      clearTimeout(morphTimer);
+      timers.forEach(clearTimeout);
+      anims.forEach((a) => a.cancel());
+      const dur = fast ? 450 : 1050;
+      studio.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(-12px)' }], { duration: 300, fill: 'forwards' });
+      intro.classList.add('out');
+      ghosts.forEach((g, i) => {
+        g.style.opacity = 1;
+        g.animate([{ transform: T(word[i]) }, { transform: 'translate(0,0) scale(1)' }],
+          { duration: dur, delay: fast ? 0 : i * 70, easing: 'cubic-bezier(.76,0,.24,1)', fill: 'forwards' });
+      });
+      // Nav and hero copy start revealing while the pieces are still travelling
+      setTimeout(() => {
+        // Pin the real blocks (no entry animation, still hidden) before releasing intro-on
+        document.querySelectorAll('.hero-r .blk.p, .hero-r .blk.a, .hero-r .blk.o').forEach((b) => { b.style.animation = 'none'; b.style.visibility = 'hidden'; });
+        html.classList.remove('intro-on');
+      }, fast ? 80 : 380);
+      setTimeout(() => {
+        document.querySelectorAll('.hero-r .blk.p, .hero-r .blk.a, .hero-r .blk.o').forEach((b) => (b.style.visibility = ''));
+        finish();
+      }, dur + (fast ? 20 : 160));
+    };
+
+    const onSkip = (e) => { if (e.type === 'keydown' && e.key === 'Tab') return; morph(true); };
+    skip.addEventListener('click', onSkip);
+    addEventListener('keydown', onSkip);
+    addEventListener('wheel', onSkip, { once: true, passive: true });
+    addEventListener('touchstart', onSkip, { once: true, passive: true });
+    const morphTimer = setTimeout(() => morph(false), 2050);
+  };
+
+  if (html.classList.contains('intro-on')) play();
+  else PaoHero.start();
+  document.querySelector('[data-replay]').addEventListener('click', (e) => { e.preventDefault(); play(); });
+})();
+</script>
+
+<script>
+// Copy pool ID
+document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', () => {
+  navigator.clipboard?.writeText(b.dataset.copy).then(() => { b.textContent = 'COPIED'; setTimeout(() => (b.textContent = 'COPY'), 1400); }).catch(() => {});
+}));
+
+// Ambient neon particles: pixel squares drift up and twinkle, rare data streaks, pointer pushes them away
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cv = document.querySelector('.particles');
+  const ctx = cv.getContext('2d');
+  const COLORS = ['#fc5ff6', '#2ffff3', '#fff590', '#31ee6b'];
+  let w, h, dpr, parts = [], streaks = [], px = -1e4, py = -1e4, last = performance.now(), running = true;
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const make = (y) => ({ x: rand(0, w), y: y ?? rand(0, h), s: Math.random() < 0.8 ? 2 : 3, vy: rand(6, 18), ph: rand(0, 6.28), sp: rand(0.6, 1.8), c: COLORS[(Math.random() * 4) | 0], dx: 0, dy: 0 });
+  const resize = () => {
+    dpr = Math.min(2, devicePixelRatio || 1);
+    w = innerWidth; h = innerHeight;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = w < 600 ? 18 : 42;
+    parts = Array.from({ length: n }, () => make());
+  };
+  resize();
+  addEventListener('resize', resize);
+  addEventListener('pointermove', (e) => { px = e.clientX; py = e.clientY; }, { passive: true });
+  document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) { last = performance.now(); requestAnimationFrame(frame); } });
+
+  function frame(now) {
+    if (!running) return;
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    ctx.clearRect(0, 0, w, h);
+    for (const p of parts) {
+      p.y -= p.vy * dt;
+      p.ph += p.sp * dt;
+      // Pointer repulsion within 120px, eased back afterwards
+      const ddx = p.x - px, ddy = p.y - py, d2 = ddx * ddx + ddy * ddy;
+      if (d2 < 14400) { const f = (1 - Math.sqrt(d2) / 120) * 60 * dt; p.dx += ddx * f * 0.05; p.dy += ddy * f * 0.05; }
+      p.dx *= 0.92; p.dy *= 0.92;
+      if (p.y < -10) Object.assign(p, make(h + 10));
+      const near = d2 < 14400 ? 0.5 : 0;
+      ctx.globalAlpha = Math.min(0.9, 0.18 + 0.22 * (1 + Math.sin(p.ph)) + near);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(Math.round(p.x + p.dx), Math.round(p.y + p.dy), p.s, p.s);
+    }
+    // Rare horizontal data streak
+    if (Math.random() < dt * 0.35) streaks.push({ x: -80, y: rand(80, h - 40), v: rand(600, 1100), l: rand(30, 90), c: COLORS[(Math.random() * 2) | 0], a: 0.55 });
+    streaks = streaks.filter((st) => st.x < w + 100);
+    for (const st of streaks) {
+      st.x += st.v * dt;
+      const g = ctx.createLinearGradient(st.x - st.l, 0, st.x, 0);
+      g.addColorStop(0, 'transparent'); g.addColorStop(1, st.c);
+      ctx.globalAlpha = st.a; ctx.fillStyle = g;
+      ctx.fillRect(st.x - st.l, st.y, st.l, 1);
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+
+// From D4: reveal on enter + depth parallax (measured without the current offset to avoid feedback)
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rises = document.querySelectorAll('.rise');
+  if (reduce || !('IntersectionObserver' in window)) rises.forEach((el) => el.classList.add('in'));
+  else {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
+    rises.forEach((el) => io.observe(el));
+  }
+  if (reduce) return;
+  const wide = matchMedia('(min-width: 901px)');
+  const els = [...document.querySelectorAll('[data-py]')];
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    if (!wide.matches) return;
+    els.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > innerHeight + 200) return;
+      const off = r.top - (el._ty || 0) + r.height / 2 - innerHeight / 2;
+      el._ty = off * +el.dataset.py;
+      el.style.transform = `translate3d(0,${el._ty.toFixed(1)}px,0)`;
+    });
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+})();
+</script>
+<script>
+// Footer epoch clock (this page does not load dx-fx.js)
+(() => {
+  const LEN = 432000, START = Date.UTC(2020, 6, 29, 21, 44, 51) / 1000, pad = (n) => String(n).padStart(2, '0');
+  const tick = () => {
+    const since = Date.now() / 1000 - START, rest = Math.floor(LEN - (since % LEN));
+    document.querySelectorAll('.sitefoot [data-ep]').forEach((el) => (el.textContent = 208 + Math.floor(since / LEN)));
+    document.querySelectorAll('.sitefoot [data-ep-left]').forEach((el) => (el.textContent = `${Math.floor(rest / 86400)}d ${pad(Math.floor(rest / 3600) % 24)}:${pad(Math.floor(rest / 60) % 60)}:${pad(rest % 60)}`));
+  };
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>

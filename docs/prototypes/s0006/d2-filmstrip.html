@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D2 · 横向长卷 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+/* ===== D2 Filmstrip =====
+   纵向滚动驱动一条横向长卷：章节之间以竖排「闸门」分隔，元素按深度视差；底部 HUD 常驻矿池数据与章节时间轴。
+   ≤ 900 px 或减少动态效果时退化为纵向排版。 */
+:root { --hud: 64px; --ph: calc(100vh - 68px - var(--hud)); }
+.film { position: relative; }
+.stage { position: sticky; top: 68px; height: var(--ph); overflow: hidden; }
+.track { display: flex; height: 100%; width: max-content; will-change: transform; }
+.panel { position: relative; height: 100%; flex: none; padding: 48px 4vw; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+.p-works { overflow: visible; }
+[data-px] { will-change: transform; }
+
+/* Hero panel */
+.p-hero { width: 100vw; display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: 2vw; padding-left: max(4vw, calc((100vw - 1180px) / 2 + 24px)); }
+.boot { font-family: var(--mono); font-size: 12.5px; color: var(--grn); line-height: 1.9; margin-bottom: 26px; }
+.p-hero h1 { font-size: clamp(44px, 5.6vw, 92px); line-height: 1.02; font-weight: 900; letter-spacing: -.01em; margin-bottom: 24px; }
+.p-hero h1 span { display: block; white-space: nowrap; }
+.p-hero h1 .hl { display: inline; color: var(--void); background: var(--yel); padding: 0 .12em; margin-left: -.06em; }
+.p-hero p { color: var(--fg-dim); font-size: 16.5px; line-height: 1.8; max-width: 28em; margin-bottom: 30px; }
+.p-hero .ctas { display: flex; gap: 12px; }
+.p-hero .art { position: relative; height: 78%; }
+.p-hero .art > * { position: absolute; }
+.p-hero .art .g-p { left: 6%; top: 4%; width: 56%; height: 52%; }
+.p-hero .art .g-a { right: 0; top: 26%; width: 52%; aspect-ratio: 1 / .87; mix-blend-mode: screen; }
+.p-hero .art .g-o { left: 28%; bottom: 0; width: 38%; aspect-ratio: 1; mix-blend-mode: screen; }
+.hint { position: absolute; right: 4vw; bottom: 26px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .16em; color: var(--fg-dim); display: flex; align-items: center; gap: 12px; }
+.hint i { display: inline-block; width: 60px; height: 1px; background: var(--fg); position: relative; overflow: hidden; }
+.hint i::after { content: ""; position: absolute; inset: 0; background: var(--cy); animation: hint 1.6s var(--inout) infinite; }
+@keyframes hint { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+/* Chapter gate: vertical title between chapters */
+.gate { width: 30vw; min-width: 340px; border-left: 1px solid var(--line); justify-content: space-between; padding: 40px 3vw; overflow: hidden; }
+.gate::before { content: ""; position: absolute; left: -1px; top: 0; bottom: 0; width: 3px; background: var(--c); box-shadow: 0 0 24px var(--c); }
+.gate .num { font-family: var(--mono); font-weight: 800; font-size: clamp(120px, 15vw, 240px); line-height: .8; color: transparent; -webkit-text-stroke: 1.5px var(--c); }
+.gate h2 { font-size: clamp(64px, 8vw, 130px); font-weight: 900; line-height: 1; letter-spacing: -.02em; }
+.gate .en { font-family: var(--mono); font-size: 12px; letter-spacing: .3em; color: var(--c); }
+.gate .cbtn { align-self: flex-start; }
+
+/* Works */
+.p-coil { width: 74vw; padding-right: 2vw; }
+.coil { display: block; height: 100%; display: grid; grid-template-rows: 1fr auto; border: 1px solid var(--line); background: var(--void-2); }
+.coil .scene { position: relative; overflow: hidden; background: #dff0ff; }
+.coil .scene img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; image-rendering: pixelated; transition: opacity .5s; }
+.coil .scene .awake { opacity: 0; }
+.coil:hover .scene .awake { opacity: 1; }
+.coil .cap { display: flex; align-items: center; gap: 28px; padding: 22px 26px; }
+.coil .cap h3 { font-family: var(--mono); font-size: clamp(40px, 4.4vw, 72px); font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.coil .cap .lead { font-size: 17px; font-weight: 800; }
+.coil .cap .specs { font-family: var(--mono); font-size: 12px; color: var(--fg-dim); margin-top: 4px; }
+.coil .cap .cbtn { margin-left: auto; }
+.p-works { flex-direction: row; align-items: center; gap: 22px; padding-right: 6vw; }
+.wk { position: relative; width: 300px; display: flex; flex-direction: column; gap: 12px; }
+.wk:nth-child(even) { translate: 0 70px; }
+.wk:nth-child(odd) { translate: 0 -50px; }
+.wk .th { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--c); border: 1px solid var(--line); }
+.wk .th img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15); mix-blend-mode: multiply; transition: filter .4s, transform .6s var(--out); }
+.wk:hover .th img { filter: none; mix-blend-mode: normal; transform: scale(1.05); }
+.wk .row { display: flex; align-items: baseline; gap: 12px; }
+.wk .no { font-family: var(--mono); font-size: 13px; font-weight: 800; color: var(--c); }
+.wk h3 { font-family: var(--mono); font-size: 30px; font-weight: 800; letter-spacing: -.02em; transition: color .2s; }
+.wk:hover h3 { color: var(--c); }
+.wk p { font-size: 14px; color: var(--fg-dim); line-height: 1.65; }
+.wk .tags { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--c); }
+
+/* Writing */
+.p-posts { flex-direction: row; align-items: stretch; gap: 22px; padding-top: 56px; padding-bottom: 56px; }
+.pf { width: 46vw; display: flex; flex-direction: column; gap: 16px; }
+.pf .img { flex: 1; overflow: hidden; border: 1px solid var(--line); position: relative; }
+.pf .img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--out); }
+.pf:hover .img img { transform: scale(1.04); }
+.pf .img::after { content: "LATEST"; position: absolute; left: 0; top: 0; background: var(--yel); color: var(--void); font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .12em; padding: 6px 10px; }
+.pf h3 { font-size: clamp(26px, 2.4vw, 38px); line-height: 1.3; font-weight: 900; }
+.meta { font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; color: var(--fg-dim); text-transform: uppercase; }
+.meta b { color: var(--c); }
+.pc { width: 22vw; min-width: 260px; display: flex; flex-direction: column; justify-content: space-between; padding: 26px; border: 1px solid var(--line); transition: border-color .3s, background .3s; }
+.pc .n { font-family: var(--mono); font-size: 96px; font-weight: 800; line-height: .8; color: transparent; -webkit-text-stroke: 1.2px var(--c); }
+.pc h3 { font-size: 21px; line-height: 1.45; font-weight: 800; margin-top: 12px; }
+.pc:hover { border-color: var(--c); background: rgba(244,242,255,.03); }
+.pc:hover .n { color: var(--c); }
+
+/* P · A · O */
+.p-pao { width: 40vw; min-width: 420px; justify-content: flex-end; border-left: 1px solid var(--line); padding-bottom: 56px; overflow: hidden; }
+.p-pao .shape { position: absolute; left: 50%; top: 38%; translate: -50% -50%; z-index: 0; }
+.p-pao > :not(.shape) { z-index: 1; }
+.p-pao .shape.g-p { width: 40%; height: 34%; top: 32%; }
+.p-pao .shape.g-a { width: 58%; aspect-ratio: 1 / .87; }
+.p-pao .shape.g-o { width: 50%; aspect-ratio: 1; }
+.p-pao .word { position: relative; font-family: var(--mono); font-size: 13px; letter-spacing: .32em; color: var(--c); }
+.p-pao h3 { position: relative; font-size: 30px; font-weight: 900; margin: 10px 0; }
+.p-pao p { position: relative; color: var(--fg-dim); font-size: 15px; line-height: 1.75; max-width: 24em; }
+
+/* Members: ID cards */
+.p-members { flex-direction: row; align-items: center; gap: 16px; }
+.idc { width: 230px; height: 62%; display: flex; flex-direction: column; padding: 22px 20px; background: #05040a; border: 1px solid var(--line); font-family: var(--mono); position: relative; overflow: hidden; transition: transform .4s var(--out), border-color .3s; }
+.idc:nth-child(even) { transform: translateY(40px); }
+.idc:hover { transform: translateY(-8px); border-color: var(--c); }
+.idc::before { content: "₳"; position: absolute; right: -10px; bottom: -40px; font-family: Inter, sans-serif; font-size: 170px; font-weight: 900; color: var(--c); opacity: .12; line-height: 1; }
+.idc .no { font-size: 12px; font-weight: 800; color: var(--c); letter-spacing: .12em; }
+.idc .addr { font-size: 12.5px; margin-top: 10px; }
+.idc .amt { margin-top: auto; font-size: 28px; font-weight: 800; }
+.idc .ep { font-size: 11px; color: var(--fg-dim); margin-top: 6px; }
+.idc .ep b { color: var(--c); }
+.idc.next { border: 1px dashed var(--yel); background: transparent; --c: var(--yel); }
+.idc.next .amt { font-family: Inter, AlibabaPuHuiTi, sans-serif; font-size: 24px; font-weight: 900; color: var(--yel); }
+.idc.next:hover { background: var(--yel); }
+.idc.next:hover * { color: var(--void); }
+.poolcol { width: 300px; display: flex; flex-direction: column; gap: 12px; font-family: var(--mono); font-size: 13px; color: var(--fg-dim); margin-left: 24px; }
+.poolcol b { color: var(--cy); font-size: 26px; letter-spacing: .1em; }
+.poolcol a:not(.cbtn) { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+.copy { background: none; border: 1px solid var(--line); color: var(--fg-dim); font: inherit; font-size: 11px; padding: 0 8px; margin-left: 6px; cursor: pointer; line-height: 1.8; }
+
+/* End */
+.p-end { width: 100vw; padding-left: 8vw; }
+.p-end h2 { font-size: clamp(110px, 15vw, 260px); font-weight: 900; line-height: .84; letter-spacing: -.05em; }
+.p-end h2 .o { color: transparent; -webkit-text-stroke: 2px var(--fg); }
+.p-end h2 .m { color: var(--mag); }
+.p-end .acts { display: flex; gap: 12px; margin-top: 40px; }
+
+/* HUD: live data + chapter timeline */
+.hud { position: fixed; left: 0; right: 0; bottom: 0; height: var(--hud); z-index: 60; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 32px; padding: 0 24px; background: rgba(10,9,16,.94); border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--fg-dim); }
+.hud .live b { color: var(--cy); font-weight: 800; }
+.hud .live .dot { display: inline-block; width: 7px; height: 7px; background: var(--grn); margin-right: 8px; animation: blink 1.6s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.tl { position: relative; height: 34px; }
+.tl .base { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); }
+.tl .fill { position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -.5px; background: linear-gradient(90deg, var(--mag), var(--cy), var(--yel), var(--grn)); transform-origin: left; transform: scaleX(var(--p, 0)); }
+.tl a { position: absolute; top: 0; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; translate: -1px 0; color: var(--fg-dim); font-size: 10.5px; letter-spacing: .12em; white-space: nowrap; }
+.tl a::before { content: ""; width: 1px; height: 10px; background: currentColor; }
+.tl a:last-child { translate: -100% 0; align-items: flex-end; }
+.tl a em { font-style: normal; }
+.tl a span { display: none; }
+.tl a.on span { display: inline; }
+.tl a.on { color: var(--fg); }
+.tl a.on b { color: var(--c); }
+.hud .goal b { color: var(--yel); }
+
+@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  :root { --hud: 0px; }
+  .hud { display: none; }
+  .film { height: auto !important; }
+  .stage { position: static; height: auto; overflow: visible; }
+  .track { flex-direction: column; width: auto; transform: none !important; }
+  .panel { width: auto !important; min-width: 0 !important; height: auto; padding: 56px 20px; }
+  [data-px] { transform: none !important; }
+  .p-hero { grid-template-columns: 1fr; }
+  .p-hero .art { height: 300px; }
+  .hint { display: none; }
+  .gate { border-left: 0; border-top: 1px solid var(--line); flex-direction: row; align-items: flex-end; gap: 20px; padding-top: 70px; padding-bottom: 20px; }
+  .gate::before { left: 0; right: 0; top: -1px; bottom: auto; width: auto; height: 3px; }
+  .gate .num { font-size: 96px; }
+  .gate h2 { font-size: 56px; }
+  .coil { height: auto; } .coil .scene { aspect-ratio: 4 / 3; } .coil .cap { flex-wrap: wrap; } .coil .cap .cbtn { margin-left: 0; }
+  .p-works, .p-posts, .p-members { flex-direction: column; align-items: stretch; }
+  .wk, .pf, .pc, .idc, .poolcol { width: auto; transform: none !important; translate: none; margin-left: 0; }
+  .pf .img { aspect-ratio: 16 / 9; flex: none; }
+  .idc { height: 180px; }
+  .p-pao { min-height: 420px; border-left: 0; border-top: 1px solid var(--line); }
+  .p-end h2 { font-size: 26vw; }
+  .p-end .acts { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="#"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="#" aria-current="page">/home</a><a href="d-article.html">/blog</a><a href="#">/works</a><a href="#">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="#end" data-go="end">合作</a></div>
+  </div>
+</nav>
+
+<main>
+  <section class="film" aria-label="Pao Studio 首页">
+    <div class="stage">
+      <div class="track">
+        <!-- 00 Hero -->
+        <div class="panel p-hero" id="home" data-ch="0">
+          <div>
+            <div class="boot" aria-hidden="true">&gt; boot pao.studio ...<br>&gt; link cardano.mainnet <b style="color:var(--cy)">[OK]</b> · epoch <b style="color:var(--fg)" data-ep>—</b><br>&gt; operator.count = 1 <b style="color:var(--yel)">// one-person company</b></div>
+            <h1><span>一家建立在</span><span>Cardano 上的</span><span><span class="hl">一人公司</span></span></h1>
+            <p>探索由 Cardano 矿池支持的一人公司运营模式，并分享实践经验。</p>
+            <div class="ctas"><a class="cbtn" href="#members" data-go="members">委托给 Pao Pool →</a><a class="cbtn alt" href="#works" data-go="works">看看作品</a></div>
+          </div>
+          <div class="art" aria-hidden="true"><span class="g-p" data-px="-.25"></span><span class="g-a" data-px=".2"></span><span class="g-o" data-px="-.1"></span></div>
+          <span class="hint" aria-hidden="true">SCROLL <i></i> 向下滚动 · 向右前进</span>
+        </div>
+
+        <!-- 01 Works -->
+        <div class="panel gate" id="works" data-ch="1" style="--c:var(--cy)"><span class="num" data-px="-.15">01</span><div><span class="en">WORKS</span><h2>作品</h2></div><a class="cbtn sm alt" href="#">全部作品 →</a></div>
+        <div class="panel p-coil">
+          <a class="coil" href="https://coil.win/">
+            <span class="scene"><img src="coil-sleep-wide.png" alt="" width="1440" height="730"><img class="awake" src="coil-awake-wide.png" alt="" width="1440" height="730"></span>
+            <span class="cap"><h3>Coil</h3><span><span class="lead" style="display:block">Your desktop trading agent.</span><span class="specs" style="display:block">NEW · v0.3.0 · macOS · Apple Silicon</span></span><span class="cbtn sm">下载 Coil ↓</span></span>
+          </a>
+        </div>
+        <div class="panel p-works">
+          <a class="wk" href="https://voda.paopao.studio/" style="--c:var(--yel)" data-px=".06"><span class="th"><img src="../../../public/images/projects/voda.jpg" alt=""></span><span class="row"><span class="no">01</span><h3>voda</h3></span><p>AI 编辑每日精选 Cardano 动态。</p><span class="tags">AI · APP</span></a>
+          <a class="wk" href="https://ouro-pass.paopao.studio/" style="--c:var(--cy)" data-px="-.04"><span class="th"><img src="../../../public/images/projects/ouro-pass.jpg" alt=""></span><span class="row"><span class="no">02</span><h3>ouro-pass</h3></span><p>基于 Cardano 的去中心化身份与订阅基础设施。</p><span class="tags">OSS</span></a>
+          <a class="wk" href="https://utxray.paopao.studio/" style="--c:var(--mag)" data-px=".08"><span class="th"><img src="../../../public/images/projects/utxray.jpg" alt=""></span><span class="row"><span class="no">03</span><h3>utxray</h3></span><p>面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。</p><span class="tags">OSS</span></a>
+          <a class="wk" href="https://ouro-ops.paopao.studio/" style="--c:var(--grn)" data-px="-.06"><span class="th"><img src="../../../public/images/projects/ouro-ops.jpg" alt=""></span><span class="row"><span class="no">04</span><h3>ouro-ops</h3></span><p>面向 AI Agent 的 Cardano Stake Pool 运维工具。</p><span class="tags">OSS</span></a>
+          <a class="wk" href="#" style="--c:var(--pur)" data-px=".05"><span class="th"><img src="../../../public/images/projects/cardano-lottery.jpg" alt=""></span><span class="row"><span class="no">05</span><h3>lottery</h3></span><p>基于 Cardano 构建的去中心化彩票应用。</p><span class="tags">APP</span></a>
+        </div>
+
+        <!-- 02 Writing -->
+        <div class="panel gate" id="writing" data-ch="2" style="--c:var(--mag)"><span class="num" data-px="-.15">02</span><div><span class="en">WRITING</span><h2>文章</h2></div><a class="cbtn sm alt" href="d-article.html">全部文章 →</a></div>
+        <div class="panel p-posts">
+          <a class="pf" href="#" style="--c:var(--yel)"><span class="img"><img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260405-subscriptions-are-failing.jpg" alt="" width="1600" height="900"></span><span class="meta"><b>ai</b> · 2026-04-05</span><h3>软件订阅正在失效，创作者经济需要新的基础设施</h3></a>
+          <a class="pc" href="#" style="--c:var(--cy)"><span class="n">02</span><span><span class="meta"><b>cardano</b> · 2026-03-25</span><h3>区块链的“组合性”演进：为什么 AI 时代需要的是 Cardano 而非 Ethereum？</h3></span></a>
+          <a class="pc" href="d-article.html" style="--c:var(--mag)"><span class="n">03</span><span><span class="meta"><b>engineering</b> · 2026-03-06</span><h3>Immutable Spec：让需求、设计、执行和验收收敛到同一份文档</h3></span></a>
+          <a class="pc" href="#" style="--c:var(--grn)"><span class="n">04</span><span><span class="meta"><b>essay</b> · 2026-03-02</span><h3>从认知到行动的健康长寿实践</h3></span></a>
+        </div>
+
+        <!-- 03 P · A · O -->
+        <div class="panel gate" id="pao" data-ch="3" style="--c:var(--yel)"><span class="num" data-px="-.15">03</span><div><span class="en">P · A · O</span><h2>主线</h2></div></div>
+        <div class="panel p-pao" style="--c:var(--mag)"><span class="shape g-p" data-px="-.18" aria-hidden="true"></span><span class="word">P // POOL</span><h3>运营 Cardano 矿池</h3><p>矿池收入用于支付节点、服务器、AI 服务和产品开发。委托 ADA 即成为会员。</p></div>
+        <div class="panel p-pao" style="--c:var(--cy)"><span class="shape g-a" data-px="-.18" aria-hidden="true"></span><span class="word">A // AI</span><h3>构建 AI 产品</h3><p>Coil 是你桌面上的交易 Agent；VODA 由 AI 编辑每天挑选 Cardano 动态。</p></div>
+        <div class="panel p-pao" style="--c:var(--yel)"><span class="shape g-o" data-px="-.18" aria-hidden="true"></span><span class="word">O // OPEN</span><h3>开源与公开写作</h3><p>Ouro Pass、utxray、ouro-ops 在 GitHub 开源，并持续分享运营实践。</p></div>
+
+        <!-- 04 Members -->
+        <div class="panel gate" id="members" data-ch="4" style="--c:var(--grn)"><span class="num" data-px="-.15">04</span><div><span class="en">ON-CHAIN MEMBERS</span><h2>成员</h2></div></div>
+        <div class="panel p-members">
+          <div class="idc" style="--c:var(--mag)"><span class="no">#01</span><span class="addr">stake1u8kl…xe93nu</span><span class="amt tnum">₳ 889.69</span><span class="ep">since epoch 586</span></div>
+          <div class="idc" style="--c:var(--cy)"><span class="no">#02</span><span class="addr">stake1uxxv…tsgyv</span><span class="amt tnum">₳ 517.43</span><span class="ep">since epoch 524 · <b>operator pledge</b></span></div>
+          <div class="idc" style="--c:var(--yel)"><span class="no">#03</span><span class="addr">stake1uxre…63gmlc</span><span class="amt tnum">₳ 104.83</span><span class="ep">since epoch 650</span></div>
+          <div class="idc" style="--c:var(--grn)"><span class="no">#04</span><span class="addr">stake1u96q…zecc8g</span><span class="amt tnum">₳ 27.65</span><span class="ep">since epoch 604</span></div>
+          <a class="idc next" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm"><span class="no">#05</span><span class="addr">你的 stake address</span><span class="amt">下一位就是你</span><span class="ep">委托给 PAO →</span></a>
+          <div class="poolcol"><b>PAO</b><span>pool1jh5p…0ksm<button class="copy" type="button" data-copy="pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">COPY</button></span><span>margin 3% · fixed ₳170</span><a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan ↗</a></div>
+        </div>
+
+        <!-- 05 End -->
+        <div class="panel p-end" id="end" data-ch="5">
+          <h2><span class="o">LET'S</span><br><span class="m">BUILD.</span></h2>
+          <div class="acts"><a class="cbtn" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托给 Pao Pool →</a><a class="cbtn alt" href="#">邮件联系 ↗</a><a class="cbtn alt" href="#">Telegram 社群</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>X · GITHUB</span></div></footer>
+
+<div class="hud" aria-label="矿池状态与章节">
+  <span class="live"><i class="dot" aria-hidden="true"></i>LIVE <b>₳ 1,540</b> · <b style="color:var(--mag)">4</b> DELEGATORS · EPOCH <b style="color:var(--fg)" data-ep>—</b> <b style="color:var(--grn)" data-ep-left>—</b></span>
+  <div class="tl"><span class="base"></span><span class="fill"></span>
+    <a href="#home" data-go="home" style="--c:var(--fg)"><em><b>00</b><span> HOME</span></em></a>
+    <a href="#works" data-go="works" style="--c:var(--cy)"><em><b>01</b><span> WORKS</span></em></a>
+    <a href="#writing" data-go="writing" style="--c:var(--mag)"><em><b>02</b><span> WRITING</span></em></a>
+    <a href="#pao" data-go="pao" style="--c:var(--yel)"><em><b>03</b><span> P·A·O</span></em></a>
+    <a href="#members" data-go="members" style="--c:var(--grn)"><em><b>04</b><span> MEMBERS</span></em></a>
+    <a href="#end" data-go="end" style="--c:var(--mag)"><em><b>05</b><span> BUILD</span></em></a>
+  </div>
+  <span class="goal" data-goal="1539.59">NEXT <b data-goal-name style="color:var(--fg)">—</b> · 还差 <b data-goal-left>—</b></span>
+</div>
+
+<nav class="proto-badge" aria-label="原型切换" style="bottom:80px">
+  <a href="index.html">总览</a><a href="d-neon-cyber.html">D</a><a href="d1-editorial.html">D1 杂志</a><a href="d2-filmstrip.html" aria-current="page">D2 长卷</a><a href="d3-scenes.html">D3 场景</a>
+</nav>
+
+<script src="dx-fx.js"></script>
+<script>
+// Filmstrip: vertical scroll drives the horizontal track; depth parallax per element; HUD timeline follows
+(() => {
+  const film = document.querySelector('.film');
+  const stage = film.querySelector('.stage');
+  const track = film.querySelector('.track');
+  const mq = matchMedia('(max-width: 900px), (prefers-reduced-motion: reduce)');
+  const pxEls = [...track.querySelectorAll('[data-px]')];
+  const chapters = [...track.querySelectorAll('[data-ch]')];
+  const marks = [...document.querySelectorAll('.tl a')];
+  const fill = document.querySelector('.tl');
+  let dist = 0, enabled = false;
+
+  const layout = () => {
+    enabled = !mq.matches;
+    if (!enabled) { film.style.height = ''; return; }
+    dist = track.scrollWidth - innerWidth;
+    film.style.height = `${dist + stage.offsetHeight}px`;
+    // Timeline marks sit at each chapter's share of the travel
+    chapters.forEach((c, i) => { marks[i].style.left = `${Math.min(100, (c.offsetLeft / dist) * 100).toFixed(2)}%`; });
+    update();
+  };
+  const xFor = (el) => Math.min(dist, el.offsetLeft);
+  const update = () => {
+    if (!enabled) return;
+    const x = Math.min(dist, Math.max(0, scrollY - film.offsetTop));
+    track.style.transform = `translate3d(${-x}px,0,0)`;
+    pxEls.forEach((el) => {
+      const panel = el.closest('.panel');
+      const center = panel.offsetLeft + panel.offsetWidth / 2 - x - innerWidth / 2;
+      el.style.transform = `translate3d(${(center * +el.dataset.px).toFixed(1)}px,0,0)`;
+    });
+    fill.style.setProperty('--p', (x / dist).toFixed(4));
+    let idx = 0;
+    chapters.forEach((c, i) => { if (c.offsetLeft - innerWidth * 0.5 <= x) idx = i; });
+    marks.forEach((m, i) => m.classList.toggle('on', i === idx));
+  };
+  let ticking = false;
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; update(); }); } }, { passive: true });
+  addEventListener('resize', layout);
+  mq.addEventListener('change', layout);
+  addEventListener('load', layout);
+  layout();
+
+  // In-page links jump to the scroll position that brings the panel into view
+  document.querySelectorAll('[data-go]').forEach((a) => a.addEventListener('click', (e) => {
+    if (!enabled) return;
+    e.preventDefault();
+    const target = document.getElementById(a.dataset.go);
+    scrollTo({ top: film.offsetTop + xFor(target), behavior: 'smooth' });
+  }));
+})();
+</script>
+</body>
+</html>

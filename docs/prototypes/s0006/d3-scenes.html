@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D3 · 全屏场景 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<script>
+  document.documentElement.classList.add('js');
+  // Scene mode only on wide screens with motion allowed; otherwise the page scrolls normally
+  if (matchMedia('(min-width: 901px)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('scenes');
+</script>
+<style>
+/* ===== D3 Scenes =====
+   全屏场景逐屏切换：入场蒙版轮流使用 Logo 形状（P 从左滑开 / A 三角从底部长出 / O 圆从指针扩散）；
+   HUD 框架常驻：场景编号、右侧形状导航、底部矿池数据。窄屏或减少动态效果时为普通滚动。 */
+:root { --bar: 56px; }
+.scn { position: relative; padding: 90px 24px; overflow: hidden; background: var(--void); }
+.scn .in-wrap { position: relative; z-index: 1; }
+
+/* Scene mode */
+.scenes body { overflow: hidden; }
+.scenes .scn { position: fixed; top: 68px; left: 0; right: 0; bottom: var(--bar); padding: 0; visibility: hidden; z-index: 1; }
+.scenes .scn.cur { visibility: visible; z-index: 2; }
+.scenes .scn.enter { visibility: visible; z-index: 3; }
+.scenes .footer { display: none; }
+.scenes .particles { z-index: 4; mix-blend-mode: screen; }
+.scenes main { z-index: auto; }
+
+/* HUD frame */
+.hud { display: none; }
+.scenes .hud { display: block; }
+.hud-top { position: fixed; left: 28px; top: calc(68px + 20px); z-index: 20; font-family: var(--mono); font-size: 11.5px; letter-spacing: .16em; color: var(--fg-dim); }
+.hud-top b { color: var(--c, var(--cy)); font-weight: 800; }
+.corner { position: fixed; z-index: 20; width: 18px; height: 18px; border: 1.5px solid rgba(244,242,255,.5); pointer-events: none; }
+.corner.tl { left: 12px; top: calc(68px + 12px); border-right: 0; border-bottom: 0; }
+.corner.tr { right: 12px; top: calc(68px + 12px); border-left: 0; border-bottom: 0; }
+.corner.bl { left: 12px; bottom: calc(var(--bar) + 12px); border-right: 0; border-top: 0; }
+.corner.br { right: 12px; bottom: calc(var(--bar) + 12px); border-left: 0; border-top: 0; }
+.hud-nav { position: fixed; right: 26px; top: 50%; translate: 0 -50%; z-index: 20; display: flex; flex-direction: column; gap: 14px; align-items: flex-end; }
+.hud-nav button { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--fg-dim); padding: 2px 0; }
+.hud-nav button span { opacity: 0; transform: translateX(6px); transition: opacity .2s, transform .3s var(--out); }
+.hud-nav button:hover span, .hud-nav button.on span { opacity: 1; transform: none; }
+.hud-nav i { width: 12px; height: 12px; background: rgba(244,242,255,.35); transition: background .3s, transform .4s var(--out); }
+.hud-nav i.p { border-radius: 0 99px 99px 0; }
+.hud-nav i.a { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.hud-nav i.o { border-radius: 50%; }
+.hud-nav button.on { color: var(--fg); }
+.hud-nav button.on i { background: var(--c); transform: scale(1.5); }
+.hud-bot { position: fixed; left: 0; right: 0; bottom: 0; height: var(--bar); z-index: 20; display: grid; grid-template-columns: auto 1fr auto; gap: 28px; align-items: center; padding: 0 28px; border-top: 1px solid var(--line); background: var(--void); font-family: var(--mono); font-size: 12px; color: var(--fg-dim); }
+.hud-bot b { font-weight: 800; }
+.hud-bot .dot { display: inline-block; width: 7px; height: 7px; background: var(--grn); margin-right: 8px; animation: blink 1.6s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hud-bot .steps { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; max-width: 420px; justify-self: center; width: 100%; }
+.hud-bot .steps i { height: 3px; background: rgba(244,242,255,.14); transition: background .4s; }
+.hud-bot .steps i.on { background: var(--c, var(--cy)); box-shadow: 0 0 8px var(--c, var(--cy)); }
+.flash { position: fixed; inset: 68px 0 var(--bar); z-index: 15; pointer-events: none; opacity: 0;
+  background: repeating-linear-gradient(0deg, rgba(47,255,243,.08) 0 2px, transparent 2px 6px); }
+
+/* S0 Home: the intro lockup becomes the hero */
+.s-home { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 22px; }
+.lock { display: flex; align-items: flex-end; justify-content: center; height: 38vh; margin-bottom: 18px; }
+.lock > * { flex: none; will-change: transform; }
+.lock .g-p { width: 23vh; height: 26.7vh; margin-bottom: 11.3vh; }
+.lock .g-a { width: 40vh; height: 38vh; margin-left: 1vh; mix-blend-mode: screen; }
+.lock .g-o { width: 38vh; height: 38vh; margin-left: -8vh; mix-blend-mode: screen; }
+.s-home h1 { font-size: clamp(30px, 3.6vw, 58px); font-weight: 900; line-height: 1.15; }
+.s-home h1 .hl { color: var(--void); background: var(--yel); padding: 0 .12em; margin-left: .1em; }
+.s-home p { color: var(--fg-dim); font-size: 16px; }
+.s-home .ctas { display: flex; gap: 12px; justify-content: center; }
+
+/* S1 Coil: full-bleed pixel world that wakes on arrival */
+.s-coil { background: #dff0ff; }
+.s-coil .world { position: absolute; inset: 0; }
+.s-coil .world img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; image-rendering: pixelated; transition: opacity .6s; }
+.s-coil .world .awake { opacity: 0; }
+.s-coil.awake .world .awake, .s-coil:hover .world .awake { opacity: 1; }
+.s-coil .ov { position: absolute; left: 7vw; top: 9vh; z-index: 1; color: #141a3a; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.s-coil .ov .tag { color: #2c4bd8; }
+.s-coil .ov h2 { color: #141a3a; font-family: var(--mono); font-size: clamp(80px, 11vw, 190px); font-weight: 800; line-height: .85; letter-spacing: -.04em; }
+.s-coil .ov .lead { font-size: clamp(18px, 1.8vw, 26px); font-weight: 800; }
+.s-coil .ov .specs { font-family: var(--mono); font-size: 12px; color: #4b5ea8; }
+.s-coil .ov .dl { margin-top: 8px; font-family: var(--mono); font-size: 14px; font-weight: 800; color: #fff; background: #2357ff; padding: 13px 22px; box-shadow: 0 0 0 2px #141a3a, 4px 4px 0 #141a3a; transition: transform .2s, box-shadow .2s; }
+.s-coil .ov .dl:hover { transform: translate(-2px, -2px); box-shadow: 0 0 0 2px #141a3a, 6px 6px 0 #141a3a; }
+
+/* S2 Works index with live preview */
+.s-works { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: center; padding: 0 11vw 0 7vw !important; }
+.s-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 26px; }
+.s-head .tag { color: var(--c); }
+.s-head h2 { font-size: clamp(40px, 4.4vw, 72px); font-weight: 900; line-height: 1; }
+.s-head h2 .hl { color: var(--void); background: var(--c); padding: 0 .1em; }
+.wl { list-style: none; border-top: 1px solid var(--line); }
+.wl a { display: grid; grid-template-columns: 44px 1fr auto; align-items: baseline; gap: 4px 14px; padding: 15px 0; border-bottom: 1px solid var(--line); }
+.wl .no { font-family: var(--mono); font-size: 12px; font-weight: 800; color: var(--c); }
+.wl h3 { font-family: var(--mono); font-size: clamp(26px, 2.6vw, 42px); font-weight: 800; letter-spacing: -.02em; line-height: 1; transition: color .2s, transform .4s var(--out); }
+.wl .tags { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--fg-dim); }
+.wl p { grid-column: 2 / -1; font-size: 13.5px; color: var(--fg-dim); max-height: 0; overflow: hidden; transition: max-height .4s var(--out), margin .4s; }
+.wl a.on h3, .wl a:hover h3 { color: var(--c); transform: translateX(10px); }
+.wl a.on p { max-height: 3em; margin-top: 6px; }
+.pv { position: relative; aspect-ratio: 16 / 11; border: 1px solid var(--line); background: var(--void-2); }
+.pv::before, .pv::after { content: ""; position: absolute; width: 22px; height: 22px; border: 2px solid var(--c); z-index: 3; transition: border-color .3s; }
+.pv::before { left: -7px; top: -7px; border-right: 0; border-bottom: 0; }
+.pv::after { right: -7px; bottom: -7px; border-left: 0; border-top: 0; }
+.pv img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.pv .r, .pv .b { position: absolute; inset: 0; background-size: cover; background-position: center; mix-blend-mode: screen; opacity: 0; }
+.pv .r { background-color: var(--mag); background-blend-mode: multiply; }
+.pv .b { background-color: var(--cy); background-blend-mode: multiply; }
+.pv.swap .r { animation: rgbR .38s steps(4); }
+.pv.swap .b { animation: rgbB .38s steps(4); }
+@keyframes rgbR { 0% { opacity: .8; transform: translate(-14px, 2px); } 100% { opacity: 0; transform: none; } }
+@keyframes rgbB { 0% { opacity: .8; transform: translate(14px, -2px); } 100% { opacity: 0; transform: none; } }
+.pv .cap { position: absolute; left: 0; bottom: 0; z-index: 2; background: var(--c); color: var(--void); font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .12em; padding: 6px 10px; }
+
+/* S3 Writing */
+.s-writing { display: grid; grid-template-columns: 1.05fr 1fr; }
+.s-writing .img { position: relative; overflow: hidden; }
+.s-writing .img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s var(--out); }
+.s-writing .img:hover img { transform: scale(1.04); }
+.s-writing .img::after { content: "LATEST"; position: absolute; left: 0; bottom: 0; background: var(--yel); color: var(--void); font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .12em; padding: 6px 10px; }
+.s-writing .txt { padding: 9vh 11vw 6vh 4vw; display: flex; flex-direction: column; }
+.meta { font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; color: var(--fg-dim); text-transform: uppercase; }
+.meta b { color: var(--c); }
+.s-writing .lead-post h3 { font-size: clamp(26px, 2.6vw, 42px); line-height: 1.3; font-weight: 900; margin: 12px 0 0; transition: color .2s; }
+.s-writing .lead-post:hover h3 { color: var(--yel); }
+.s-writing .more { margin-top: auto; border-top: 1px solid var(--line); }
+.s-writing .more a { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.s-writing .more h4 { font-size: 16px; line-height: 1.45; margin-top: 4px; transition: color .2s; }
+.s-writing .more a:hover h4 { color: var(--c); }
+.s-writing .cbtn { margin-top: 18px; align-self: flex-start; }
+
+/* S4 P · A · O: expanding columns */
+.s-pao { display: flex; }
+.col { flex: 1; position: relative; border-left: 1px solid var(--line); display: flex; flex-direction: column; justify-content: flex-end; padding: 0 3vw 7vh; transition: flex 0.7s var(--out); overflow: hidden; }
+.col:first-child { border-left: 0; }
+.col:hover { flex: 1.6; }
+.col .shape { position: absolute; left: 50%; top: 40%; translate: -50% -50%; transition: transform .8s var(--out); }
+.col:hover .shape { transform: scale(1.15) rotate(var(--rot, 0deg)); }
+.col .shape.g-p { width: 22vh; height: 22vh; top: 34%; }
+.col .shape.g-a { width: 30vh; height: 26vh; }
+.col .shape.g-o { width: 28vh; height: 28vh; }
+.col .w { position: relative; font-family: var(--mono); font-size: 12.5px; letter-spacing: .3em; color: var(--c); }
+.col h3 { position: relative; font-size: clamp(24px, 2.2vw, 34px); font-weight: 900; margin: 10px 0; }
+.col p { position: relative; color: var(--fg-dim); font-size: 15px; line-height: 1.75; max-width: 24em; }
+
+/* S5 Members */
+.s-members { display: flex; flex-direction: column; justify-content: center; padding: 0 11vw 0 7vw !important; }
+.cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.dc { position: relative; display: flex; flex-direction: column; gap: 8px; min-height: 30vh; padding: 20px 18px; background: #05040a; border: 1px solid var(--line); font-family: var(--mono); overflow: hidden; transition: transform .3s, border-color .3s; }
+.dc::before { content: "₳"; position: absolute; right: -6px; bottom: -34px; font-family: Inter, sans-serif; font-size: 130px; font-weight: 900; color: var(--c); opacity: .12; line-height: 1; }
+.dc:hover { transform: translateY(-4px); border-color: var(--c); }
+.dc .no { font-size: 12px; font-weight: 800; color: var(--c); letter-spacing: .12em; }
+.dc .addr { font-size: 12.5px; }
+.dc .amt { margin-top: auto; font-size: 24px; font-weight: 800; }
+.dc .ep { font-size: 11px; color: var(--fg-dim); }
+.dc .ep b { color: var(--c); }
+.dc.next { --c: var(--yel); border-style: dashed; border-color: rgba(255,245,144,.6); background: transparent; }
+.dc.next .amt { font-family: Inter, AlibabaPuHuiTi, sans-serif; font-size: 20px; font-weight: 900; color: var(--yel); }
+.dc.next:hover { background: var(--yel); }
+.dc.next:hover * { color: var(--void); }
+.poolline { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 16px; padding: 14px 14px 14px 20px; border: 1px solid var(--line); background: #05040a; font-family: var(--mono); font-size: 13px; color: var(--fg-dim); }
+.poolline b { color: var(--cy); }
+.poolline a:not(.cbtn) { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+.poolline .cbtn { margin-left: auto; }
+.copy { background: none; border: 1px solid var(--line); color: var(--fg-dim); font: inherit; font-size: 11px; padding: 0 8px; margin-left: 6px; cursor: pointer; line-height: 1.8; }
+
+/* S6 Build */
+.s-build { display: flex; flex-direction: column; justify-content: center; padding: 0 7vw !important; }
+.s-build h2 { font-size: clamp(100px, 16vw, 280px); font-weight: 900; line-height: .82; letter-spacing: -.05em; }
+.s-build h2 .o { color: transparent; -webkit-text-stroke: 2px var(--fg); }
+.s-build h2 .m { color: var(--mag); }
+.s-build .acts { display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
+.s-build .fine { position: absolute; left: 7vw; bottom: 26px; font-family: var(--mono); font-size: 12px; color: var(--fg-dim); }
+
+/* Fallback (narrow screens / reduced motion) */
+html:not(.scenes) .scn { border-top: 1px solid var(--line); }
+html:not(.scenes) .s-coil { min-height: 560px; }
+html:not(.scenes) .s-coil .world .awake { opacity: 1; }
+html:not(.scenes) .lock { height: 160px; }
+html:not(.scenes) .lock .g-p { width: 96px; height: 112px; margin-bottom: 48px; }
+html:not(.scenes) .lock .g-a { width: 168px; height: 160px; }
+html:not(.scenes) .lock .g-o { width: 160px; height: 160px; margin-left: -34px; }
+@media (max-width: 900px) {
+  .s-works, .s-writing { grid-template-columns: 1fr; padding: 70px 20px !important; gap: 30px; }
+  .s-writing .img { aspect-ratio: 16 / 9; }
+  .s-writing .txt { padding: 0; gap: 24px; }
+  .s-pao { flex-direction: column; padding: 0 !important; }
+  .col { min-height: 360px; border-left: 0; border-top: 1px solid var(--line); padding: 0 20px 40px; }
+  .col .shape.g-p { width: 120px; height: 120px; } .col .shape.g-a { width: 160px; height: 140px; } .col .shape.g-o { width: 150px; height: 150px; }
+  .s-members, .s-build { padding: 70px 20px !important; }
+  .cards { grid-template-columns: 1fr 1fr; }
+  .dc { min-height: 150px; } .dc .addr { font-size: 11px; }
+  .dc.next { grid-column: 1 / -1; }
+  .poolline .cbtn { margin-left: 0; width: 100%; }
+  .s-coil .ov { left: 20px; top: 30px; }
+  .s-coil .ov h2 { font-size: 72px; }
+  .s-build h2 { font-size: 26vw; }
+  .s-build .fine { position: static; margin-top: 30px; }
+  .lock { transform: scale(.82); }
+  .s-home h1 { font-size: 28px; }
+  .s-home .ctas { flex-direction: column; width: 100%; }
+}
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="#home" data-go="0"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="#home" data-go="0" aria-current="page">/home</a><a href="#writing" data-go="3">/blog</a><a href="#works" data-go="2">/works</a><a href="#">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="#build" data-go="6">合作</a></div>
+  </div>
+</nav>
+
+<main>
+  <section class="scn s-home" id="home" data-name="HOME" style="--c:var(--cy)" aria-labelledby="h1">
+    <div class="lock" aria-hidden="true"><span class="g-p" data-depth="14"></span><span class="g-a" data-depth="24"></span><span class="g-o" data-depth="18"></span></div>
+    <h1 id="h1" data-in>一家建立在 Cardano 上的<span class="hl">一人公司</span></h1>
+    <p data-in>探索由 Cardano 矿池支持的一人公司运营模式，并分享实践经验。</p>
+    <div class="ctas" data-in><a class="cbtn" href="#members" data-go="5">委托给 Pao Pool →</a><a class="cbtn alt" href="#coil" data-go="1">看看作品</a></div>
+  </section>
+
+  <section class="scn s-coil" id="coil" data-name="COIL" style="--c:var(--cy)" aria-labelledby="h-coil">
+    <div class="world" aria-hidden="true"><img src="coil-sleep-wide.png" alt="" width="1440" height="730"><img class="awake" src="coil-awake-wide.png" alt="" width="1440" height="730"></div>
+    <div class="ov"><span class="tag" data-in>01 // works · new · trading agent</span><h2 id="h-coil" data-in>Coil</h2><span class="lead" data-in>Your desktop trading agent.</span><span class="specs" data-in>v0.3.0 · macOS · Apple Silicon</span><a class="dl" href="https://coil.win/" data-in>下载 Coil ↓</a></div>
+  </section>
+
+  <section class="scn s-works" id="works" data-name="WORKS" style="--c:var(--cy)" aria-labelledby="h-works">
+    <div>
+      <div class="s-head" data-in><span class="tag">02 // works</span><h2 id="h-works"><span class="hl">作品</span></h2></div>
+      <ul class="wl" data-in>
+        <li><a href="https://voda.paopao.studio/" class="on" style="--c:var(--yel)" data-img="../../../public/images/projects/voda.jpg"><span class="no">01</span><h3>voda</h3><span class="tags">AI · APP</span><p>AI 编辑每日精选 Cardano 动态。</p></a></li>
+        <li><a href="https://ouro-pass.paopao.studio/" style="--c:var(--cy)" data-img="../../../public/images/projects/ouro-pass.jpg"><span class="no">02</span><h3>ouro-pass</h3><span class="tags">OSS</span><p>基于 Cardano 的去中心化身份与订阅基础设施。</p></a></li>
+        <li><a href="https://utxray.paopao.studio/" style="--c:var(--mag)" data-img="../../../public/images/projects/utxray.jpg"><span class="no">03</span><h3>utxray</h3><span class="tags">OSS</span><p>面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。</p></a></li>
+        <li><a href="https://ouro-ops.paopao.studio/" style="--c:var(--grn)" data-img="../../../public/images/projects/ouro-ops.jpg"><span class="no">04</span><h3>ouro-ops</h3><span class="tags">OSS</span><p>面向 AI Agent 的 Cardano Stake Pool 运维工具。</p></a></li>
+        <li><a href="#" style="--c:var(--pur)" data-img="../../../public/images/projects/cardano-lottery.jpg"><span class="no">05</span><h3>lottery</h3><span class="tags">APP</span><p>基于 Cardano 构建的去中心化彩票应用。</p></a></li>
+      </ul>
+    </div>
+    <div class="pv" data-in style="--c:var(--yel)" aria-hidden="true"><img src="../../../public/images/projects/voda.jpg" alt=""><span class="r"></span><span class="b"></span><span class="cap">voda.paopao.studio</span></div>
+  </section>
+
+  <section class="scn s-writing" id="writing" data-name="WRITING" style="--c:var(--mag)" aria-labelledby="h-writing">
+    <a class="img" href="#" aria-label="软件订阅正在失效，创作者经济需要新的基础设施"><img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260405-subscriptions-are-failing.jpg" alt="" width="1600" height="900"></a>
+    <div class="txt">
+      <div class="s-head" data-in><span class="tag">03 // writing</span><h2 id="h-writing"><span class="hl">文章</span></h2></div>
+      <a class="lead-post" href="#" style="--c:var(--yel)" data-in><span class="meta"><b>ai</b> · 2026-04-05</span><h3>软件订阅正在失效，创作者经济需要新的基础设施</h3></a>
+      <div class="more" data-in>
+        <a href="#" style="--c:var(--cy)"><span class="meta"><b>cardano</b> · 2026-03-25</span><h4>区块链的“组合性”演进：为什么 AI 时代需要的是 Cardano 而非 Ethereum？</h4></a>
+        <a href="d-article.html" style="--c:var(--mag)"><span class="meta"><b>engineering</b> · 2026-03-06</span><h4>Immutable Spec：让需求、设计、执行和验收收敛到同一份文档</h4></a>
+        <a href="#" style="--c:var(--grn)"><span class="meta"><b>essay</b> · 2026-03-02</span><h4>从认知到行动的健康长寿实践</h4></a>
+      </div>
+      <a class="cbtn sm alt" href="d-article.html" data-in>全部文章 →</a>
+    </div>
+  </section>
+
+  <section class="scn s-pao" id="pao" data-name="P·A·O" style="--c:var(--yel)" aria-label="P · A · O">
+    <div class="col" style="--c:var(--mag);--rot:-6deg"><span class="shape g-p" aria-hidden="true"></span><span class="w" data-in>04 // P — POOL</span><h3 data-in>运营 Cardano 矿池</h3><p data-in>矿池收入用于支付节点、服务器、AI 服务和产品开发。委托 ADA 即成为会员。</p></div>
+    <div class="col" style="--c:var(--cy);--rot:8deg"><span class="shape g-a" aria-hidden="true"></span><span class="w" data-in>A — AI</span><h3 data-in>构建 AI 产品</h3><p data-in>Coil 是你桌面上的交易 Agent；VODA 由 AI 编辑每天挑选 Cardano 动态。</p></div>
+    <div class="col" style="--c:var(--yel)"><span class="shape g-o" aria-hidden="true"></span><span class="w" data-in>O — OPEN</span><h3 data-in>开源与公开写作</h3><p data-in>Ouro Pass、utxray、ouro-ops 在 GitHub 开源，并持续分享运营实践。</p></div>
+  </section>
+
+  <section class="scn s-members" id="members" data-name="MEMBERS" style="--c:var(--grn)" aria-labelledby="h-members">
+    <div class="s-head" data-in style="--c:var(--yel)"><span class="tag" style="color:var(--grn)">05 // stake</span><h2 id="h-members">链上的<span class="hl">成员</span></h2></div>
+    <div class="cards">
+      <div class="dc" style="--c:var(--mag)" data-in><span class="no">#01</span><span class="addr">stake1u8kl…xe93nu</span><span class="amt tnum">₳ 889.69</span><span class="ep">since epoch 586</span></div>
+      <div class="dc" style="--c:var(--cy)" data-in><span class="no">#02</span><span class="addr">stake1uxxv…tsgyv</span><span class="amt tnum">₳ 517.43</span><span class="ep">since epoch 524 · <b>operator pledge</b></span></div>
+      <div class="dc" style="--c:var(--yel)" data-in><span class="no">#03</span><span class="addr">stake1uxre…63gmlc</span><span class="amt tnum">₳ 104.83</span><span class="ep">since epoch 650</span></div>
+      <div class="dc" style="--c:var(--grn)" data-in><span class="no">#04</span><span class="addr">stake1u96q…zecc8g</span><span class="amt tnum">₳ 27.65</span><span class="ep">since epoch 604</span></div>
+      <a class="dc next" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" data-in><span class="no">#05</span><span class="addr">你的 stake address</span><span class="amt">下一位就是你</span><span class="ep">委托给 PAO →</span></a>
+    </div>
+    <div class="poolline" data-in><span><b>PAO</b></span><span>pool1jh5p…0ksm<button class="copy" type="button" data-copy="pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">COPY</button></span><span>margin 3% · fixed ₳170</span><a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan ↗</a><a class="cbtn" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托给 Pao Pool →</a></div>
+  </section>
+
+  <section class="scn s-build" id="build" data-name="BUILD" style="--c:var(--mag)" aria-labelledby="h-build">
+    <h2 id="h-build" data-in><span class="o">LET'S</span><br><span class="m">BUILD.</span></h2>
+    <div class="acts" data-in><a class="cbtn" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托给 Pao Pool →</a><a class="cbtn alt" href="#">邮件联系 ↗</a><a class="cbtn alt" href="#">Telegram 社群</a></div>
+    <span class="fine">© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳ · X · GITHUB</span>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>X · GITHUB</span></div></footer>
+
+<div class="hud">
+  <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+  <div class="hud-top">SCENE <b class="idx">00</b> / 06 — <span class="nm">HOME</span></div>
+  <nav class="hud-nav" aria-label="场景"></nav>
+  <div class="hud-bot">
+    <span><i class="dot" aria-hidden="true"></i>LIVE <b style="color:var(--cy)">₳ 1,540</b> · <b style="color:var(--mag)">4</b> DELEGATORS · EPOCH <b style="color:var(--fg)" data-ep>—</b> <b style="color:var(--grn)" data-ep-left>—</b></span>
+    <span class="steps" aria-hidden="true"></span>
+    <span data-goal="1539.59">NEXT <b data-goal-name style="color:var(--fg)">—</b> · 还差 <b data-goal-left style="color:var(--yel)">—</b></span>
+  </div>
+  <div class="flash" aria-hidden="true"></div>
+</div>
+
+<nav class="proto-badge" aria-label="原型切换" style="bottom:70px">
+  <a href="index.html">总览</a><a href="d-neon-cyber.html">D</a><a href="d1-editorial.html">D1 杂志</a><a href="d2-filmstrip.html">D2 长卷</a><a href="d3-scenes.html" aria-current="page">D3 场景</a>
+</nav>
+
+<script src="dx-fx.js"></script>
+<script>
+(() => {
+  const html = document.documentElement;
+  const scenes = [...document.querySelectorAll('.scn')];
+  const SHAPES = ['p', 'a', 'o'];
+
+  // Works index: hovering a row swaps the preview with an RGB-split flick
+  const pv = document.querySelector('.pv');
+  const pvImg = pv.querySelector('img');
+  const rows = [...document.querySelectorAll('.wl a')];
+  const show = (a) => {
+    rows.forEach((r) => r.classList.toggle('on', r === a));
+    if (pvImg.getAttribute('src') === a.dataset.img) return;
+    pvImg.src = a.dataset.img;
+    pv.querySelectorAll('.r, .b').forEach((l) => (l.style.backgroundImage = `url(${a.dataset.img})`));
+    pv.style.setProperty('--c', getComputedStyle(a).getPropertyValue('--c'));
+    pv.querySelector('.cap').textContent = new URL(a.href, location.href).host || 'coming soon';
+    pv.classList.remove('swap'); void pv.offsetWidth; pv.classList.add('swap');
+  };
+  rows.forEach((a) => { a.addEventListener('pointerenter', () => show(a)); a.addEventListener('focus', () => show(a)); });
+
+  const coil = document.querySelector('.s-coil');
+  if (!html.classList.contains('scenes')) {
+    // Plain scroll: wake Coil when it comes into view
+    new IntersectionObserver(([e]) => e.isIntersecting && coil.classList.add('awake'), { threshold: .5 }).observe(coil);
+    return;
+  }
+
+  // HUD: shape nav + step bar
+  const nav = document.querySelector('.hud-nav');
+  const steps = document.querySelector('.hud-bot .steps');
+  scenes.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.style.setProperty('--c', s.style.getPropertyValue('--c'));
+    b.innerHTML = `<span>${String(i).padStart(2, '0')} ${s.dataset.name}</span><i class="${SHAPES[i % 3]}"></i>`;
+    b.addEventListener('click', () => go(i));
+    nav.appendChild(b);
+    steps.appendChild(document.createElement('i'));
+  });
+  const navBtns = [...nav.children], stepEls = [...steps.children];
+  const hudIdx = document.querySelector('.hud-top .idx'), hudNm = document.querySelector('.hud-top .nm'), hudTop = document.querySelector('.hud-top');
+  const flash = document.querySelector('.flash');
+
+  let cur = 0, busy = false, px = innerWidth / 2, py = innerHeight / 2;
+  addEventListener('pointermove', (e) => { px = e.clientX; py = e.clientY - 68; }, { passive: true });
+
+  const hud = (i) => {
+    const c = scenes[i].style.getPropertyValue('--c');
+    hudIdx.textContent = String(i).padStart(2, '0');
+    hudNm.textContent = scenes[i].dataset.name;
+    hudTop.style.setProperty('--c', c);
+    navBtns.forEach((b, k) => b.classList.toggle('on', k === i));
+    stepEls.forEach((s, k) => { s.classList.toggle('on', k <= i); s.style.setProperty('--c', c); });
+  };
+
+  // Mask keyframes per logo shape
+  const masks = (shape, dir) => {
+    if (shape === 'o') return [`circle(0% at ${px}px ${py}px)`, `circle(150% at ${px}px ${py}px)`];
+    if (shape === 'a') return dir > 0
+      ? ['polygon(50% 100%, 50% 100%, 50% 100%)', 'polygon(50% -160%, 260% 210%, -160% 210%)']
+      : ['polygon(50% 0%, 50% 0%, 50% 0%)', 'polygon(50% 260%, 260% -110%, -160% -110%)'];
+    return dir > 0
+      ? ['inset(0 100% 0 0 round 0 50vh 50vh 0)', 'inset(0 0 0 0 round 0 0 0 0)']
+      : ['inset(0 0 0 100% round 50vh 0 0 50vh)', 'inset(0 0 0 0 round 0 0 0 0)'];
+  };
+
+  const enterContent = (s) => s.querySelectorAll('[data-in]').forEach((el, k) =>
+    el.animate([{ opacity: 0, transform: 'translateY(30px)' }, { opacity: 1, transform: 'none' }], { duration: 700, delay: 380 + k * 70, easing: 'cubic-bezier(.2,.9,.2,1)', fill: 'backwards' }));
+
+  const go = (i) => {
+    i = Math.max(0, Math.min(scenes.length - 1, i));
+    if (busy || i === cur) return;
+    busy = true;
+    const from = scenes[cur], to = scenes[i], dir = i > cur ? 1 : -1;
+    const [a, b] = masks(SHAPES[i % 3], dir);
+    coil.classList.remove('awake');
+    to.classList.add('enter');
+    to.animate([{ clipPath: a }, { clipPath: b }], { duration: 900, easing: 'cubic-bezier(.76,0,.24,1)' });
+    from.animate([{ transform: 'none', filter: 'brightness(1)' }, { transform: `scale(.94) translateY(${-dir * 3}vh)`, filter: 'brightness(.4)' }], { duration: 900, easing: 'cubic-bezier(.76,0,.24,1)' });
+    flash.animate([{ opacity: 0 }, { opacity: 1, offset: .3 }, { opacity: 0 }], { duration: 420, easing: 'steps(4)' });
+    enterContent(to);
+    hud(i);
+    setTimeout(() => {
+      from.classList.remove('cur');
+      to.classList.remove('enter');
+      to.classList.add('cur');
+      cur = i;
+      history.replaceState(null, '', `#${to.id}`);
+      if (to === coil) setTimeout(() => coil.classList.contains('cur') && coil.classList.add('awake'), 700);
+      setTimeout(() => (busy = false), 250);
+    }, 900);
+  };
+
+  // Input: wheel (with inertia guard), keys, touch, in-page links
+  let acc = 0, lastWheel = 0;
+  addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const now = performance.now();
+    if (busy || now - lastWheel < 60 && Math.abs(e.deltaY) < 8) { lastWheel = now; return; }
+    lastWheel = now;
+    acc += e.deltaY;
+    if (Math.abs(acc) > 40) { go(cur + Math.sign(acc)); acc = 0; }
+  }, { passive: false });
+  addEventListener('keydown', (e) => {
+    if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(cur + 1); }
+    if (['ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); go(cur - 1); }
+    if (e.key === 'Home') go(0);
+    if (e.key === 'End') go(scenes.length - 1);
+  });
+  let ty = null;
+  addEventListener('touchstart', (e) => { ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchend', (e) => { if (ty !== null) { const d = ty - e.changedTouches[0].clientY; if (Math.abs(d) > 50) go(cur + Math.sign(d)); ty = null; } });
+  document.querySelectorAll('[data-go]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); go(+a.dataset.go); }));
+
+  // Hero lockup follows the pointer slightly
+  const lock = [...document.querySelectorAll('.lock > *')];
+  addEventListener('pointermove', (e) => {
+    if (cur !== 0) return;
+    const dx = e.clientX / innerWidth - .5, dy = e.clientY / innerHeight - .5;
+    lock.forEach((el) => (el.style.translate = `${(-dx * el.dataset.depth).toFixed(1)}px ${(-dy * el.dataset.depth).toFixed(1)}px`));
+  });
+
+  const start = Math.max(0, scenes.findIndex((s) => `#${s.id}` === location.hash));
+  cur = start;
+  scenes[start].classList.add('cur');
+  hud(start);
+  enterContent(scenes[start]);
+  if (scenes[start] === coil) setTimeout(() => coil.classList.add('awake'), 900);
+})();
+</script>
+</body>
+</html>

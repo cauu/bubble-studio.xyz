@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D5 · 作品 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<link rel="stylesheet" href="d5-pages.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+.coil { display: block; border: 1px solid var(--line); background: var(--void-2); }
+.coil:hover { border-color: var(--cy); box-shadow: 0 0 0 1px var(--cy), 0 0 60px -18px var(--cy); }
+.coil .scene { position: relative; display: block; aspect-ratio: 1440 / 500; overflow: hidden; background: #dff0ff; }
+.coil .scene img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 92%; image-rendering: pixelated; transition: opacity .5s; }
+.coil .scene .awake { opacity: 0; } .coil:hover .scene .awake { opacity: 1; }
+.coil .cap { display: flex; align-items: center; gap: 24px; padding: 18px 22px; }
+.coil .cap h3 { font-family: var(--mono); font-size: clamp(32px, 3vw, 48px); font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.coil .cap .lead { font-size: 17px; font-weight: 800; } .coil .cap .specs { font-family: var(--mono); font-size: 12px; color: var(--fg-dim); margin-top: 4px; }
+.coil .cap .cbtn { margin-left: auto; }
+.voda { display: grid; grid-template-columns: 1.2fr 1fr; margin-top: 20px; border: 1px solid var(--line); background: var(--void-2); }
+.voda .wb { padding: 32px; display: flex; flex-direction: column; gap: 12px; }
+.voda h3 { font-family: var(--mono); font-size: clamp(32px, 3vw, 48px); font-weight: 800; line-height: 1; }
+.voda .lead { color: var(--fg) !important; font-weight: 800; font-size: 17px; }
+.voda .links { margin-top: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+.th { display: block; overflow: hidden; background: var(--c); aspect-ratio: 16 / 10; }
+.th img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15); mix-blend-mode: multiply; transition: filter .4s, transform .6s var(--out); }
+.wcard:hover .th img, .voda:hover .th img { filter: none; mix-blend-mode: normal; transform: scale(1.04); }
+.wgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.wgrid .wcard:nth-child(3n+2) { margin-top: 48px; }
+.wcard { display: flex; flex-direction: column; border: 1px solid var(--line); background: var(--void-2); transition: border-color .3s; }
+.wcard:hover { border-color: var(--c); }
+.wb { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 8px; }
+.wb p { color: var(--fg-dim); font-size: 14px; line-height: 1.7; }
+.wcard h3 { font-family: var(--mono); font-size: 26px; font-weight: 800; letter-spacing: -.02em; transition: color .2s; }
+.wcard:hover h3 { color: var(--c); }
+.wcard .links { display: flex; gap: 18px; margin-top: 6px; font-family: var(--mono); font-size: 12.5px; font-weight: 800; }
+.wcard .links a { color: var(--c); }
+.wcard.more { justify-content: center; padding: 32px; gap: 12px; border-style: dashed; min-height: 300px; }
+.wcard.more .num { font-family: var(--mono); font-size: 72px; font-weight: 800; line-height: .8; color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
+.wcard.more .go { font-family: var(--mono); font-size: 13px; font-weight: 800; color: var(--cy); }
+@media (max-width: 900px) {
+  .coil .scene { aspect-ratio: 4 / 3; } .coil .cap { flex-wrap: wrap; } .coil .cap .cbtn { margin-left: 0; }
+  .voda { grid-template-columns: 1fr; } .voda .wb { padding: 22px; }
+  .wgrid { grid-template-columns: 1fr; } .wgrid .wcard:nth-child(n) { margin-top: 0; }
+}
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="d5-hybrid.html"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="d5-hybrid.html">/home</a><a href="d5-works.html" aria-current="page">/works</a><a href="d5-blog.html">/blog</a><a href="d5-skills.html">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托 PAO</a></div>
+  </div>
+</nav>
+
+<main>
+<header class="ph" style="--c:var(--cy)">
+    <div class="art" aria-hidden="true"><span class="g-p" data-py=".06"></span><span class="g-a" data-py="-.04"></span><span class="g-o" data-py=".08"></span></div>
+    <div class="crumb rise">&gt; <a href="d5-hybrid.html">~</a>/works</div>
+    
+    <h1 class="rise" style="--d:.1s"><span class="hl">作品</span></h1>
+    <p class="sub rise" style="--d:.18s">AI 产品、开源基础设施与链上应用。</p>
+    
+  </header>
+  <div class="gate rise" style="--c:var(--mag)"><span class="num">01</span><div><span class="en">AI PRODUCTS</span><h2>AI 产品</h2></div></div>
+  <div class="lane">
+    <a class="coil rise" href="https://coil.win/">
+      <span class="scene"><img src="coil-sleep-wide.png" alt="" width="1440" height="730"><img class="awake" src="coil-awake-wide.png" alt="" width="1440" height="730"></span>
+      <span class="cap"><h3>Coil</h3><span><span class="lead" style="display:block">Your desktop trading agent.</span><span class="specs" style="display:block">NEW · v0.3.0 · macOS · Apple Silicon</span></span><span class="cbtn sm">下载 Coil ↓</span></span>
+    </a>
+    <article class="voda corners rise" style="--c:var(--yel)">
+      <a class="th" href="https://voda.paopao.studio/"><img src="../../../public/images/projects/voda.jpg" alt="VODA 截图" width="1200" height="750"></a>
+      <div class="wb"><span class="meta"><b>AI · APP</b> · 应用</span><h3>VOD₳</h3><p class="lead">AI 编辑每日精选 Cardano 动态。</p><p>用于追踪 Cardano 社区与治理动态的应用。</p>
+      <div class="links"><a class="cbtn sm" href="https://voda.paopao.studio/" style="background:var(--yel)">今日精选 ↗</a><a class="cbtn sm alt" href="https://voda.paopao.studio/governance">治理提案</a></div></div>
+    </article>
+  </div>
+  <div class="gate rise" style="--c:var(--cy)"><span class="num">02</span><div><span class="en">INFRASTRUCTURE · OPEN SOURCE</span><h2>基础设施</h2></div></div>
+  <div class="lane wgrid">
+      <article class="wcard corners rise" style="--c:var(--cy);--d:0.00s">
+        <a class="th" href="https://ouro-pass.paopao.studio/"><img src="../../../public/images/projects/ouro-pass.jpg" alt="Ouro Pass 截图" width="1200" height="750"></a>
+        <div class="wb"><span class="meta"><b>OSS</b> · 基础设施</span><h3>ouro-pass</h3><p>基于 Cardano 的去中心化身份与订阅基础设施。</p>
+        <div class="links"><a href="https://ouro-pass.paopao.studio/">访问 ↗</a><a href="https://github.com/cauu/ouro-pass">GitHub ↗</a></div></div>
+      </article>
+      <article class="wcard corners rise" style="--c:var(--mag);--d:0.08s">
+        <a class="th" href="https://utxray.paopao.studio/"><img src="../../../public/images/projects/utxray.jpg" alt="utxray 截图" width="1200" height="750"></a>
+        <div class="wb"><span class="meta"><b>OSS</b> · 基础设施</span><h3>utxray</h3><p>面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。</p>
+        <div class="links"><a href="https://utxray.paopao.studio/">访问 ↗</a><a href="https://github.com/cauu/utxray">GitHub ↗</a></div></div>
+      </article>
+      <article class="wcard corners rise" style="--c:var(--grn);--d:0.16s">
+        <a class="th" href="https://ouro-ops.paopao.studio/"><img src="../../../public/images/projects/ouro-ops.jpg" alt="Ouro Ops 截图" width="1200" height="750"></a>
+        <div class="wb"><span class="meta"><b>OSS</b> · 基础设施</span><h3>ouro-ops</h3><p>面向 AI Agent 的 Cardano Stake Pool 运维工具。</p>
+        <div class="links"><a href="https://ouro-ops.paopao.studio/">访问 ↗</a><a href="https://github.com/cauu/ouro-ops">GitHub ↗</a></div></div>
+      </article>
+  </div>
+  <div class="gate rise" style="--c:var(--grn)"><span class="num">03</span><div><span class="en">APPLICATIONS</span><h2>应用</h2></div></div>
+  <div class="lane wgrid">
+      <article class="wcard corners rise" style="--c:var(--pur)">
+        <a class="th" href="#"><img src="../../../public/images/projects/cardano-lottery.jpg" alt="lottery 截图" width="1200" height="750"></a>
+        <div class="wb"><span class="meta"><b>APP</b> · 应用</span><h3>lottery</h3><p>基于 Cardano 构建的去中心化彩票应用。</p><div class="links"><a href="#">访问 ↗</a></div></div>
+      </article>
+  </div>
+  <div class="sec-end"></div>
+</main>
+
+<footer class="sitefoot">
+  <div class="top">
+    <div class="brand"><img src="pao_logo_dark.svg" alt="Pao Studio" width="185" height="26"><p>在 Cardano 上构建 AI 产品与开源工具。<br>Stake with PAO Pool，获取质押奖励，同时享受增值服务。</p></div>
+    <div><h4>EXPLORE</h4><ul><li><a href="d5-works.html">作品</a></li><li><a href="d5-blog.html">博客</a></li><li><a href="d5-skills.html">Skills</a></li></ul></div>
+    <div><h4>SOCIAL</h4><ul><li><a href="https://x.com/cauu_128">X ↗</a></li><li><a href="https://github.com/cauu">GitHub ↗</a></li></ul></div>
+  </div>
+  <div class="bot"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>EPOCH <b data-ep>—</b> · <span data-ep-left>—</span></span></div>
+</footer>
+
+<nav class="proto-badge" aria-label="原型切换"><a href="index.html">总览</a><a href="d5-hybrid.html">首页</a><a href="d5-works.html" aria-current="page">作品</a><a href="d5-blog.html">博客</a><a href="d5-article.html">文章</a><a href="d5-skills.html">Skills</a><a href="d5-governance.html">治理</a><a href="d5-about.html">关于</a><a href="d5-staking.html">质押</a></nav>
+
+<script src="dx-fx.js"></script>
+<script src="d5-pages.js"></script>
+
+</body>
+</html>

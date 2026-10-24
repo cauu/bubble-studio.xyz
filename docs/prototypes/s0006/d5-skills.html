@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D5 · Skills — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<link rel="stylesheet" href="d5-pages.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+.skgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.skgrid .sk:nth-child(even) { margin-top: 48px; }
+.sk { min-width: 0; display: flex; flex-direction: column; gap: 14px; padding: 26px; background: var(--void-2); border: 1px solid var(--line); transition: border-color .3s; }
+.sk:hover { border-color: var(--c); }
+.sk .sh { display: flex; align-items: center; justify-content: space-between; }
+.sk .n { font-family: var(--mono); font-size: 54px; font-weight: 800; line-height: .8; color: transparent; -webkit-text-stroke: 1.3px var(--c); transition: color .3s; }
+.sk:hover .n { color: var(--c); }
+.sk h3 { font-family: var(--mono); font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; letter-spacing: -.02em; }
+.sk p { color: var(--fg-dim); font-size: 15px; line-height: 1.8; }
+.cmd { display: flex; align-items: center; gap: 10px; padding: 12px 12px 12px 14px; background: #05040a; border: 1px solid var(--line); font-family: var(--mono); font-size: 12.5px; margin-top: auto; }
+.cmd .pr { color: var(--c); font-weight: 800; }
+.cmd code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; color: var(--fg); }
+.sk .def { font-family: var(--mono); font-size: 12.5px; font-weight: 800; color: var(--c); }
+@media (max-width: 900px) { .skgrid { grid-template-columns: minmax(0, 1fr); } .skgrid .sk:nth-child(n) { margin-top: 0; } }
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="d5-hybrid.html"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="d5-hybrid.html">/home</a><a href="d5-works.html">/works</a><a href="d5-blog.html">/blog</a><a href="d5-skills.html" aria-current="page">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托 PAO</a></div>
+  </div>
+</nav>
+
+<main>
+<header class="ph" style="--c:var(--grn)">
+    <div class="art" aria-hidden="true"><span class="g-p" data-py=".06"></span><span class="g-a" data-py="-.04"></span><span class="g-o" data-py=".08"></span></div>
+    <div class="crumb rise">&gt; <a href="d5-hybrid.html">~</a>/skills</div>
+    
+    <h1 class="rise" style="--d:.1s">工程 <span class="hl">Skills</span></h1>
+    <p class="sub rise" style="--d:.18s">面向 Coding Agent，开源、可独立安装。<a class="gh" href="https://github.com/cauu/skills">GitHub ↗</a></p>
+    
+  </header>
+  <div class="gate rise" style="--c:var(--grn)"><span class="num">01</span><div><span class="en">INSTALL ONE BY ONE</span><h2>按需安装，各自独立</h2></div><p class="aside">每个 Skill 都可以单独安装，复制命令到终端即可。</p></div>
+  <div class="lane skgrid">
+    <article class="sk corners rise" style="--c:var(--yel);--d:0.00s">
+      <div class="sh"><span class="n">01</span><span class="meta"><b>可持续迭代协议</b></span></div>
+      <h3>immutable-spec</h3>
+      <p>让用户和 AI 围绕同一份 Spec 及其关联文档持续推进项目，每轮计划、决策、执行结果和验收证据都有记录可查。</p>
+      <div class="cmd"><span class="pr">$</span><code>npx skills@latest add cauu/skills --skill immutable-spec</code><button class="copy" type="button" data-copy="npx skills@latest add cauu/skills --skill immutable-spec" aria-label="复制 immutable-spec 的安装命令">COPY</button></div>
+      <a class="def" href="https://github.com/cauu/skills">查看定义 ↗</a>
+    </article>
+    <article class="sk corners rise" style="--c:var(--cy);--d:0.08s">
+      <div class="sh"><span class="n">02</span><span class="meta"><b>开发前检查</b></span></div>
+      <h3>challenge</h3>
+      <p>在开始开发前，先检查问题是否真实、方案是否过度复杂、关键假设是否成立，避免做错或做多。</p>
+      <div class="cmd"><span class="pr">$</span><code>npx skills@latest add cauu/skills --skill challenge</code><button class="copy" type="button" data-copy="npx skills@latest add cauu/skills --skill challenge" aria-label="复制 challenge 的安装命令">COPY</button></div>
+      <a class="def" href="https://github.com/cauu/skills">查看定义 ↗</a>
+    </article>
+    <article class="sk corners rise" style="--c:var(--pur);--d:0.00s">
+      <div class="sh"><span class="n">03</span><span class="meta"><b>代码设计</b></span></div>
+      <h3>codebase-design</h3>
+      <p>在写代码前先划清模块职责和交互方式，让复杂逻辑待在合适的位置，后续更容易修改和测试。</p>
+      <div class="cmd"><span class="pr">$</span><code>npx skills@latest add cauu/skills --skill codebase-design</code><button class="copy" type="button" data-copy="npx skills@latest add cauu/skills --skill codebase-design" aria-label="复制 codebase-design 的安装命令">COPY</button></div>
+      <a class="def" href="https://github.com/cauu/skills">查看定义 ↗</a>
+    </article>
+    <article class="sk corners rise" style="--c:var(--grn);--d:0.08s">
+      <div class="sh"><span class="n">04</span><span class="meta"><b>开发</b></span></div>
+      <h3>tdd</h3>
+      <p>围绕一个具体行为，先写一个会失败的测试，再写最少的代码让它通过，逐步完成开发。</p>
+      <div class="cmd"><span class="pr">$</span><code>npx skills@latest add cauu/skills --skill tdd</code><button class="copy" type="button" data-copy="npx skills@latest add cauu/skills --skill tdd" aria-label="复制 tdd 的安装命令">COPY</button></div>
+      <a class="def" href="https://github.com/cauu/skills">查看定义 ↗</a>
+    </article>
+    <article class="sk corners rise" style="--c:var(--mag);--d:0.00s">
+      <div class="sh"><span class="n">05</span><span class="meta"><b>代码审查</b></span></div>
+      <h3>code-review</h3>
+      <p>让三个相互隔离的 Reviewer 分别检查同一份代码，再核实并合并问题，最后交给人决定是否处理。</p>
+      <div class="cmd"><span class="pr">$</span><code>npx skills@latest add cauu/skills --skill code-review</code><button class="copy" type="button" data-copy="npx skills@latest add cauu/skills --skill code-review" aria-label="复制 code-review 的安装命令">COPY</button></div>
+      <a class="def" href="https://github.com/cauu/skills">查看定义 ↗</a>
+    </article>
+    <article class="sk corners rise" style="--c:var(--fg);--d:0.08s">
+      <div class="sh"><span class="n">06</span><span class="meta"><b>仓库导航</b></span></div>
+      <h3>codebase-map</h3>
+      <p>为代码仓库维护一份简明的导航地图，记录重要目录、模块职责和关键入口，方便人和 Agent 快速找到代码。</p>
+      <div class="cmd"><span class="pr">$</span><code>npx skills@latest add cauu/skills --skill codebase-map</code><button class="copy" type="button" data-copy="npx skills@latest add cauu/skills --skill codebase-map" aria-label="复制 codebase-map 的安装命令">COPY</button></div>
+      <a class="def" href="https://github.com/cauu/skills">查看定义 ↗</a>
+    </article>
+  </div>
+  <div class="sec-end"></div>
+</main>
+
+<footer class="sitefoot">
+  <div class="top">
+    <div class="brand"><img src="pao_logo_dark.svg" alt="Pao Studio" width="185" height="26"><p>在 Cardano 上构建 AI 产品与开源工具。<br>Stake with PAO Pool，获取质押奖励，同时享受增值服务。</p></div>
+    <div><h4>EXPLORE</h4><ul><li><a href="d5-works.html">作品</a></li><li><a href="d5-blog.html">博客</a></li><li><a href="d5-skills.html">Skills</a></li></ul></div>
+    <div><h4>SOCIAL</h4><ul><li><a href="https://x.com/cauu_128">X ↗</a></li><li><a href="https://github.com/cauu">GitHub ↗</a></li></ul></div>
+  </div>
+  <div class="bot"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>EPOCH <b data-ep>—</b> · <span data-ep-left>—</span></span></div>
+</footer>
+
+<nav class="proto-badge" aria-label="原型切换"><a href="index.html">总览</a><a href="d5-hybrid.html">首页</a><a href="d5-works.html">作品</a><a href="d5-blog.html">博客</a><a href="d5-article.html">文章</a><a href="d5-skills.html" aria-current="page">Skills</a><a href="d5-governance.html">治理</a><a href="d5-about.html">关于</a><a href="d5-staking.html">质押</a></nav>
+
+<script src="dx-fx.js"></script>
+<script src="d5-pages.js"></script>
+
+</body>
+</html>

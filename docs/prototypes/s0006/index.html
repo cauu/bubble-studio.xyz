@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S0006 原型总览</title>
+<link rel="stylesheet" href="base.css">
+<style>
+main { padding: 72px 0 120px; }
+h1 { font-size: clamp(32px, 4.4vw, 52px); line-height: 1.12; font-weight: 900; margin: 14px 0 14px; }
+.intro { max-width: 46em; font-size: 16px; line-height: 1.75; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 48px; }
+.opt { display: flex; flex-direction: column; border-radius: 24px; padding: 28px; background: #fff; box-shadow: 0 1px 2px rgba(23,32,38,.05), 0 4px 12px rgba(23,32,38,.06); transition: transform .45s var(--spring), box-shadow .3s; }
+.opt:hover { transform: translateY(-6px); box-shadow: 0 6px 14px rgba(23,32,38,.05), 0 26px 56px rgba(23,32,38,.12); }
+.swatch { height: 120px; border-radius: 16px; margin-bottom: 22px; position: relative; overflow: hidden; }
+.opt .k { font-size: 12px; font-weight: 800; letter-spacing: .12em; color: var(--muted); }
+.opt h2 { font-size: 24px; margin: 4px 0 10px; }
+.opt p { font-size: 14px; line-height: 1.7; }
+.opt ul { margin: 16px 0 20px 18px; font-size: 13.5px; line-height: 1.8; }
+.opt .go { margin-top: auto; font-weight: 700; color: var(--ink); }
+.base { margin-top: 56px; padding: 28px; border-radius: 24px; background: var(--card); display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.base h2 { font-size: 22px; margin-bottom: 8px; }
+.base ul { margin-left: 18px; font-size: 14px; line-height: 1.8; }
+.base a { text-decoration: underline; text-underline-offset: 3px; font-weight: 600; color: var(--ink); }
+.grid.two { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 900px) { .grid, .grid.two, .base { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <span class="chip">S0006 · s6-01</span>
+  <h1>首页视觉与动效方向原型</h1>
+  <p class="intro">三个方向都基于当前首页的真实中文文案与 section 顺序，只使用 Bubble-light 八色、Inter 与现有 token，Footer 保持浅色，并支持 <code>prefers-reduced-motion</code> 降级。请在桌面浏览器打开并滚动、悬停体验动效；选定方向（或组合）后进入 s6-02 冻结动效合同。</p>
+
+  <div class="grid">
+    <a class="opt" href="a-bubble-float.html">
+      <div class="swatch" style="background:radial-gradient(60px 60px at 25% 40%,var(--sky),transparent 70%),radial-gradient(40px 40px at 70% 30%,var(--lavender),transparent 70%),radial-gradient(30px 30px at 60% 75%,var(--lemon),transparent 70%),var(--canvas)"></div>
+      <span class="k">方向 A</span><h2>泡泡浮游</h2>
+      <p>世界观驱动：泡泡成为品牌的物理介质，延续当前版本的结构和气质，改动最温和。</p>
+      <ul><li>Hero 漂浮泡泡 + 指针视差，标题弹性上升</li><li>数字 count-up，玻璃 ledger 卡轻微浮动</li><li>序号泡泡弹出、收入流程中泡泡沿管道流动</li></ul>
+      <span class="go">打开原型 →</span>
+    </a>
+    <a class="opt" href="b-kinetic-editorial.html">
+      <div class="swatch" style="background:var(--canvas);display:grid;place-items:center;font-size:44px;font-weight:900;color:var(--ink);border:1px solid var(--hairline)">一人公司</div>
+      <span class="k">方向 B</span><h2>动态编辑</h2>
+      <p>排版驱动：超大字与滚动叙事，颜色克制，适合以内容与观点建立信任。</p>
+      <ul><li>逐字遮罩上升的巨型标题、关键词跑马灯</li><li>质押步骤随滚动点亮，进度线填充</li><li>收入陈述随滚动逐字上色，流程描线绘制</li></ul>
+      <span class="go">打开原型 →</span>
+    </a>
+    <a class="opt" href="c-color-bento.html">
+      <div class="swatch" style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;padding:8px;background:var(--canvas)"><i style="background:#fff;border-radius:10px"></i><i style="background:var(--teal);border-radius:10px"></i><i style="background:var(--lemon);border-radius:10px"></i><i style="background:var(--sky);border-radius:10px"></i><i style="background:var(--lavender);border-radius:10px"></i><i style="background:var(--grass);border-radius:10px"></i></div>
+      <span class="k">方向 C</span><h2>彩色便当</h2>
+      <p>规范驱动：完整落实 Bubble-light「饱和色卡片轮换」，视觉冲击最强，改动最大。</p>
+      <ul><li>首屏便当格，色块弹性入场并带贴纸旋转</li><li>3D 指针倾斜与高光</li><li>收入构成以积木下落堆叠呈现</li></ul>
+      <span class="go">打开原型 →</span>
+    </a>
+  </div>
+
+  <h2 style="font-size:28px;margin-top:64px">第二轮 · Logo 色彩探索</h2>
+  <p class="intro" style="margin-top:8px">取色自 Pao Studio Logo 的霓虹渐变（P 粉 #FC5FF6→#C60A76、A 青 #2FFFF3→#078CBE、O 黄 #FFF590→#D9B201，另有绿、紫），不受当前排版与内容限制，并删除「收入构成」。两者都突破了 Bubble-light 的浅色画布与八色合同，选定后需在 s6-02 改写视觉合同。</p>
+  <div class="grid two" style="margin-top:28px">
+    <a class="opt" href="d-neon-cyber.html">
+      <div class="swatch" style="background:#0a0910;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:0"><i style="background:linear-gradient(#fc5ff6,#c60a76)"></i><i style="background:linear-gradient(#2ffff3,#078cbe)"></i><i style="background:linear-gradient(#fff590,#d9b201)"></i></div>
+      <span class="k">方向 D · 已选定 · v2</span><h2>霓虹赛博</h2>
+      <p>深色底 + Logo 几何（P / 三角 / 圆）放大成大色块，HUD 网格、扫描线、RGB 故障字。</p>
+      <ul><li>全屏开场：P → A → O 拼出 PAO，再飞入 Hero（每会话一次，<code>?intro</code> 强制重播）</li><li>Hero 色块指针视差、滚动解体；矿池实时数据与 epoch 倒计时并入 Hero 状态栏</li><li>动效分级：故障字只在入场与悬停触发，扫描光只扫一次，跑马灯随滚动加速</li></ul>
+      <span class="go">打开首页原型 →</span>
+    </a>
+    <a class="opt" href="e-riso-print.html">
+      <div class="swatch" style="background:#f6efdc;position:relative"><i style="position:absolute;right:18%;top:14px;width:92px;height:92px;border-radius:50%;background:#ff48b0;box-shadow:-8px 4px 0 #ff6c2f"></i><i style="position:absolute;left:0;right:0;bottom:0;height:34px;background-image:radial-gradient(circle,#00a95c 34%,transparent 37%);background-size:6px 6px;background-color:#d9e04a"></i></div>
+      <span class="k">方向 E</span><h2>孔版印刷</h2>
+      <p>纸张底色、荧光粉/黄/蓝套色、网点与套印错位，首屏还原参考图的落日小镇场景。</p>
+      <ul><li>粉色太阳升起、泡泡上浮、滚动视差</li><li>撕票式权益卡、双色调项目明信片</li><li>油墨偏移抖动、按钮压印反馈</li></ul>
+      <span class="go">打开原型 →</span>
+    </a>
+  </div>
+
+  <div class="grid two" style="margin-top:18px">
+    <a class="opt" href="d-article.html">
+      <div class="swatch" style="background:linear-gradient(#0a0910 0 38%,#f6f5fa 38%);position:relative"><i style="position:absolute;left:18px;bottom:22px;width:56%;height:6px;background:#17151f;opacity:.7;box-shadow:0 -14px 0 #17151f,0 14px 0 rgba(23,21,31,.4)"></i><i style="position:absolute;left:0;top:0;height:3px;width:46%;background:linear-gradient(90deg,#fc5ff6,#2ffff3,#fff590)"></i></div>
+      <span class="k">方向 D · 文章页</span><h2>阅读模式</h2>
+      <p>赛博元素只留在导航、文章头和代码块，正文放在浅色纸面上；可切换「夜读」。</p>
+      <ul><li>Logo 渐变阅读进度条、粘性目录高亮当前章节</li><li>章节号色块轮换 Logo 色，代码块为终端样式</li><li>文末接下一篇与「质押即订阅」入口</li></ul>
+      <span class="go">打开文章原型 →</span>
+    </a>
+  </div>
+
+  <h2 style="font-size:28px;margin-top:64px">第三轮 · D 排版与转场探索</h2>
+  <p class="intro" style="margin-top:8px">保留霓虹赛博的配色、粒子和 Logo 几何，只换版式与转场思路。内容与 D 首页一致：作品 → 文章 → P·A·O → 链上的成员 → 收尾。窄屏或减少动态效果时三版都退化为普通纵向滚动。</p>
+  <div class="grid two" style="margin-top:28px">
+    <a class="opt" href="d1-editorial.html">
+      <div class="swatch" style="background:#0a0910;display:grid;place-items:center;font-size:56px;font-weight:900;color:#f4f2ff;background-image:repeating-linear-gradient(90deg,rgba(244,242,255,.08) 0 1px,transparent 1px 8.33%)">一人<span style="color:transparent;-webkit-text-stroke:1px #2ffff3;font-family:monospace;margin-left:10px">01</span></div>
+      <span class="k">D1</span><h2>杂志网格</h2>
+      <p>可见 12 栏、左侧竖排章节索引、巨型描边章节号随滚动横移；阶梯式作品索引、拼贴式文章、账本式成员表。</p>
+      <span class="go">打开原型 →</span>
+    </a>
+    <a class="opt" href="d2-filmstrip.html">
+      <div class="swatch" style="background:#0a0910;display:flex;gap:6px;padding:14px;overflow:hidden"><i style="flex:none;width:40%;background:linear-gradient(#fc5ff6,#c60a76)"></i><i style="flex:none;width:3px;background:#2ffff3;box-shadow:0 0 10px #2ffff3"></i><i style="flex:none;width:30%;background:#dff0ff"></i><i style="flex:none;width:30%;background:#13111c;border:1px solid rgba(244,242,255,.2)"></i></div>
+      <span class="k">D2</span><h2>横向长卷</h2>
+      <p>纵向滚动驱动整条横向长卷，章节间以竖排闸门分隔，元素按深度视差；底部 HUD 常驻矿池数据与章节时间轴。</p>
+      <span class="go">打开原型 →</span>
+    </a>
+    <a class="opt" href="d5-hybrid.html" style="outline:2px solid #2ffff3;outline-offset:-2px">
+      <div class="swatch" style="background:#0a0910;position:relative;overflow:hidden"><i style="position:absolute;left:14px;right:14px;top:26px;height:2px;background:#2ffff3;box-shadow:0 0 10px #2ffff3"></i><i style="position:absolute;left:22%;right:22%;top:44px;bottom:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px"><b style="background:#fff590;height:46px"></b><b style="background:#2ffff3;height:46px;margin-top:14px"></b><b style="background:#fc5ff6;height:46px"></b></i></div>
+      <span class="k">D5 · 当前推荐</span><h2>D + D4 综合</h2>
+      <p>D 的开场、Hero 与状态栏 + D4 的章节分割线、出场与视差动效、作品排版；内容收进 1180 px 阅读宽度。</p>
+      <span class="go">打开原型 →</span>
+    </a>
+    <a class="opt" href="d4-vertical.html">
+      <div class="swatch" style="background:#0a0910;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:14px;align-items:start"><i style="height:60%;background:#fff590"></i><i style="height:60%;margin-top:22px;background:#2ffff3"></i><i style="height:60%;background:#fc5ff6"></i><i style="height:60%;margin-top:22px;background:#31ee6b"></i><i style="height:60%;background:#c141f2"></i></div>
+      <span class="k">D4</span><h2>纵向长卷</h2>
+      <p>D2 的模块排版改为纵向滚动：横向章节闸门、错落卡片行、并排 P·A·O、纵向视差与底部 HUD 时间轴。</p>
+      <span class="go">打开原型 →</span>
+    </a>
+    <a class="opt" href="d3-scenes.html">
+      <div class="swatch" style="background:#0a0910;position:relative;overflow:hidden"><i style="position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px;border-radius:50%;background:radial-gradient(circle,#13111c 60%,#2ffff3 61%,#2ffff3 62%,transparent 63%)"></i><i style="position:absolute;right:14px;top:20px;display:grid;gap:6px"><b style="width:8px;height:8px;background:#fc5ff6;border-radius:0 9px 9px 0"></b><b style="width:8px;height:8px;background:#2ffff3;clip-path:polygon(50% 0,100% 100%,0 100%)"></b><b style="width:8px;height:8px;background:#fff590;border-radius:50%"></b></i></div>
+      <span class="k">D3</span><h2>全屏场景</h2>
+      <p>逐屏切换的场景式首页，入场蒙版轮流使用 P / 三角 / 圆；HUD 框架常驻，Coil 场景进入后自动醒来。</p>
+      <span class="go">打开原型 →</span>
+    </a>
+  </div>
+
+  <h2 style="font-size:28px;margin-top:64px">第四轮 · D5 全站页面</h2>
+  <p class="intro" style="margin-top:8px">以 D5 为最终方向，用站内真实内容（messages、文章、项目、治理数据）设计全站页面。共享 <code>dx-base.css</code>、<code>d5-pages.css</code>、<code>dx-fx.js</code>、<code>d5-pages.js</code>。Products 路由已重定向到作品页，不单独设计。</p>
+  <div class="grid" style="margin-top:28px;grid-template-columns:repeat(4,1fr)">
+    <a class="opt" href="d5-hybrid.html" style="padding:22px"><span class="k">D5 · 首页</span><h2 style="font-size:20px">首页</h2><p>Hero「Stake with PAO Pool」、状态栏与阶段进度、作品 / 文章 / P·A·O / 成员</p><span class="go">打开 →</span></a>
+    <a class="opt" href="d5-works.html" style="padding:22px"><span class="k">D5 · 作品</span><h2 style="font-size:20px">作品</h2><p>AI 产品（Coil 横幅、VODA）、开源基础设施、链上应用</p><span class="go">打开 →</span></a>
+    <a class="opt" href="d5-blog.html" style="padding:22px"><span class="k">D5 · 博客</span><h2 style="font-size:20px">博客</h2><p>分类筛选、最新精选、按年份分组的文章索引</p><span class="go">打开 →</span></a>
+    <a class="opt" href="d5-article.html" style="padding:22px"><span class="k">D5 · 文章</span><h2 style="font-size:20px">文章</h2><p>深色阅读、目录高亮、阅读进度、可切换日读</p><span class="go">打开 →</span></a>
+    <a class="opt" href="d5-skills.html" style="padding:22px"><span class="k">D5 · Skills</span><h2 style="font-size:20px">Skills</h2><p>6 个工程 Skills，一键复制安装命令</p><span class="go">打开 →</span></a>
+    <a class="opt" href="d5-governance.html" style="padding:22px"><span class="k">D5 · 治理</span><h2 style="font-size:20px">治理</h2><p>治理行动卡片、支持 / 反对比例、epoch 侧栏</p><span class="go">打开 →</span></a>
+    <a class="opt" href="d5-about.html" style="padding:22px"><span class="k">D5 · 关于</span><h2 style="font-size:20px">关于</h2><p>工作室、作者、矿池三段公开身份</p><span class="go">打开 →</span></a>
+    <a class="opt" href="d5-staking.html" style="padding:22px"><span class="k">D5 · 质押指南</span><h2 style="font-size:20px">质押指南</h2><p>机制、奖励周期、核验矿池、委托步骤、FAQ、来源</p><span class="go">打开 →</span></a>
+  </div>
+
+  <div class="base">
+    <div>
+      <h2>当前版本基线</h2>
+      <ul><li><a href="baseline/home-zh-1440.png">首页 1440 px 截图</a></li><li><a href="baseline/home-zh-375.png">首页 375 px 截图</a></li></ul>
+    </div>
+    <div>
+      <h2>说明</h2>
+      <ul><li>矿池数据为截图时的展示值，仅作原型示意。</li><li>原型为静态 HTML，不代表最终组件拆分；动效数值在 s6-02 冻结。</li><li>方向可组合，例如 C 的配色 + A 的泡泡首屏。</li></ul>
+    </div>
+  </div>
+</main>
+<nav class="proto-badge" aria-label="原型切换">
+  <a href="index.html" aria-current="page">总览</a><a href="a-bubble-float.html">A 泡泡浮游</a><a href="b-kinetic-editorial.html">B 动态编辑</a><a href="c-color-bento.html">C 彩色便当</a><a href="d-neon-cyber.html">D</a><a href="e-riso-print.html">E</a><a href="d1-editorial.html">D1</a><a href="d2-filmstrip.html">D2</a><a href="d3-scenes.html">D3</a><a href="d4-vertical.html">D4</a><a href="d5-hybrid.html">D5</a><a href="d5-works.html">D5 页面</a>
+</nav>
+</body>
+</html>
