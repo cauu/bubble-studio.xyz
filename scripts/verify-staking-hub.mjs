@@ -103,20 +103,12 @@ const getPage = async ({ name, path: pathname }) => {
 };
 
 const stakingSource = await fs.readFile(path.join(process.cwd(), 'src/app/[locale]/staking/page.tsx'), 'utf8');
-const stakingSections = [...stakingSource.matchAll(/<section\b[^>]*className="([^"]*)"/g)].map((match) => match[1]);
-
-assert(
-  stakingSections.every((className) => !className.includes('bg-primary') && !className.includes('bg-brand-lemon')),
-  'visual contract: full-width primary or lemon section remains'
-);
-assert(stakingSource.includes('rounded-xl bg-brand-incana'), 'visual contract: inset Incana reward container missing');
-assert(
-  stakingSource.includes('rounded-xl bg-brand-lemon'),
-  'visual contract: inset lemon membership container missing'
-);
-assert(!stakingSource.includes('shadow-soft'), 'visual contract: independent shadow cards remain');
-assert(!stakingSource.includes('grid-cols-5'), 'visual contract: five-column delegation layout remains');
-console.log('PASS visual contract inset-accents=yes shadow-cards=0 five-column-layout=absent');
+// S0006 supersedes S0002.2's light-palette layout; retain all factual and discovery checks below.
+assert(stakingSource.includes('className="staking-page"'), 'D5 staking page missing');
+assert(stakingSource.includes('<Gate'), 'D5 chapter gates missing');
+assert(!stakingSource.includes('bg-white'), 'legacy white staking panel remains');
+assert(stakingSource.includes('className="dsteps"'), 'D5 delegation sequence missing');
+console.log('PASS D5 visual source contract chapters=yes legacy-white-panels=0');
 
 const pages = new Map();
 
@@ -193,7 +185,7 @@ for (const contextCase of contextCases) {
   const page = await getPage(contextCase);
   assert(!page.html.includes('href="/staking"'), `${contextCase.name}: prominent staking link remains`);
   if (contextCase.name === 'projects')
-    assert(!getVisibleText(page.html).includes('Pao Pool'), 'projects: Pao Pool card remains');
+    assert(!getVisibleText(getElementHtml(page.html, 'main')).includes('Pao Pool'), 'projects: Pao Pool card remains');
   console.log(`PASS ${contextCase.name} prominent-staking-entry=absent`);
 }
 

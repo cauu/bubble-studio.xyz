@@ -1,32 +1,54 @@
-import { Github } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { GlobalConfig } from '@/constants';
+import { EpochClock } from '@/components/neon/EpochClock';
 
 export const Footer = () => {
-  return (
-    <footer className="border-t border-hairline bg-canvas">
-      <div className="mx-auto flex min-h-[76px] max-w-wrap items-center justify-between gap-6 px-6 max-[600px]:min-h-[68px] max-[600px]:px-[18px]">
-        <span className="text-sm text-muted tnum max-[600px]:text-xs">© 2024–2026 Pao Studio</span>
+  const t = useTranslations();
 
-        <div className="flex items-center gap-5 max-[600px]:gap-3">
-          <a
-            href={GlobalConfig.social.twitter}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="grid h-9 w-9 place-items-center rounded-full text-xl text-body transition-colors hover:bg-black/5 hover:text-ink"
-            aria-label="X / Twitter"
-          >
-            <span aria-hidden="true">𝕏</span>
-          </a>
-          <a
-            href={GlobalConfig.social.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="grid h-9 w-9 place-items-center rounded-full text-body transition-colors hover:bg-black/5 hover:text-ink"
-            aria-label="GitHub"
-          >
-            <Github className="h-5 w-5" aria-hidden="true" />
-          </a>
+  // Same pages as the main nav + social; low-exposure pages (/staking, /about, /governance) stay out (S0002.1, S0004)
+  return (
+    <footer className="sitefoot">
+      <div className="top">
+        <div className="brand">
+          <img src="/images/pao-logo-dark.svg" alt="Pao Studio" width={185} height={26} loading="lazy" />
+          <p>{t('footer.blurb')}</p>
         </div>
+        <div>
+          <h4>{t('footer.explore').toUpperCase()}</h4>
+          <ul>
+            <li>
+              <Link href="/projects">{t('nav.projects')}</Link>
+            </li>
+            <li>
+              <Link href="/blogs">{t('nav.blog')}</Link>
+            </li>
+            <li>
+              <Link href="/skills">{t('nav.skills')}</Link>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4>{t('footer.social').toUpperCase()}</h4>
+          <ul>
+            <li>
+              <a href={GlobalConfig.social.twitter} target="_blank" rel="noopener noreferrer">
+                X ↗
+              </a>
+            </li>
+            <li>
+              <a href={GlobalConfig.social.github} target="_blank" rel="noopener noreferrer">
+                GitHub ↗
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="bot">
+        <span className="tnum">© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span>
+        <span className="tnum">
+          EPOCH <EpochClock part="epoch" /> · <EpochClock part="left" />
+        </span>
       </div>
     </footer>
   );

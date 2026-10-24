@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D5 · 治理 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<link rel="stylesheet" href="d5-pages.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+.govgrid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; align-items: start; padding-top: 48px; }
+.tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+.acts { display: grid; gap: 16px; }
+.act { padding: 24px 26px; background: var(--void-2); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; transition: border-color .3s; }
+.act:hover { border-color: var(--c); }
+.act .ah { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.act .id { font-family: var(--mono); font-size: 13px; font-weight: 800; color: var(--void); background: var(--c); padding: 3px 8px; }
+.act .hot { font-family: var(--mono); font-size: 11px; font-weight: 800; color: var(--mag); letter-spacing: .14em; margin-left: auto; }
+.act h3 { font-size: clamp(19px, 1.8vw, 24px); line-height: 1.4; font-weight: 800; }
+.act p { color: var(--fg-dim); font-size: 14.5px; line-height: 1.75; }
+.votes { display: grid; grid-template-columns: auto auto 1fr; gap: 18px; align-items: center; font-family: var(--mono); font-size: 12.5px; color: var(--fg-dim); }
+.votes .pro b { color: var(--grn); } .votes .con b { color: var(--mag); }
+.votes .bar { height: 6px; background: var(--mag); position: relative; }
+.votes .bar i { position: absolute; inset: 0 auto 0 0; width: calc(var(--p) * 100%); background: var(--grn); }
+.act .more { font-family: var(--mono); font-size: 12.5px; font-weight: 800; color: var(--c); }
+.side { position: sticky; top: 96px; }
+.side h4 { font-size: 17px; color: var(--fg); margin-bottom: 8px; font-family: Inter, AlibabaPuHuiTi, sans-serif; }
+.side p { color: var(--fg-dim); font-size: 14px; line-height: 1.75; font-family: Inter, AlibabaPuHuiTi, sans-serif; }
+.snap { margin-top: 18px; }
+@media (max-width: 900px) { .govgrid { grid-template-columns: 1fr; } .side { position: static; } .votes { grid-template-columns: auto auto; } .votes .bar { grid-column: 1 / -1; } }
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="d5-hybrid.html"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="d5-hybrid.html">/home</a><a href="d5-works.html">/works</a><a href="d5-blog.html">/blog</a><a href="d5-skills.html">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托 PAO</a></div>
+  </div>
+</nav>
+
+<main>
+<header class="ph" style="--c:var(--yel)">
+    <div class="art" aria-hidden="true"><span class="g-p" data-py=".06"></span><span class="g-a" data-py="-.04"></span><span class="g-o" data-py=".08"></span></div>
+    <div class="crumb rise">&gt; <a href="d5-hybrid.html">~</a>/governance</div>
+    <span class="eyebrow rise" style="--d:.05s">CARDANO GOVERNANCE</span>
+    <h1 class="rise" style="--d:.1s">Cardano <span class="hl">治理</span></h1>
+    <p class="sub rise" style="--d:.18s">查看经过整理的 Cardano 治理行动，对照支持与反对观点，并了解 Pao Studio 如何参与去中心化决策。</p>
+    
+  </header>
+  <div class="lane govgrid">
+    <div>
+      <div class="tabs rise" role="tablist"><button class="chip-btn" role="tab" aria-pressed="true" style="--c:var(--yel)">治理行动</button><button class="chip-btn" role="tab" aria-pressed="false" style="--c:var(--yel)">热门话题</button></div>
+      <div class="acts">
+      <article class="act corners rise" style="--c:var(--cy);--d:0.00s">
+        <div class="ah"><span class="id">GA:14</span><span class="meta">提交时间 · 2025-05-12</span><span class="hot">热门</span></div>
+        <h3>Cardano Blockchain Ecosystem Budget: Amaru Node Development 2025</h3>
+        <p>Amaru is an open-source project implementing a new fully interoperable block-producing node for Cardano. It aims to improve the network&#x27;s overall accessibility and robustness without compromising its safety and security.…</p>
+        <div class="votes"><span class="pro"><b>10</b> 支持观点</span><span class="con"><b>6</b> 反对观点</span><span class="bar"><i style="--p:0.62"></i></span></div>
+        <a class="more" href="#">提案内容 →</a>
+      </article>
+      <article class="act corners rise" style="--c:var(--mag);--d:0.06s">
+        <div class="ah"><span class="id">GA:13</span><span class="meta">提交时间 · 2025-05-14</span><span class="hot">热门</span></div>
+        <h3>2025 Cardano NCL</h3>
+        <p>The Cardano Constitution, at Article IV, Section 3, requires that before withdrawal of Treasury funds, the community must have established a Net Change Limit (NCL). This means passing a NCL in a formal on-chain governanc…</p>
+        <div class="votes"><span class="pro"><b>5</b> 支持观点</span><span class="con"><b>5</b> 反对观点</span><span class="bar"><i style="--p:0.50"></i></span></div>
+        <a class="more" href="#">提案内容 →</a>
+      </article>
+      <article class="act corners rise" style="--c:var(--yel);--d:0.12s">
+        <div class="ah"><span class="id">GA:18</span><span class="meta">提交时间 · 2025-05-14</span></div>
+        <h3>Cardano Blockchain Ecosystem Budget - 275M ada Administered by Intersect</h3>
+        <p>On behalf of Intersect and the Cardano Budget Committee, this Budget Info Action proposes a Cardano Blockchain Ecosystem Budget of 275,269,340 ada. The period during which this Budget Info Action remains in effect will b…</p>
+        <div class="votes"><span class="pro"><b>8</b> 支持观点</span><span class="con"><b>10</b> 反对观点</span><span class="bar"><i style="--p:0.44"></i></span></div>
+        <a class="more" href="#">提案内容 →</a>
+      </article>
+      <article class="act corners rise" style="--c:var(--grn);--d:0.18s">
+        <div class="ah"><span class="id">GA:17</span><span class="meta">提交时间 · 2025-05-12</span></div>
+        <h3>2025 Cardano Blockchain Ecosystem Budget - 7.5M ₳ for community builders</h3>
+        <p>The Cardano 2025 on-chain budget process introduces a constitutionally driven, community-led model for treasury allocation. ADA holders, through Delegated Representatives (DReps) and Constitutional Committee oversight, v…</p>
+        <div class="votes"><span class="pro"><b>10</b> 支持观点</span><span class="con"><b>10</b> 反对观点</span><span class="bar"><i style="--p:0.50"></i></span></div>
+        <a class="more" href="#">提案内容 →</a>
+      </article>
+      </div>
+      <p class="snap meta rise">数据快照 · 2025-05-15 · 正式实现读取实时治理数据</p>
+    </div>
+    <aside class="side rise" style="--d:.1s">
+      <div class="term"><header><i style="background:var(--mag)"></i><i style="background:var(--cy)"></i><i style="background:var(--yel)"></i><span style="margin-left:8px">gov --about</span></header>
+        <div class="body" style="white-space:normal"><h4>关于治理</h4><p>Cardano 治理是一个去中心化的决策系统，让 ADA 持有者参与网络的未来发展。</p></div></div>
+      <div class="term" style="margin-top:14px"><header><span>cardano --epoch</span></header>
+        <div class="body"><div class="row"><span class="k">epoch</span><span class="v tnum" data-ep>—</span></div><div class="row"><span class="k">remaining</span><span class="v tnum" data-ep-left style="color:var(--grn)">—</span></div></div></div>
+      <a class="cbtn" href="https://voda.paopao.studio/governance" style="background:var(--yel);margin-top:14px;width:100%">在 VODA 查看提案 ↗</a>
+    </aside>
+  </div>
+  <div class="sec-end"></div>
+</main>
+
+<footer class="sitefoot">
+  <div class="top">
+    <div class="brand"><img src="pao_logo_dark.svg" alt="Pao Studio" width="185" height="26"><p>在 Cardano 上构建 AI 产品与开源工具。<br>Stake with PAO Pool，获取质押奖励，同时享受增值服务。</p></div>
+    <div><h4>EXPLORE</h4><ul><li><a href="d5-works.html">作品</a></li><li><a href="d5-blog.html">博客</a></li><li><a href="d5-skills.html">Skills</a></li></ul></div>
+    <div><h4>SOCIAL</h4><ul><li><a href="https://x.com/cauu_128">X ↗</a></li><li><a href="https://github.com/cauu">GitHub ↗</a></li></ul></div>
+  </div>
+  <div class="bot"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>EPOCH <b data-ep>—</b> · <span data-ep-left>—</span></span></div>
+</footer>
+
+<nav class="proto-badge" aria-label="原型切换"><a href="index.html">总览</a><a href="d5-hybrid.html">首页</a><a href="d5-works.html">作品</a><a href="d5-blog.html">博客</a><a href="d5-article.html">文章</a><a href="d5-skills.html">Skills</a><a href="d5-governance.html" aria-current="page">治理</a><a href="d5-about.html">关于</a><a href="d5-staking.html">质押</a></nav>
+
+<script src="dx-fx.js"></script>
+<script src="d5-pages.js"></script>
+
+</body>
+</html>

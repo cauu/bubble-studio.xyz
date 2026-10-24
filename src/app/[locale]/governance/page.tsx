@@ -1,5 +1,9 @@
 import { getTranslations } from 'next-intl/server';
 
+import governanceData from '@/data/gov-contents-2025-05-15.json';
+import type { IGovActionContent, GovernanceSummary } from '@/types/governance';
+import { PageHeader } from '@/components/neon/PageHeader';
+
 import { GovernanceClient } from './GovernanceClient';
 
 type Props = {
@@ -11,14 +15,24 @@ type Props = {
 export default async function GovernancePage({ params: { locale } }: Props) {
   const t = await getTranslations({ locale, namespace: 'governance' });
 
+  const entries: GovernanceSummary[] = (
+    (governanceData as unknown as Record<string, IGovActionContent[]>)[locale] || []
+  ).map(({ id, type, title, metadata, opinions }) => ({
+    id,
+    type,
+    title,
+    metadata: { createdDate: metadata.createdDate },
+    opinions: { summary: opinions.summary, pros: opinions.pros, cons: opinions.cons }
+  }));
   return (
-    <div className="relative overflow-x-hidden">
-      <div className="page-aura animate-aura-drift" aria-hidden="true" />
-      <header className="wrap relative pt-16 max-[860px]:pt-11">
-        <h1 className="text-[clamp(36px,4.5vw,52px)] leading-[1.15]">{t('page_title')}</h1>
-        <p className="mt-5 max-w-[50rem] text-[16.5px] leading-[1.8] text-body">{t('page_intro')}</p>
-      </header>
-      <GovernanceClient locale={locale} />
+    <div className="governance-page">
+      <PageHeader
+        path="governance"
+        title={<span className="hl">{t('page_title')}</span>}
+        sub={t('page_intro')}
+        color="yel"
+      />
+      <GovernanceClient entries={entries} />
     </div>
   );
 }

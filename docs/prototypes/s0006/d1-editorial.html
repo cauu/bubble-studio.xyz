@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D1 · 杂志网格 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+/* ===== D1 Editorial grid =====
+   杂志式非对称 12 栏：可见栏线、左侧竖排章节索引、巨型章节号随滚动横移、阶梯式作品索引、账本式成员表。 */
+:root { --rail: 76px; }
+.gridlines { position: fixed; top: 0; bottom: 0; left: var(--rail); right: 0; z-index: 0; pointer-events: none;
+  background: repeating-linear-gradient(90deg, rgba(244,242,255,.045) 0 1px, transparent 1px calc((100vw - var(--rail)) / 12)); }
+main { margin-left: var(--rail); }
+.footer { margin-left: var(--rail); }
+.g12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 0; padding: 0 calc((100vw - var(--rail)) / 24); }
+
+/* Left rail: vertical chapter index */
+.rail { position: fixed; left: 0; top: 68px; bottom: 0; width: var(--rail); z-index: 40; border-right: 1px solid var(--line); background: rgba(10,9,16,.7);
+  display: flex; flex-direction: column; align-items: center; padding: 22px 0; gap: 6px; }
+.rail a { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 10px 0; width: 100%; color: var(--fg-dim); transition: color .3s; }
+.rail a b { font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+.rail a span { writing-mode: vertical-rl; font-size: 13px; font-weight: 800; letter-spacing: .3em; }
+.rail a.on { color: var(--fg); }
+.rail a.on b { color: var(--c); }
+.rail a.on span { background: var(--c); color: var(--void); padding: 6px 3px; }
+.rail .prog { margin-top: auto; width: 2px; height: 120px; background: var(--line); position: relative; overflow: hidden; }
+.rail .prog i { position: absolute; inset: 0; background: linear-gradient(var(--mag), var(--cy), var(--yel)); transform-origin: top; transform: scaleY(var(--p, 0)); }
+
+/* Line-mask reveal */
+.rv { display: block; overflow: hidden; }
+.rv > * { display: block; transform: translateY(105%); transition: transform 1s var(--out); transition-delay: var(--d, 0s); }
+.rv.in > * { transform: none; }
+.fade { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--out), transform 1s var(--out); transition-delay: var(--d, 0s); }
+.fade.in { opacity: 1; transform: none; }
+
+/* ---------- Cover ---------- */
+.cover { position: relative; min-height: calc(100vh - 68px); padding-top: 26px; overflow: hidden; display: flex; flex-direction: column; }
+.cover-top { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 24px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .14em; color: var(--fg-dim); padding-bottom: 14px; border-bottom: 1px solid var(--line); text-transform: uppercase; }
+.cover-top b { color: var(--fg); font-weight: 800; }
+.cover .art { position: absolute; right: 0; top: 0; bottom: 0; width: 60%; pointer-events: none; }
+.cover .art .g-p { position: absolute; left: 4%; top: 12%; width: 54%; height: 46%; }
+.cover .art .g-a { position: absolute; right: 2%; top: 30%; width: 50%; aspect-ratio: 1 / .87; mix-blend-mode: screen; }
+.cover .art .g-o { position: absolute; left: 30%; bottom: 4%; width: 36%; aspect-ratio: 1; mix-blend-mode: screen; }
+.cover .art > * { animation: artIn 1.2s var(--out) both; animation-delay: var(--d); }
+@keyframes artIn { from { transform: translateY(40px) scale(.92); opacity: 0; } }
+.cover h1 { grid-column: 1 / 10; position: relative; z-index: 2; margin-top: 4vh; mix-blend-mode: difference; color: #fff; }
+.cover h1 .kick { font-size: clamp(22px, 2.6vw, 40px); font-weight: 900; letter-spacing: -.01em; line-height: 1.2; }
+.cover h1 .mega { font-size: clamp(120px, 19.5vw, 330px); font-weight: 900; line-height: .84; letter-spacing: -.04em; margin-left: -.05em; }
+.cover-foot { grid-column: 1 / -1; margin-top: auto; display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); border-top: 1px solid var(--line); position: relative; z-index: 3; background: rgba(10,9,16,.82); }
+.cover-foot > div { padding: 16px 18px 20px; border-right: 1px solid var(--line); }
+.cover-foot .intro { grid-column: span 4; }
+.cover-foot .intro p { font-size: 15px; line-height: 1.75; color: var(--fg-dim); margin-bottom: 16px; }
+.cover-foot .intro .ctas { display: flex; gap: 10px; flex-wrap: wrap; }
+.cover-foot .st { grid-column: span 2; display: flex; flex-direction: column; gap: 6px; }
+.cover-foot .st .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--fg-dim); }
+.cover-foot .st .v { font-family: var(--mono); font-size: clamp(20px, 1.9vw, 28px); font-weight: 800; }
+.cover-foot .goal { grid-column: span 4; border-right: 0; }
+.cover-foot .goal .bar { height: 8px; margin-top: 10px; background: repeating-linear-gradient(-45deg, rgba(244,242,255,.12) 0 2px, transparent 2px 6px); position: relative; }
+.cover-foot .goal .bar i { position: absolute; left: 0; top: -5px; width: 2px; height: 18px; background: var(--yel); box-shadow: 0 0 10px var(--yel); left: calc(var(--f, 0) * 100%); }
+.cover-foot .goal .ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--fg-dim); margin-top: 10px; }
+
+/* ---------- Chapter opener: giant outlined number scrubs sideways ---------- */
+.chap { position: relative; padding: 140px 0 40px; overflow: hidden; }
+.chap .num { display: block; padding-left: calc((100vw - var(--rail)) / 24 + 4vw); font-family: var(--mono); font-weight: 800; font-size: clamp(160px, 26vw, 420px); line-height: .8; letter-spacing: -.06em; color: transparent; -webkit-text-stroke: 1.5px var(--c); white-space: nowrap; will-change: transform; }
+.chap .ttl { position: absolute; right: calc((100vw - var(--rail)) / 24); bottom: 40px; display: flex; align-items: flex-end; gap: 18px; }
+.chap .ttl h2 { writing-mode: vertical-rl; font-size: clamp(56px, 6.4vw, 104px); font-weight: 900; line-height: 1; letter-spacing: .06em; }
+.chap .ttl .en { font-family: var(--mono); font-size: 12px; letter-spacing: .3em; color: var(--c); writing-mode: vertical-rl; }
+.chap .ttl .all { writing-mode: horizontal-tb; align-self: flex-end; margin-bottom: 4px; }
+
+/* ---------- Works ---------- */
+.coil { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); border-block: 1px solid var(--line); }
+.coil .scene { grid-column: 1 / 9; position: relative; aspect-ratio: 1440 / 640; overflow: hidden; background: #dff0ff; }
+.coil .scene img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; image-rendering: pixelated; transition: opacity .5s; }
+.coil .scene .awake { opacity: 0; }
+.coil:hover .scene .awake { opacity: 1; }
+.coil .cap { grid-column: 9 / -1; padding: 28px 0 28px 28px; display: flex; flex-direction: column; gap: 12px; border-left: 1px solid var(--line); }
+.coil .cap .tag { color: var(--cy); }
+.coil .cap h3 { font-family: var(--mono); font-size: clamp(54px, 6vw, 96px); font-weight: 800; line-height: .9; letter-spacing: -.04em; }
+.coil .cap .lead { font-size: 18px; font-weight: 800; }
+.coil .cap .specs { font-family: var(--mono); font-size: 12px; color: var(--fg-dim); }
+.coil .cap .cbtn { margin-top: auto; align-self: flex-start; }
+.stairs { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); row-gap: 0; padding-top: 24px; }
+.st-item { display: grid; grid-template-columns: auto 1fr; column-gap: 20px; align-items: end; padding: 26px 0 22px; border-bottom: 1px solid var(--line); position: relative; }
+.st-item:nth-child(1) { grid-column: 1 / 7; }
+.st-item:nth-child(2) { grid-column: 3 / 9; }
+.st-item:nth-child(3) { grid-column: 5 / 11; }
+.st-item:nth-child(4) { grid-column: 7 / 13; }
+.st-item:nth-child(5) { grid-column: 2 / 8; }
+.st-item .no { grid-row: span 2; font-family: var(--mono); font-size: 76px; font-weight: 800; line-height: .8; color: transparent; -webkit-text-stroke: 1.2px var(--c); transition: color .3s; }
+.st-item h3 { font-family: var(--mono); font-size: clamp(26px, 2.6vw, 40px); font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+.st-item p { font-size: 14px; color: var(--fg-dim); margin-top: 8px; }
+.st-item .tags { position: absolute; right: 0; top: 26px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; color: var(--c); }
+.st-item .th { position: absolute; right: 0; bottom: calc(100% - 20px); width: 220px; aspect-ratio: 16 / 10; overflow: hidden; opacity: 0; transform: translateY(10px) rotate(-2deg); transition: opacity .3s, transform .5s var(--out); pointer-events: none; z-index: 5; box-shadow: 8px 8px 0 var(--c); }
+.st-item .th img { width: 100%; height: 100%; object-fit: cover; }
+.st-item:hover .no { color: var(--c); }
+.st-item:hover .th { opacity: 1; transform: none; }
+.st-item:hover h3 { color: var(--c); }
+
+/* ---------- Writing: overlapping collage ---------- */
+.feat { grid-column: 1 / 8; position: relative; }
+.feat .img { display: block; aspect-ratio: 4 / 3; overflow: hidden; }
+.feat .img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.4) contrast(1.1); transition: filter .5s, transform 1.2s var(--out); }
+.feat:hover .img img { filter: none; transform: scale(1.04); }
+.feat .over { position: relative; display: block; margin: -96px 0 0 7%; max-width: 15em; z-index: 2; }
+.feat .over h3 { display: inline; font-size: clamp(28px, 3.2vw, 50px); line-height: 1.35; font-weight: 900; background: var(--void); box-shadow: 14px 0 0 var(--void), -14px 0 0 var(--void); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.feat .meta, .toc .meta { font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; color: var(--fg-dim); text-transform: uppercase; }
+.feat .meta { margin-top: 18px; padding-left: 7%; }
+.feat .meta b, .toc .meta b { color: var(--c); }
+.toc { grid-column: 9 / -1; padding-top: 40px; display: flex; flex-direction: column; }
+.toc a { display: grid; grid-template-columns: 54px 1fr; gap: 6px 0; padding: 22px 0; border-top: 1px solid var(--line); }
+.toc a .n { grid-row: span 2; font-family: var(--mono); font-size: 30px; font-weight: 800; color: var(--c); line-height: 1; }
+.toc a h3 { font-size: 18px; line-height: 1.45; font-weight: 800; transition: color .2s; }
+.toc a:hover h3 { color: var(--c); }
+.toc .cbtn { margin-top: 28px; align-self: flex-start; }
+
+/* ---------- P · A · O: giant letterforms ---------- */
+.pao { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+.pao > div { padding: 0 28px 40px 0; position: relative; }
+.pao > div + div { padding-left: 28px; border-left: 1px solid var(--line); }
+.pao .L { display: block; font-size: clamp(180px, 22vw, 360px); font-weight: 900; line-height: .82; letter-spacing: -.05em; background: linear-gradient(var(--c), var(--cd)); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 10px 0 8px -.04em; transition: transform .8s var(--out); transform-origin: left bottom; }
+.pao > div:hover .L { transform: skewX(-6deg) scale(1.03); }
+.pao h3 { font-family: var(--mono); font-size: 14px; letter-spacing: .3em; color: var(--c); }
+.pao h4 { font-size: 24px; margin: 10px 0; }
+.pao p { color: var(--fg-dim); font-size: 15px; line-height: 1.75; max-width: 24em; }
+
+/* ---------- Members: ledger ---------- */
+.ledger { grid-column: 1 / -1; width: 100%; border-collapse: collapse; font-family: var(--mono); }
+.ledger th { text-align: left; font-size: 10.5px; letter-spacing: .16em; color: var(--fg-dim); font-weight: 700; padding: 0 12px 12px 0; border-bottom: 1px solid var(--fg); }
+.ledger td { padding: 22px 12px 22px 0; border-bottom: 1px solid var(--line); font-size: 15px; vertical-align: baseline; }
+.ledger td.no { color: var(--c); font-weight: 800; width: 80px; }
+.ledger td:nth-child(4), .ledger th:nth-child(4) { padding-left: 48px; }
+.ledger td.amt { font-size: clamp(22px, 2.4vw, 34px); font-weight: 800; text-align: right; white-space: nowrap; }
+.ledger td.note { color: var(--c); font-size: 11.5px; letter-spacing: .1em; text-align: right; }
+.ledger tr.you td { color: var(--yel); border-bottom: 1px dashed rgba(255,245,144,.5); }
+.ledger tr.you .cur { display: inline-block; width: .6em; height: 1.1em; background: var(--yel); vertical-align: -.2em; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.ledger tbody tr { transition: background .2s; }
+.ledger tbody tr:hover { background: rgba(244,242,255,.04); }
+.poolline { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; padding-top: 22px; font-family: var(--mono); font-size: 13px; color: var(--fg-dim); }
+.poolline b { color: var(--cy); }
+.poolline a:not(.cbtn) { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+.poolline .cbtn { margin-left: auto; }
+.copy { background: none; border: 1px solid var(--line); color: var(--fg-dim); font: inherit; font-size: 11px; padding: 0 8px; margin-left: 6px; cursor: pointer; line-height: 1.8; }
+
+/* ---------- Closing ---------- */
+.end { padding: 160px 0 120px; overflow: hidden; }
+.end h2 { grid-column: 1 / -1; font-size: clamp(90px, 17vw, 300px); font-weight: 900; line-height: .82; letter-spacing: -.05em; }
+.end h2 .o { color: transparent; -webkit-text-stroke: 2px var(--fg); }
+.end h2 .m { color: var(--mag); }
+.end .acts { grid-column: 7 / -1; display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
+
+@media (max-width: 1000px) {
+  :root { --rail: 0px; }
+  .rail { display: none; }
+  .gridlines { background: repeating-linear-gradient(90deg, rgba(244,242,255,.045) 0 1px, transparent 1px 25vw); }
+  .g12 { padding: 0 20px; }
+  .cover .art { width: 100%; opacity: .55; }
+  .cover h1 { grid-column: 1 / -1; }
+  .cover-foot { grid-template-columns: 1fr 1fr; }
+  .cover-foot .intro, .cover-foot .goal { grid-column: 1 / -1; border-right: 0; border-bottom: 1px solid var(--line); }
+  .cover-foot .st { grid-column: span 1; }
+  .chap .ttl { right: 20px; }
+  .coil .scene, .coil .cap { grid-column: 1 / -1; }
+  .coil .cap { border-left: 0; padding: 22px 0; }
+  .st-item:nth-child(n) { grid-column: 1 / -1; }
+  .st-item .th { display: none; }
+  .feat, .toc { grid-column: 1 / -1; }
+  .feat .over { margin: -60px 0 0 6%; }
+  .feat .meta { padding-left: 6%; }
+  .pao { grid-template-columns: 1fr; }
+  .pao > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  .ledger th:nth-child(4), .ledger td:nth-child(4), .ledger th:nth-child(5), .ledger td:nth-child(5) { display: none; }
+  .end .acts { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .cover h1 .mega { font-size: 34vw; }
+  .chap { padding-top: 90px; }
+  .chap .ttl h2 { font-size: 44px; }
+  .chap .ttl .all { display: none; }
+  .st-item .no { font-size: 52px; }
+  .ledger td { font-size: 12px; padding: 16px 8px 16px 0; }
+  .ledger td.no { width: 40px; }
+  .poolline .cbtn { margin-left: 0; width: 100%; }
+}
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+<div class="gridlines" aria-hidden="true"></div>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="#"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="#" aria-current="page">/home</a><a href="d-article.html">/blog</a><a href="#">/works</a><a href="#">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="#end">合作</a></div>
+  </div>
+</nav>
+
+<aside class="rail" aria-label="章节">
+  <a href="#cover" style="--c:var(--fg)"><b>00</b><span>封面</span></a>
+  <a href="#works" style="--c:var(--cy)"><b>01</b><span>作品</span></a>
+  <a href="#writing" style="--c:var(--mag)"><b>02</b><span>文章</span></a>
+  <a href="#pao" style="--c:var(--yel)"><b>03</b><span>主线</span></a>
+  <a href="#members" style="--c:var(--grn)"><b>04</b><span>成员</span></a>
+  <div class="prog" aria-hidden="true"><i></i></div>
+</aside>
+
+<main>
+  <!-- 00 Cover -->
+  <section class="cover" id="cover" aria-labelledby="h1">
+    <div class="art" aria-hidden="true"><span class="g-p" style="--d:.1s"></span><span class="g-a" style="--d:.25s"></span><span class="g-o" style="--d:.4s"></span></div>
+    <div class="g12" style="flex:1;align-content:start">
+      <div class="cover-top"><span><b>PAO STUDIO</b> — 一人公司实验志</span><span>ISSUE · EPOCH <b data-ep>—</b></span><span>BUILT ON CARDANO ₳</span></div>
+      <h1 id="h1">
+        <span class="rv kick"><span style="--d:.2s">一家建立在 Cardano 上的</span></span>
+        <span class="rv mega"><span style="--d:.35s">一人</span></span>
+        <span class="rv mega"><span style="--d:.5s">公司</span></span>
+      </h1>
+    </div>
+    <div class="g12" style="padding:0">
+      <div class="cover-foot fade" style="--d:.7s">
+        <div class="intro"><p>探索由 Cardano 矿池支持的一人公司运营模式，并分享实践经验。</p><div class="ctas"><a class="cbtn sm" href="#members">委托给 Pao Pool →</a><a class="cbtn sm alt" href="#works">看看作品</a></div></div>
+        <div class="st"><span class="k">LIVE STAKE</span><span class="v tnum" style="color:var(--cy)">₳ 1,540</span></div>
+        <div class="st"><span class="k">DELEGATORS</span><span class="v tnum" style="color:var(--mag)">4</span></div>
+        <div class="goal" data-goal="1539.59"><span class="k mono dim" style="font-size:10.5px;letter-spacing:.14em">NEXT · <b data-goal-name style="color:var(--fg)">—</b> · 还差 <b data-goal-left style="color:var(--yel)">—</b></span><div class="bar" aria-hidden="true"><i></i></div><div class="ticks"><span>0</span><span>1M</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 Works -->
+  <section id="works" aria-labelledby="h-works">
+    <div class="chap" style="--c:var(--cy)"><span class="num" data-scrub="1">01</span>
+      <div class="ttl"><a class="cbtn sm alt all" href="#">全部作品 →</a><span class="en">WORKS</span><h2 id="h-works">作品</h2></div></div>
+    <div class="g12">
+      <a class="coil fade" href="https://coil.win/">
+        <span class="scene"><img src="coil-sleep-wide.png" alt="" width="1440" height="730"><img class="awake" src="coil-awake-wide.png" alt="" width="1440" height="730"></span>
+        <span class="cap"><span class="tag">new · trading agent</span><h3>Coil</h3><span class="lead">Your desktop trading agent.</span><span class="specs">v0.3.0 · macOS · Apple Silicon</span><span class="cbtn sm">下载 Coil ↓</span></span>
+      </a>
+      <div class="stairs">
+        <a class="st-item fade" href="https://voda.paopao.studio/" style="--c:var(--yel)"><span class="no">01</span><h3>voda</h3><p>AI 编辑每日精选 Cardano 动态。</p><span class="tags">AI · APP</span><span class="th"><img src="../../../public/images/projects/voda.jpg" alt="" loading="lazy"></span></a>
+        <a class="st-item fade" href="https://ouro-pass.paopao.studio/" style="--c:var(--cy)"><span class="no">02</span><h3>ouro-pass</h3><p>基于 Cardano 的去中心化身份与订阅基础设施。</p><span class="tags">OSS</span><span class="th"><img src="../../../public/images/projects/ouro-pass.jpg" alt="" loading="lazy"></span></a>
+        <a class="st-item fade" href="https://utxray.paopao.studio/" style="--c:var(--mag)"><span class="no">03</span><h3>utxray</h3><p>面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。</p><span class="tags">OSS</span><span class="th"><img src="../../../public/images/projects/utxray.jpg" alt="" loading="lazy"></span></a>
+        <a class="st-item fade" href="https://ouro-ops.paopao.studio/" style="--c:var(--grn)"><span class="no">04</span><h3>ouro-ops</h3><p>面向 AI Agent 的 Cardano Stake Pool 运维工具。</p><span class="tags">OSS</span><span class="th"><img src="../../../public/images/projects/ouro-ops.jpg" alt="" loading="lazy"></span></a>
+        <a class="st-item fade" href="#" style="--c:var(--pur)"><span class="no">05</span><h3>lottery</h3><p>基于 Cardano 构建的去中心化彩票应用。</p><span class="tags">APP</span><span class="th"><img src="../../../public/images/projects/cardano-lottery.jpg" alt="" loading="lazy"></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Writing -->
+  <section id="writing" aria-labelledby="h-writing">
+    <div class="chap" style="--c:var(--mag)"><span class="num" data-scrub="-1">02</span>
+      <div class="ttl"><span class="en">WRITING</span><h2 id="h-writing">文章</h2></div></div>
+    <div class="g12">
+      <a class="feat fade" href="#" style="--c:var(--yel)">
+        <span class="img"><img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260405-subscriptions-are-failing.jpg" alt="" width="1600" height="900"></span>
+        <span class="over"><h3>软件订阅正在失效，创作者经济需要新的基础设施</h3></span>
+        <span class="meta" style="display:block"><b>ai</b> · 2026-04-05 · latest</span>
+      </a>
+      <div class="toc">
+        <a class="fade" href="#" style="--c:var(--cy)"><span class="n">02</span><span class="meta"><b>cardano</b> · 2026-03-25</span><h3>区块链的“组合性”演进：为什么 AI 时代需要的是 Cardano 而非 Ethereum？</h3></a>
+        <a class="fade" href="d-article.html" style="--c:var(--mag);--d:.08s"><span class="n">03</span><span class="meta"><b>engineering</b> · 2026-03-06</span><h3>Immutable Spec：让需求、设计、执行和验收收敛到同一份文档</h3></a>
+        <a class="fade" href="#" style="--c:var(--grn);--d:.16s"><span class="n">04</span><span class="meta"><b>essay</b> · 2026-03-02</span><h3>从认知到行动的健康长寿实践</h3></a>
+        <a class="cbtn sm alt" href="d-article.html">全部文章 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 P · A · O -->
+  <section id="pao" aria-labelledby="h-pao">
+    <div class="chap" style="--c:var(--yel)"><span class="num" data-scrub="1">03</span>
+      <div class="ttl"><span class="en">P · A · O</span><h2 id="h-pao">主线</h2></div></div>
+    <div class="g12">
+      <div class="pao">
+        <div class="fade" style="--c:var(--mag);--cd:var(--mag-d)"><span class="L" aria-hidden="true">P</span><h3>POOL</h3><h4>运营 Cardano 矿池</h4><p>矿池收入用于支付节点、服务器、AI 服务和产品开发。委托 ADA 即成为会员。</p></div>
+        <div class="fade" style="--c:var(--cy);--cd:var(--cy-d);--d:.1s"><span class="L" aria-hidden="true">A</span><h3>AI</h3><h4>构建 AI 产品</h4><p>Coil 是你桌面上的交易 Agent；VODA 由 AI 编辑每天挑选 Cardano 动态。</p></div>
+        <div class="fade" style="--c:var(--yel);--cd:var(--yel-d);--d:.2s"><span class="L" aria-hidden="true">O</span><h3>OPEN</h3><h4>开源与公开写作</h4><p>Ouro Pass、utxray、ouro-ops 在 GitHub 开源，并持续分享运营实践。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Members -->
+  <section id="members" aria-labelledby="h-members">
+    <div class="chap" style="--c:var(--grn)"><span class="num" data-scrub="-1">04</span>
+      <div class="ttl"><span class="en">ON-CHAIN MEMBERS</span><h2 id="h-members">成员</h2></div></div>
+    <div class="g12">
+      <table class="ledger fade" style="--c:var(--grn)">
+        <thead><tr><th>NO.</th><th>STAKE ADDRESS</th><th style="text-align:right">AMOUNT</th><th>SINCE</th><th style="text-align:right">NOTE</th></tr></thead>
+        <tbody>
+          <tr><td class="no">#01</td><td>stake1u8kl…xe93nu</td><td class="amt tnum">₳ 889.69</td><td>epoch 586</td><td class="note"></td></tr>
+          <tr><td class="no">#02</td><td>stake1uxxv…tsgyv</td><td class="amt tnum">₳ 517.43</td><td>epoch 524</td><td class="note">OPERATOR PLEDGE</td></tr>
+          <tr><td class="no">#03</td><td>stake1uxre…63gmlc</td><td class="amt tnum">₳ 104.83</td><td>epoch 650</td><td class="note"></td></tr>
+          <tr><td class="no">#04</td><td>stake1u96q…zecc8g</td><td class="amt tnum">₳ 27.65</td><td>epoch 604</td><td class="note"></td></tr>
+          <tr class="you"><td class="no" style="color:var(--yel)">#05</td><td>你的地址 <span class="cur" aria-hidden="true"></span></td><td class="amt">—</td><td>epoch <span data-ep>—</span></td><td class="note" style="color:var(--yel)">NEXT</td></tr>
+        </tbody>
+      </table>
+      <div class="poolline fade"><span><b>PAO</b></span><span>pool1jh5p…0ksm<button class="copy" type="button" data-copy="pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">COPY</button></span><span>margin 3% · fixed ₳170</span><a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan ↗</a><a class="cbtn" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托给 Pao Pool →</a></div>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="end" id="end" aria-labelledby="h-end">
+    <div class="g12">
+      <h2 id="h-end"><span class="rv"><span class="o">LET'S</span></span><span class="rv"><span class="m" style="--d:.12s">BUILD.</span></span></h2>
+      <div class="acts fade"><a class="cbtn" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托给 Pao Pool →</a><a class="cbtn alt" href="#">邮件联系 ↗</a><a class="cbtn alt" href="#">Telegram 社群</a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>X · GITHUB</span></div></footer>
+
+<nav class="proto-badge" aria-label="原型切换">
+  <a href="index.html">总览</a><a href="d-neon-cyber.html">D</a><a href="d1-editorial.html" aria-current="page">D1 杂志</a><a href="d2-filmstrip.html">D2 长卷</a><a href="d3-scenes.html">D3 场景</a>
+</nav>
+
+<script src="dx-fx.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reveal: line masks and fades (opacity/transform only, observer sees full boxes)
+  const items = document.querySelectorAll('.rv, .fade');
+  if (reduce || !('IntersectionObserver' in window)) items.forEach((el) => el.classList.add('in'));
+  else {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    items.forEach((el) => io.observe(el));
+  }
+
+  // Rail: active chapter + reading progress
+  const links = [...document.querySelectorAll('.rail a')];
+  const secs = links.map((a) => document.querySelector(a.getAttribute('href')));
+  const prog = document.querySelector('.rail .prog');
+  const nums = [...document.querySelectorAll('[data-scrub]')];
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    let idx = 0;
+    secs.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * 0.4) idx = i; });
+    links.forEach((a, i) => a.classList.toggle('on', i === idx));
+    prog?.style.setProperty('--p', (scrollY / (document.documentElement.scrollHeight - innerHeight)).toFixed(4));
+    // Chapter numbers slide sideways as their opener crosses the viewport
+    if (!reduce) nums.forEach((n) => {
+      const r = n.parentElement.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) return;
+      const t = (r.top + r.height / 2) / innerHeight - 0.5;
+      n.style.transform = `translateX(${(t * 16 * +n.dataset.scrub).toFixed(2)}vw)`;
+    });
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+})();
+</script>
+</body>
+</html>

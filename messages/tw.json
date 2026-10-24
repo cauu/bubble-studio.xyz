@@ -335,14 +335,16 @@
     "skipToContent": "跳到主要內容",
     "langLabel": "語言選擇",
     "mainNav": "主導航",
-    "logoAlt": "標誌"
+    "logoAlt": "標誌",
+    "stakeShort": "委託 PAO"
   },
   "footer": {
-    "blurb": "扎根 Cardano 的「一人公司」實驗。做有趣的產品，寫有深度的內容。",
+    "blurb": "在 Cardano 上構建 AI 產品與開源工具。Stake with PAO Pool，獲取質押獎勵，同時享受增值服務。",
     "explore": "探索",
     "community": "社區",
     "staking": "質押",
-    "governance": "治理"
+    "governance": "治理",
+    "social": "社交"
   },
   "blog": {
     "title": "博客",
@@ -498,7 +500,7 @@
       "delegateCta": "在 Cexplorer 打開 PAO",
       "verifyCta": "在 CardanoScan 核驗",
       "liveNote": "本次頁面請求透過 Koios 取得了質押量和委託人數。請在 Cardano 瀏覽器中獨立核對目前數值。",
-      "fallbackNote": "本次頁面請求無法連接 Koios，因此卡片顯示的是明確標記的 fallback 數值。請前往 CardanoScan 查看目前權益池資料。",
+      "fallbackNote": "暫時無法讀取 Koios 資料，即時指標顯示為 —。請前往 CardanoScan 查看目前的礦池資料。",
       "estimateNote": "頁面顯示的 APY 是估算值，不是保證收益或即時表現聲明。"
     },
     "delegate": {
@@ -610,5 +612,116 @@
       },
       "disclaimer": "本頁用於解釋協議機制和 Pao Studio 自己營運的權益池，不構成財務、投資、稅務或安全建議。ADA 價格與質押獎勵可能變化，你仍需自行負責錢包安全與委託決定。"
     }
+  },
+  "landing": {
+    "boot": "pool PAO · cardano mainnet",
+    "titleA": "Stake with",
+    "titleB": "PAO",
+    "titleC": "Pool",
+    "subStrong": "質押身份 = 會員憑證",
+    "sub": "獲取質押獎勵，",
+    "subTail": "同時享受 PAO Pool 的增值服務。",
+    "ctaStake": "委託給 Pao Pool →",
+    "ctaWorks": "看看作品",
+    "stat": {
+      "stake": "LIVE STAKE",
+      "delegators": "DELEGATORS",
+      "epoch": "EPOCH",
+      "left": "剩餘",
+      "verify": "鏈上驗證 ↗",
+      "statusLabel": "Pao Pool 即時狀態"
+    },
+    "goal": {
+      "label": "質押階段目標",
+      "next": "NEXT TARGET",
+      "left": "還差",
+      "here": "YOU ARE HERE"
+    },
+    "ticker": [
+      "P = POOL",
+      "A = AI",
+      "O = OPEN",
+      "NON-CUSTODIAL",
+      "NO-LOCK",
+      "委託即會員",
+      "SUBSCRIPTION=$0",
+      "BUILT ON CARDANO ₳"
+    ],
+    "works": {
+      "en": "WORKS",
+      "title": "作品",
+      "all": "全部作品 →",
+      "coilLead": "Your desktop trading agent.",
+      "coilNew": "NEW",
+      "coilCta": "下載 Coil ↓"
+    },
+    "posts": {
+      "en": "WRITING",
+      "title": "文章",
+      "all": "全部文章 →",
+      "latest": "LATEST"
+    },
+    "pao": {
+      "en": "P · A · O",
+      "title": "主線",
+      "p": {
+        "word": "P // POOL",
+        "title": "營運 Cardano 礦池",
+        "body": "礦池收入用於支付節點、伺服器、AI 服務和產品開發。委託 ADA 即成為會員。"
+      },
+      "a": {
+        "word": "A // AI",
+        "title": "構建 AI 產品",
+        "body": "Coil 是你桌面上的交易 Agent；VODA 由 AI 編輯每天挑選 Cardano 動態。"
+      },
+      "o": {
+        "word": "O // OPEN",
+        "title": "開源與公開寫作",
+        "body": "Ouro Pass、utxray、ouro-ops 在 GitHub 開源，並持續分享營運實踐。"
+      }
+    },
+    "members": {
+      "en": "ON-CHAIN MEMBERS",
+      "title": "成員",
+      "since": "since epoch",
+      "operator": "operator pledge",
+      "yourAddress": "你的 stake address",
+      "next": "下一位就是你",
+      "delegate": "委託給 PAO →",
+      "fees": "margin {margin}% · fixed ₳{fixed}",
+      "unavailable": "暫時無法讀取鏈上委託資料，請在 CardanoScan 查看。"
+    },
+    "end": {
+      "title1": "LET'S",
+      "title2": "BUILD.",
+      "delegate": "委託給 Pao Pool →",
+      "email": "郵件聯繫 ↗",
+      "telegram": "Telegram 社群"
+    },
+    "intro": {
+      "skip": "SKIP ↵",
+      "left": "PAO//STUDIO — SYS.BOOT",
+      "right": "CARDANO MAINNET",
+      "replay": "重播開場"
+    }
+  },
+  "pages": {
+    "worksTitle": "作品",
+    "worksSub": "AI 產品、開源基礎設施與鏈上應用。",
+    "skillsTitle": "工程 Skills",
+    "skillsSub": "面向 Coding Agent，開源、可獨立安裝。",
+    "read": "閱讀全文",
+    "toc": "本文目錄",
+    "copyLink": "複製連結",
+    "copied": "已複製",
+    "previous": "上一篇",
+    "next": "下一篇",
+    "readingTime": "閱讀約 {minutes} 分鐘",
+    "snapshot": "資料快照 · 2025-05-15",
+    "expired": "已結束",
+    "backBlog": "全部文章",
+    "copyError": "複製失敗，請選取文字複製。",
+    "latest": "最新",
+    "author": "作者"
   }
 }

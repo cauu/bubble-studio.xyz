@@ -1,19 +1,5 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import {
-  Activity,
-  BadgeCheck,
-  CheckCircle2,
-  Clock3,
-  ExternalLink,
-  Gauge,
-  Network,
-  Search,
-  Server,
-  ShieldCheck,
-  WalletCards
-} from 'lucide-react';
-
 import { GlobalConfig } from '@/constants';
 import { Link } from '@/i18n/navigation';
 import { getPoolStats } from '@/lib/pool-stats';
@@ -26,9 +12,9 @@ import {
   getLocalizedUrl,
   getOpenGraphLocale
 } from '@/lib/seo';
-import { PoolLedgerCard } from '@/components/home/PoolLedgerCard';
-import { Button } from '@/components/ui/Button';
-import { Chip } from '@/components/ui/Chip';
+import { PageHeader } from '@/components/neon/PageHeader';
+import { Gate } from '@/components/neon/Gate';
+import { CopyButton } from '@/components/neon/CopyButton';
 import { JsonLd } from '@/components/JsonLd';
 
 type Props = {
@@ -58,32 +44,10 @@ const officialSources = [
   }
 ] as const;
 
-const mechanismItems = [
-  { key: 'ownership', icon: ShieldCheck, color: 'bg-brand-mint' },
-  { key: 'participation', icon: Network, color: 'bg-brand-sky' },
-  { key: 'operator', icon: Server, color: 'bg-brand-lavender' }
-] as const;
-
-const rewardSteps = [
-  { key: 'snapshot', icon: Clock3 },
-  { key: 'production', icon: Activity },
-  { key: 'distribution', icon: BadgeCheck }
-] as const;
-
-const delegationSteps = [
-  { key: 'open', icon: ExternalLink },
-  { key: 'verify', icon: Search },
-  { key: 'wallet', icon: WalletCards },
-  { key: 'confirm', icon: CheckCircle2 },
-  { key: 'check', icon: BadgeCheck }
-] as const;
-
-const poolChecks = [
-  { key: 'fees', icon: WalletCards },
-  { key: 'saturation', icon: Gauge },
-  { key: 'performance', icon: Activity },
-  { key: 'operator', icon: Server }
-] as const;
+const mechanismItems = ['ownership', 'participation', 'operator'] as const;
+const rewardSteps = ['snapshot', 'production', 'distribution'] as const;
+const delegationSteps = ['open', 'verify', 'wallet', 'confirm', 'check'] as const;
+const poolChecks = ['fees', 'saturation', 'performance', 'operator'] as const;
 
 const faqKeys = ['custody', 'guarantee', 'timing', 'redelegate', 'support'] as const;
 
@@ -188,295 +152,202 @@ export default async function StakingPage({ params: { locale } }: Props) {
   };
 
   return (
-    <div className="relative overflow-x-hidden pb-24 max-[860px]:pb-[72px]">
+    <div className="staking-page">
       <JsonLd id="staking-structured-data" data={structuredData} />
-      <section className="relative isolate overflow-hidden pb-20 pt-20 max-[860px]:pb-16 max-[860px]:pt-14">
-        <div className="hero-aura animate-aura-drift" aria-hidden="true" />
-        <div className="hero-grain" aria-hidden="true" />
-        <div className="wrap relative z-[1] grid grid-cols-[1.15fr_.85fr] items-center gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-10">
-          <div>
-            <span className="mb-5 block text-xs font-bold uppercase tracking-[.12em] text-brand-incana">
-              {t('hero.eyebrow')}
-            </span>
-            <h1 className="max-w-[13em] text-balance text-[clamp(42px,5vw,64px)] leading-[1.1] tracking-[-1.5px] max-[600px]:text-[38px]">
-              {t('hero.title')}
-            </h1>
-            <p className="mt-6 max-w-[41rem] text-pretty text-[17px] leading-[1.8] text-body-strong">
-              {t('hero.answer')}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3 max-[600px]:flex-col">
-              <Button href="#delegate" size="lg" className="max-[600px]:w-full">
-                {t('hero.learnCta')}
-              </Button>
-              <Button
-                href={GlobalConfig.DELEGATE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="ghost"
-                size="lg"
-                className="max-[600px]:w-full"
-              >
-                {t('hero.delegateCta')}
-                <ExternalLink size={16} aria-hidden="true" />
-              </Button>
-            </div>
-            <p className="mt-4 text-sm font-semibold text-muted">{t('hero.safety')}</p>
-          </div>
-          <PoolLedgerCard stats={stats} />
+      <PageHeader
+        path="staking"
+        title={<span className="hl">{t('hero.title')}</span>}
+        sub={t('hero.answer')}
+        color="cy"
+      >
+        <div className="ctas">
+          <a className="cbtn" href="#delegate">
+            {t('hero.learnCta')}
+          </a>
+          <a className="cbtn alt" href={GlobalConfig.DELEGATE_URL} target="_blank" rel="noopener noreferrer">
+            {t('hero.delegateCta')} ↗
+          </a>
         </div>
-      </section>
-
-      <section id="how-it-works" className="bg-white py-20 max-[860px]:py-16" aria-labelledby="mechanism-title">
-        <div className="wrap">
-          <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">
-            {t('mechanism.eyebrow')}
-          </span>
-          <h2 id="mechanism-title" className="mt-4 max-w-[18em] text-[clamp(30px,4vw,44px)] leading-[1.15]">
-            {t('mechanism.title')}
-          </h2>
-          <p className="mt-5 max-w-[48rem] text-[16px] leading-[1.8] text-body">{t('mechanism.intro')}</p>
-          <div className="mt-10 grid grid-cols-3 gap-8 max-[820px]:grid-cols-1 max-[820px]:gap-0">
-            {mechanismItems.map(({ key, icon: Icon, color }) => (
-              <article
-                key={key}
-                className="border-t border-hairline pt-6 max-[820px]:grid max-[820px]:grid-cols-[44px_1fr] max-[820px]:gap-x-4 max-[820px]:py-6"
-              >
-                <span
-                  className={`grid h-10 w-10 place-items-center rounded-md text-ink ${color} max-[820px]:row-span-2`}
-                  aria-hidden="true"
-                >
-                  <Icon size={19} />
-                </span>
-                <h3 className="mt-5 text-lg leading-[1.4] max-[820px]:mt-0">{t(`mechanism.items.${key}.title`)}</h3>
-                <p className="mt-2 text-[14.5px] leading-[1.75] text-body">{t(`mechanism.items.${key}.body`)}</p>
+        <p className="safety">{t('hero.safety')}</p>
+      </PageHeader>
+      <section id="how-it-works" aria-labelledby="mechanism-title">
+        <Gate num="01" en={t('mechanism.eyebrow')} title={t('mechanism.title')} titleId="mechanism-title" color="mag" />
+        <div className="lane">
+          <p className="section-intro">{t('mechanism.intro')}</p>
+          <div className="g3">
+            {mechanismItems.map((key, i) => (
+              <article className="sc" key={key}>
+                <span className={`ic ${['g-p', 'g-a', 'g-o'][i]}`} aria-hidden="true" />
+                <h3>{t(`mechanism.items.${key}.title`)}</h3>
+                <p>{t(`mechanism.items.${key}.body`)}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
-
-      <section id="rewards" className="py-20 max-[860px]:py-16" aria-labelledby="rewards-title">
-        <div className="wrap">
-          <div className="overflow-hidden rounded-xl bg-brand-incana px-10 py-10 text-on-dark max-[760px]:px-6 max-[760px]:py-8">
-            <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-lemon">
-              {t('rewards.eyebrow')}
-            </span>
-            <h2 id="rewards-title" className="mt-4 max-w-[18em] text-[clamp(30px,4vw,44px)] leading-[1.15] text-white">
-              {t('rewards.title')}
-            </h2>
-            <p className="mt-5 max-w-[50rem] text-[16px] leading-[1.8] text-white/80">{t('rewards.intro')}</p>
-            <ol className="mt-9 grid grid-cols-3 divide-x divide-white/20 border-y border-white/20 max-[760px]:grid-cols-1 max-[760px]:divide-x-0 max-[760px]:divide-y">
-              {rewardSteps.map(({ key, icon: Icon }, index) => (
-                <li key={key} className="px-6 py-7 first:pl-0 last:pr-0 max-[760px]:px-0 max-[760px]:py-6">
-                  <div className="flex items-center justify-between">
-                    <Icon size={20} className="text-brand-lemon" aria-hidden="true" />
-                    <span className="text-xs font-bold text-white/50 tnum">0{index + 1}</span>
-                  </div>
-                  <h3 className="mt-4 text-lg leading-[1.4] text-white">{t(`rewards.steps.${key}.title`)}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.75] text-white/75">{t(`rewards.steps.${key}.body`)}</p>
-                </li>
-              ))}
-            </ol>
-            <p className="mt-6 border-l-2 border-brand-lemon pl-4 text-[14px] leading-[1.7] text-white/85">
-              {t('rewards.disclaimer')}
-            </p>
-          </div>
+      <section id="rewards" aria-labelledby="rewards-title">
+        <Gate num="02" en={t('rewards.eyebrow')} title={t('rewards.title')} titleId="rewards-title" color="cy" />
+        <div className="lane">
+          <p className="section-intro">{t('rewards.intro')}</p>
+          <ol className="tline">
+            {rewardSteps.map((key, i) => (
+              <li key={key} style={{ ['--c' as string]: `var(--${['mag', 'cy', 'yel'][i]})` }}>
+                <span className="ep">0{i + 1}</span>
+                <h3>{t(`rewards.steps.${key}.title`)}</h3>
+                <p>{t(`rewards.steps.${key}.body`)}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="warn">{t('rewards.disclaimer')}</p>
         </div>
       </section>
-
-      <section id="pao-pool" className="bg-white py-20 max-[860px]:py-16" aria-labelledby="pool-title">
-        <div className="wrap grid grid-cols-[.88fr_1.12fr] items-start gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-9">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">{t('pool.eyebrow')}</span>
-            <h2 id="pool-title" className="mt-4 text-[clamp(30px,4vw,44px)] leading-[1.15]">
-              {t('pool.title')}
-            </h2>
-            <p className="mt-5 text-[16px] leading-[1.8] text-body">{t('pool.intro')}</p>
-          </div>
-          <div className="rounded-xl bg-surface-soft p-8 max-[600px]:p-5">
-            <div className="border-b border-hairline pb-6">
-              <span className="text-xs font-bold uppercase tracking-[.1em] text-muted">{t('pool.poolIdLabel')}</span>
-              <code className="mt-3 block break-all text-[13px] leading-[1.7] text-ink">{GlobalConfig.POOL_ID}</code>
-            </div>
-            <div className="mt-6 flex flex-wrap gap-3 max-[600px]:flex-col">
-              <Button href={GlobalConfig.DELEGATE_URL} target="_blank" rel="noopener noreferrer" size="lg">
-                {t('pool.delegateCta')}
-                <ExternalLink size={16} aria-hidden="true" />
-              </Button>
-              <Button
+      <section id="pao-pool" aria-labelledby="pool-title">
+        <Gate num="03" en={t('pool.eyebrow')} title={t('pool.title')} titleId="pool-title" color="yel" />
+        <div className="lane poolg">
+          <div className="term">
+            <header>pool --info</header>
+            <dl className="body">
+              <div className="row">
+                <dt className="k">ticker</dt>
+                <dd className="v">PAO</dd>
+              </div>
+              <div className="pool-id">
+                <dt>{t('pool.poolIdLabel')}</dt>
+                <dd>
+                  <code>{GlobalConfig.POOL_ID}</code>
+                  <CopyButton value={GlobalConfig.POOL_ID} ariaLabel={t('pool.poolIdLabel')} />
+                </dd>
+              </div>
+              <div className="row">
+                <dt className="k">stake</dt>
+                <dd className="v">{stats.isLive ? stats.stake : '—'}</dd>
+              </div>
+              <div className="row">
+                <dt className="k">delegators</dt>
+                <dd className="v">{stats.isLive ? stats.delegators : '—'}</dd>
+              </div>
+              <div className="row">
+                <dt className="k">APY (est.)</dt>
+                <dd>{stats.apy}</dd>
+              </div>
+              {stats.marginPct !== null && (
+                <div className="row">
+                  <dt className="k">margin</dt>
+                  <dd>{stats.marginPct}%</dd>
+                </div>
+              )}
+              {stats.fixedCostAda !== null && (
+                <div className="row">
+                  <dt className="k">fixed cost</dt>
+                  <dd>₳ {stats.fixedCostAda}</dd>
+                </div>
+              )}
+            </dl>
+            <div className="cta">
+              <a className="cbtn sm" href={GlobalConfig.DELEGATE_URL} target="_blank" rel="noopener noreferrer">
+                {t('pool.delegateCta')} ↗
+              </a>
+              <a
+                className="cbtn sm alt"
                 href={GlobalConfig.CARDANOSCAN_POOL_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                variant="ghost"
-                size="lg"
               >
-                {t('pool.verifyCta')}
-              </Button>
+                {t('pool.verifyCta')} ↗
+              </a>
             </div>
-            <p className="mt-6 text-[13px] leading-[1.7] text-muted">
-              {stats.isLive ? t('pool.liveNote') : t('pool.fallbackNote')}
-            </p>
-            <p className="mt-2 text-[13px] leading-[1.7] text-muted">{t('pool.estimateNote')}</p>
+          </div>
+          <div className="notes">
+            <p>{t('pool.intro')}</p>
+            <p>{stats.isLive ? t('pool.liveNote') : t('pool.fallbackNote')}</p>
+            <p>{t('pool.estimateNote')}</p>
           </div>
         </div>
       </section>
-
-      <section id="delegate" className="scroll-mt-24 py-20 max-[860px]:py-16" aria-labelledby="delegate-title">
-        <div className="wrap">
-          <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">
-            {t('delegate.eyebrow')}
-          </span>
-          <h2 id="delegate-title" className="mt-4 max-w-[20em] text-[clamp(30px,4vw,44px)] leading-[1.15]">
-            {t('delegate.title')}
-          </h2>
-          <p className="mt-5 max-w-[50rem] text-[16px] leading-[1.8] text-body">{t('delegate.intro')}</p>
-          <ol className="mt-10 max-w-[900px] border-y border-hairline">
-            {delegationSteps.map(({ key, icon: Icon }, index) => (
-              <li
-                key={key}
-                className="grid grid-cols-[72px_1fr] gap-5 border-b border-hairline-soft py-6 last:border-b-0 max-[600px]:grid-cols-[52px_1fr] max-[600px]:gap-3"
-              >
-                <div className="flex items-start justify-between gap-2 pt-0.5 max-[600px]:justify-start">
-                  <Icon size={19} className="text-brand-incana" aria-hidden="true" />
-                  <span className="text-xs font-bold text-muted tnum max-[600px]:hidden">0{index + 1}</span>
-                </div>
-                <div>
-                  <h3 className="text-[17px] leading-[1.4]">
-                    <span className="mr-2 hidden text-xs text-muted tnum max-[600px]:inline">0{index + 1}</span>
-                    {t(`delegate.steps.${key}.title`)}
-                  </h3>
-                  <p className="mt-2 text-[14.5px] leading-[1.75] text-body">{t(`delegate.steps.${key}.body`)}</p>
-                </div>
+      <section id="delegate" aria-labelledby="delegate-title">
+        <Gate num="04" en={t('delegate.eyebrow')} title={t('delegate.title')} titleId="delegate-title" color="grn" />
+        <div className="lane">
+          <p className="section-intro">{t('delegate.intro')}</p>
+          <ol className="dsteps">
+            {delegationSteps.map((key) => (
+              <li key={key}>
+                <h3>{t(`delegate.steps.${key}.title`)}</h3>
+                <p>{t(`delegate.steps.${key}.body`)}</p>
               </li>
             ))}
           </ol>
         </div>
       </section>
-
-      <section id="choose-a-pool" className="bg-white py-20 max-[860px]:py-16" aria-labelledby="choose-title">
-        <div className="wrap">
-          <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">{t('choose.eyebrow')}</span>
-          <h2 id="choose-title" className="mt-4 text-[clamp(30px,4vw,44px)] leading-[1.15]">
-            {t('choose.title')}
-          </h2>
-          <p className="mt-5 max-w-[48rem] text-[16px] leading-[1.8] text-body">{t('choose.intro')}</p>
-          <div className="mt-9 grid grid-cols-2 gap-x-10 max-[700px]:grid-cols-1">
-            {poolChecks.map(({ key, icon: Icon }) => (
-              <article key={key} className="grid grid-cols-[36px_1fr] gap-4 border-t border-hairline py-6">
-                <span
-                  className="grid h-9 w-9 flex-none place-items-center rounded-md bg-brand-sky text-primary"
-                  aria-hidden="true"
-                >
-                  <Icon size={17} />
-                </span>
-                <div>
-                  <h3 className="text-[17px] leading-[1.4]">{t(`choose.items.${key}.title`)}</h3>
-                  <p className="mt-2 text-[14.5px] leading-[1.75] text-body">{t(`choose.items.${key}.body`)}</p>
-                </div>
+      <section id="choose-a-pool" aria-labelledby="choose-title">
+        <Gate num="05" en={t('choose.eyebrow')} title={t('choose.title')} titleId="choose-title" color="cy" />
+        <div className="lane">
+          <p className="section-intro">{t('choose.intro')}</p>
+          <div className="g4">
+            {poolChecks.map((key) => (
+              <article className="ck" key={key}>
+                <h3>{t(`choose.items.${key}.title`)}</h3>
+                <p>{t(`choose.items.${key}.body`)}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
-
-      <section id="membership" className="py-20 max-[860px]:py-16" aria-labelledby="membership-title">
-        <div className="wrap">
-          <div className="grid grid-cols-[auto_1fr] items-start gap-7 rounded-xl bg-brand-lemon px-10 py-9 max-[650px]:grid-cols-1 max-[650px]:gap-5 max-[650px]:px-6 max-[650px]:py-7">
-            <Chip color="blank" className="justify-self-start">
-              {t('membership.label')}
-            </Chip>
-            <div>
-              <h2 id="membership-title" className="text-[clamp(28px,3.5vw,40px)] leading-[1.15]">
-                {t('membership.title')}
-              </h2>
-              <p className="mt-4 max-w-[52rem] text-[15.5px] leading-[1.8] text-body-strong">{t('membership.body')}</p>
-            </div>
-          </div>
+      <section id="membership" aria-labelledby="membership-title" className="lane membership-section">
+        <div className="member">
+          <span className="tag">{t('membership.label')}</span>
+          <h2 id="membership-title">{t('membership.title')}</h2>
+          <p>{t('membership.body')}</p>
         </div>
       </section>
-
-      <section id="faq" className="bg-white py-20 max-[860px]:py-16" aria-labelledby="faq-title">
-        <div className="wrap">
-          <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">{t('faq.eyebrow')}</span>
-          <h2 id="faq-title" className="mt-4 max-w-[16em] text-[clamp(30px,4vw,44px)] leading-[1.15]">
-            {t('faq.title')}
-          </h2>
-          <div className="mt-10 max-w-[900px] divide-y divide-hairline border-y border-hairline">
-            {faqKeys.map((key, index) => (
-              <details key={key} open={index === 0} className="group py-5">
-                <summary className="flex cursor-pointer list-none items-start justify-between gap-5 text-[17px] font-semibold leading-[1.45] text-ink marker:hidden [&::-webkit-details-marker]:hidden">
-                  <span>{t(`faq.items.${key}.question`)}</span>
-                  <span
-                    className="mt-0.5 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-surface-soft text-base font-medium leading-none text-body transition-transform group-open:rotate-45"
-                    aria-hidden="true"
-                  >
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 max-w-[48rem] pr-11 text-[14.5px] leading-[1.75] text-body">
-                  {t(`faq.items.${key}.answer`)}
-                </p>
-              </details>
-            ))}
-          </div>
+      <section id="faq" aria-labelledby="faq-title">
+        <Gate num="06" en={t('faq.eyebrow')} title={t('faq.title')} titleId="faq-title" color="mag" />
+        <div className="lane faq">
+          {faqKeys.map((key, i) => (
+            <details key={key} open={i === 0}>
+              <summary>
+                {t(`faq.items.${key}.question`)}
+                <i aria-hidden="true" />
+              </summary>
+              <p>{t(`faq.items.${key}.answer`)}</p>
+            </details>
+          ))}
         </div>
       </section>
-
-      <section id="sources" className="py-20 max-[860px]:py-16" aria-labelledby="sources-title">
-        <div className="wrap">
-          <span className="text-xs font-bold uppercase tracking-[.12em] text-brand-incana">{t('sources.eyebrow')}</span>
-          <h2 id="sources-title" className="mt-4 text-[clamp(30px,4vw,44px)] leading-[1.15]">
-            {t('sources.title')}
-          </h2>
-          <p className="mt-5 max-w-[50rem] text-[15.5px] leading-[1.8] text-body">{t('sources.intro')}</p>
-
-          <div className="mt-10 grid grid-cols-2 gap-8 max-[800px]:grid-cols-1">
+      <section id="sources" aria-labelledby="sources-title">
+        <Gate num="07" en={t('sources.eyebrow')} title={t('sources.title')} titleId="sources-title" color="yel" />
+        <div className="lane">
+          <p className="section-intro">{t('sources.intro')}</p>
+          <div className="srcs">
             <div>
-              <h3 className="text-xl">{t('sources.officialTitle')}</h3>
-              <ul className="mt-4 border-t border-hairline">
+              <h3>{t('sources.officialTitle')}</h3>
+              <ul>
                 {officialSources.map(({ key, href }) => (
                   <li key={key}>
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-start justify-between gap-4 border-b border-hairline py-4 text-[14px] font-semibold text-ink transition-colors hover:text-brand-incana"
-                    >
-                      <span>{t(`sources.official.${key}`)}</span>
-                      <ExternalLink size={15} className="mt-0.5 flex-none text-muted" aria-hidden="true" />
+                    <a href={href} target="_blank" rel="noopener noreferrer">
+                      {t(`sources.official.${key}`)} ↗
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
-
             <div>
-              <h3 className="text-xl">{t('sources.relatedTitle')}</h3>
-              <ul className="mt-4 border-t border-hairline">
+              <h3>{t('sources.relatedTitle')}</h3>
+              <ul className="rel">
                 {relatedPosts.map(({ key, slug }) => (
                   <li key={key}>
-                    <Link
-                      href={`/blogs/${getLocalizedPostSlug(slug, locale)}`}
-                      className="group block border-b border-hairline py-4"
-                    >
-                      <span className="block text-[14px] font-semibold text-ink transition-colors group-hover:text-brand-incana">
-                        {t(`sources.related.${key}.title`)}
-                      </span>
-                      <span className="mt-1 block text-[13px] leading-[1.6] text-muted">
-                        {t(`sources.related.${key}.description`)}
-                      </span>
+                    <Link href={`/blogs/${getLocalizedPostSlug(slug, locale)}`}>
+                      <b>{t(`sources.related.${key}.title`)}</b>
+                      <span>{t(`sources.related.${key}.description`)}</span>
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-
-          <p className="mt-8 max-w-[52rem] border-l-2 border-brand-incana pl-4 text-[13.5px] leading-[1.75] text-body">
-            {t('sources.disclaimer')}
-          </p>
+          <p className="warn">{t('sources.disclaimer')}</p>
         </div>
       </section>
+      <div className="sec-end" />
     </div>
   );
 }

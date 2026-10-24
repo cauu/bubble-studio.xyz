@@ -5,7 +5,7 @@ import { Check, ChevronDown } from 'lucide-react';
 import clsx from 'clsx';
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useRouter } from '@/i18n/navigation';
-import { Button } from '@/components/ui/Button';
+import { getLocalizedPostSlug } from '@/lib/seo';
 
 const languages = [
   { code: 'zh', name: '简体中文' },
@@ -90,16 +90,18 @@ export const LanguageSwitcher = () => {
 
   const selectLanguage = (locale: LanguageCode) => {
     setIsOpen(false);
-    if (locale !== currentLocale) router.replace(pathname, { locale });
+    if (locale !== currentLocale) {
+      const target = pathname.startsWith('/blogs/')
+        ? `/blogs/${getLocalizedPostSlug(pathname.slice('/blogs/'.length), locale)}`
+        : pathname;
+      router.replace(target, { locale });
+    }
   };
 
   return (
-    <div ref={containerRef} className="relative">
-      <Button
+    <div ref={containerRef} className="lang">
+      <button
         type="button"
-        variant="ghost"
-        size="md"
-        className="min-w-[92px]"
         aria-label={t('nav.langLabel')}
         aria-haspopup="menu"
         aria-expanded={isOpen}
@@ -107,24 +109,19 @@ export const LanguageSwitcher = () => {
         onClick={() => setIsOpen((open) => !open)}
         onKeyDown={handleTriggerKeyDown}
       >
-        <span>{currentLanguage.name}</span>
+        <span className="lang-full">{currentLanguage.name}</span>
+        <span className="lang-short" aria-hidden="true">
+          {currentLocale === 'en' ? 'EN' : currentLocale === 'zh' ? '简中' : '繁中'}
+        </span>
         <ChevronDown
-          size={16}
+          size={14}
           strokeWidth={2}
           className={clsx('transition-transform duration-200', isOpen && 'rotate-180')}
           aria-hidden="true"
         />
-      </Button>
+      </button>
 
-      <div
-        id="language-menu"
-        role="menu"
-        aria-label={t('nav.langLabel')}
-        className={clsx(
-          'absolute right-0 top-[calc(100%+8px)] z-50 min-w-[136px] space-y-1 overflow-hidden rounded-md border border-hairline bg-white p-2 shadow-card transition duration-150',
-          isOpen ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-1 opacity-0'
-        )}
-      >
+      <div id="language-menu" role="menu" aria-label={t('nav.langLabel')} className="lang-menu" data-open={isOpen}>
         {languages.map((language, index) => {
           const isCurrent = language.code === currentLocale;
 
@@ -140,12 +137,6 @@ export const LanguageSwitcher = () => {
               tabIndex={isOpen ? 0 : -1}
               onClick={() => selectLanguage(language.code)}
               onKeyDown={(event) => handleOptionKeyDown(event, index)}
-              className={clsx(
-                'flex w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium text-body transition-colors duration-150 focus-visible:outline-none',
-                isCurrent
-                  ? 'bg-surface-card text-ink'
-                  : 'hover:bg-surface-soft hover:text-ink focus-visible:bg-surface-soft focus-visible:text-ink'
-              )}
             >
               <span className="whitespace-nowrap">{language.name}</span>
               <Check

@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B · 动态编辑 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ===== Direction B: Kinetic Editorial =====
+   排版驱动：超大字、遮罩上升、滚动联动叙事、跑马灯与描线。颜色克制，每段只点亮一种品牌色。 */
+
+.js [data-reveal] { clip-path: inset(0 0 100% 0); transform: translateY(24px); transition: opacity .6s var(--ease), clip-path 1s var(--ease), transform 1s var(--ease); }
+.js [data-reveal].in { clip-path: inset(0 0 -20% 0); transform: none; }
+
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60; background: var(--teal); transform-origin: left; transform: scaleX(0); }
+
+.kicker { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; }
+.kicker b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.kicker::after { content: ""; flex: 1; height: 1px; background: var(--hairline); }
+
+/* ---------- Hero ---------- */
+.hero { padding: 96px 0 0; position: relative; }
+.hero h1 { font-size: clamp(48px, 9.4vw, 136px); line-height: 1.02; font-weight: 900; letter-spacing: -.01em; margin-bottom: 40px; }
+.hero h1 .ln { display: block; overflow: hidden; padding: .04em 0; }
+.hero h1 .ch { display: inline-block; transform: translateY(105%); animation: up .9s var(--ease) forwards; animation-delay: calc(var(--i) * 45ms + 120ms); }
+.hero h1 .teal { color: var(--teal); }
+@keyframes up { to { transform: none; } }
+.hero-low { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end; padding-bottom: 56px; }
+.hero-low p { font-size: 18px; line-height: 1.75; color: var(--body-strong); max-width: 34em; white-space: pre-line; opacity: 0; animation: fade .8s var(--ease) .9s forwards; }
+.hero-low .ctas { display: flex; gap: 12px; opacity: 0; animation: fade .8s var(--ease) 1.05s forwards; }
+@keyframes fade { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.dot-live { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); margin-right: 8px; animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.6); opacity: .5; } }
+
+/* Stat strip (replaces ledger card) */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--hairline); }
+.stat { padding: 26px 24px 28px 0; position: relative; }
+.stat + .stat { padding-left: 24px; border-left: 1px solid var(--hairline); }
+.stat small { display: block; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.stat b { font-size: clamp(30px, 3.6vw, 48px); font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -.02em; }
+.stat a { position: absolute; right: 0; top: 26px; font-size: 12px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Marquee */
+.marquee { overflow: hidden; border-bottom: 1px solid var(--hairline); padding: 18px 0; background: var(--canvas); }
+.marquee .track { display: flex; width: max-content; animation: slide 36s linear infinite; }
+.marquee:hover .track { animation-play-state: paused; }
+.marquee span { display: inline-flex; align-items: center; gap: 28px; padding-right: 28px; font-size: 22px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.marquee span i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); flex: none; }
+@keyframes slide { to { transform: translateX(-50%); } }
+
+/* ---------- Sections ---------- */
+section.band { padding: 128px 0; position: relative; }
+.band.soft { background: var(--card); }
+.band.white { background: #fff; }
+h2.big { font-size: clamp(38px, 6vw, 84px); line-height: 1.05; font-weight: 900; letter-spacing: -.01em; }
+
+/* Perks: sticky left + scroll-activated steps */
+.perks { display: grid; grid-template-columns: .9fr 1.1fr; gap: 72px; }
+.perks-left { position: sticky; top: 110px; align-self: start; }
+.perks-left p { font-size: 16px; line-height: 1.8; margin: 24px 0 36px; white-space: pre-line; }
+.zero { display: flex; align-items: baseline; gap: 14px; padding: 24px 28px; border-radius: var(--r-xl); background: var(--teal); color: #fff; }
+.zero b { font-size: 88px; font-weight: 900; line-height: .9; letter-spacing: -3px; }
+.zero span { font-size: 14px; color: rgba(255,255,255,.85); line-height: 1.5; }
+.zero span em { font-style: normal; display: block; color: var(--lemon); font-weight: 700; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.steps { position: relative; padding-left: 40px; }
+.steps::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: rgba(23,32,38,.1); }
+.steps .fill { position: absolute; left: 7px; top: 8px; width: 2px; height: calc(100% - 16px); background: var(--teal); transform-origin: top; transform: scaleY(var(--p, 0)); }
+.step { position: relative; padding: 40px 0; min-height: clamp(220px, 34vh, 340px); opacity: .32; transition: opacity .5s var(--ease); }
+.step::before { content: ""; position: absolute; left: -40px; top: 50px; width: 16px; height: 16px; border-radius: 50%; background: var(--card); border: 2px solid rgba(23,32,38,.18); transition: all .4s var(--spring); }
+.step.on { opacity: 1; }
+.step.on::before { background: var(--c); border-color: var(--c); transform: scale(1.25); }
+.step .n { font-size: 13px; font-weight: 800; color: var(--muted); letter-spacing: .1em; }
+.step h3 { font-size: clamp(24px, 2.6vw, 34px); line-height: 1.2; margin: 8px 0 12px; }
+.step p { font-size: 16px; line-height: 1.75; max-width: 30em; }
+.step .chip { margin-top: 16px; background: #fff; }
+
+/* Benefits: editorial index rows */
+.rows { border-top: 1px solid var(--ink); margin-top: 56px; }
+.row { display: grid; grid-template-columns: 80px 1fr 1.1fr 40px; gap: 24px; align-items: center; padding: 30px 0; border-bottom: 1px solid var(--hairline); position: relative; isolation: isolate; cursor: default; }
+.row::before { content: ""; position: absolute; inset: 0 -24px; z-index: -1; background: var(--c); border-radius: var(--r-lg); transform: scaleY(0); transform-origin: bottom; transition: transform .45s var(--ease); }
+.row:hover::before { transform: scaleY(1); }
+.row .n { font-size: 14px; font-weight: 800; color: var(--muted); }
+.row h3 { font-size: clamp(22px, 2.4vw, 32px); line-height: 1.2; }
+.row h3 small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.row p { font-size: 15px; line-height: 1.7; }
+.row .arr { font-size: 22px; color: var(--ink); transition: transform .4s var(--spring); }
+.row:hover .arr { transform: translateX(6px) rotate(-45deg); }
+.chart-reveal { margin-top: 56px; border-radius: var(--r-xl); overflow: hidden; background: #0b1114; }
+.js .chart-reveal img { transform: scale(1.12); transition: transform 1.6s var(--ease); }
+.chart-reveal.in img { transform: none; }
+.cap-line { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-top: 12px; }
+
+/* Projects: horizontal strip */
+.strip-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; }
+.strip-head p { max-width: 30em; font-size: 16px; line-height: 1.75; margin-top: 20px; }
+.strip-ctl { display: flex; gap: 8px; }
+.strip-ctl button { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--hairline); background: #fff; font-size: 18px; cursor: pointer; transition: background .2s, transform .3s var(--spring); }
+.strip-ctl button:hover { background: var(--ink); color: #fff; transform: scale(1.06); }
+.strip { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 48px max(24px, calc((100vw - 1132px) / 2)) 8px; scrollbar-width: none; }
+.strip::-webkit-scrollbar { display: none; }
+.card { flex: 0 0 min(460px, 82vw); scroll-snap-align: start; }
+.card .shot { aspect-ratio: 4/3; border-radius: var(--r-xl); overflow: hidden; background: var(--soft); }
+.card .shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease); }
+.card:hover .shot img { transform: scale(1.05); }
+.card .meta { display: flex; justify-content: space-between; align-items: baseline; margin-top: 18px; border-top: 1px solid var(--ink); padding-top: 14px; }
+.card h3 { font-size: 28px; font-weight: 800; }
+.card .meta span { font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--muted); }
+.card p { font-size: 15px; margin-top: 8px; }
+.card .lk { display: inline-block; margin-top: 14px; font-weight: 600; color: var(--ink); background: linear-gradient(var(--ink), var(--ink)) left bottom / 0 2px no-repeat; transition: background-size .4s var(--ease); padding-bottom: 2px; }
+.card:hover .lk { background-size: 100% 2px; }
+
+/* Model: scroll-filled statement + drawn flow */
+.statement { font-size: clamp(26px, 3.6vw, 48px); line-height: 1.4; font-weight: 800; max-width: 22em; }
+.statement .w { color: rgba(10,10,10,.14); transition: color .3s; }
+.statement .w.lit { color: var(--ink); }
+.statement .w.lit.t { color: var(--teal); }
+.flowmap { margin-top: 80px; display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: 0; align-items: center; position: relative; }
+.flowmap .col { display: grid; gap: 12px; }
+.node { padding: 18px 20px; border: 1px solid var(--hairline); border-radius: var(--r-lg); background: #fff; position: relative; }
+.node small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.node b { font-size: 18px; color: var(--ink); }
+.node.found { border-color: transparent; background: var(--sky); }
+.node.found small { color: rgba(10,10,10,.6); }
+.hub { margin: 0 28px; background: var(--teal); color: #fff; border-radius: var(--r-xl); padding: 28px; position: relative; z-index: 1; }
+.hub em { font-style: normal; font-size: 12px; font-weight: 700; letter-spacing: .12em; color: var(--lemon); text-transform: uppercase; }
+.hub h3 { color: #fff; font-size: 26px; margin: 6px 0 10px; }
+.hub p { font-size: 14px; color: rgba(255,255,255,.8); }
+.flowlines { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: visible; }
+.flowlines path { fill: none; stroke: var(--hairline); stroke-width: 1.5; stroke-dasharray: 600; stroke-dashoffset: 600; transition: stroke-dashoffset 1.6s var(--ease); }
+.flowmap.in .flowlines path { stroke-dashoffset: 0; }
+.flowlines path.hot { stroke: var(--teal); stroke-width: 2; }
+
+/* Contact */
+.contact { padding: 128px 0 140px; background: #fff; }
+.contact .chip { background: var(--card); }
+.contact h2 { font-size: clamp(44px, 8vw, 116px); line-height: 1.02; font-weight: 900; margin: 28px 0 32px; }
+.contact h2 a { background: linear-gradient(var(--lemon), var(--lemon)) left 88% / 0 .22em no-repeat; transition: background-size .6s var(--ease); }
+.contact h2 a:hover { background-size: 100% .22em; }
+.contact .row2 { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
+.contact p { font-size: 17px; line-height: 1.75; max-width: 32em; white-space: pre-line; }
+
+@media (max-width: 900px) {
+  .hero-low { grid-template-columns: 1fr; gap: 28px; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+  .stat:nth-child(n+3) { border-top: 1px solid var(--hairline); }
+  .perks { grid-template-columns: 1fr; gap: 40px; }
+  .perks-left { position: static; }
+  .step { min-height: 0; padding: 28px 0; opacity: 1; }
+  .row { grid-template-columns: 48px 1fr 32px; }
+  .row p { grid-column: 2 / 3; }
+  .flowmap { grid-template-columns: 1fr; gap: 16px; }
+  .hub { margin: 0; }
+  .flowlines { display: none; }
+}
+@media (max-width: 600px) {
+  section.band, .contact { padding: 84px 0; }
+  .hero { padding-top: 64px; }
+  .hero-low .ctas { flex-direction: column; } .hero-low .ctas .btn { width: 100%; }
+  .stat { padding-right: 12px; } .stat + .stat { padding-left: 12px; } .stat:nth-child(3) { padding-left: 0; }
+  .stat a { position: static; display: inline-block; margin-top: 8px; }
+  .strip-ctl { display: none; }
+  .strip { padding-left: 18px; padding-right: 18px; }
+  .zero b { font-size: 64px; }
+}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="#"><img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/pao_logo.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="#" aria-current="page">首页</a><a href="#">博客</a><a href="#">项目</a><a href="#">Skills</a></div>
+    <div class="nav-right"><span class="nav-lang">简体中文</span><a class="btn btn-primary btn-sm" href="#contact">合作</a></div>
+  </div>
+</nav>
+
+<main>
+  <section class="hero" aria-labelledby="hero-h1">
+    <div class="wrap">
+      <div class="kicker"><b>Pao Studio</b> 一人公司实验 · Cardano</div>
+      <h1 id="hero-h1" data-split>
+        <span class="ln">一家建立在</span>
+        <span class="ln">Cardano 上的</span>
+        <span class="ln teal">一人公司</span>
+      </h1>
+      <div class="hero-low">
+        <p>探索由 Cardano 矿池支持的一人公司运营模式，并分享实践经验。
+希望通过我们的努力，能让 Cardano 成为一人公司的新基建。</p>
+        <div class="ctas"><a class="btn btn-primary" href="#">委托给 Pao Pool</a><a class="btn btn-ghost" href="#perks">查看订阅内容</a></div>
+      </div>
+      <div class="stats" role="table" aria-label="Pao Pool 矿池数据">
+        <div class="stat" role="row"><small><span class="dot-live" aria-hidden="true"></span>矿池代号</small><b>PAO</b></div>
+        <div class="stat" role="row"><small>矿池质押量</small><b class="tnum" data-count="1.5" data-decimals="1" data-suffix="K ADA">1.5K ADA</b></div>
+        <div class="stat" role="row"><small>质押年化</small><b class="tnum" data-count="2.2" data-decimals="1" data-suffix="%">2.2%</b></div>
+        <div class="stat" role="row"><small>委托人</small><b class="tnum" data-count="4">4</b><a href="#">CardanoScan →</a></div>
+      </div>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="track">
+        <span><i style="--c:var(--sky)"></i>非托管<i style="--c:var(--lavender)"></i>不锁仓<i style="--c:var(--lemon)"></i>委托即会员<i style="--c:var(--grass)"></i>奖励会变化<i style="--c:var(--mint)"></i>可随时更换矿池<i style="--c:var(--orange)"></i>Cardano 开源基础设施</span>
+        <span><i style="--c:var(--sky)"></i>非托管<i style="--c:var(--lavender)"></i>不锁仓<i style="--c:var(--lemon)"></i>委托即会员<i style="--c:var(--grass)"></i>奖励会变化<i style="--c:var(--mint)"></i>可随时更换矿池<i style="--c:var(--orange)"></i>Cardano 开源基础设施</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Perks -->
+  <section class="band soft" id="perks" aria-labelledby="perks-h2">
+    <div class="wrap">
+      <div class="kicker"><b>01</b> 订阅模式</div>
+      <div class="perks">
+        <div class="perks-left">
+          <h2 class="big" id="perks-h2" data-reveal>质押即订阅</h2>
+          <p data-reveal data-delay="100">传统订阅模式要求用户定期付费。Pao Studio 尝试基于 Cardano 原生质押机制，建立一种新的订阅方式。
+用户将 ADA 委托给 Pao Pool，无需额外付费、锁仓或托管，照常获得质押奖励。</p>
+          <div class="zero" data-reveal data-delay="200"><b class="tnum">$0</b><span><em>订阅费用</em>将 ADA 委托给 Pao Pool，即可享受内容和产品服务。<br>非托管 · 不锁仓 · 可随时更换矿池</span></div>
+        </div>
+        <div class="steps">
+          <span class="fill" aria-hidden="true"></span>
+          <div class="step" style="--c:var(--sky)"><span class="n">01 · 模式如何运作</span><h3>无需另行支付订阅费</h3><p>ADA 不会转入 Pao Studio 或 Pao Pool，委托期间也不会被锁定。</p><span class="chip">非托管</span></div>
+          <div class="step" style="--c:var(--lavender)"><span class="n">02</span><h3>委托关系对应会员身份</h3><p>系统可以根据链上委托状态识别会员，并开放相应的内容、产品功能、早期体验和会员活动。</p><span class="chip">委托即会员</span></div>
+          <div class="step" style="--c:var(--mint)"><span class="n">03</span><h3>矿池收入用于公司运营</h3><p>Pao Pool 获得的运营收入用于支付节点、服务器、AI 服务和产品开发成本，为一人公司的持续运营提供一项收入来源。</p><span class="chip">运营收入</span></div>
+          <div class="step" style="--c:var(--grass)"><span class="n">04</span><h3>委托者参与产品迭代</h3><p>委托者可以参与早期测试并提交实际需求，相关反馈将作为产品调整的参考。</p><span class="chip">产品反馈</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="band white" aria-labelledby="ben-h2">
+    <div class="wrap">
+      <div class="kicker"><b>02</b> 委托者权益</div>
+      <h2 class="big" id="ben-h2" data-reveal>现在质押，<br>可以获得...</h2>
+      <div class="rows">
+        <div class="row" style="--c:var(--lavender)" data-reveal><span class="n">01</span><h3><small>内容服务</small>Crypto 交易策略推送</h3><p>提供具体的 Crypto 交易策略内容，包括市场判断、交易逻辑、执行条件和风险说明。</p><span class="arr" aria-hidden="true">→</span></div>
+        <div class="row" style="--c:var(--lemon)" data-reveal><span class="n">02</span><h3><small>不定期开放</small>Token 抽奖</h3><p>面向委托者开展 Token 抽奖，奖品可能包括 ADA、SNEK 等资产。奖品内容和参与条件以每期活动规则为准。</p><span class="arr" aria-hidden="true">→</span></div>
+        <div class="row" style="--c:var(--sky)" data-reveal><span class="n">03</span><h3><small>Coming Soon</small>交易 Agent 内测权限</h3><p>交易 Agent 开放内测后，Pao Pool 委托者可以优先使用，并参与早期产品反馈。</p><span class="arr" aria-hidden="true">→</span></div>
+        <div class="row" style="--c:var(--grass)" data-reveal><span class="n">04</span><h3><small>开源</small>支持 Cardano 开源产品开发</h3><p>将 ADA 委托给 Pao Pool，支持我们为 Cardano 的开源生态贡献产品。</p><span class="arr" aria-hidden="true">→</span></div>
+      </div>
+      <figure class="chart-reveal" data-reveal><img src="../../../public/images/trading-strategy-card.png" alt="BTCUSDT 4 小时交易策略示意图" width="2244" height="701" loading="lazy"></figure>
+      <div class="cap-line"><span>交易策略示意 · BTCUSDT 4H</span><span>仅为内容样例，不构成投资建议</span></div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="band soft" aria-labelledby="proj-h2" style="padding-bottom:112px">
+    <div class="wrap">
+      <div class="kicker"><b>03</b> 项目</div>
+      <div class="strip-head">
+        <div><h2 class="big" id="proj-h2" data-reveal>项目列表</h2><p>Pao Studio 会尝试开发不同类型的产品，包括开源的 Cardano 基础设施、Web3 应用和 AI 应用。</p></div>
+        <div class="strip-ctl"><button type="button" data-dir="-1" aria-label="上一个">←</button><button type="button" data-dir="1" aria-label="下一个">→</button></div>
+      </div>
+    </div>
+    <div class="strip" tabindex="0" aria-label="项目列表，可横向滚动">
+      <a class="card" href="#"><div class="shot"><img src="../../../public/images/projects/ouro-pass.jpg" alt="" loading="lazy"></div><div class="meta"><h3>Ouro Pass</h3><span>基础设施</span></div><p>基于 Cardano 的去中心化身份与订阅基础设施。</p><span class="lk">访问项目 ↗</span></a>
+      <a class="card" href="#"><div class="shot"><img src="../../../public/images/projects/utxray.jpg" alt="" loading="lazy"></div><div class="meta"><h3>utxray</h3><span>基础设施</span></div><p>面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。</p><span class="lk">访问项目 ↗</span></a>
+      <a class="card" href="#"><div class="shot"><img src="../../../public/images/projects/ouro-ops.jpg" alt="" loading="lazy"></div><div class="meta"><h3>Ouro Ops</h3><span>基础设施</span></div><p>面向 AI Agent 的 Cardano Stake Pool 运维工具。</p><span class="lk">访问项目 ↗</span></a>
+      <a class="card" href="#"><div class="shot" style="display:grid;place-items:center;background:var(--ink)"><b style="color:#fff;font-size:28px">查看全部项目 →</b></div><div class="meta"><h3>更多</h3><span>/projects</span></div><p>开源的 Cardano 基础设施、Web3 应用和 AI 应用。</p></a>
+    </div>
+  </section>
+
+  <!-- Model -->
+  <section class="band white" aria-labelledby="model-h2">
+    <div class="wrap">
+      <div class="kicker"><b>04</b> <span id="model-h2">收入构成</span></div>
+      <p class="statement" data-words>对一人公司来说，先要解决的是生存问题。Pao Studio 希望将|矿池运营收入|作为覆盖基础开支的主要来源，同时继续探索交易、产品增值服务、咨询与项目开发等其他收入。</p>
+      <div class="flowmap" data-reveal>
+        <svg class="flowlines" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M300 50 C 350 50, 340 150, 380 150"/><path d="M300 150 L 380 150"/><path d="M300 250 C 350 250, 340 150, 380 150"/>
+          <path class="hot" d="M620 150 C 660 150, 660 150, 700 150"/>
+        </svg>
+        <div class="col">
+          <div class="node"><small>Trading · 波动收入</small><b>交易收入</b></div>
+          <div class="node"><small>Products · 产品收入</small><b>产品增值服务</b></div>
+          <div class="node"><small>Services · 项目收入</small><b>咨询与项目制开发</b></div>
+        </div>
+        <div class="hub"><em>用于支持</em><h3>Pao Studio 现金流</h3><p>来自矿池及其他业务的收入，用于支持公司的日常运营与后续开发：节点与服务器、AI 服务、产品开发、日常运营。</p></div>
+        <div class="col">
+          <div class="node found"><small>Foundation · 基础收入</small><b>矿池运营收入</b><p style="font-size:13.5px;margin-top:6px;color:var(--body-strong)">希望以矿池运营收入优先覆盖公司的基本运营成本。</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact" aria-labelledby="ct-h2">
+    <div class="wrap">
+      <span class="chip">产品开发 · 咨询与合作</span>
+      <h2 id="ct-h2" data-reveal><a href="#">软件开发<br>与技术咨询 ↗</a></h2>
+      <div class="row2">
+        <p>Pao Studio 提供 AI、区块链及传统软件项目的开发与咨询服务。
+如有项目需求或合作想法，欢迎来信交流。</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn-primary" href="#">邮件联系</a><a class="btn btn-ghost" href="#">加入 Telegram 社群</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap"><span class="tnum">© 2024–2026 Pao Studio</span><span>𝕏 · GitHub</span></div></footer>
+
+<nav class="proto-badge" aria-label="原型切换">
+  <a href="index.html">总览</a><a href="a-bubble-float.html">A 泡泡浮游</a><a href="b-kinetic-editorial.html" aria-current="page">B 动态编辑</a><a href="c-color-bento.html">C 彩色便当</a>
+</nav>
+
+<script src="base.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Split hero title into per-character spans (kept readable: aria-label on h1)
+  const h1 = document.querySelector('[data-split]');
+  h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
+  let i = 0;
+  h1.querySelectorAll('.ln').forEach((ln) => {
+    const text = ln.textContent;
+    ln.textContent = '';
+    ln.setAttribute('aria-hidden', 'true');
+    for (const c of text) {
+      const s = document.createElement('span');
+      s.className = 'ch';
+      s.style.setProperty('--i', i++);
+      s.textContent = c === ' ' ? ' ' : c;
+      ln.appendChild(s);
+    }
+  });
+
+  // Statement words: split, highlight segment wrapped in |...|
+  const st = document.querySelector('[data-words]');
+  const parts = st.textContent.split('|');
+  st.textContent = '';
+  parts.forEach((part, idx) => {
+    for (const c of part) {
+      const s = document.createElement('span');
+      s.className = 'w' + (idx === 1 ? ' t' : '');
+      s.textContent = c;
+      st.appendChild(s);
+    }
+  });
+  const words = st.querySelectorAll('.w');
+
+  const bar = document.querySelector('.progress');
+  const steps = [...document.querySelectorAll('.step')];
+  const fill = document.querySelector('.steps .fill');
+  const stepsBox = document.querySelector('.steps');
+
+  const onScroll = () => {
+    const vh = innerHeight;
+    const max = document.documentElement.scrollHeight - vh;
+    bar.style.transform = `scaleX(${scrollY / max})`;
+
+    // Perks step progress
+    const r = stepsBox.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (vh * 0.55 - r.top) / r.height));
+    fill.style.setProperty('--p', p);
+    steps.forEach((s) => { const b = s.getBoundingClientRect(); s.classList.toggle('on', b.top < vh * 0.62); });
+
+    // Statement fill
+    const sr = st.getBoundingClientRect();
+    const sp = Math.min(1, Math.max(0, (vh * 0.85 - sr.top) / (sr.height + vh * 0.35)));
+    const lit = Math.round(sp * words.length);
+    words.forEach((w, k) => w.classList.toggle('lit', k < lit));
+  };
+  if (reduce) {
+    steps.forEach((s) => s.classList.add('on'));
+    words.forEach((w) => w.classList.add('lit'));
+    fill.style.setProperty('--p', 1);
+  } else {
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // Strip controls
+  const strip = document.querySelector('.strip');
+  document.querySelectorAll('.strip-ctl button').forEach((b) =>
+    b.addEventListener('click', () => strip.scrollBy({ left: +b.dataset.dir * 484, behavior: reduce ? 'auto' : 'smooth' }))
+  );
+})();
+</script>
+</body>
+</html>

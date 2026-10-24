@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D5 · 文章 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<link rel="stylesheet" href="d5-pages.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+.rbar { position: fixed; left: 0; right: 0; top: 0; height: 3px; z-index: 120; background: linear-gradient(90deg, var(--mag), var(--cy), var(--yel)); transform-origin: left; transform: scaleX(0); }
+.ah { padding-top: 72px; padding-bottom: 8px; }
+.ah .crumb { font-family: var(--mono); font-size: 12.5px; color: var(--grn); }
+.ah .crumb a { color: var(--fg-dim); } .ah .crumb a:hover { color: var(--fg); }
+.ah .cat { display: inline-block; margin-top: 26px; font-family: var(--mono); font-size: 12px; font-weight: 800; letter-spacing: .14em; color: var(--void); background: var(--yel); padding: 4px 10px; }
+.ah h1 { margin-top: 18px; font-size: clamp(32px, 4.4vw, 62px); line-height: 1.15; font-weight: 900; max-width: 17em; text-wrap: balance; }
+.am { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; margin-top: 24px; font-family: var(--mono); font-size: 12.5px; color: var(--fg-dim); }
+.am a { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+.am .tags { display: flex; gap: 8px; } .am .tags i { font-style: normal; padding: 3px 9px; box-shadow: inset 0 0 0 1px var(--line); color: var(--fg); }
+.cover { margin: 40px 0 0; border: 1px solid var(--line); }
+.cover img { display: block; width: 100%; aspect-ratio: 21 / 9; object-fit: cover; }
+.read { display: grid; grid-template-columns: 220px minmax(0, 700px); gap: 72px; padding-top: 72px; }
+.toc { position: sticky; top: 96px; align-self: start; font-family: var(--mono); font-size: 12.5px; }
+.toc .lbl { display: block; font-size: 11px; letter-spacing: .2em; color: var(--fg-dim); margin-bottom: 14px; }
+.toc ol { list-style: none; border-left: 1px solid var(--line); }
+.toc a { display: grid; grid-template-columns: 26px 1fr; padding: 7px 0 7px 14px; margin-left: -1px; border-left: 2px solid transparent; color: var(--fg-dim); line-height: 1.5; transition: color .2s, border-color .2s; }
+.toc a b { font-weight: 800; color: rgba(244,242,255,.35); }
+.toc a:hover { color: var(--fg); }
+.toc a.on { color: var(--fg); border-left-color: var(--c); }
+.toc a.on b { color: var(--c); }
+.toc .tools { display: flex; gap: 8px; margin-top: 24px; }
+.toc .copy { margin: 0; padding: 4px 10px; }
+.prose { font-size: 17.5px; line-height: 1.95; color: #d9d6e8; counter-reset: h2; }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 { counter-increment: h2; position: relative; margin-top: 2.6em; padding-top: 22px; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.3; font-weight: 900; color: var(--fg); scroll-margin-top: 96px; }
+.prose h2::before { content: counter(h2, decimal-leading-zero); display: block; font-family: var(--mono); font-size: 13px; font-weight: 800; letter-spacing: .14em; color: var(--c, var(--cy)); margin-bottom: 8px; }
+.prose h2::after { content: ""; position: absolute; left: 0; top: 0; width: 48px; height: 2px; background: var(--c, var(--cy)); box-shadow: 0 0 14px var(--c, var(--cy)); }
+.prose h2:first-child { margin-top: 0; }
+.prose h3 { margin-top: 1.8em; font-size: 20px; line-height: 1.45; font-weight: 800; color: var(--fg); }
+.prose h3::before { content: "// "; font-family: var(--mono); color: var(--fg-dim); }
+.prose a { color: var(--cy); text-decoration: underline; text-underline-offset: 3px; }
+.prose strong { color: var(--fg); background: linear-gradient(transparent 62%, rgba(255,245,144,.28) 62%); }
+.prose ul { list-style: none; padding-left: 1.3em; }
+.prose ol { padding-left: 1.4em; }
+.prose ul li { position: relative; }
+.prose ul li::before { content: ""; position: absolute; left: -1.05em; top: .8em; width: 6px; height: 6px; background: var(--c, var(--mag)); }
+.prose li + li { margin-top: .35em; }
+.prose code { font-family: var(--mono); font-size: .84em; color: var(--yel); background: rgba(244,242,255,.07); padding: .12em .42em; }
+.prose pre { position: relative; background: #05040a; border: 1px solid var(--line); padding: 46px 20px 20px; overflow-x: auto; font-size: 13.5px; line-height: 1.75; }
+.prose pre::before { content: attr(data-lang); position: absolute; left: 0; right: 0; top: 0; padding: 9px 14px 9px 64px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--fg-dim); border-bottom: 1px solid var(--line);
+  background: radial-gradient(circle at 18px 50%, var(--mag) 4px, transparent 5px), radial-gradient(circle at 32px 50%, var(--cy) 4px, transparent 5px), radial-gradient(circle at 46px 50%, var(--yel) 4px, transparent 5px); }
+.prose pre code { background: none; color: var(--fg); padding: 0; font-size: inherit; }
+.prose blockquote { border-left: 3px solid var(--cy); padding: .3em 0 .3em 1.1em; color: var(--fg-dim); }
+.after { display: grid; gap: 16px; padding-top: 96px; max-width: calc(220px + 72px + 700px + 2 * var(--pad)); }
+.au { display: flex; gap: 24px; align-items: center; padding: 24px 26px; border: 1px solid var(--line); background: var(--void-2); }
+.au .sh { flex: none; width: 56px; height: 50px; }
+.au .nm { display: block; font-size: 22px; margin: 4px 0 6px; color: var(--fg); }
+.au .dsc { display: block; color: var(--fg-dim); font-size: 14px; line-height: 1.7; }
+.pn { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.pn a { display: flex; flex-direction: column; gap: 10px; padding: 22px 24px; border: 1px solid var(--line); background: var(--void-2); transition: border-color .3s; }
+.pn a:hover { border-color: var(--c); }
+.pn a:last-child { text-align: right; }
+.pn h3 { font-size: 18px; line-height: 1.45; font-weight: 800; transition: color .2s; }
+.pn a:hover h3 { color: var(--c); }
+.stake { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 26px; border: 1px dashed rgba(255,245,144,.55); transition: background .3s; }
+.stake b { display: block; font-size: 22px; color: var(--fg); }
+.stake b em { font-style: normal; color: var(--void); background: var(--yel); padding: 0 .12em; }
+.stake span span { display: block; margin-top: 6px; color: var(--fg-dim); font-size: 14px; }
+.stake:hover { background: rgba(255,245,144,.05); }
+@media (max-width: 1000px) { .read { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 48px; } .toc { display: none; } }
+@media (max-width: 900px) {
+  .ah { padding-top: 48px; } .cover img { aspect-ratio: 16 / 9; }
+  .prose { font-size: 16.5px; } .prose pre { font-size: 12.5px; padding-inline: 14px; }
+  .pn { grid-template-columns: 1fr; } .pn a:last-child { text-align: left; }
+  .stake { flex-direction: column; align-items: flex-start; } .stake .cbtn { width: 100%; }
+}
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="d5-hybrid.html"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="d5-hybrid.html">/home</a><a href="d5-works.html">/works</a><a href="d5-blog.html" aria-current="page">/blog</a><a href="d5-skills.html">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托 PAO</a></div>
+  </div>
+</nav>
+
+<main>
+<div class="rbar" aria-hidden="true"></div>
+  <header class="ah lane">
+    <div class="crumb rise">&gt; <a href="d5-hybrid.html">~</a>/<a href="d5-blog.html">blog</a>/<span style="color:var(--yel)">engineering</span></div>
+    <span class="cat rise" style="--d:.05s">软件工程</span>
+    <h1 class="rise" style="--d:.1s">Immutable Spec：让需求、设计、执行和验收收敛到同一份文档</h1>
+    <div class="am rise" style="--d:.16s"><span class="tnum">2026-03-06</span><span>by <a href="d5-about.html#martin">Martin</a></span><span id="rt">— 分钟阅读</span><span class="tags"><i>软件工程</i><i>开发流程</i><i>文档管理</i></span></div>
+    <figure class="cover corners rise" style="--c:var(--yel);--d:.22s"><img src="../../../public/images/blog/immutable-spec-cover.jpg" alt="" width="1600" height="800"></figure>
+  </header>
+  <div class="lane read">
+    <aside class="toc" aria-label="目录">
+      <span class="lbl">// CONTENTS</span>
+      <ol id="toc"></ol>
+      <div class="tools"><button class="copy" type="button" id="cp">复制链接</button><button class="copy" type="button" id="top">↑ TOP</button></div>
+    </aside>
+    <article class="prose" id="prose">
+<h2>引言</h2>
+<p>在传统的开发流程中，需求、设计、开发计划、测试记录、上线说明、回退方案往往分散在多个地方。PR 描述里有一部分，文档系统里有一部分，聊天记录里还有一部分。项目推进一段时间后，一个很现实的问题就会出现：</p>
+<p>当前到底该按什么标准继续做？</p>
+<p>而这个问题，到了AI时代会更加突出。<code>Immutable Spec</code> 提供了一种更清晰的做法：每一个需求对应一份 spec，这份 spec 同时承载需求详情、方案设计、执行计划和测试验收标准，并且只允许追加，不允许覆盖历史。</p>
+<p>它既是一种文档组织方式，也是一种交付机制。</p>
+<h2>为什么需要 Immutable Spec</h2>
+<p>软件开发中的许多混乱，并不来自技术本身，而是来自协作标准的不统一。常见情况包括：</p>
+<ul>
+<li>需求改动后，旧文档没有同步，开发继续按旧理解推进</li>
+<li>设计和实现脱节，到了验收阶段才发现标准不一致</li>
+<li>某个事项看起来已经完成，但没人能准确说明是否真正通过验收</li>
+<li>出现问题需要回退时，只能临时处理，缺少清晰记录</li>
+<li>迭代越来越多之后，历史决策、变更原因和验证证据难以追溯</li>
+</ul>
+<p>这些问题最终都会指向同一个根源：缺少一个唯一、稳定、可追溯的执行标准。</p>
+<p>Immutable Spec 的价值，就在于建立这样一个标准。</p>
+<h2>Immutable Spec 的核心思路</h2>
+<h3>一份 spec 对应一次需求交付</h3>
+<p>每一个明确的需求，都应该有一份对应的 spec。<br>
+这份 spec 至少覆盖四个方面：</p>
+<ul>
+<li>需求详情</li>
+<li>方案设计</li>
+<li>执行计划</li>
+<li>测试与验收标准</li>
+</ul>
+<p>这样，开发、测试、验收和回退都围绕同一份文档展开，团队对当前目标的理解也会更一致。</p>
+<h3>文档只追加，不改写历史</h3>
+<p>这里的 "immutable" 指的是历史不可覆盖。</p>
+<p>允许追加：</p>
+<ul>
+<li>执行日志</li>
+<li>验证证据</li>
+<li>变更说明</li>
+<li>状态记录</li>
+</ul>
+<p>不建议直接修改已经记录的需求、设计和结论。历史保留下来，后续追溯才有依据。</p>
+<h3>同一时间只允许一个 active spec</h3>
+<p>历史 spec 应该保留，因为它们本身就是审计链路的一部分。<br>
+但为了保持流程线性、降低复杂度，同一时间只允许一个 <code>active spec</code>。</p>
+<p>这意味着当前执行只能跟随唯一的一份文档。旧 spec 可以保留、可以完成、也可以停止使用，但不能与新的执行标准并行生效。</p>
+<h2>一份 Immutable Spec 应该包含什么</h2>
+<p>推荐每份 spec 使用统一结构，例如：</p>
+<pre><code class="language-md"># &#x3C;Spec Title>
+
+## 1. Requirement Details
+- Background
+- Scope
+- Constraints
+- Non-goals
+
+## 2. Outline Design
+- Architecture / modules impacted
+- Data model and interfaces
+- Risk and rollback strategy
+
+## 3. Execution Plan
+- [ ] pX-1 &#x3C;deliverable>
+- [ ] pX-2 &#x3C;deliverable>
+
+## 4. Test And Acceptance Criteria
+- TC-1 ...
+- TC-2 ...
+
+## 5. Execution Log (append-only)
+- &#x3C;date> pX-1 started ...
+- &#x3C;date> pX-1 completed ...
+
+## 6. Validation Evidence (append-only)
+- TC-1 | stack: ... | command: ... | result: ... | note: ...
+
+## 7. Change Log (append-only)
+- &#x3C;date> new requirement / scope change / rollback note
+</code></pre>
+<p>这样的结构有一个很直接的好处：需求、设计、执行和验收被放进了同一个上下文里，团队不需要在多个地方来回查找当前标准。</p>
+<h2>为什么要坚持线性推进</h2>
+<p>Immutable Spec 特别适合希望降低协作复杂度的团队。</p>
+<p>如果多个 spec 同时处于活跃状态，问题会迅速增加：优先级如何判断、依赖如何处理、测试证据归属哪一份 spec、回退应该针对哪个状态、commit 应该关联哪条链路。这些问题会消耗大量协作成本。</p>
+<p>更稳妥的方式，是在同一阶段只推进一个 <code>active spec</code>。如果需求变化，就新建一份 spec，让它成为新的执行标准；旧 spec 保留历史记录，并明确说明当前已停止使用。</p>
+<p>这种做法会带来少量重复内容，但会显著提升执行边界的清晰度。</p>
+<h2>事项管理：什么叫"完成"</h2>
+<p>在 Immutable Spec 中，事项状态可以保持得很简单：</p>
+<ul>
+<li><code>[ ]</code> 未开始</li>
+<li><code>[~]</code> 进行中</li>
+<li><code>[x]</code> 已完成</li>
+</ul>
+<p>关键在于对"已完成"的定义要足够严格。</p>
+<p>一个事项只有在以下条件全部满足后，才应当标记为完成：</p>
+<ul>
+<li>实现已经完成</li>
+<li>对应验收标准已经验证</li>
+<li>验证证据已经追加到 spec</li>
+</ul>
+<p>这样可以避免一种常见误区：代码写完了，就默认事情完成了。<br>
+在工程交付中，完成通常意味着"实现 + 验证 + 记录"三者都已经闭合。</p>
+<h2>事项级提交：让 commit 与 spec 对齐</h2>
+<p>如果 spec 是执行标准，那么 commit 就应该成为这份标准的实现记录。</p>
+<p>推荐做法是：</p>
+<ul>
+<li>一个事项对应一个 commit</li>
+<li>commit message 包含 spec 文件名和事项 ID</li>
+<li>没有验收证据的事项，不作为完成项提交</li>
+</ul>
+<p>例如：</p>
+<pre><code class="language-text">spec(2026-03-06-phase3-runtime-probe.md): p3-1 add runtime probe command
+</code></pre>
+<p>正文可以进一步统一为：</p>
+<pre><code class="language-text">Spec: docs/specs/2026-03-06-phase3-runtime-probe.md
+Item: p3-1
+Acceptance: TC-1, TC-2
+</code></pre>
+<p>这样做的好处非常明显：代码历史和文档历史自然对齐。后续复盘时，可以快速定位某个 commit 对应的事项、需求背景和验收标准。</p>
+<h2>验收证据需要统一格式，但不应绑定技术栈</h2>
+<p>不同项目的技术栈不同，验收命令也会不同。<br>
+Rust 项目可能是 <code>cargo test</code>，Node 项目可能是 <code>pnpm build</code>，Python 项目可能是 <code>pytest</code>，部署链路可能还涉及 Ansible、Shell 或手工验证。</p>
+<p>因此，更合理的约束方式是统一证据格式，而不是固定命令本身。</p>
+<p>推荐格式如下：</p>
+<pre><code class="language-text">TC-&#x3C;n> | stack: &#x3C;rust|node|python|ansible|ui|other> | command: &#x3C;cmd or manual step> | result: &#x3C;pass|fail> | note: &#x3C;short observation>
+</code></pre>
+<p>例如：</p>
+<ul>
+<li><code>TC-1 | stack: rust | command: cargo test -q | result: pass | note: deploy payload defaults covered</code></li>
+<li><code>TC-2 | stack: node | command: pnpm build | result: pass | note: UI renders correctly</code></li>
+<li><code>TC-3 | stack: ansible | command: ansible-playbook --syntax-check ... | result: pass | note: syntax valid</code></li>
+<li><code>TC-4 | stack: ui | command: manual validation | result: pass | note: warning banner displayed</code></li>
+</ul>
+<p>这样既保留了统一的记录方式，也保留了对不同项目形态的适配能力。</p>
+<h2>需求变更时应该如何处理</h2>
+<p>当需求发生变化时，不建议直接改写当前 spec 的核心内容。<br>
+更稳妥的方式，是新建一份 spec，把新的范围、设计、执行计划和验收标准完整写清楚。</p>
+<p>旧 spec 保留原样，只追加一条变更记录，说明它已经停止作为当前执行标准，并指向新的 spec。后续执行全部切换到新 spec。</p>
+<p>这种处理方式有两个优点：</p>
+<ul>
+<li>历史决策会被完整保留</li>
+<li>当前执行标准始终清晰，不会出现多份文档交叉生效的情况</li>
+</ul>
+<h2>回退时应该如何处理</h2>
+<p>如果某项改动需要回退，也应该纳入同一套流程。</p>
+<p>对于已经提交、已经联调、已经上线，或者已经被外部验证过的改动，回退应当被视为一次新的变更，并单独创建一份 rollback spec。回退原因、影响范围、执行步骤和回退后的验收标准，都应写在这份新文档中。</p>
+<p>代码层优先使用 <code>git revert</code>。回退完成后，同样要补充验收证据，并在原 spec 中追加一条回退记录，指向新的 rollback spec。</p>
+<p>这样做之后，团队可以清楚回答这些问题：</p>
+<ul>
+<li>为什么回退</li>
+<li>回退了哪些内容</li>
+<li>回退后如何验证</li>
+<li>回退影响了哪些后续事项</li>
+</ul>
+<h2>Immutable Spec 能带来什么</h2>
+<p>采用 Immutable Spec 之后，团队通常会获得几项明显收益：</p>
+<ul>
+<li>需求标准更加统一</li>
+<li>设计、实现、验收之间更容易对齐</li>
+<li>每个事项都有清晰的完成条件</li>
+<li>验收证据和代码历史可以互相对应</li>
+<li>历史决策能够被持续追溯</li>
+<li>回退流程更容易制度化</li>
+</ul>
+<p>更重要的是，团队的沟通方式会发生变化。<br>
+讨论不再依赖零散的口头上下文，而是回到当前 <code>active spec</code>。完成结论也不再依赖主观判断，而是看验收标准和证据是否已经补齐。</p>
+<h2>适合哪些场景</h2>
+<p>Immutable Spec 特别适合这些情况：</p>
+<ul>
+<li>需求变化频繁，但要求强追溯</li>
+<li>工程任务跨越前端、后端、部署、联调多个环节</li>
+<li>事项完成后需要支持复盘和审计</li>
+<li>希望把开发、验收、上线、回退纳入同一套规则</li>
+<li>团队希望减少对口头同步的依赖</li>
+</ul>
+<p>对于非常轻量、完全临时性的探索任务，这套方法可能会显得偏重。<br>
+但对于需要长期维护、多人协作、强调验收质量的项目，它通常会带来更高的稳定性和更低的协作成本。</p>
+<h2>结语</h2>
+<p>Immutable Spec 的核心价值，在于用一份清晰、可追溯、可执行的文档，把需求、设计、执行、验证和回退收敛到同一个坐标系中。</p>
+<p>它要求团队坚持几条简单规则：</p>
+<ul>
+<li>一个需求对应一份 spec</li>
+<li>一个时间点只保留一个 <code>active spec</code></li>
+<li>一个事项对应一个 commit</li>
+<li>一个完成结论对应一份证据</li>
+<li>一次回退进入新的 spec 流程</li>
+</ul>
+<p>这些约束会增加一定的前期纪律，但通常能显著减少返工、误解和历史混乱。对于长期项目来说，这种收敛通常是值得的。</p>
+    </article>
+  </div>
+  <section class="lane after">
+    <a class="au corners rise" href="d5-about.html#martin" style="--c:var(--cy)"><span class="sh g-a" aria-hidden="true"></span><span><span class="meta"><b>AUTHOR</b></span><b class="nm">Martin</b><span class="dsc">Martin 撰写 Pao Studio 的文章，也参与产品开发。网站连接的 GitHub 资料使用公开名称 0xMartin。</span></span></a>
+    <div class="pn">
+      <a class="corners rise" href="#" style="--c:var(--grn)"><span class="meta"><b>← PREV</b> · 随笔 · 2026-03-02</span><h3>从认知到行动的健康长寿实践</h3></a>
+      <a class="corners rise" href="#" style="--c:var(--cy);--d:.08s"><span class="meta"><b>NEXT →</b> · Cardano · 2026-03-25</span><h3>区块链的“组合性”演进：为什么 AI 时代需要的是 Cardano 而非 Ethereum？</h3></a>
+    </div>
+    <a class="stake rise" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm"><span><b>Stake with <em>PAO</em> Pool</b><span>质押身份 = 会员凭证 · 获取质押奖励，同时享受增值服务。</span></span><span class="cbtn">委托 PAO →</span></a>
+  </section>
+  <div class="sec-end"></div>
+</main>
+
+<footer class="sitefoot">
+  <div class="top">
+    <div class="brand"><img src="pao_logo_dark.svg" alt="Pao Studio" width="185" height="26"><p>在 Cardano 上构建 AI 产品与开源工具。<br>Stake with PAO Pool，获取质押奖励，同时享受增值服务。</p></div>
+    <div><h4>EXPLORE</h4><ul><li><a href="d5-works.html">作品</a></li><li><a href="d5-blog.html">博客</a></li><li><a href="d5-skills.html">Skills</a></li></ul></div>
+    <div><h4>SOCIAL</h4><ul><li><a href="https://x.com/cauu_128">X ↗</a></li><li><a href="https://github.com/cauu">GitHub ↗</a></li></ul></div>
+  </div>
+  <div class="bot"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>EPOCH <b data-ep>—</b> · <span data-ep-left>—</span></span></div>
+</footer>
+
+<nav class="proto-badge" aria-label="原型切换"><a href="index.html">总览</a><a href="d5-hybrid.html">首页</a><a href="d5-works.html">作品</a><a href="d5-blog.html">博客</a><a href="d5-article.html" aria-current="page">文章</a><a href="d5-skills.html">Skills</a><a href="d5-governance.html">治理</a><a href="d5-about.html">关于</a><a href="d5-staking.html">质押</a></nav>
+
+<script src="dx-fx.js"></script>
+<script src="d5-pages.js"></script>
+<script>
+// Article: reading time, code labels, numbered TOC with logo-colour rotation, progress bar, copy link
+(() => {
+  const prose = document.getElementById('prose');
+  const colors = ['var(--cy)', 'var(--mag)', 'var(--yel)', 'var(--grn)', 'var(--pur)'];
+  document.getElementById('rt').textContent = `${Math.max(1, Math.round(prose.textContent.replace(/\s/g, '').length / 400))} 分钟阅读`;
+  prose.querySelectorAll('pre').forEach((pre) => { pre.dataset.lang = ((pre.querySelector('code')?.className.match(/language-(\w+)/) || [])[1] || 'text').toUpperCase(); });
+  const heads = [...prose.querySelectorAll('h2')];
+  const toc = document.getElementById('toc');
+  heads.forEach((h, i) => {
+    h.id = `s-${i + 1}`;
+    const c = colors[i % colors.length];
+    h.style.setProperty('--c', c);
+    // Lists inside a section pick up its colour
+    let n = h.nextElementSibling;
+    while (n && n.tagName !== 'H2') { n.style.setProperty('--c', c); n = n.nextElementSibling; }
+    const li = document.createElement('li');
+    li.innerHTML = `<a href="#${h.id}" style="--c:${c}"><b>${String(i + 1).padStart(2, '0')}</b><span>${h.textContent}</span></a>`;
+    toc.appendChild(li);
+  });
+  const links = [...toc.querySelectorAll('a')];
+  const bar = document.querySelector('.rbar');
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const r = prose.getBoundingClientRect();
+    bar.style.transform = `scaleX(${Math.min(1, Math.max(0, -r.top / (r.height - innerHeight * 0.6))).toFixed(4)})`;
+    let idx = 0;
+    heads.forEach((h, i) => { if (h.getBoundingClientRect().top < innerHeight * 0.3) idx = i; });
+    links.forEach((a, i) => a.classList.toggle('on', i === idx));
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+  const cp = document.getElementById('cp');
+  cp.addEventListener('click', () => navigator.clipboard?.writeText(location.href).then(() => { cp.textContent = '已复制'; setTimeout(() => (cp.textContent = '复制链接'), 1400); }).catch(() => {}));
+  document.getElementById('top').addEventListener('click', () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
+})();
+</script>
+</body>
+</html>

@@ -87,3 +87,9 @@ export interface IGovActionContent {
   createdAt: string;
   updatedAt: string;
 }
+
+/** Only the fields needed by the interactive governance index cross the client boundary. */
+export type GovernanceSummary = Pick<IGovActionContent, 'id' | 'type' | 'title'> & {
+  metadata: Pick<IGovernanceAction, 'createdDate'>;
+  opinions: Pick<IGovActionContent['opinions'], 'summary' | 'pros' | 'cons'>;
+};

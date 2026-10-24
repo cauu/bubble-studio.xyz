@@ -32,9 +32,9 @@ export default function Comments({ term, language }: CommentsProps) {
         reactionsEnabled="1"
         emitMetadata="0"
         inputPosition="top"
-        theme="light"
+        theme="dark"
         lang={lang}
-        loading="eager"
+        loading="lazy"
       />
     </div>
   );

@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C · 彩色便当 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ===== Direction C: Color Bento =====
+   规范驱动：落实 Bubble-light「饱和色卡片轮换」。便当格首屏、弹性入场、3D 指针倾斜、贴纸与积木堆叠。 */
+
+.js [data-reveal] { transform: translateY(36px) scale(.94) rotate(var(--rot, 0deg)); transition: opacity .55s var(--ease), transform .85s var(--spring); }
+.js [data-reveal].in { transform: rotate(var(--rest, 0deg)); }
+
+/* Tile primitive */
+.t { position: relative; border-radius: var(--r-xl); padding: 28px; overflow: hidden; isolation: isolate; color: var(--ink);
+  transform-style: preserve-3d; transition: box-shadow .35s var(--ease); }
+.t[data-tilt] { will-change: transform; }
+.t[data-tilt]:hover { box-shadow: 0 10px 20px rgba(23,32,38,.06), 0 30px 60px rgba(23,32,38,.14); }
+.t .glare { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgba(255,255,255,.35), transparent 45%); }
+.t[data-tilt]:hover .glare { opacity: 1; }
+.c-sky { background: var(--sky); } .c-lav { background: var(--lavender); } .c-lemon { background: var(--lemon); }
+.c-grass { background: var(--grass); } .c-mint { background: var(--mint); } .c-orange { background: var(--orange); color: #fff; }
+.c-sea { background: var(--sea); color: #fff; } .c-teal { background: var(--teal); color: #fff; }
+.c-white { background: #fff; box-shadow: var(--shadow-soft); } .c-card { background: var(--card); }
+.c-orange h3, .c-sea h3, .c-teal h3, .c-orange h2, .c-teal h2 { color: #fff; }
+.lbl { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+
+/* ---------- Hero bento ---------- */
+.hero { padding: 48px 0 96px; }
+.hgrid { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: minmax(118px, auto); gap: 14px; }
+.h-title { grid-column: span 8; grid-row: span 3; background: #fff; box-shadow: var(--shadow-soft); padding: 48px; display: flex; flex-direction: column; justify-content: space-between; }
+.h-title h1 { font-size: clamp(40px, 5.8vw, 78px); line-height: 1.08; font-weight: 900; margin: 18px 0 20px; }
+.h-title h1 .hl { color: var(--teal); }
+.h-title p { font-size: 17px; line-height: 1.75; color: var(--body-strong); max-width: 32em; white-space: pre-line; margin-bottom: 28px; }
+.h-title .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.h-ledger { grid-column: span 4; grid-row: span 2; padding: 24px; display: flex; flex-direction: column; }
+.h-ledger header { display: flex; align-items: center; gap: 8px; font-weight: 700; margin-bottom: 14px; }
+.h-ledger header a { margin-left: auto; font-size: 12px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; color: rgba(255,255,255,.85); }
+.live { width: 9px; height: 9px; border-radius: 50%; background: var(--lemon); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.6); opacity: .5; } }
+.h-ledger .r { display: flex; justify-content: space-between; padding: 11px 0; border-top: 1px solid rgba(255,255,255,.14); font-size: 14px; color: rgba(255,255,255,.82); }
+.h-ledger .r b { color: #fff; font-size: 16px; }
+.h-ledger .foot { margin-top: auto; padding-top: 12px; font-size: 12.5px; font-weight: 600; color: var(--lemon); }
+.h-zero { grid-column: span 2; display: flex; flex-direction: column; justify-content: space-between; }
+.h-zero b { font-size: 46px; font-weight: 900; line-height: 1; letter-spacing: -1.5px; }
+.h-mem { grid-column: span 2; display: flex; flex-direction: column; justify-content: space-between; }
+.h-mem b { font-size: 20px; font-weight: 800; line-height: 1.25; }
+.h-strip { grid-column: span 12; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 18px 22px; }
+.sticker { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; font-size: 14px; font-weight: 700; background: #fff; box-shadow: var(--shadow-soft);
+  transform: rotate(var(--r, 0deg)); transition: transform .4s var(--spring); }
+.sticker:hover { transform: rotate(0deg) scale(1.08); }
+.sticker i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+
+/* ---------- Sections ---------- */
+section.band { padding: 104px 0; }
+.band.white { background: #fff; }
+.sh { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-bottom: 40px; }
+.sh h2 { font-size: clamp(32px, 4.4vw, 54px); line-height: 1.12; font-weight: 900; }
+.sh p { font-size: 16px; line-height: 1.75; max-width: 40em; margin-top: 14px; white-space: pre-line; }
+.more { display: inline-flex; gap: 8px; font-weight: 700; color: var(--ink); white-space: nowrap; padding: 12px 18px; border-radius: 999px; background: var(--card); transition: background .2s, transform .35s var(--spring); }
+.more:hover { background: var(--lemon); transform: rotate(-2deg) scale(1.04); }
+
+/* Perks */
+.pgrid { display: grid; grid-template-columns: repeat(4, 1fr) 1.3fr; gap: 14px; }
+.perk { display: flex; flex-direction: column; min-height: 300px; }
+.perk .num { font-size: 56px; font-weight: 900; line-height: 1; letter-spacing: -2px; opacity: .9; }
+.perk h3 { font-size: 19px; line-height: 1.3; margin: auto 0 10px; }
+.perk p { font-size: 13.5px; line-height: 1.6; }
+.perk .tag { align-self: flex-start; margin-top: 14px; font-size: 12px; font-weight: 700; padding: 6px 11px; border-radius: 999px; background: rgba(255,255,255,.55); }
+.tier { display: flex; flex-direction: column; }
+.tier .price { font-size: 84px; font-weight: 900; line-height: 1; letter-spacing: -3px; margin: 14px 0 6px; }
+.tier p { font-size: 14px; color: rgba(255,255,255,.85); margin-bottom: 20px; }
+.tier .btn { margin-top: auto; background: #fff; color: var(--ink); }
+.tier .fine { font-size: 12px; color: rgba(255,255,255,.7); margin-top: 10px; text-align: center; }
+.tier .lbl { color: var(--lemon); opacity: 1; }
+
+/* Benefits */
+.bgrid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+.b-strat { grid-column: span 7; grid-row: span 2; display: flex; flex-direction: column; }
+.b-strat h3, .b-raffle h3, .b-agent h3, .b-os h3 { font-size: 22px; margin: 6px 0 8px; }
+.b-strat p { font-size: 14px; margin-bottom: 22px; max-width: 34em; }
+.b-strat img { margin-top: auto; border-radius: var(--r-lg); background: #0b1114; transform: rotate(-1.2deg); transition: transform .6s var(--spring); box-shadow: 0 18px 40px rgba(23,32,38,.25); }
+.b-strat:hover img { transform: rotate(0) scale(1.02); }
+.b-raffle, .b-agent { grid-column: span 5; }
+.b-raffle p, .b-agent p, .b-os p { font-size: 13.5px; line-height: 1.6; }
+.b-raffle .coins { position: absolute; right: 20px; top: 20px; display: flex; }
+.coin { width: 44px; height: 44px; border-radius: 50%; border: 3px solid #fff; background: #fff center/70% no-repeat; margin-left: -10px; box-shadow: var(--shadow-soft); transition: transform .4s var(--spring); }
+.b-raffle:hover .coin { transform: translateY(-8px) rotate(-10deg); }
+.b-raffle:hover .coin:nth-child(2) { transition-delay: .05s; } .b-raffle:hover .coin:nth-child(3) { transition-delay: .1s; }
+.b-raffle .t-inner, .b-agent .t-inner { max-width: 70%; }
+.b-agent .bot { position: absolute; right: 22px; bottom: 22px; width: 64px; height: 64px; border-radius: 20px; background: #fff; display: grid; place-items: center; font-size: 30px; box-shadow: var(--shadow-soft); animation: nod 3s ease-in-out infinite; }
+@keyframes nod { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg) translateY(-4px); } }
+.b-os { grid-column: span 12; display: flex; align-items: center; gap: 24px; }
+.b-os .code { margin-left: auto; width: 300px; flex: none; border-radius: var(--r-lg); background: #172328; font: 11px/1.7 ui-monospace, Menlo, monospace; color: var(--mint); padding: 14px 16px; }
+
+/* Projects */
+.pj { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.proj { padding: 18px; display: flex; flex-direction: column; }
+.proj .frame { border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 16/10; transform: rotate(var(--r)); transition: transform .55s var(--spring); box-shadow: 0 12px 30px rgba(23,32,38,.2); }
+.proj:hover .frame { transform: rotate(0) translateY(-4px) scale(1.02); }
+.proj .frame img { width: 100%; height: 100%; object-fit: cover; }
+.proj .meta { padding: 22px 6px 4px; }
+.proj h3 { font-size: 24px; font-weight: 900; }
+.proj p { font-size: 13.5px; margin-top: 6px; line-height: 1.6; }
+.proj .go { display: flex; justify-content: space-between; margin-top: 18px; padding: 0 6px; font-size: 13.5px; font-weight: 700; }
+
+/* Model: stacking blocks */
+.stack { max-width: 1040px; margin: 0 auto; display: grid; gap: 14px; }
+.srcs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.blk { padding: 22px 24px; border-radius: var(--r-xl); }
+.blk small { display: block; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+.blk b { display: block; font-size: 19px; margin-top: 4px; color: inherit; }
+.blk span { display: inline-block; margin-top: 12px; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.55); }
+.js .stack [data-drop] { opacity: 0; transform: translateY(-60px); }
+.stack.in [data-drop] { opacity: 1; transform: none; transition: opacity .3s, transform .8s var(--spring); transition-delay: var(--t); }
+.cash { display: grid; grid-template-columns: .9fr 1.1fr; gap: 28px; padding: 30px; }
+.cash h3 { font-size: 28px; margin: 6px 0 10px; }
+.cash p { font-size: 14px; color: rgba(255,255,255,.82); }
+.cash .lbl { color: var(--lemon); opacity: 1; }
+.uses { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.uses div { border-radius: var(--r-md); padding: 16px; font-weight: 700; font-size: 14px; color: var(--ink); }
+.found { display: flex; align-items: center; gap: 20px; padding: 28px 30px; }
+.found b { font-size: 28px; }
+.found .pill { margin-left: auto; background: #fff; border-radius: 999px; padding: 10px 16px; font-weight: 700; font-size: 13px; white-space: nowrap; }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+.contact .main { padding: 48px; }
+.contact h2 { font-size: clamp(30px, 3.8vw, 46px); line-height: 1.15; font-weight: 900; margin: 14px 0 14px; }
+.contact p { font-size: 16px; white-space: pre-line; }
+.contact .side { display: grid; gap: 14px; }
+.contact .side a { display: flex; align-items: center; justify-content: space-between; padding: 28px; font-size: 20px; font-weight: 800; border-radius: var(--r-xl); transition: transform .4s var(--spring); }
+.contact .side a:hover { transform: translateY(-4px) rotate(-1deg); }
+.contact .side a span { font-size: 26px; transition: transform .4s var(--spring); }
+.contact .side a:hover span { transform: translate(4px, -4px); }
+
+@media (max-width: 1000px) {
+  .hgrid { grid-template-columns: repeat(6, 1fr); }
+  .h-title { grid-column: span 6; grid-row: auto; padding: 36px; }
+  .h-ledger { grid-column: span 6; grid-row: auto; }
+  .h-zero, .h-mem { grid-column: span 3; }
+  .h-strip { grid-column: span 6; }
+  .pgrid { grid-template-columns: 1fr 1fr; }
+  .tier { grid-column: span 2; }
+  .perk { min-height: 240px; }
+  .b-strat, .b-raffle, .b-agent, .b-os { grid-column: span 12; }
+  .pj { grid-template-columns: 1fr 1fr; }
+  .cash, .contact { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .hero { padding-top: 24px; }
+  .h-title { padding: 26px; }
+  .h-title .ctas { flex-direction: column; } .h-title .ctas .btn { width: 100%; }
+  section.band { padding: 72px 0; }
+  .sh { flex-direction: column; align-items: flex-start; }
+  .pgrid, .pj, .srcs, .uses { grid-template-columns: 1fr; }
+  .tier { grid-column: auto; }
+  .perk { min-height: 0; } .perk h3 { margin-top: 18px; }
+  .b-raffle .t-inner, .b-agent .t-inner { max-width: 100%; }
+  .b-raffle .coins { position: static; margin: 0 0 14px 10px; }
+  .b-agent .bot { position: static; margin-top: 16px; }
+  .b-os { flex-direction: column; align-items: stretch; } .b-os .code { width: 100%; margin: 0; }
+  .found { flex-wrap: wrap; } .found .pill { margin-left: 0; }
+  .contact .main { padding: 28px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="#"><img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/logos/pao_logo.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="#" aria-current="page">首页</a><a href="#">博客</a><a href="#">项目</a><a href="#">Skills</a></div>
+    <div class="nav-right"><span class="nav-lang">简体中文</span><a class="btn btn-primary btn-sm" href="#contact">合作</a></div>
+  </div>
+</nav>
+
+<main>
+  <section class="hero" aria-labelledby="hero-h1">
+    <div class="wrap hgrid">
+      <div class="t h-title" data-reveal data-tilt="2">
+        <span class="glare"></span>
+        <div>
+          <span class="chip" style="background:var(--card)">Pao Studio</span>
+          <h1 id="hero-h1">一家建立在<br>Cardano 上的<br><span class="hl">一人公司</span></h1>
+          <p>探索由 Cardano 矿池支持的一人公司运营模式，并分享实践经验。
+希望通过我们的努力，能让 Cardano 成为一人公司的新基建。</p>
+        </div>
+        <div class="ctas"><a class="btn btn-primary" href="#">委托给 Pao Pool</a><a class="btn btn-ghost" href="#perks" style="background:var(--card);box-shadow:none">查看订阅内容</a></div>
+      </div>
+
+      <div class="t h-ledger c-teal" data-reveal data-delay="90" data-tilt="6" role="table" aria-label="Pao Pool 矿池数据">
+        <span class="glare"></span>
+        <header><span class="live" aria-hidden="true"></span>Pao Pool<a href="#">实时 · CardanoScan →</a></header>
+        <div class="r" role="row"><span>矿池代号</span><b>PAO</b></div>
+        <div class="r" role="row"><span>矿池质押量</span><b class="tnum" data-count="1.5" data-decimals="1" data-suffix="K ADA">1.5K ADA</b></div>
+        <div class="r" role="row"><span>质押年化</span><b class="tnum" data-count="2.2" data-decimals="1" data-suffix="%">2.2%</b></div>
+        <div class="r" role="row"><span>委托人</span><b class="tnum" data-count="4">4</b></div>
+        <span class="foot">✓ 非托管 · 不锁仓 · 奖励会变化</span>
+      </div>
+
+      <div class="t h-zero c-lemon" data-reveal data-delay="180" data-tilt="10" style="--rot:-6deg;--rest:-1.5deg">
+        <span class="glare"></span><span class="lbl">订阅费用</span><b class="tnum">$0</b>
+      </div>
+      <div class="t h-mem c-sky" data-reveal data-delay="240" data-tilt="10" style="--rot:6deg;--rest:1deg">
+        <span class="glare"></span><span class="lbl">会员</span><b>委托<br>即会员</b>
+      </div>
+
+      <div class="t h-strip c-card" data-reveal data-delay="300">
+        <span class="sticker" style="--c:var(--grass);--r:-2deg"><i></i>非托管</span>
+        <span class="sticker" style="--c:var(--orange);--r:1.5deg"><i></i>不锁仓</span>
+        <span class="sticker" style="--c:var(--lavender);--r:-1deg"><i></i>可随时更换矿池</span>
+        <span class="sticker" style="--c:var(--mint);--r:2deg"><i></i>Cardano 开源基础设施</span>
+        <span class="sticker" style="--c:var(--sea);--r:-1.5deg"><i></i>AI × Web3 产品</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Perks -->
+  <section class="band white" id="perks" aria-labelledby="perks-h2">
+    <div class="wrap">
+      <div class="sh" data-reveal>
+        <div><h2 id="perks-h2">质押即订阅</h2><p>传统订阅模式要求用户定期付费。Pao Studio 尝试基于 Cardano 原生质押机制，建立一种新的订阅方式。
+用户将 ADA 委托给 Pao Pool，无需额外付费、锁仓或托管，照常获得质押奖励。</p></div>
+      </div>
+      <div class="pgrid">
+        <div class="t perk c-sky" data-reveal data-tilt="8"><span class="glare"></span><span class="num tnum">01</span><h3>无需另行支付订阅费</h3><p>ADA 不会转入 Pao Studio 或 Pao Pool，委托期间也不会被锁定。</p><span class="tag">非托管</span></div>
+        <div class="t perk c-lav" data-reveal data-delay="70" data-tilt="8"><span class="glare"></span><span class="num tnum">02</span><h3>委托关系对应会员身份</h3><p>系统可以根据链上委托状态识别会员，并开放相应的内容、产品功能、早期体验和会员活动。</p><span class="tag">委托即会员</span></div>
+        <div class="t perk c-mint" data-reveal data-delay="140" data-tilt="8"><span class="glare"></span><span class="num tnum">03</span><h3>矿池收入用于公司运营</h3><p>Pao Pool 获得的运营收入用于支付节点、服务器、AI 服务和产品开发成本。</p><span class="tag">运营收入</span></div>
+        <div class="t perk c-grass" data-reveal data-delay="210" data-tilt="8"><span class="glare"></span><span class="num tnum">04</span><h3>委托者参与产品迭代</h3><p>委托者可以参与早期测试并提交实际需求，相关反馈将作为产品调整的参考。</p><span class="tag">产品反馈</span></div>
+        <div class="t tier c-teal" data-reveal data-delay="280" data-tilt="6"><span class="glare"></span><span class="lbl">订阅费用</span><span class="price tnum">$0</span><p>无需另行支付订阅费。将 ADA 委托给 Pao Pool，即可享受我们提供的内容和产品服务。</p><a class="btn" href="#">委托给 Pao Pool</a><span class="fine">非托管 · 不锁仓 · 可随时更换矿池</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="band" aria-labelledby="ben-h2">
+    <div class="wrap">
+      <div class="sh" data-reveal><h2 id="ben-h2">现在质押，可以获得...</h2></div>
+      <div class="bgrid">
+        <div class="t b-strat c-lav" data-reveal data-tilt="3"><span class="glare"></span><span class="lbl">内容服务</span><h3>Crypto 交易策略推送</h3><p>提供具体的 Crypto 交易策略内容，包括市场判断、交易逻辑、执行条件和风险说明。</p><img src="../../../public/images/trading-strategy-card.png" alt="BTCUSDT 4 小时交易策略示意图" width="2244" height="701" loading="lazy"></div>
+        <div class="t b-raffle c-lemon" data-reveal data-delay="80" data-tilt="6"><span class="glare"></span>
+          <div class="coins" aria-hidden="true"><span class="coin" style="background-image:url('https://cardano.org/img/brand-assets/cardano-starburst-blue.svg')"></span><span class="coin" style="background-image:url('https://assets.coingecko.com/coins/images/30496/standard/Snek-Square-BG_200x200.png');background-size:cover"></span><span class="coin" style="background:var(--orange);display:grid;place-items:center;color:#fff;font-weight:900">?</span></div>
+          <div class="t-inner"><span class="lbl">不定期开放</span><h3>Token 抽奖</h3><p>面向委托者开展 Token 抽奖，奖品可能包括 ADA、SNEK 等资产。奖品内容和参与条件以每期活动规则为准。</p></div>
+        </div>
+        <div class="t b-agent c-mint" data-reveal data-delay="160" data-tilt="6"><span class="glare"></span>
+          <div class="t-inner"><span class="lbl">Coming Soon</span><h3>交易 Agent 内测权限</h3><p>交易 Agent 开放内测后，Pao Pool 委托者可以优先使用，并参与早期产品反馈。</p></div>
+          <span class="bot" aria-hidden="true">🤖</span>
+        </div>
+        <div class="t b-os c-white" data-reveal data-delay="220"><div><h3>支持 Cardano 开源产品开发</h3><p>将 ADA 委托给 Pao Pool，支持我们为 Cardano 的开源生态贡献产品。</p></div>
+          <div class="code" aria-hidden="true"><span style="color:var(--lavender)">const</span> build = <span style="color:var(--sky)">'Cardano'</span>;<br><span style="color:rgba(255,255,255,.55)">openSource.contribute(build);</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="band white" aria-labelledby="proj-h2">
+    <div class="wrap">
+      <div class="sh" data-reveal><div><h2 id="proj-h2">项目列表</h2><p>Pao Studio 会尝试开发不同类型的产品，包括开源的 Cardano 基础设施、Web3 应用和 AI 应用。</p></div><a class="more" href="#">查看全部项目 →</a></div>
+      <div class="pj">
+        <a class="t proj c-sea" href="#" data-reveal data-tilt="5" style="--r:-2deg"><span class="glare"></span><div class="frame"><img src="../../../public/images/projects/ouro-pass.jpg" alt="" loading="lazy"></div><div class="meta"><span class="lbl">基础设施</span><h3>Ouro Pass</h3><p>基于 Cardano 的去中心化身份与订阅基础设施。</p></div><div class="go"><span>访问项目 ↗</span><span>GitHub</span></div></a>
+        <a class="t proj c-lemon" href="#" data-reveal data-delay="80" data-tilt="5" style="--r:1.5deg"><span class="glare"></span><div class="frame"><img src="../../../public/images/projects/utxray.jpg" alt="" loading="lazy"></div><div class="meta"><span class="lbl">基础设施</span><h3>utxray</h3><p>面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。</p></div><div class="go"><span>访问项目 ↗</span><span>GitHub</span></div></a>
+        <a class="t proj c-orange" href="#" data-reveal data-delay="160" data-tilt="5" style="--r:-1.5deg"><span class="glare"></span><div class="frame"><img src="../../../public/images/projects/ouro-ops.jpg" alt="" loading="lazy"></div><div class="meta"><span class="lbl">基础设施</span><h3>Ouro Ops</h3><p>面向 AI Agent 的 Cardano Stake Pool 运维工具。</p></div><div class="go"><span>访问项目 ↗</span><span>GitHub</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Model -->
+  <section class="band" aria-labelledby="model-h2">
+    <div class="wrap">
+      <div class="sh" data-reveal style="max-width:1040px;margin-left:auto;margin-right:auto"><div><h2 id="model-h2">收入构成</h2><p>对一人公司来说，先要解决的是生存问题。Pao Studio 希望将矿池运营收入作为覆盖基础开支的主要来源，同时继续探索交易、产品增值服务、咨询与项目开发等其他收入。</p></div></div>
+      <div class="stack" data-reveal>
+        <div class="srcs">
+          <div class="blk c-lav" data-drop style="--t:.0s"><small>Trading · 持续探索</small><b>交易收入</b><span>波动收入</span></div>
+          <div class="blk c-mint" data-drop style="--t:.08s"><small>Products · 持续探索</small><b>产品增值服务</b><span>产品收入</span></div>
+          <div class="blk c-grass" data-drop style="--t:.16s"><small>Services · 持续探索</small><b>咨询与项目制开发</b><span>项目收入</span></div>
+        </div>
+        <div class="blk cash c-teal" data-drop style="--t:.3s">
+          <div><span class="lbl">用于支持</span><h3>Pao Studio 现金流</h3><p>来自矿池及其他业务的收入，用于支持公司的日常运营与后续开发。</p></div>
+          <div class="uses"><div class="c-sky">节点与服务器</div><div class="c-lemon">AI 服务</div><div class="c-mint">产品开发</div><div class="c-grass">日常运营</div></div>
+        </div>
+        <div class="blk found c-sky" data-drop style="--t:.44s"><div><small>Foundation · 基础收入</small><b>矿池运营收入</b><p style="font-size:14px;margin-top:6px">希望以矿池运营收入优先覆盖公司的基本运营成本。</p></div><span class="pill">覆盖基本运营成本</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="band white" id="contact" aria-labelledby="ct-h2">
+    <div class="wrap contact">
+      <div class="t main c-lemon" data-reveal><span class="chip" style="background:rgba(255,255,255,.6)">产品开发 · 咨询与合作</span><h2 id="ct-h2">软件开发与技术咨询</h2><p>Pao Studio 提供 AI、区块链及传统软件项目的开发与咨询服务。
+如有项目需求或合作想法，欢迎来信交流。</p></div>
+      <div class="side">
+        <a class="c-teal" href="#" data-reveal data-delay="80">邮件联系 <span>↗</span></a>
+        <a class="c-card" href="#" data-reveal data-delay="160">加入 Telegram 社群 <span>↗</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap"><span class="tnum">© 2024–2026 Pao Studio</span><span>𝕏 · GitHub</span></div></footer>
+
+<nav class="proto-badge" aria-label="原型切换">
+  <a href="index.html">总览</a><a href="a-bubble-float.html">A 泡泡浮游</a><a href="b-kinetic-editorial.html">B 动态编辑</a><a href="c-color-bento.html" aria-current="page">C 彩色便当</a>
+</nav>
+
+<script src="base.js"></script>
+<script>
+// 3D pointer tilt + glare on [data-tilt] tiles (fine pointer, motion allowed)
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(pointer: fine)').matches) return;
+  document.querySelectorAll('[data-tilt]').forEach((el) => {
+    const max = +el.dataset.tilt || 6;
+    let raf;
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.transition = 'transform .12s linear, box-shadow .35s';
+        el.style.transform = `perspective(900px) rotateX(${(0.5 - y) * max}deg) rotateY(${(x - 0.5) * max}deg) translateY(-4px)`;
+        el.style.setProperty('--gx', x * 100 + '%');
+        el.style.setProperty('--gy', y * 100 + '%');
+      });
+    });
+    el.addEventListener('pointerleave', () => {
+      cancelAnimationFrame(raf);
+      el.style.transition = 'transform .7s cubic-bezier(.34,1.56,.64,1), box-shadow .35s';
+      el.style.transform = '';
+    });
+  });
+})();
+</script>
+</body>
+</html>

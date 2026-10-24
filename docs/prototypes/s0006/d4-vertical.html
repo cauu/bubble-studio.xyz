@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D4 · 纵向长卷 — S0006 原型</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="dx-base.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+/* ===== D4 Vertical filmstrip =====
+   D2 长卷的模块排版改为纵向滚动：章节以横向「闸门」横幅开场，作品 / 文章 / 成员保持横排错落，
+   元素按深度做纵向视差；底部 HUD 常驻矿池数据与章节时间轴。 */
+:root { --hud: 64px; --pad: 4vw; }
+.blk { position: relative; padding: 0 var(--pad); }
+[data-py] { will-change: transform; }
+.rise { opacity: 0; translate: 0 40px; transition: opacity .8s var(--out), translate 1s var(--out); transition-delay: var(--d, 0s); }
+.rise.in { opacity: 1; translate: 0 0; }
+
+/* Hero */
+.p-hero { min-height: calc(100vh - 68px - var(--hud)); display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: 2vw; padding-left: max(var(--pad), calc((100vw - 1180px) / 2 + 24px)); overflow: hidden; }
+.boot { font-family: var(--mono); font-size: 12.5px; color: var(--grn); line-height: 1.9; margin-bottom: 26px; }
+.p-hero h1 { font-size: clamp(44px, 5.6vw, 92px); line-height: 1.02; font-weight: 900; letter-spacing: -.01em; margin-bottom: 24px; }
+.p-hero h1 span { display: block; white-space: nowrap; }
+.p-hero h1 .hl { display: inline; color: var(--void); background: var(--yel); padding: 0 .12em; margin-left: -.06em; }
+.p-hero p { color: var(--fg-dim); font-size: 16.5px; line-height: 1.8; max-width: 28em; margin-bottom: 30px; }
+.p-hero .ctas { display: flex; gap: 12px; }
+.p-hero .art { position: relative; height: 72vh; max-height: 640px; }
+.p-hero .art > * { position: absolute; }
+.p-hero .art .g-p { left: 6%; top: 4%; width: 56%; height: 44%; }
+.p-hero .art .g-a { right: 0; top: 26%; width: 52%; aspect-ratio: 1 / .87; mix-blend-mode: screen; }
+.p-hero .art .g-o { left: 28%; bottom: 0; width: 38%; aspect-ratio: 1; mix-blend-mode: screen; }
+.hint { position: absolute; left: 50%; bottom: 22px; translate: -50% 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: .16em; color: var(--fg-dim); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.hint i { display: block; width: 1px; height: 46px; background: var(--line); position: relative; overflow: hidden; }
+.hint i::after { content: ""; position: absolute; inset: 0; background: var(--cy); animation: hint 1.6s var(--inout) infinite; }
+@keyframes hint { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
+
+/* Chapter gate: horizontal band with a neon edge */
+.gate { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 28px; padding: 100px var(--pad) 36px; overflow: hidden; }
+.gate::before { content: ""; position: absolute; left: var(--pad); right: var(--pad); top: 60px; height: 2px; background: var(--c); box-shadow: 0 0 24px var(--c); transform-origin: left; transform: scaleX(0); transition: transform 1.2s var(--inout); }
+.gate.in::before { transform: scaleX(1); }
+.gate .num { font-family: var(--mono); font-weight: 800; font-size: clamp(56px, 6vw, 96px); line-height: .8; color: transparent; -webkit-text-stroke: 1.5px var(--c); }
+.gate .en { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: .3em; color: var(--c); margin-bottom: 8px; }
+.gate h2 { font-size: clamp(32px, 3.4vw, 52px); font-weight: 900; line-height: 1; letter-spacing: -.01em; }
+
+/* Works */
+.coil { display: block; border: 1px solid var(--line); background: var(--void-2); }
+.coil .scene { position: relative; display: block; aspect-ratio: 1440 / 500; overflow: hidden; background: #dff0ff; }
+.coil .scene img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 92%; image-rendering: pixelated; transition: opacity .5s; }
+.coil .scene .awake { opacity: 0; }
+.coil:hover .scene .awake { opacity: 1; }
+.coil .cap { display: flex; align-items: center; gap: 24px; padding: 18px 22px; }
+.coil .cap h3 { font-family: var(--mono); font-size: clamp(32px, 3vw, 48px); font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.coil .cap .lead { font-size: 17px; font-weight: 800; }
+.coil .cap .specs { font-family: var(--mono); font-size: 12px; color: var(--fg-dim); margin-top: 4px; }
+.coil .cap .cbtn { margin-left: auto; }
+.p-works { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; padding-top: 110px; padding-bottom: 90px; }
+.wk { position: relative; display: flex; flex-direction: column; gap: 12px; }
+.wk:nth-child(even) { margin-top: 90px; }
+.wk .th { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--c); border: 1px solid var(--line); }
+.wk .th img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15); mix-blend-mode: multiply; transition: filter .4s, transform .6s var(--out); }
+.wk:hover .th img { filter: none; mix-blend-mode: normal; transform: scale(1.05); }
+.wk .row { display: flex; align-items: baseline; gap: 12px; }
+.wk .no { font-family: var(--mono); font-size: 13px; font-weight: 800; color: var(--c); }
+.wk h3 { font-family: var(--mono); font-size: clamp(22px, 2vw, 30px); font-weight: 800; letter-spacing: -.02em; transition: color .2s; }
+.wk:hover h3 { color: var(--c); }
+.wk p { font-size: 14px; color: var(--fg-dim); line-height: 1.65; }
+.wk .tags { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--c); }
+
+/* Writing */
+.p-posts { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 22px; height: 68vh; min-height: 520px; }
+.pf { display: flex; flex-direction: column; gap: 16px; min-height: 0; }
+.pf .img { flex: 1; overflow: hidden; border: 1px solid var(--line); position: relative; }
+.pf .img img { position: absolute; inset: -6% 0; width: 100%; height: 112%; object-fit: cover; transition: scale 1.2s var(--out); }
+.pf:hover .img img { scale: 1.04; }
+.pf .img::after { content: "LATEST"; position: absolute; left: 0; top: 0; background: var(--yel); color: var(--void); font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .12em; padding: 6px 10px; }
+.pf h3 { font-size: clamp(24px, 2.2vw, 36px); line-height: 1.3; font-weight: 900; }
+.meta { font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; color: var(--fg-dim); text-transform: uppercase; }
+.meta b { color: var(--c); }
+.pc { display: flex; flex-direction: column; justify-content: space-between; padding: 26px; border: 1px solid var(--line); transition: border-color .3s, background .3s; }
+.pc:nth-child(odd) { margin-top: 60px; }
+.pc .n { font-family: var(--mono); font-size: clamp(64px, 6.4vw, 96px); font-weight: 800; line-height: .8; color: transparent; -webkit-text-stroke: 1.2px var(--c); }
+.pc h3 { font-size: 19px; line-height: 1.45; font-weight: 800; margin-top: 12px; }
+.pc:hover { border-color: var(--c); background: rgba(244,242,255,.03); }
+.pc:hover .n { color: var(--c); }
+
+/* P · A · O: three tall panels side by side */
+.p-pao { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--line); padding: 0; margin: 0 var(--pad); }
+.pp { position: relative; height: 74vh; min-height: 540px; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 3vw 48px; overflow: hidden; }
+.pp + .pp { border-left: 1px solid var(--line); }
+.pp .shape { position: absolute; left: 50%; top: 40%; translate: -50% -50%; z-index: 0; }
+.pp .shape.g-p { width: 40%; height: 30%; top: 33%; }
+.pp .shape.g-a { width: 58%; aspect-ratio: 1 / .87; }
+.pp .shape.g-o { width: 50%; aspect-ratio: 1; }
+.pp > :not(.shape) { position: relative; z-index: 1; }
+.pp .word { font-family: var(--mono); font-size: 13px; letter-spacing: .32em; color: var(--c); }
+.pp h3 { font-size: 30px; font-weight: 900; margin: 10px 0; }
+.pp p { color: var(--fg-dim); font-size: 15px; line-height: 1.75; max-width: 24em; }
+
+/* Members: ID cards */
+.p-members { display: grid; grid-template-columns: repeat(5, 1fr) 1.2fr; gap: 16px; align-items: start; padding-bottom: 60px; }
+.idc { height: 340px; display: flex; flex-direction: column; padding: 22px 20px; background: #05040a; border: 1px solid var(--line); font-family: var(--mono); position: relative; overflow: hidden; transition: border-color .3s, scale .4s var(--out); }
+.idc:nth-child(even) { margin-top: 50px; }
+.idc:hover { border-color: var(--c); scale: 1.03; }
+.idc::before { content: "₳"; position: absolute; right: -10px; bottom: -40px; font-family: Inter, sans-serif; font-size: 170px; font-weight: 900; color: var(--c); opacity: .12; line-height: 1; }
+.idc .no { font-size: 12px; font-weight: 800; color: var(--c); letter-spacing: .12em; }
+.idc .addr { font-size: 12.5px; margin-top: 10px; }
+.idc .amt { margin-top: auto; font-size: 26px; font-weight: 800; }
+.idc .ep { font-size: 11px; color: var(--fg-dim); margin-top: 6px; }
+.idc .ep b { color: var(--c); }
+.idc.next { border: 1px dashed var(--yel); background: transparent; --c: var(--yel); }
+.idc.next .amt { font-family: Inter, AlibabaPuHuiTi, sans-serif; font-size: 22px; font-weight: 900; color: var(--yel); }
+.idc.next:hover { background: var(--yel); }
+.idc.next:hover * { color: var(--void); }
+.poolcol { display: flex; flex-direction: column; gap: 12px; font-family: var(--mono); font-size: 13px; color: var(--fg-dim); padding: 22px 0 0 10px; }
+.poolcol b { color: var(--cy); font-size: 26px; letter-spacing: .1em; }
+.poolcol a:not(.cbtn) { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+.poolcol .cbtn { align-self: flex-start; margin-top: 8px; }
+.copy { background: none; border: 1px solid var(--line); color: var(--fg-dim); font: inherit; font-size: 11px; padding: 0 8px; margin-left: 6px; cursor: pointer; line-height: 1.8; }
+
+/* End */
+.p-end { padding: 160px var(--pad) calc(120px + var(--hud)); padding-left: 8vw; }
+.p-end h2 { font-size: clamp(110px, 15vw, 260px); font-weight: 900; line-height: .84; letter-spacing: -.05em; }
+.p-end h2 .o { color: transparent; -webkit-text-stroke: 2px var(--fg); }
+.p-end h2 .m { color: var(--mag); }
+.p-end .acts { display: flex; gap: 12px; margin-top: 40px; flex-wrap: wrap; }
+.footer { margin-bottom: var(--hud); }
+
+/* HUD: live data + chapter timeline */
+.hud { position: fixed; left: 0; right: 0; bottom: 0; height: var(--hud); z-index: 60; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 32px; padding: 0 24px; background: rgba(10,9,16,.94); border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--fg-dim); }
+.hud .live b { color: var(--cy); font-weight: 800; }
+.hud .live .dot { display: inline-block; width: 7px; height: 7px; background: var(--grn); margin-right: 8px; animation: blink 1.6s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.tl { position: relative; height: 34px; }
+.tl .base { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); }
+.tl .fill { position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -.5px; background: linear-gradient(90deg, var(--mag), var(--cy), var(--yel), var(--grn)); transform-origin: left; transform: scaleX(var(--p, 0)); }
+.tl a { position: absolute; top: 0; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; translate: -1px 0; color: var(--fg-dim); font-size: 10.5px; letter-spacing: .12em; white-space: nowrap; }
+.tl a::before { content: ""; width: 1px; height: 10px; background: currentColor; }
+.tl a em { font-style: normal; }
+.tl a span { display: none; }
+.tl a.on span { display: inline; }
+.tl a:last-child { translate: -100% 0; align-items: flex-end; }
+.tl a.on { color: var(--fg); }
+.tl a.on b { color: var(--c); }
+.hud .goal b { color: var(--yel); }
+
+@media (max-width: 900px) {
+  :root { --hud: 0px; --pad: 20px; }
+  .hud { display: none; }
+  [data-py] { transform: none !important; }
+  .p-hero { grid-template-columns: 1fr; padding: 56px 20px; }
+  .p-hero .art { height: 300px; }
+  .p-hero h1 { font-size: 44px; }
+  .p-hero .ctas { flex-direction: column; }
+  .hint { display: none; }
+  .gate { grid-template-columns: auto 1fr; padding-top: 90px; }
+  .gate::before { top: 50px; }
+  .gate .num { font-size: 52px; }
+  .gate h2 { font-size: 30px; }
+  .gate .cbtn { grid-column: 1 / -1; justify-self: start; }
+  .coil .scene { aspect-ratio: 4 / 3; } .coil .cap { flex-wrap: wrap; } .coil .cap .cbtn { margin-left: 0; }
+  .p-works, .p-posts, .p-members { grid-template-columns: 1fr; height: auto; padding-top: 40px; }
+  .wk:nth-child(even), .pc:nth-child(odd), .idc:nth-child(even) { margin-top: 0; }
+  .pf .img { aspect-ratio: 16 / 9; flex: none; }
+  .p-pao { grid-template-columns: 1fr; }
+  .pp { height: 420px; min-height: 0; } .pp + .pp { border-left: 0; border-top: 1px solid var(--line); }
+  .idc { height: 170px; }
+  .p-end h2 { font-size: 26vw; }
+}
+@media (prefers-reduced-motion: reduce) { [data-py] { transform: none !important; } .rise { opacity: 1; translate: none; } }
+</style>
+</head>
+<body>
+<canvas class="particles" aria-hidden="true"></canvas>
+
+<nav class="nav" aria-label="主导航">
+  <div class="wrap">
+    <a class="logo" href="#"><img src="pao_logo_dark.svg" alt="Pao Studio 标志" width="200" height="28"></a>
+    <div class="nav-links"><a href="#" aria-current="page">/home</a><a href="d-article.html">/blog</a><a href="#works">/works</a><a href="#">/skills</a></div>
+    <div class="nav-right"><span class="nav-lang">ZH</span><a class="cbtn sm" href="#end">合作</a></div>
+  </div>
+</nav>
+
+<main>
+  <!-- 00 Hero -->
+  <section class="blk p-hero" id="home" data-ch aria-labelledby="h1">
+    <div>
+      <div class="boot" aria-hidden="true">&gt; boot pao.studio ...<br>&gt; link cardano.mainnet <b style="color:var(--cy)">[OK]</b> · epoch <b style="color:var(--fg)" data-ep>—</b><br>&gt; operator.count = 1 <b style="color:var(--yel)">// one-person company</b></div>
+      <h1 id="h1"><span>一家建立在</span><span>Cardano 上的</span><span><span class="hl">一人公司</span></span></h1>
+      <p>探索由 Cardano 矿池支持的一人公司运营模式，并分享实践经验。</p>
+      <div class="ctas"><a class="cbtn" href="#members">委托给 Pao Pool →</a><a class="cbtn alt" href="#works">看看作品</a></div>
+    </div>
+    <div class="art" aria-hidden="true"><span class="g-p" data-py=".08"></span><span class="g-a" data-py="-.12"></span><span class="g-o" data-py=".1"></span></div>
+    <span class="hint" aria-hidden="true">SCROLL<i></i></span>
+  </section>
+
+  <!-- 01 Works -->
+  <section id="works" data-ch aria-labelledby="h-works">
+    <div class="gate rise" style="--c:var(--cy)"><span class="num" data-py="-.08">01</span><div><span class="en">WORKS</span><h2 id="h-works">作品</h2></div><a class="cbtn sm alt" href="#">全部作品 →</a></div>
+    <div class="blk">
+      <a class="coil rise" href="https://coil.win/">
+        <span class="scene"><img src="coil-sleep-wide.png" alt="" width="1440" height="730"><img class="awake" src="coil-awake-wide.png" alt="" width="1440" height="730"></span>
+        <span class="cap"><h3>Coil</h3><span><span class="lead" style="display:block">Your desktop trading agent.</span><span class="specs" style="display:block">NEW · v0.3.0 · macOS · Apple Silicon</span></span><span class="cbtn sm">下载 Coil ↓</span></span>
+      </a>
+    </div>
+    <div class="blk p-works">
+      <a class="wk rise" href="https://voda.paopao.studio/" style="--c:var(--yel)" data-py=".05"><span class="th"><img src="../../../public/images/projects/voda.jpg" alt=""></span><span class="row"><span class="no">01</span><h3>voda</h3></span><p>AI 编辑每日精选 Cardano 动态。</p><span class="tags">AI · APP</span></a>
+      <a class="wk rise" href="https://ouro-pass.paopao.studio/" style="--c:var(--cy);--d:.08s" data-py="-.04"><span class="th"><img src="../../../public/images/projects/ouro-pass.jpg" alt=""></span><span class="row"><span class="no">02</span><h3>ouro-pass</h3></span><p>基于 Cardano 的去中心化身份与订阅基础设施。</p><span class="tags">OSS</span></a>
+      <a class="wk rise" href="https://utxray.paopao.studio/" style="--c:var(--mag);--d:.16s" data-py=".07"><span class="th"><img src="../../../public/images/projects/utxray.jpg" alt=""></span><span class="row"><span class="no">03</span><h3>utxray</h3></span><p>面向 Cardano 智能合约的 Agent-First 调试与质量检测工具。</p><span class="tags">OSS</span></a>
+      <a class="wk rise" href="https://ouro-ops.paopao.studio/" style="--c:var(--grn);--d:.24s" data-py="-.05"><span class="th"><img src="../../../public/images/projects/ouro-ops.jpg" alt=""></span><span class="row"><span class="no">04</span><h3>ouro-ops</h3></span><p>面向 AI Agent 的 Cardano Stake Pool 运维工具。</p><span class="tags">OSS</span></a>
+      <a class="wk rise" href="#" style="--c:var(--pur);--d:.32s" data-py=".04"><span class="th"><img src="../../../public/images/projects/cardano-lottery.jpg" alt=""></span><span class="row"><span class="no">05</span><h3>lottery</h3></span><p>基于 Cardano 构建的去中心化彩票应用。</p><span class="tags">APP</span></a>
+    </div>
+  </section>
+
+  <!-- 02 Writing -->
+  <section id="writing" data-ch aria-labelledby="h-writing">
+    <div class="gate rise" style="--c:var(--mag)"><span class="num" data-py="-.08">02</span><div><span class="en">WRITING</span><h2 id="h-writing">文章</h2></div><a class="cbtn sm alt" href="d-article.html">全部文章 →</a></div>
+    <div class="blk p-posts">
+      <a class="pf rise" href="#" style="--c:var(--yel)"><span class="img"><img src="https://cdn.jsdelivr.net/gh/cauu/bubble-studio-assets@main/images/blogs/20260405-subscriptions-are-failing.jpg" alt="" width="1600" height="900" data-py="-.06"></span><span class="meta"><b>ai</b> · 2026-04-05</span><h3>软件订阅正在失效，创作者经济需要新的基础设施</h3></a>
+      <a class="pc rise" href="#" style="--c:var(--cy);--d:.08s"><span class="n">02</span><span><span class="meta"><b>cardano</b> · 2026-03-25</span><h3>区块链的“组合性”演进：为什么 AI 时代需要的是 Cardano 而非 Ethereum？</h3></span></a>
+      <a class="pc rise" href="d-article.html" style="--c:var(--mag);--d:.16s"><span class="n">03</span><span><span class="meta"><b>engineering</b> · 2026-03-06</span><h3>Immutable Spec：让需求、设计、执行和验收收敛到同一份文档</h3></span></a>
+      <a class="pc rise" href="#" style="--c:var(--grn);--d:.24s"><span class="n">04</span><span><span class="meta"><b>essay</b> · 2026-03-02</span><h3>从认知到行动的健康长寿实践</h3></span></a>
+    </div>
+  </section>
+
+  <!-- 03 P · A · O -->
+  <section id="pao" data-ch aria-labelledby="h-pao">
+    <div class="gate rise" style="--c:var(--yel)"><span class="num" data-py="-.08">03</span><div><span class="en">P · A · O</span><h2 id="h-pao">主线</h2></div></div>
+    <div class="p-pao">
+      <div class="pp rise" style="--c:var(--mag)"><span class="shape g-p" data-py="-.14" aria-hidden="true"></span><span class="word">P // POOL</span><h3>运营 Cardano 矿池</h3><p>矿池收入用于支付节点、服务器、AI 服务和产品开发。委托 ADA 即成为会员。</p></div>
+      <div class="pp rise" style="--c:var(--cy);--d:.1s"><span class="shape g-a" data-py=".1" aria-hidden="true"></span><span class="word">A // AI</span><h3>构建 AI 产品</h3><p>Coil 是你桌面上的交易 Agent；VODA 由 AI 编辑每天挑选 Cardano 动态。</p></div>
+      <div class="pp rise" style="--c:var(--yel);--d:.2s"><span class="shape g-o" data-py="-.2" aria-hidden="true"></span><span class="word">O // OPEN</span><h3>开源与公开写作</h3><p>Ouro Pass、utxray、ouro-ops 在 GitHub 开源，并持续分享运营实践。</p></div>
+    </div>
+  </section>
+
+  <!-- 04 Members -->
+  <section id="members" data-ch aria-labelledby="h-members">
+    <div class="gate rise" style="--c:var(--grn)"><span class="num" data-py="-.08">04</span><div><span class="en">ON-CHAIN MEMBERS</span><h2 id="h-members">成员</h2></div></div>
+    <div class="blk p-members">
+      <div class="idc rise" style="--c:var(--mag)"><span class="no">#01</span><span class="addr">stake1u8kl…xe93nu</span><span class="amt tnum">₳ 889.69</span><span class="ep">since epoch 586</span></div>
+      <div class="idc rise" style="--c:var(--cy);--d:.06s"><span class="no">#02</span><span class="addr">stake1uxxv…tsgyv</span><span class="amt tnum">₳ 517.43</span><span class="ep">since epoch 524 · <b>operator pledge</b></span></div>
+      <div class="idc rise" style="--c:var(--yel);--d:.12s"><span class="no">#03</span><span class="addr">stake1uxre…63gmlc</span><span class="amt tnum">₳ 104.83</span><span class="ep">since epoch 650</span></div>
+      <div class="idc rise" style="--c:var(--grn);--d:.18s"><span class="no">#04</span><span class="addr">stake1u96q…zecc8g</span><span class="amt tnum">₳ 27.65</span><span class="ep">since epoch 604</span></div>
+      <a class="idc next rise" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm" style="--d:.24s"><span class="no">#05</span><span class="addr">你的 stake address</span><span class="amt">下一位就是你</span><span class="ep">委托给 PAO →</span></a>
+      <div class="poolcol rise" style="--d:.3s"><b>PAO</b><span>pool1jh5p…0ksm<button class="copy" type="button" data-copy="pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">COPY</button></span><span>margin 3% · fixed ₳170</span><a href="https://cardanoscan.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">CardanoScan ↗</a><a class="cbtn sm" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托给 Pao Pool →</a></div>
+    </div>
+  </section>
+
+  <!-- 05 End -->
+  <section class="p-end" id="end" data-ch aria-labelledby="h-end">
+    <h2 id="h-end"><span class="o">LET'S</span><br><span class="m">BUILD.</span></h2>
+    <div class="acts rise"><a class="cbtn" href="https://cexplorer.io/pool/pool1jh5p5627hzqxdzjutfenz83qs7p2qtha4kvst3hs0829sdc0ksm">委托给 Pao Pool →</a><a class="cbtn alt" href="#">邮件联系 ↗</a><a class="cbtn alt" href="#">Telegram 社群</a></div>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap"><span>© 2024–2026 PAO STUDIO // BUILT ON CARDANO ₳</span><span>X · GITHUB</span></div></footer>
+
+<div class="hud" aria-label="矿池状态与章节">
+  <span class="live"><i class="dot" aria-hidden="true"></i>LIVE <b>₳ 1,540</b> · <b style="color:var(--mag)">4</b> DELEGATORS · EPOCH <b style="color:var(--fg)" data-ep>—</b> <b style="color:var(--grn)" data-ep-left>—</b></span>
+  <div class="tl"><span class="base"></span><span class="fill"></span>
+    <a href="#home" style="--c:var(--fg)"><em><b>00</b><span> HOME</span></em></a>
+    <a href="#works" style="--c:var(--cy)"><em><b>01</b><span> WORKS</span></em></a>
+    <a href="#writing" style="--c:var(--mag)"><em><b>02</b><span> WRITING</span></em></a>
+    <a href="#pao" style="--c:var(--yel)"><em><b>03</b><span> P·A·O</span></em></a>
+    <a href="#members" style="--c:var(--grn)"><em><b>04</b><span> MEMBERS</span></em></a>
+    <a href="#end" style="--c:var(--mag)"><em><b>05</b><span> BUILD</span></em></a>
+  </div>
+  <span class="goal" data-goal="1539.59">NEXT <b data-goal-name style="color:var(--fg)">—</b> · 还差 <b data-goal-left>—</b></span>
+</div>
+
+<nav class="proto-badge" aria-label="原型切换" style="bottom:80px">
+  <a href="index.html">总览</a><a href="d-neon-cyber.html">D</a><a href="d1-editorial.html">D1</a><a href="d2-filmstrip.html">D2</a><a href="d4-vertical.html" aria-current="page">D4 纵向长卷</a>
+</nav>
+
+<script src="dx-fx.js"></script>
+<script>
+// Vertical filmstrip: reveal, depth parallax, HUD chapter timeline
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rises = document.querySelectorAll('.rise');
+  if (reduce || !('IntersectionObserver' in window)) rises.forEach((el) => el.classList.add('in'));
+  else {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
+    rises.forEach((el) => io.observe(el));
+  }
+
+  const pyEls = [...document.querySelectorAll('[data-py]')];
+  const chapters = [...document.querySelectorAll('[data-ch]')];
+  const marks = [...document.querySelectorAll('.tl a')];
+  const tl = document.querySelector('.tl');
+  const wide = matchMedia('(min-width: 901px)');
+  let max = 1;
+  const layout = () => {
+    max = document.documentElement.scrollHeight - innerHeight;
+    chapters.forEach((c, i) => { marks[i].style.left = `${Math.min(100, (Math.min(max, c.offsetTop - 68) / max) * 100).toFixed(2)}%`; });
+    update();
+  };
+  const update = () => {
+    if (!reduce && wide.matches) pyEls.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > innerHeight + 200) return;
+      // Measure without the current parallax offset to avoid feedback
+      const off = r.top - (el._ty || 0) + r.height / 2 - innerHeight / 2;
+      el._ty = off * +el.dataset.py;
+      el.style.transform = `translate3d(0,${el._ty.toFixed(1)}px,0)`;
+    });
+    tl.style.setProperty('--p', (scrollY / max).toFixed(4));
+    let idx = 0;
+    chapters.forEach((c, i) => { if (c.getBoundingClientRect().top < innerHeight * 0.45) idx = i; });
+    marks.forEach((m, i) => m.classList.toggle('on', i === idx));
+  };
+  let ticking = false;
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; update(); }); } }, { passive: true });
+  addEventListener('resize', layout);
+  addEventListener('load', layout);
+  layout();
+})();
+</script>
+</body>
+</html>

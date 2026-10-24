@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
-import { ArrowUpRight, Github, Mail } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { JsonLd } from '@/components/JsonLd';
-import { Reveal } from '@/components/ui/Reveal';
+import { PageHeader } from '@/components/neon/PageHeader';
+import { Gate } from '@/components/neon/Gate';
+import { CopyButton } from '@/components/neon/CopyButton';
 import { GlobalConfig } from '@/constants';
 import { getEntityIds } from '@/lib/entities';
 import {
@@ -100,132 +101,99 @@ export default async function AboutPage({ params: { locale } }: Props) {
     ]
   };
 
-  const externalLinkClass =
-    'inline-flex items-center gap-1.5 text-[14px] font-semibold text-brand-incana underline decoration-hairline underline-offset-4 transition-colors hover:text-primary';
-
   return (
-    <div className="relative overflow-x-hidden pb-24 max-[860px]:pb-[72px]">
+    <div className="about-page">
       <JsonLd id="about-structured-data" data={structuredData} />
-      <div className="page-aura animate-aura-drift" aria-hidden="true" />
-
-      <header className="pt-16 max-[860px]:pt-11">
-        <Reveal className="wrap">
-          <span className="mb-5 block text-xs font-bold uppercase tracking-[0.12em] text-brand-incana">
-            {t('eyebrow')}
-          </span>
-          <h1 className="text-[clamp(36px,4.5vw,52px)] leading-[1.15]">{t('title')}</h1>
-          <p className="mt-5 max-w-[48rem] text-[16.5px] leading-[1.8] text-body">{t('intro')}</p>
-        </Reveal>
-      </header>
-
-      <section className="pt-12 max-[860px]:pt-10" aria-labelledby="identity-title">
-        <div className="wrap">
-          <Reveal className="overflow-hidden rounded-lg border border-hairline bg-white shadow-[0_8px_24px_rgba(23,32,38,.06)]">
-            <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(240px,.8fr)] max-[760px]:grid-cols-1">
-              <div className="p-8 max-[600px]:p-6">
-                <span className="text-xs font-bold uppercase tracking-[0.12em] text-brand-incana">
-                  {t('studio.eyebrow')}
-                </span>
-                <h2 id="identity-title" className="mt-3 text-[26px] leading-tight">
-                  {t('studio.title')}
-                </h2>
-                <p className="mt-4 max-w-[40rem] text-[15px] leading-[1.8] text-body">{t('studio.body')}</p>
-              </div>
-              <dl className="border-l border-hairline bg-canvas-soft p-8 max-[760px]:border-l-0 max-[760px]:border-t max-[600px]:p-6">
-                <div>
-                  <dt className="text-xs font-bold uppercase tracking-[0.1em] text-muted">{t('studio.alias')}</dt>
-                  <dd className="mt-2 text-[16px] font-semibold text-ink">Bubble Studio</dd>
+      <PageHeader path="about" title={<span className="hl">{t('title')}</span>} sub={t('intro')} color="yel" />
+      <section aria-labelledby="identity-title">
+        <Gate num="01" en={t('studio.eyebrow')} title={t('studio.title')} titleId="identity-title" color="mag" />
+        <div className="lane arow">
+          <div className="shape g-p" data-py="-.04" aria-hidden="true" />
+          <div>
+            <p className="lead">{t('studio.body')}</p>
+            <div className="term">
+              <header>studio --identity</header>
+              <dl className="body">
+                <div className="row">
+                  <dt className="k">{t('studio.alias')}</dt>
+                  <dd>Bubble Studio</dd>
                 </div>
-                <div className="mt-6 border-t border-hairline pt-6">
-                  <dt className="text-xs font-bold uppercase tracking-[0.1em] text-muted">{t('studio.contact')}</dt>
-                  <dd className="mt-2">
-                    <a className={externalLinkClass} href={`mailto:${GlobalConfig.CONTACT_EMAIL}`}>
-                      <Mail size={15} aria-hidden="true" />
-                      {t('studio.email')}
+                <div className="row">
+                  <dt className="k">domain</dt>
+                  <dd>bubble-studio.xyz</dd>
+                </div>
+                <div className="row">
+                  <dt className="k">{t('studio.contact')}</dt>
+                  <dd>
+                    <a className="text-link" href={`mailto:${GlobalConfig.CONTACT_EMAIL}`}>
+                      {t('studio.email')} ↗
                     </a>
                   </dd>
                 </div>
               </dl>
             </div>
-          </Reveal>
+          </div>
         </div>
       </section>
-
-      <section className="pt-8" aria-label={t('factsLabel')}>
-        <div className="wrap grid grid-cols-2 gap-8 max-[760px]:grid-cols-1">
-          <article id="martin" className="scroll-mt-24">
-            <Reveal className="h-full rounded-lg border border-hairline bg-white p-8 shadow-[0_8px_24px_rgba(23,32,38,.06)] max-[600px]:p-6">
-              <span className="text-xs font-bold uppercase tracking-[0.12em] text-brand-incana">
-                {t('author.eyebrow')}
-              </span>
-              <h2 className="mt-3 text-[26px] leading-tight">Martin / 0xMartin</h2>
-              <p className="mt-4 text-[15px] leading-[1.8] text-body">{t('author.body')}</p>
-              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
-                <a
-                  className={externalLinkClass}
-                  href={GlobalConfig.social.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Github size={15} aria-hidden="true" />
-                  {t('author.github')}
-                </a>
-                <a
-                  className={externalLinkClass}
-                  href={GlobalConfig.social.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t('author.x')}
-                  <ArrowUpRight size={15} aria-hidden="true" />
-                </a>
-              </div>
-            </Reveal>
-          </article>
-
-          <article id="pao-pool" className="scroll-mt-24">
-            <Reveal
-              className="h-full rounded-lg border border-hairline bg-white p-8 shadow-[0_8px_24px_rgba(23,32,38,.06)] max-[600px]:p-6"
-              delay={70}
-            >
-              <span className="text-xs font-bold uppercase tracking-[0.12em] text-brand-incana">
-                {t('pool.eyebrow')}
-              </span>
-              <h2 className="mt-3 text-[26px] leading-tight">Pao Pool</h2>
-              <p className="mt-4 text-[15px] leading-[1.8] text-body">{t('pool.body')}</p>
-              <div className="mt-5 rounded-md bg-canvas-soft p-4">
-                <span className="text-xs font-bold uppercase tracking-[0.1em] text-muted">{t('pool.id')}</span>
-                <code className="mt-2 block break-all text-[12.5px] leading-[1.7] text-ink">
-                  {GlobalConfig.POOL_ID}
-                </code>
-              </div>
-              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
-                <a
-                  className={externalLinkClass}
-                  href={GlobalConfig.CARDANOSCAN_POOL_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t('pool.cardanoscan')}
-                  <ArrowUpRight size={15} aria-hidden="true" />
-                </a>
-                <a
-                  className={externalLinkClass}
-                  href={GlobalConfig.DELEGATE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t('pool.cexplorer')}
-                  <ArrowUpRight size={15} aria-hidden="true" />
-                </a>
-                <a className={externalLinkClass} href={`${getLocalizedPath(locale, 'staking')}#pao-pool`}>
-                  {t('pool.details')}
-                </a>
-              </div>
-            </Reveal>
-          </article>
+      <section id="martin" aria-labelledby="martin-title">
+        <Gate num="02" en={t('author.eyebrow')} title="Martin / 0xMartin" titleId="martin-title" color="cy" />
+        <div className="lane arow">
+          <div className="shape g-a" data-py=".04" aria-hidden="true" />
+          <div>
+            <p className="lead">{t('author.body')}</p>
+            <div className="links">
+              <a className="cbtn alt" href={GlobalConfig.social.github} target="_blank" rel="noopener noreferrer">
+                {t('author.github')} ↗
+              </a>
+              <a className="cbtn alt" href={GlobalConfig.social.twitter} target="_blank" rel="noopener noreferrer">
+                {t('author.x')} ↗
+              </a>
+            </div>
+          </div>
         </div>
       </section>
+      <section id="pao-pool" aria-labelledby="about-pool-title">
+        <Gate num="03" en={t('pool.eyebrow')} title="Pao Pool" titleId="about-pool-title" color="yel" />
+        <div className="lane arow">
+          <div className="shape g-o" data-py="-.05" aria-hidden="true" />
+          <div>
+            <p className="lead">{t('pool.body')}</p>
+            <div className="term">
+              <header>pool --id</header>
+              <dl className="body">
+                <div className="row">
+                  <dt className="k">ticker</dt>
+                  <dd className="v">PAO</dd>
+                </div>
+                <div className="pool-id">
+                  <dt>{t('pool.id')}</dt>
+                  <dd>
+                    <code>{GlobalConfig.POOL_ID}</code>
+                    <CopyButton value={GlobalConfig.POOL_ID} ariaLabel={t('pool.id')} />
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <div className="links">
+              <a className="cbtn" href={`${getLocalizedPath(locale, 'staking')}#pao-pool`}>
+                {t('pool.details')} →
+              </a>
+              <a
+                className="cbtn alt"
+                href={GlobalConfig.CARDANOSCAN_POOL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t('pool.cardanoscan')} ↗
+              </a>
+              <a className="cbtn alt" href={GlobalConfig.DELEGATE_URL} target="_blank" rel="noopener noreferrer">
+                {t('pool.cexplorer')} ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className="sec-end" />
     </div>
   );
 }

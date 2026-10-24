@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
-import { Reveal } from '@/components/ui/Reveal';
+import { PageHeader } from '@/components/neon/PageHeader';
 import { SkillsGrid } from './SkillsGrid';
 import {
   getAbsoluteUrl,
@@ -53,29 +53,18 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
 }
 
 export default function SkillsPage() {
-  const t = useTranslations('skills');
-
+  const t = useTranslations('pages');
   return (
-    <div className="relative overflow-x-hidden pb-24 max-[860px]:pb-[72px]">
-      <div className="page-aura animate-aura-drift" aria-hidden="true" />
-
-      <header className="pt-16 max-[860px]:pt-11">
-        <Reveal className="wrap">
-          <span className="mb-5 block text-xs font-bold uppercase tracking-[0.12em] text-brand-incana">
-            {t('eyebrow')}
-          </span>
-          <h1 className="whitespace-nowrap text-[clamp(36px,4.5vw,52px)] leading-[1.15] max-[860px]:whitespace-normal">
-            {t('title')}
-          </h1>
-          <p className="mt-5 max-w-[46rem] text-[16.5px] leading-[1.8] text-body">{t('sub')}</p>
-        </Reveal>
-      </header>
-
-      <section className="pt-12 max-[860px]:pt-10">
-        <div className="wrap">
-          <SkillsGrid />
-        </div>
+    <div className="skills-page">
+      <PageHeader path="skills" title={<span className="hl">{t('skillsTitle')}</span>} sub={t('skillsSub')} color="grn">
+        <a className="text-link" href="https://github.com/cauu/skills" target="_blank" rel="noopener noreferrer">
+          GitHub ↗
+        </a>
+      </PageHeader>
+      <section className="lane page-content">
+        <SkillsGrid />
       </section>
+      <div className="sec-end" />
     </div>
   );
 }

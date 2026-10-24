@@ -1,0 +1,52 @@
+/* S0006 · D layout explorations (D1 / D2 / D3) — shared neon tokens on top of base.css */
+:root {
+  --void: #0a0910; --void-2: #13111c; --line: rgba(244,242,255,.12); --fg: #f4f2ff; --fg-dim: rgba(244,242,255,.62);
+  --mag: #fc5ff6; --mag-d: #c60a76; --cy: #2ffff3; --cy-d: #078cbe; --yel: #fff590; --yel-d: #d9b201;
+  --grn: #31ee6b; --grn-d: #079f1b; --pur: #c141f2; --pur-d: #590ac6;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --out: cubic-bezier(.2,.9,.2,1); --inout: cubic-bezier(.76,0,.24,1);
+}
+body { background: var(--void); color: var(--fg); }
+h1, h2, h3, h4 { color: var(--fg); }
+::selection { background: var(--mag); color: var(--void); }
+body::before { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 1px, transparent 1px 3px); }
+
+.mono { font-family: var(--mono); }
+.tag { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.dim { color: var(--fg-dim); }
+
+/* Nav */
+.nav { background: rgba(10,9,16,.86); border-bottom-color: var(--line); }
+.nav-links a { color: var(--fg-dim); font-family: var(--mono); font-size: 13px; }
+.nav-links a:hover, .nav-links a[aria-current='page'] { background: rgba(244,242,255,.08); color: var(--fg); }
+.nav-lang { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1px var(--line); font-family: var(--mono); }
+
+/* Cut-corner buttons */
+.cbtn { --cut: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 0 24px; white-space: nowrap;
+  font-family: var(--mono); font-weight: 800; font-size: 13.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--void); background: var(--cy);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut)); transition: transform .2s, filter .2s, background .2s, color .2s; }
+.cbtn:hover { transform: translate(-2px, -2px); filter: drop-shadow(4px 4px 0 var(--mag)); }
+.cbtn.alt { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--fg); }
+.cbtn.alt:hover { background: var(--fg); color: var(--void); }
+.cbtn.sm { min-height: 40px; padding: 0 16px; font-size: 12px; }
+
+/* Logo geometry primitives */
+.g-p { border-radius: 0 999px 999px 0; background: linear-gradient(var(--mag), var(--mag-d)); position: relative; }
+.g-p::after { content: ""; position: absolute; left: 0; top: 100%; width: 34%; height: 42%; background: var(--mag-d); }
+.g-a { background: linear-gradient(var(--cy), var(--cy-d)); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.g-o { border-radius: 50%; background: linear-gradient(var(--yel), var(--yel-d)); }
+
+/* Ambient particles (dx-fx.js) */
+.particles { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+main, .footer { position: relative; z-index: 1; }
+
+.footer { background: var(--void); border-top-color: var(--line); }
+.footer .wrap { color: var(--fg-dim); font-family: var(--mono); font-size: 12.5px; }
+.proto-badge { background: rgba(20,18,30,.92); }
+.proto-badge a { color: var(--fg-dim); }
+.proto-badge a[aria-current='page'] { background: var(--cy); color: var(--void); }
+.nav .cbtn { white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
