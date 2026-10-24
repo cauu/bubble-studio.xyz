@@ -2,9 +2,11 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 
-import { getPostData, getPostDescription } from '@/lib/posts';
-import { CATEGORY_CHIP } from '@/lib/categories';
-import { Chip } from '@/components/ui/Chip';
+import { getPostData, getPostDescription, getSortedPostsData } from '@/lib/posts';
+import { getArticleLayout } from '@/lib/article-layout';
+import { ArticleNavigation } from '@/components/neon/ArticleNavigation';
+import { GlobalConfig } from '@/constants';
+import type { AppLocale } from '@/lib/seo';
 import { JsonLd } from '@/components/JsonLd';
 import { Link } from '@/i18n/navigation';
 import { getEntityIds } from '@/lib/entities';
@@ -125,42 +127,89 @@ export default async function PostPage({ params: { locale, slug } }: Props) {
       notFound();
     }
 
+    const { contentHtml, headings, minutes } = getArticleLayout(post.contentHtml);
+    const allPosts = await getSortedPostsData(locale as AppLocale);
+    const index = allPosts.findIndex((p) => p.slug === slug);
+    const adjacent = [
+      { post: allPosts[index + 1], label: 'previous' },
+      { post: index > 0 ? allPosts[index - 1] : undefined, label: 'next' }
+    ];
     return (
-      <div className="max-w-[760px] mx-auto px-6 max-[600px]:px-[18px] pt-16 pb-24 max-[860px]:pt-11 max-[860px]:pb-[72px]">
+      <div className="article-page">
         <JsonLd id="article-structured-data" data={structuredData} />
         <article>
-          <header className="mb-8">
-            <h1 className="text-[clamp(28px,3.6vw,40px)] leading-[1.2] mb-4">{post.title}</h1>
-            <div className="flex flex-wrap items-center gap-3 pb-6 border-b border-hairline">
-              <Chip color={CATEGORY_CHIP[post.category]}>{t(`blog.categories.${post.category}`)}</Chip>
-              <span className="text-[13.5px] font-semibold text-muted tnum">{post.date.replaceAll('-', '.')}</span>
-              <span className="text-muted-soft" aria-hidden="true">
-                ·
-              </span>
-              {isMartin ? (
-                <Link
-                  href="/about#martin"
-                  className="text-[13.5px] font-semibold text-muted underline decoration-hairline underline-offset-[3px] transition-colors hover:text-brand-incana"
-                >
-                  {post.author}
-                </Link>
-              ) : (
-                <span className="text-[13.5px] font-semibold text-muted">{post.author}</span>
-              )}
+          <header className="lane ah">
+            <div className="crumb">
+              &gt; <Link href="/">~</Link>/<Link href="/blogs">blog</Link>/{post.date}
             </div>
+            <Link href="/blogs" className="cat">
+              {t(`blog.categories.${post.category}`)}
+            </Link>
+            <h1>{post.title}</h1>
+            <div className="am">
+              <time dateTime={post.date}>{post.date}</time>
+              {isMartin ? <Link href="/about#martin">{post.author}</Link> : <span>{post.author}</span>}
+              <span>{t('pages.readingTime', { minutes })}</span>
+              <span className="tags">
+                {post.tags.map((tag) => (
+                  <i key={tag}>{tag}</i>
+                ))}
+              </span>
+            </div>
+            {post.image && (
+              <div className="cover">
+                <img src={post.image} alt={post.title} width={1600} height={686} />
+              </div>
+            )}
           </header>
-
-          {post.image && <img src={post.image} alt={post.title} className="rounded-lg w-full mb-8" />}
-
-          <div
-            className="prose prose-sm md:prose-lg max-w-none prose-a:underline prose-a:underline-offset-[3px] prose-a:decoration-hairline hover:prose-a:text-brand-incana prose-img:rounded-lg"
-            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
-          />
+          <div className="lane read">
+            <ArticleNavigation headings={headings} url={canonicalUrl} />
+            <div id="article-body" className="prose max-w-none" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+          </div>
         </article>
-
-        <div className="mt-12 pt-8 border-t border-hairline">
-          <Comments term={String(post.id)} language={locale as any} />
+        <div className="lane after">
+          {isMartin && (
+            <Link href="/about#martin" className="au">
+              <span className="sh g-a" aria-hidden="true" />
+              <span>
+                <span className="meta">{t('pages.author')}</span>
+                <b className="nm">{post.author} ↗</b>
+                <span className="dsc">{t('about.author.body')}</span>
+              </span>
+            </Link>
+          )}
+          <nav className="pn" aria-label={t('pages.backBlog')}>
+            {adjacent.map(
+              ({ post: other, label }) =>
+                other && (
+                  <Link
+                    key={label}
+                    href={`/blogs/${other.slug}`}
+                    style={{ ['--c' as string]: label === 'next' ? 'var(--mag)' : 'var(--cy)' }}
+                  >
+                    <span className="meta">
+                      {t(`pages.${label}`)} {label === 'next' ? '→' : '←'}
+                    </span>
+                    <h3>{other.title}</h3>
+                  </Link>
+                )
+            )}
+          </nav>
+          <a className="stake" href={GlobalConfig.DELEGATE_URL} target="_blank" rel="noopener noreferrer">
+            <span>
+              <b>
+                Stake with <em>PAO</em> Pool
+              </b>
+              <span>
+                {t('landing.sub')}
+                {t('landing.subTail')}
+              </span>
+            </span>
+            <span className="cbtn sm">{t('nav.stakeCta')} ↗</span>
+          </a>
+          <Comments term={String(post.id)} language={locale as AppLocale} />
         </div>
+        <div className="sec-end" />
       </div>
     );
   } catch (error) {
